@@ -1,0 +1,29 @@
+{
+    "name": "notfoundnl/siteboss-framework",
+    "description": "SiteBoss CMS Framework.",
+    "keywords": [
+        "laravel",
+        "frontend",
+        "api",
+        "laravel"
+    ],
+    "license": "GPL-3.0-or-later",
+    "authors": [
+        {
+            "name": "NotFound Digital Creativity",
+            "email": "info@notfound.nl"
+        }
+    ],
+    "require": {
+        "php": ">=8.1.0",
+        "laravel/framework": "^10.0",
+        "illuminate/support": "^9.0|^10.0",
+        "notfoundnl/siteboss-layout": "^1.2.3"
+    },
+    "autoload": {
+        "psr-0": {
+            "NotFound\\Layout": "src/"
+        }
+    },
+    "minimum-stability": "stable"
+}
