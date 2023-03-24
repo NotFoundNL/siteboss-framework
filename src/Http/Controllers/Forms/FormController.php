@@ -15,7 +15,6 @@ class FormController extends Controller
         return $form
             ->whereTypeCombination()
             ->where('archived', 0)
-            ->orWhere('archived', null)
             ->orderBy('name', 'ASC')
             ->get();
     }
@@ -32,8 +31,7 @@ class FormController extends Controller
     {
         $this->authorize('view', $category);
 
-        //TODO: show number of applications
-        return $form->getByCategory($category->slug);
+        return $category->forms->where('archived', false)->where('type', 'form');
     }
 
     public function updateText(Request $request, Form $form)
@@ -101,7 +99,7 @@ class FormController extends Controller
 
     public function update(Request $request, Form $form)
     {
-        $this->authorize('update', $form->category);
+        $this->authorize('view', $form->category);
 
         $request->validate([
             'name' => 'required',

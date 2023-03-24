@@ -67,6 +67,7 @@ class Form extends BaseModel
     protected $casts = [
         'success_text' => 'object',
         'confirmation_mail' => 'object',
+        'archived' => 'boolean',
     ];
 
     public function category()
