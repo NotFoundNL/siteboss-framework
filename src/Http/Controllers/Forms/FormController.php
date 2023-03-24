@@ -31,7 +31,7 @@ class FormController extends Controller
     {
         $this->authorize('view', $category);
 
-        return $category->forms->where('archived', false)->where('type', 'form');
+        return $category->forms->where('archived', false)->where('type', 'form')->values();
     }
 
     public function updateText(Request $request, Form $form)
