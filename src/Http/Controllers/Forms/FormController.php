@@ -104,11 +104,14 @@ class FormController extends Controller
 
         $request->validate([
             'name' => 'required',
+            'archived' => 'boolean',
+            'notification_address' => 'string',
         ]);
 
         $form->name = $request->name;
+        $form->locales = $request->locales ?? null;
         $form->notification_address = $request->mail ?? '';
-        $form->archived = $request->archived ?? $form->archived;
+        $form->archived = $request->archived;
 
         return $form->save();
     }
