@@ -81,6 +81,7 @@ class FormController extends Controller
             $form->category_id = $category->id;
 
             $form->notification_address = $request->mail ?? '';
+            $form->locales = $request->locales ?? '';
         }
 
         try {
