@@ -14,7 +14,7 @@ class FormController extends Controller
     {
         return $form
             ->whereTypeCombination()
-            ->where('archived', 0)
+            ->where('archived', false)
             ->orderBy('name', 'ASC')
             ->get();
     }
@@ -27,7 +27,7 @@ class FormController extends Controller
             ->get();
     }
 
-    public function readAllBasedOnCategory(Form $form, Category $category)
+    public function readAllBasedOnCategory(Category $category)
     {
         $this->authorize('view', $category);
 
