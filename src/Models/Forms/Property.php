@@ -97,21 +97,24 @@ class Property extends BaseModel
                     $autoLayoutOptions[] = $checkbox->build();
                     break;
                 case 'textarea':
-                    $checkbox = new LayoutInputTextArea($option->internal, $option->label);
-                    $autoLayoutOptions[] = $checkbox->build();
+                    $textArea = new LayoutInputTextArea('textarea'.$option->internal, $option->label);
+                    $autoLayoutOptions[] = $textArea->build();
                     break;
                 case 'number':
-                    $checkbox = new LayoutInputText($option->internal, $option->label);
-                    $autoLayoutOptions[] = $checkbox->build();
+                    $number = new LayoutInputText($option->internal, $option->label);
+                    $autoLayoutOptions[] = $number->build();
                     break;
                 case 'list':
+                    $list = new LayoutInputText('list'.$option->internal, $option->label);
+                    $autoLayoutOptions[] = $list->build();
+                    break;
                 case 'optionlist':
-                    $checkbox = new LayoutInputText($option->internal, $option->label);
-                    $autoLayoutOptions[] = $checkbox->build();
+                    $optionList = new LayoutInputText('optionlist'.$option->internal, $option->label);
+                    $autoLayoutOptions[] = $optionList->build();
                     break;
                 case 'input':
-                    $checkbox = new LayoutInputText($option->internal, $option->label);
-                    $autoLayoutOptions[] = $checkbox->build();
+                    $textInput = new LayoutInputText($option->internal, $option->label);
+                    $autoLayoutOptions[] = $textInput->build();
                     break;
             }
         }
