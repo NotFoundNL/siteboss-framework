@@ -5,6 +5,9 @@ namespace NotFound\Framework\Models\Forms;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use NotFound\Framework\Models\BaseModel;
 use NotFound\Framework\Services\Forms\Fields\FactoryType;
+use NotFound\Layout\Inputs\LayoutInputCheckbox;
+use NotFound\Layout\Inputs\LayoutInputText;
+use NotFound\Layout\Inputs\LayoutInputTextArea;
 
 /**
  * NotFound\Framework\Models\Forms\Property
@@ -61,7 +64,7 @@ class Property extends BaseModel
         $properties = [];
         foreach ($this->get() as $property) {
             $type = $typeFactory->getByType($property->type, $property->options, 4);
-            $property->{'options'} = $type->getOptions($property->options);
+            $property->{'options'} = $this->makeAutoLayout($type->getOptions($property->options));
 
             $properties[] = $property;
         }
@@ -82,5 +85,37 @@ class Property extends BaseModel
         }
 
         return $properties;
+    }
+
+    private function makeAutoLayout($options)
+    {
+        $autoLayoutOptions = [];
+        foreach ($options as $option) {
+            switch ($option->type) {
+                case 'checkbox':
+                    $checkbox = new LayoutInputCheckbox($option->internal, $option->label);
+                    $autoLayoutOptions[] = $checkbox->build();
+                    break;
+                case 'textarea':
+                    $checkbox = new LayoutInputTextArea($option->internal, $option->label);
+                    $autoLayoutOptions[] = $checkbox->build();
+                    break;
+                case 'number':
+                    $checkbox = new LayoutInputText($option->internal, $option->label);
+                    $autoLayoutOptions[] = $checkbox->build();
+                    break;
+                case 'list':
+                case 'optionlist':
+                    $checkbox = new LayoutInputText($option->internal, $option->label);
+                    $autoLayoutOptions[] = $checkbox->build();
+                    break;
+                case 'input':
+                    $checkbox = new LayoutInputText($option->internal, $option->label);
+                    $autoLayoutOptions[] = $checkbox->build();
+                    break;
+            }
+        }
+
+        return $autoLayoutOptions;
     }
 }
