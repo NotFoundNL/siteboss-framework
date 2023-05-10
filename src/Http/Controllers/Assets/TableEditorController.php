@@ -2,6 +2,7 @@
 
 namespace NotFound\Framework\Http\Controllers\Assets;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use NotFound\Framework\Events\AfterSaveEvent;
@@ -28,14 +29,16 @@ use NotFound\Layout\Responses\Toast;
  */
 class TableEditorController extends AssetEditorController
 {
-    public function index(Table $table, int $recordId, string $langUrl)
+    public function index(Request $request, Table $table, int $recordId, string $langUrl)
     {
         $this->authorize('view', $table);
         $lang = Lang::whereUrl($langUrl)->firstOrFail();
 
         $tableService = new TableService($table, $lang, $recordId === 0 ? null : $recordId);
 
-        $formUrl = sprintf('/table/%s/%s/%s/', $table->url, $recordId ?? 0, urlencode($langUrl));
+        $params = sprintf('?page=%d&sort=%s&asc=%s', $request->page ?? 1, $request->sort ?? '', $request->asc ?? '');
+
+        $formUrl = sprintf('/table/%s/%s/%s/?%s', $table->url, $recordId ?? 0, urlencode($langUrl), $params);
 
         $form = new LayoutForm($formUrl);
 
@@ -139,7 +142,10 @@ class TableEditorController extends AssetEditorController
             }
         } else {
             // Redirect
-            $response->addAction(new Redirect('/table/'.$table->url.'/'));
+
+            $params = sprintf('?page=%d&sort=%s&asc=%s', $request->page ?? 1, $request->sort ?? '', $request->asc ?? '');
+
+            $response->addAction(new Redirect('/table/'.$table->url.'/?'.$params));
         }
 
         return $response->build();

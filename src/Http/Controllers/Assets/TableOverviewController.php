@@ -45,7 +45,7 @@ class TableOverviewController extends Controller
         $layoutTable->setTotalItems($siteTableRowsPaginator->total());
 
         foreach ($siteTableRowsPaginator as $row) {
-            $link = sprintf('/table/%s/%d/?page=%d', $table->url, $row->id, $request->page ?? 1);
+            $link = sprintf('/table/%s/%d/?page=%d&sort=%s&asc=%s', $table->url, $row->id, $request->page ?? 1, $request->sort ?? '', $request->asc ?? '');
             $layoutRow = new LayoutTableRow($row->id, link: $link);
 
             foreach ($components as $component) {
