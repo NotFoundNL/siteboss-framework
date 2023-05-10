@@ -41,7 +41,7 @@ class SolrItem extends BaseModel
         $this->fl = explode(' ', $fl);
         $this->results = isset($solr->response->docs) ? $solr->response->docs : null;
         $this->highlights = isset($solr->highlighting) ? $solr->highlighting : null;
-        $this->spellcheck = isset($solr->spellcheck) ? $solr->spellcheck : null;
+        $this->spellcheck = $solr->spellcheck ?? null;
         $this->suggest = isset($solr->suggest) ? $solr->suggest : null;
         $this->number = isset($solr->response->numFound) ? $solr->response->numFound : 0;
 
@@ -180,7 +180,7 @@ class SolrItem extends BaseModel
     public function spellcheckList()
     {
         $items = [];
-        $query = $this->header->params->q;
+        $query = $this->q;
 
         if (isset($this->spellcheck)) {
             foreach ($this->spellcheck->suggestions as $suggestion) {
