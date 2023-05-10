@@ -55,7 +55,7 @@ class TableEditorController extends AssetEditorController
 
         $breadcrumb = new LayoutBreadcrumb();
         $breadcrumb->addHome();
-        $breadcrumb->addItem($table->name, '/table/'.$table->url.'/');
+        $breadcrumb->addItem($table->name, '/table/'.$table->url.'/?'.$params);
         $upsertingText = $recordId === 0 ? __('siteboss::ui.new') : __('siteboss::ui.edit');
         $breadcrumb->addItem($upsertingText); //TODO: Add better title
         $page->addBreadCrumb($breadcrumb);
