@@ -13,6 +13,7 @@ class DatePicker extends Properties
 
     public function properties(): void
     {
+        $this->overview();
         $this->sortable();
         $this->localize();
         $this->required();
@@ -22,7 +23,6 @@ class DatePicker extends Properties
 
     public function serverProperties(): void
     {
-        $this->overview();
     }
 
     protected function rename(): array
