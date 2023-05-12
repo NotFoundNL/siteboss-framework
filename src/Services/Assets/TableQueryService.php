@@ -40,17 +40,20 @@ class TableQueryService
 
     private function setOrdering(Builder $query): Builder
     {
-        if ($this->table->isOrdered() && ! request()->query('sort')) {
+        // TODO: Find out why 'sort' is assigned the string value 'null'
+        $orderColumn = (request()->query('sort') !== null && request()->query('sort') !== 'null') ? request()->query('sort') : null;
+
+        if ($this->table->isOrdered() && ! $orderColumn) {
             return $query->orderBy('order', 'ASC');
         }
 
-        if (request()->query('sort')) {
+        if ($orderColumn !== null) {
             $order = 'ASC';
             if (request()->query('asc') && request()->query('asc') === 'false') {
                 $order = 'DESC';
             }
 
-            return $query->orderBy(request()->query('sort'), $order);
+            return $query->orderBy($orderColumn, $order);
         }
 
         return $query;
