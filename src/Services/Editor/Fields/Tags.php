@@ -41,4 +41,13 @@ class Tags extends Properties
             'ajaxtags' => 'lazyLoad',
         ];
     }
+
+    public function checkColumnType(?\Doctrine\DBAL\Types\Type $type): string
+    {
+        if ($type !== null) {
+            return 'COLUMN NOT NEEDED';
+        }
+
+        return '';
+    }
 }

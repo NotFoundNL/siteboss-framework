@@ -39,4 +39,16 @@ class TableSelect extends Properties
             'customquery' => 'customQuery',
         ];
     }
+
+    public function checkColumnType(?\Doctrine\DBAL\Types\Type $type): string
+    {
+        if ($type === null) {
+            return 'COLUMN MISSING';
+        }
+        if (! in_array($type->getName(), ['string', 'integer'])) {
+            return 'TYPE ERROR: '.$type->getName().' is not a valid type for a table select field';
+        }
+
+        return '';
+    }
 }

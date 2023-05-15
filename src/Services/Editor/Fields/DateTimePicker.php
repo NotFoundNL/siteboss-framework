@@ -21,4 +21,16 @@ class DateTimePicker extends Properties
     public function serverProperties(): void
     {
     }
+
+    public function checkColumnType(?\Doctrine\DBAL\Types\Type $type): string
+    {
+        if ($type === null) {
+            return 'COLUMN MISSING';
+        }
+        if (! in_array($type->getName(), ['int'])) {
+            return 'TYPE ERROR: '.$type->getName().' is not a valid type for a text field';
+        }
+
+        return '';
+    }
 }

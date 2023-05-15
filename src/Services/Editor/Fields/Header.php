@@ -19,4 +19,9 @@ class Header extends Properties
     public function serverProperties(): void
     {
     }
+
+    public function checkColumnType(?\Doctrine\DBAL\Types\Type $type): string
+    {
+        return '';
+    }
 }

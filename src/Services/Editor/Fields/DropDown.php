@@ -4,6 +4,7 @@ namespace NotFound\Framework\Services\Editor\Fields;
 
 use NotFound\Framework\Services\Editor\Properties;
 use NotFound\Framework\Services\Editor\Repeatable;
+use Doctrine\DBAL\Types\Type;
 use stdClass;
 
 class DropDown extends Properties
@@ -27,5 +28,14 @@ class DropDown extends Properties
 
     public function serverProperties(): void
     {
+    }
+
+    public function checkColumnType(?Type $type): string
+    {
+        if ($type === null) {
+            return 'COLUMN MISSING';
+        }
+
+        return '';
     }
 }

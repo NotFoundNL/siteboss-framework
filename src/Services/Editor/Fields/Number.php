@@ -22,4 +22,13 @@ class Number extends Properties
     public function serverProperties(): void
     {
     }
+
+    public function checkColumnType(?\Doctrine\DBAL\Types\Type $type): string
+    {
+        if ($type === null) {
+            return 'COLUMN MISSING';
+        }
+
+        return '';
+    }
 }

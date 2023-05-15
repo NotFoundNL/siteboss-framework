@@ -4,6 +4,7 @@ namespace NotFound\Framework\Services\Editor\Fields;
 
 use NotFound\Framework\Services\Editor\Properties;
 use NotFound\Framework\Services\Editor\Repeatable;
+use Doctrine\DBAL\Types\Type;
 use stdClass;
 
 class Image extends Properties
@@ -32,5 +33,14 @@ class Image extends Properties
     public function serverProperties(): void
     {
         $this->addCheckbox('createPNG', 'Create PNG');
+    }
+
+    public function checkColumnType(?Type $type): string
+    {
+        if ($type === null) {
+            return 'COLUMN MISSING';
+        }
+
+        return '';
     }
 }

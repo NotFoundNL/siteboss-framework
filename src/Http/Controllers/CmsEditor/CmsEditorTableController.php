@@ -6,6 +6,8 @@ use Illuminate\Http\Request as HttpRequest;
 use NotFound\Framework\Http\Requests\FormDataRequest;
 use NotFound\Framework\Models\Table;
 use NotFound\Framework\Services\Editor\FieldsProperties;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 use NotFound\Layout\Elements\LayoutBreadcrumb;
 use NotFound\Layout\Elements\LayoutButton;
 use NotFound\Layout\Elements\LayoutForm;
@@ -22,6 +24,7 @@ use NotFound\Layout\Inputs\LayoutInputText;
 use NotFound\Layout\LayoutResponse;
 use NotFound\Layout\Responses\Redirect;
 use NotFound\Layout\Responses\Toast;
+use stdClass;
 
 class CmsEditorTableController extends \NotFound\Framework\Http\Controllers\Controller
 {
@@ -157,7 +160,7 @@ class CmsEditorTableController extends \NotFound\Framework\Http\Controllers\Cont
 
         $UItable->addHeader(new LayoutTableHeader('Element', 'table'));
         $UItable->addHeader(new LayoutTableHeader('Type', 'type'));
-        $UItable->addHeader(new LayoutTableHeader('Internal name', 'internal'));
+        $UItable->addHeader(new LayoutTableHeader('Error', 'error'));
         $UItable->addHeader(new LayoutTableHeader('Enabled', 'enabled'));
         $tables = $table->items()->orderBy('order', 'asc')->get();
 
@@ -165,6 +168,14 @@ class CmsEditorTableController extends \NotFound\Framework\Http\Controllers\Cont
             $row = new LayoutTableRow($cmsTable->id, '/app/editor/table/'.$table->id.'/'.$cmsTable->id);
             $row->addColumn(new LayoutTableColumn($cmsTable->name, 'text'));
             $row->addColumn(new LayoutTableColumn($cmsTable->type, 'text'));
+
+            if (isset($cmsTable->properties->localize) && $cmsTable->properties->localize == 1) {
+                $tableName = $table->table.'_tr';
+            } else {
+                $tableName = $table->table;
+            }
+            $row->addColumn(new LayoutTableColumn($cmsTable->enabled ? $this->checkColumn($tableName, $cmsTable) : '-', 'text'));
+
             $row->addColumn(new LayoutTableColumn($cmsTable->internal, 'text'));
             $row->addColumn(new LayoutTableColumn($cmsTable->enabled, 'checkbox'));
             $UItable->addRow($row);
@@ -264,5 +275,19 @@ class CmsEditorTableController extends \NotFound\Framework\Http\Controllers\Cont
         }
 
         return response()->json(['status' => 'ok']);
+    }
+
+    private function checkColumn(string $table, object $field): string
+    {
+        $className = '\\App\\Services\\Editor\\Fields\\'.$field->type;
+
+        $fieldClass = new $className(new stdClass());
+
+        if (Schema::hasColumn($table, $field->internal)) {
+            return $fieldClass->checkColumnType(DB::getDoctrineColumn(set_database_prefix($table), $field->internal)->getType());
+
+        } else {
+            return $fieldClass->checkColumnType(null);
+        }
     }
 }
