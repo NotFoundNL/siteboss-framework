@@ -50,8 +50,10 @@ class ComponentDatePicker extends AbstractComponent
 
     public function getTableOverviewContent(): LayoutTableColumn
     {
+        // TODO: implement more general language specific date formatting
+        $lang = app()->getLocale() == 'nl' ? 'nl_NL' : 'en_US';
         $format = new \IntlDateFormatter(
-            'nl_NL',
+            $lang,
             \IntlDateFormatter::MEDIUM,
             \IntlDateFormatter::NONE,
             'Europe/Amsterdam',
@@ -66,7 +68,7 @@ class ComponentDatePicker extends AbstractComponent
     {
         $timeValue = intval($value);
         if ($timeValue == 0) {
-            $this->currentValue = null;
+            $this->currentValue = '';
         } else {
             $this->currentValue = date('Y-m-d', intval($value));
         }
