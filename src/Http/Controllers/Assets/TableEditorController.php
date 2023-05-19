@@ -38,7 +38,7 @@ class TableEditorController extends AssetEditorController
 
         $params = sprintf('?page=%d&sort=%s&asc=%s', $request->page ?? 1, $request->sort ?? '', $request->asc ?? '');
 
-        $formUrl = sprintf('/table/%s/%s/%s/?%s', $table->url, $recordId ?? 0, urlencode($langUrl), $params);
+        $formUrl = sprintf('/table/%s/%s/%s/%s', $table->url, $recordId ?? 0, urlencode($langUrl), $params);
 
         $form = new LayoutForm($formUrl);
 
