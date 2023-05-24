@@ -14,7 +14,7 @@ class TypeDropdown extends AbstractType
 
         foreach ($this->properties->options->list as $option) {
             // if id is in array value
-            if ($option->id != $this->getValue()) {
+            if ($option->index != $this->getValue()) {
                 continue;
             }
 
@@ -47,7 +47,7 @@ class TypeDropdown extends AbstractType
 
         // Check if the value exists as an option in the field properties
         foreach ($this->properties->options->list as $option) {
-            if ($this->getValue() == $option->id) {
+            if ($this->getValue() == $option->index) {
                 return true;
             }
         }

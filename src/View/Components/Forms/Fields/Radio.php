@@ -6,6 +6,6 @@ class Radio extends AbstractFieldComponent
 {
     public function optionList()
     {
-        return $this->field->properties->options->list;
+        return array_filter($this->field->properties->options->list, fn ($option) => ! $option->deleted);
     }
 }
