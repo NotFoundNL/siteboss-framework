@@ -23,7 +23,7 @@ class Button extends Properties
     {
     }
 
-    public function checkColumnType(?\Doctrine\DBAL\Schema\Column $type): string
+    public function checkColumnType(?\Doctrine\DBAL\Types\Type $type): string
     {
         return '';
     }
