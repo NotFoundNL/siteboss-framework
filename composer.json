@@ -2,7 +2,7 @@
     "name": "notfoundnl/siteboss-framework",
     "description": "This is my package siteboss-framework",
     "keywords": [
-        "NotFoundNL",
+        "NotFound",
         "laravel",
         "siteboss-framework"
     ],
@@ -60,7 +60,7 @@
     },
     "extra": {
         "laravel": {
-            "services": [
+            "providers": [
                 "NotFound\\Framework\\FrameworkServiceProvider"
             ]
         }
