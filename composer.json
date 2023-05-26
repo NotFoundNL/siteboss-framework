@@ -60,9 +60,9 @@
     },
     "extra": {
         "laravel": {
-            "aliases": {
-                "Framework": "NotFound\\Framework\\Facades\\Framework"
-            }
+            "services": [
+                "NotFound\\Framework\\FrameworkServiceProvider"
+            ]
         }
     },
     "minimum-stability": "dev",
