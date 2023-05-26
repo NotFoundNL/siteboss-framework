@@ -1,6 +1,6 @@
 <?php
 
-namespace NotFound\Framework\CmsEditor;
+namespace NotFound\Framework\Http\Controllers;
 
 use App\Http\Requests\FormDataRequest;
 use App\Models\CmsMenu;

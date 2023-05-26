@@ -2,7 +2,7 @@
     "name": "notfoundnl/siteboss-framework",
     "description": "This is my package siteboss-framework",
     "keywords": [
-        "NotFoundNL",
+        "NotFound",
         "laravel",
         "siteboss-framework"
     ],
@@ -60,9 +60,9 @@
     },
     "extra": {
         "laravel": {
-            "aliases": {
-                "Framework": "NotFound\\Framework\\Facades\\Framework"
-            }
+            "providers": [
+                "NotFound\\Framework\\FrameworkServiceProvider"
+            ]
         }
     },
     "minimum-stability": "dev",

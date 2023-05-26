@@ -1,6 +1,6 @@
 <?php
 
-namespace NotFound\Framework\CmsEditor;
+namespace NotFound\Framework\Http\Controllers;
 
 use NotFound\Layout\Elements\Table\LayoutTable;
 use NotFound\Layout\Elements\Table\LayoutTableColumn;

@@ -1,6 +1,6 @@
 <?php
 
-namespace NotFound\Framework\CmsEditor;
+namespace NotFound\Framework\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\FormDataRequest;
