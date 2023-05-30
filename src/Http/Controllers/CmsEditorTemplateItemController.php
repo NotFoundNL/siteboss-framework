@@ -3,8 +3,8 @@
 namespace NotFound\Framework\Http\Controllers;
 
 use App\Http\Requests\FormDataRequest;
-use App\Models\Template;
-use App\Models\TemplateItem;
+use NotFound\Framework\Models\Template;
+use NotFound\Framework\Models\TemplateItem;
 use NotFound\Layout\Elements\LayoutButton;
 use NotFound\Layout\Elements\LayoutForm;
 use NotFound\Layout\Helpers\LayoutWidgetHelper;

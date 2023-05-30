@@ -3,7 +3,7 @@
 namespace NotFound\Framework\Http\Controllers;
 
 use App\Http\Requests\FormDataRequest;
-use App\Models\Template;
+use NotFound\Framework\Models\Template;
 use App\Services\Editor\FieldsProperties;
 use Illuminate\Http\Request as HttpRequest;
 use NotFound\Layout\Elements\LayoutBreadcrumb;

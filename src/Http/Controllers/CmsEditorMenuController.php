@@ -3,7 +3,7 @@
 namespace NotFound\Framework\Http\Controllers;
 
 use App\Http\Requests\FormDataRequest;
-use App\Models\CmsMenu;
+use NotFound\Framework\Models\CmsMenu;
 use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Facades\Log;
 use NotFound\Layout\Elements\LayoutBreadcrumb;
