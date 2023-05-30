@@ -1,6 +1,6 @@
 <?php
 
-namespace NotFound\Framework\Http\Controllers;
+namespace NotFound\Framework\Http\Controllers\CmsEditor;
 
 use App\Http\Requests\FormDataRequest;
 use NotFound\Framework\Models\CmsMenu;
@@ -23,7 +23,7 @@ use NotFound\Layout\LayoutResponse;
 use NotFound\Layout\Responses\Redirect;
 use NotFound\Layout\Responses\Toast;
 
-class CmsEditorMenuController extends \App\Http\Controllers\Controller
+class CmsEditorMenuController extends \NotFound\Framework\Http\Controllers\Controller
 {
     public function index()
     {

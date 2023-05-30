@@ -1,6 +1,6 @@
 <?php
 
-namespace NotFound\Framework\Http\Controllers;
+namespace NotFound\Framework\Http\Controllers\CmsEditor;
 
 use NotFound\Layout\Elements\Table\LayoutTable;
 use NotFound\Layout\Elements\Table\LayoutTableColumn;
@@ -8,7 +8,7 @@ use NotFound\Layout\Elements\Table\LayoutTableHeader;
 use NotFound\Layout\Elements\Table\LayoutTableRow;
 use NotFound\Layout\Helpers\LayoutWidgetHelper;
 
-class CmsEditorController extends \App\Http\Controllers\Controller
+class CmsEditorController extends \NotFound\Framework\Http\Controllers\Controller
 {
     public function index()
     {

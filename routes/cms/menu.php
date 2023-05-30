@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\MenuController;
+use NotFound\Framework\Http\Controllers\MenuController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('{id?}', [MenuController::class, 'index']);

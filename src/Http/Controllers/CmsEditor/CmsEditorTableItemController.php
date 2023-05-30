@@ -1,6 +1,6 @@
 <?php
 
-namespace NotFound\Framework\Http\Controllers;
+namespace NotFound\Framework\Http\Controllers\CmsEditor;
 
 use App\Http\Requests\FormDataRequest;
 use NotFound\Framework\Models\Table;
@@ -15,7 +15,7 @@ use NotFound\Layout\Responses\Redirect;
 use NotFound\Layout\Responses\Toast;
 use stdClass;
 
-class CmsEditorTableItemController extends \App\Http\Controllers\Controller
+class CmsEditorTableItemController extends \NotFound\Framework\Http\Controllers\Controller
 {
     public function readOne(Table $table, TableItem $tableItem)
     {
