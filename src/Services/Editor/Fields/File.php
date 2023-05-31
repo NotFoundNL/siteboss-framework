@@ -30,5 +30,7 @@ class File extends Properties
         if (! in_array($type->getName(), ['string'])) {
             return 'TYPE ERROR: '.$type->getName().' is not a valid type for a text field';
         }
+
+        return '';
     }
 }
