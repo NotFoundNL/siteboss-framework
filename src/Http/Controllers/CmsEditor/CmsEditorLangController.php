@@ -130,7 +130,7 @@ class CmsEditorLangController extends Controller
         $input->setValue($lang->enabled == 1 ?? false);
         $form->addInput($input);
 
-        $form->addButton(new LayoutButton(__('save')));
+        $form->addButton(new LayoutButton(__('siteboss::ui.save')));
 
         $widgetPage->widget->addForm($form);
 
@@ -179,6 +179,6 @@ class CmsEditorLangController extends Controller
             return response()->json(['status' => 'ok']);
         }
 
-        abort(404, __('response.table.delete'));
+        abort(404, __('siteboss::response.table.delete'));
     }
 }

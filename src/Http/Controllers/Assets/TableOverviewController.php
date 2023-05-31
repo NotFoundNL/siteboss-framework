@@ -91,7 +91,7 @@ class TableOverviewController extends Controller
 
         $bar->addSearchBox(new LayoutSearchBox(''));
 
-        $widget = new LayoutWidget(__('ui.overview'));
+        $widget = new LayoutWidget(__('siteboss::ui.overview'));
         $widget->noPadding();
         $widget->addBar($bar);
         $widget->addTable($layoutTable);

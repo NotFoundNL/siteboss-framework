@@ -37,7 +37,7 @@ class MenuController extends Controller
         $currentMenu = Menu::whereId($id)->with(['template'])->firstOrFail();
         $lang = Lang::default();
 
-        $page = new LayoutPage(__('page.title'));
+        $page = new LayoutPage(__('siteboss::page.title'));
         $page->addBreadCrumb($this->getBreadcrumb($currentMenu));
         $page->addWidget($this->getTableWidget($currentMenu, $lang));
 
@@ -132,7 +132,7 @@ class MenuController extends Controller
         try {
             $menu->save();
 
-            $response = ['value' => $menu->$property, 'message' => __('ui.menu.updated')];
+            $response = ['value' => $menu->$property, 'message' => __('siteboss::ui.menu.updated')];
         } catch (\Exception $e) {
             $response = ['error' => $e];
         }
@@ -155,10 +155,10 @@ class MenuController extends Controller
 
         $table = new LayoutTable(edit: true, sort: true, create: true);
         $table->setDeleteEndpoint('/app/menu/');
-        $table->addHeader(new LayoutTableHeader(__('page.active'), 'active', 'checkbox'));
-        $table->addHeader(new LayoutTableHeader(__('page.inMenuShort'), 'menu', 'checkbox'));
-        $table->addHeader(new LayoutTableHeader(__('page.pageTitle'), 'title'));
-        $table->addHeader(new LayoutTableHeader(__('page.template'), 'template'));
+        $table->addHeader(new LayoutTableHeader(__('siteboss::page.active'), 'active', 'checkbox'));
+        $table->addHeader(new LayoutTableHeader(__('siteboss::page.inMenuShort'), 'menu', 'checkbox'));
+        $table->addHeader(new LayoutTableHeader(__('siteboss::page.pageTitle'), 'title'));
+        $table->addHeader(new LayoutTableHeader(__('siteboss::page.template'), 'template'));
 
         foreach ($menuItems as $menuItem) {
             //TODO: localization
@@ -170,7 +170,7 @@ class MenuController extends Controller
             $menu->setToggleEndPoint('/app/menu/'.$menuItem->id.'/toggle/menu');
             $row->addColumn($menu);
 
-            $menuTitle = new LayoutTableColumn($menuItem->value ?? __('ui.menu.untitled'));
+            $menuTitle = new LayoutTableColumn($menuItem->value ?? __('siteboss::ui.menu.untitled'));
             if (isset($menuItem->template?->allow_children) && $menuItem->template?->allow_children !== '') {
                 $menuTitle->makeLinkButton('/app/menu/'.$menuItem->id);
             }
@@ -182,7 +182,7 @@ class MenuController extends Controller
             $table->addRow($row);
         }
 
-        $tableWidget = new LayoutWidget(__('page.overview'));
+        $tableWidget = new LayoutWidget(__('siteboss::page.overview'));
         $tableWidget->noPadding();
         $tableWidget->addTable($table);
 
@@ -197,11 +197,11 @@ class MenuController extends Controller
 
         $form = new LayoutForm('/app/page/create/'.$currentMenu->id);
 
-        $text = new LayoutInputText('name', __('ui.menu.name'));
+        $text = new LayoutInputText('name', __('siteboss::ui.menu.name'));
         $text->setRequired();
         $form->addInput($text);
 
-        $dropdown = new LayoutInputDropdown('template_id', __('ui.menu.template'));
+        $dropdown = new LayoutInputDropdown('template_id', __('siteboss::ui.menu.template'));
         $dropdown->setRequired();
 
         $childrenString = $currentMenu->template?->allow_children;
@@ -211,9 +211,9 @@ class MenuController extends Controller
         }
         $form->addInput($dropdown);
 
-        $form->addButton(new LayoutButton(__('ui.save')));
+        $form->addButton(new LayoutButton(__('siteboss::ui.save')));
 
-        $formWidget = new LayoutWidget(__('ui.menu.new'));
+        $formWidget = new LayoutWidget(__('siteboss::ui.menu.new'));
         $formWidget->addForm($form);
 
         return $formWidget;
@@ -235,7 +235,7 @@ class MenuController extends Controller
         }
 
         for ($i = count($collection) - 1; $i >= 0; $i--) {
-            $pageTitle = $collection[$i]->parent_id === 0 ? 'Menu' : $collection[$i]->getTitle(Lang::default()) ?? __('page.noTitleSet');
+            $pageTitle = $collection[$i]->parent_id === 0 ? 'Menu' : $collection[$i]->getTitle(Lang::default()) ?? __('siteboss::page.noTitleSet');
             if ($i !== 0) {
                 $breadcrumb->addItem($pageTitle, '/app/menu/'.$collection[$i]->id);
             } else {

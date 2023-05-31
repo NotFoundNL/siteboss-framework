@@ -47,24 +47,24 @@ class TableEditorController extends AssetEditorController
             $form->addComponent($component);
         });
 
-        $page = new LayoutPage(__('ui.page'));
+        $page = new LayoutPage(__('siteboss::ui.page'));
         $page->addTitle(new LayoutTitle($table->name));
 
         $breadcrumb = new LayoutBreadcrumb();
         $breadcrumb->addHome();
         $breadcrumb->addItem($table->name, '/table/'.$table->url.'/');
-        $upsertingText = $recordId === 0 ? __('ui.new') : __('ui.edit');
+        $upsertingText = $recordId === 0 ? __('siteboss::ui.new') : __('siteboss::ui.edit');
         $breadcrumb->addItem($upsertingText); //TODO: Add better title
         $page->addBreadCrumb($breadcrumb);
 
-        $saveButton = new LayoutButton(__('ui.save'));
+        $saveButton = new LayoutButton(__('siteboss::ui.save'));
 
         if (! (isset($table->properties?->disable_sticky_submit) && $table->properties?->disable_sticky_submit == true)) {
             $saveButton->setSticky();
         }
 
         if ((isset($table->properties->stay_on_page) && $table->properties->stay_on_page == true)) {
-            $saveButton->addAlternative('stay_on_page', __('ui.save_no_redirect'));
+            $saveButton->addAlternative('stay_on_page', __('siteboss::ui.save_no_redirect'));
         }
 
         $form->addButton($saveButton);
@@ -73,7 +73,7 @@ class TableEditorController extends AssetEditorController
         if (auth()->user()->hasRole('admin') && request()->query('editor') !== '1') {
             $bar = new LayoutBar();
             $bar->removePadding();
-            $editButton = new LayoutBarButton(__('ui.edit'));
+            $editButton = new LayoutBarButton(__('siteboss::ui.edit'));
             $editButton->setLink('/table/'.$table->url.'/'.$recordId.'/?editor=1');
             $bar->addBarButton($editButton);
             $widget->addBar($bar);
@@ -125,7 +125,7 @@ class TableEditorController extends AssetEditorController
         Cache::clear('table'.$table->id.'_'.$recordId);
 
         $response = new LayoutResponse();
-        $response->addAction(new Toast(__('response.table.ok')));
+        $response->addAction(new Toast(__('siteboss::response.table.ok')));
 
         if (
             isset($request->siteboss_formOptions['send']) &&
@@ -154,6 +154,6 @@ class TableEditorController extends AssetEditorController
             return response()->json(['status' => 'ok']);
         }
 
-        abort(404, __('response.table.delete'));
+        abort(404, __('siteboss::response.table.delete'));
     }
 }

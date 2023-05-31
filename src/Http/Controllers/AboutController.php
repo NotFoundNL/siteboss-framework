@@ -26,7 +26,7 @@ class AboutController extends Controller
 
         $breadcrumb = new LayoutBreadcrumb();
         $breadcrumb->addHome();
-        $breadcrumb->addItem(__('about.title'));
+        $breadcrumb->addItem(__('siteboss::about.title'));
         $page->addBreadCrumb($breadcrumb);
 
         $widget = new LayoutWidget('About '.$productName.' CMS', 6);
@@ -34,11 +34,11 @@ class AboutController extends Controller
         $metadata = json_decode(file_get_contents(base_path('composer.json')));
 
         $widget->addText(new LayoutText(sprintf('<header style="font-size: 22px;font-weight:bold;border:none">PHP %s</header>', phpversion())));
-        $widget->addText(new LayoutText(sprintf('<p>%s: %s</p>', __('about.configuration'), php_ini_loaded_file())));
-        $widget->addText(new LayoutText(sprintf('<p>%s: %s</p>', __('about.server'), gethostname())));
-        $widget->addText(new LayoutText(sprintf('<p>%s: %s</p>', __('about.maxUploadSize'), $this->getMaximumFileUploadSize())));
+        $widget->addText(new LayoutText(sprintf('<p>%s: %s</p>', __('siteboss::about.configuration'), php_ini_loaded_file())));
+        $widget->addText(new LayoutText(sprintf('<p>%s: %s</p>', __('siteboss::about.server'), gethostname())));
+        $widget->addText(new LayoutText(sprintf('<p>%s: %s</p>', __('siteboss::about.maxUploadSize'), $this->getMaximumFileUploadSize())));
 
-        $widget->addText(new LayoutText($productName.' server '.__('about.version').' '.$metadata->version));
+        $widget->addText(new LayoutText($productName.' server '.__('siteboss::about.version').' '.$metadata->version));
 
         $widget->addText(new LayoutText('Error sound CC Attribution 3.0: Mike Koenig on SoundBible'));
 
@@ -47,9 +47,9 @@ class AboutController extends Controller
         $groupC = new CmsGroup();
         $roles = $groupC->getCachedRolesByActiveUser();
 
-        $widget->addText(new LayoutText(__('about.rights').': '.implode(', ', $roles->toArray())));
+        $widget->addText(new LayoutText(__('siteboss::about.rights').': '.implode(', ', $roles->toArray())));
 
-        $widget2 = new LayoutWidget(__('about.rights_info'), 6);
+        $widget2 = new LayoutWidget(__('siteboss::about.rights_info'), 6);
 
         $groups = CmsGroup::where('description', '!=', '')
             ->whereNotNull('description')->get();
@@ -58,9 +58,9 @@ class AboutController extends Controller
             $widget2->addTitle(new LayoutTitle($group->name));
             $widget2->addText(new LayoutText($group->description));
             if (auth()->user()->hasRole($group->internal)) {
-                $widget2->addText(new LayoutText(__('about.rights_assigned')));
+                $widget2->addText(new LayoutText(__('siteboss::about.rights_assigned')));
             } else {
-                $widget2->addText(new LayoutText(__('about.rights_not_assigned')));
+                $widget2->addText(new LayoutText(__('siteboss::about.rights_not_assigned')));
             }
         }
 

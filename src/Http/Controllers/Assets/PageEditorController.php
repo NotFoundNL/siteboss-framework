@@ -38,9 +38,9 @@ class PageEditorController extends AssetEditorController
             $form->addComponent($component);
         });
 
-        $form->addButton(new LayoutButton(__('ui.save')));
+        $form->addButton(new LayoutButton(__('siteboss::ui.save')));
 
-        $helper = new LayoutWidgetHelper(__('page.title'), $lang->language.': '.($menu->getTitle($lang) ?? __('page.edit')));
+        $helper = new LayoutWidgetHelper(__('siteboss::page.title'), $lang->language.': '.($menu->getTitle($lang) ?? __('siteboss::page.edit')));
 
         $this->setBreadcrumbs($helper, ($menu->parent()->first()));
 
@@ -66,7 +66,7 @@ class PageEditorController extends AssetEditorController
         $pageService->update($lang);
 
         $response = new LayoutResponse();
-        $response->addAction(new Toast(__('response.table.ok')));
+        $response->addAction(new Toast(__('siteboss::response.table.ok')));
         $response->addAction(new Redirect('/app/menu/'.$menu->parent_id));
 
         return $response->build();
@@ -86,7 +86,7 @@ class PageEditorController extends AssetEditorController
         }
 
         for ($i = count($collection) - 1; $i >= 0; $i--) {
-            $pageTitle = $collection[$i]->parent_id === 0 ? 'Menu' : $collection[$i]->getTitle(Lang::whereDefault(1)->first()) ?? __('page.noTitleSet');
+            $pageTitle = $collection[$i]->parent_id === 0 ? 'Menu' : $collection[$i]->getTitle(Lang::whereDefault(1)->first()) ?? __('siteboss::page.noTitleSet');
             $helper->addBreadcrumb($pageTitle, '/app/menu/'.$collection[$i]->id);
         }
     }

@@ -21,16 +21,16 @@ class SupportController extends Controller
     public function index(FormDataRequest $request)
     {
         $response = new LayoutResponse();
-        $page = new LayoutPage(__('support.title'));
+        $page = new LayoutPage(__('siteboss::support.title'));
 
         $breadcrumb = new LayoutBreadcrumb();
         $breadcrumb->addHome();
-        $breadcrumb->addItem(__('support.breadcrumb'));
+        $breadcrumb->addItem(__('siteboss::support.breadcrumb'));
         $page->addBreadCrumb($breadcrumb);
 
-        $widget = new LayoutWidget(__('support.widgetTitle'));
+        $widget = new LayoutWidget(__('siteboss::support.widgetTitle'));
 
-        $widget->addText(new LayoutText(__('support.intro')));
+        $widget->addText(new LayoutText(__('siteboss::support.intro')));
 
         $form = new LayoutForm('/app/support');
 
@@ -39,19 +39,19 @@ class SupportController extends Controller
 
         $form->addInput($email);
 
-        $subject = new LayoutInputText('subject', __('support.subject'));
+        $subject = new LayoutInputText('subject', __('siteboss::support.subject'));
         $subject->setRequired();
-        $subject->setDescription(__('support.subjectDescription'));
+        $subject->setDescription(__('siteboss::support.subjectDescription'));
 
         $form->addInput($subject);
 
-        $description = new LayoutInputTextArea('description', __('support.description'));
+        $description = new LayoutInputTextArea('description', __('siteboss::support.description'));
         $description->setRequired();
-        $description->setDescription(__('support.descriptionDescription'));
+        $description->setDescription(__('siteboss::support.descriptionDescription'));
 
         $form->addInput($description);
 
-        $form->addButton(new LayoutButton(__('support.submit')));
+        $form->addButton(new LayoutButton(__('siteboss::support.submit')));
 
         $widget->addForm($form);
 
@@ -94,23 +94,23 @@ class SupportController extends Controller
 
         $response = new LayoutResponse();
         if ($info['http_code'] == 200 && $server_output->result == 'ok') {
-            $toast = new Toast(__('support.done'));
+            $toast = new Toast(__('siteboss::support.done'));
             $response->addAction($toast);
         } else {
-            $toastError = new Toast(__('support.error'), 'error');
+            $toastError = new Toast(__('siteboss::support.error'), 'error');
             $response->addAction($toastError);
         }
 
-        $page = new LayoutPage(__('support.title'));
+        $page = new LayoutPage(__('siteboss::support.title'));
 
         $breadcrumb = new LayoutBreadcrumb();
         $breadcrumb->addHome();
-        $breadcrumb->addItem(__('support.breadcrumb'));
+        $breadcrumb->addItem(__('siteboss::support.breadcrumb'));
         $page->addBreadCrumb($breadcrumb);
 
-        $widget = new LayoutWidget(__('support.widgetTitle'));
+        $widget = new LayoutWidget(__('siteboss::support.widgetTitle'));
 
-        $widget->addText(new LayoutText(__('support.done')));
+        $widget->addText(new LayoutText(__('siteboss::support.done')));
 
         $page->addWidget($widget);
         $response->addUIElement($page);

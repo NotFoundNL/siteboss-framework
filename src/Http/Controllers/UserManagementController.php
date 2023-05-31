@@ -34,15 +34,15 @@ class UserManagementController extends Controller
             return LayoutPage::unauthorized();
         }
 
-        $page = new LayoutPage(__('ui.users.list'));
+        $page = new LayoutPage(__('siteboss::ui.users.list'));
 
         $breadcrumb = new LayoutBreadcrumb();
         $breadcrumb->addHome();
-        $breadcrumb->addItem(__('ui.users.list'), '/app/users');
-        $breadcrumb->addItem(__('ui.users.new'));
+        $breadcrumb->addItem(__('siteboss::ui.users.list'), '/app/users');
+        $breadcrumb->addItem(__('siteboss::ui.users.new'));
         $page->addBreadCrumb($breadcrumb);
 
-        $widget = new LayoutWidget(__('ui.users.new'));
+        $widget = new LayoutWidget(__('siteboss::ui.users.new'));
 
         $form = new LayoutForm(sprintf('/app/users/create/'));
 
@@ -50,12 +50,12 @@ class UserManagementController extends Controller
 
         $form->addText($help);
 
-        $email = new LayoutInputText('email', __('Email'));
+        $email = new LayoutInputText('email', __('siteboss::Email'));
 
         $email->setRequired();
         $form->addInput($email);
 
-        $form->addButton(new LayoutButton(__('ui.save')));
+        $form->addButton(new LayoutButton(__('siteboss::ui.save')));
 
         $widget->addForm($form);
         $page->addWidget($widget);
@@ -80,10 +80,10 @@ class UserManagementController extends Controller
         $user->properties = new \stdClass();
         $response = new LayoutResponse();
         if ($user->save()) {
-            $response->addAction(new Toast(__('response.user.updated')));
+            $response->addAction(new Toast(__('siteboss::response.user.updated')));
             $response->addAction(new Redirect('/app/users/'.$user->id));
         } else {
-            $response->addAction(new Toast(__('response.user.error')));
+            $response->addAction(new Toast(__('siteboss::response.user.error')));
         }
 
         return $response->build();
@@ -95,20 +95,20 @@ class UserManagementController extends Controller
             return LayoutPage::unauthorized();
         }
 
-        $page = new LayoutPage(__('ui.users.list'));
+        $page = new LayoutPage(__('siteboss::ui.users.list'));
 
         $breadcrumb = new LayoutBreadcrumb();
         $breadcrumb->addHome();
-        $breadcrumb->addItem(__('ui.users.list'));
+        $breadcrumb->addItem(__('siteboss::ui.users.list'));
         $page->addBreadCrumb($breadcrumb);
 
-        $widget = new LayoutWidget(__('ui.users.list'));
+        $widget = new LayoutWidget(__('siteboss::ui.users.list'));
         $widget->noPadding();
 
         if (env('OIDC_USE_EXISTING_EMAIL', false)) {
             $bar = new LayoutBar();
 
-            $button = new LayoutBarButton(__('ui.users.new'));
+            $button = new LayoutBarButton(__('siteboss::ui.users.new'));
 
             $button->setLink('/app/users/create');
 
@@ -131,11 +131,11 @@ class UserManagementController extends Controller
             return LayoutPage::unauthorized();
         }
 
-        $page = new LayoutPage(__('ui.users.list'));
+        $page = new LayoutPage(__('siteboss::ui.users.list'));
 
         $breadcrumb = new LayoutBreadcrumb();
         $breadcrumb->addHome();
-        $breadcrumb->addItem(__('ui.users.list'), '/app/users');
+        $breadcrumb->addItem(__('siteboss::ui.users.list'), '/app/users');
         $breadcrumb->addItem($user->name ?? 'User');
         $page->addBreadCrumb($breadcrumb);
 
@@ -183,9 +183,9 @@ class UserManagementController extends Controller
 
         $response = new LayoutResponse();
         if ($user->save()) {
-            $response->addAction(new Toast(__('response.user.updated')));
+            $response->addAction(new Toast(__('siteboss::response.user.updated')));
         } else {
-            $response->addAction(new Toast(__('response.user.error')));
+            $response->addAction(new Toast(__('siteboss::response.user.error')));
         }
 
         return $response->build();
@@ -196,7 +196,7 @@ class UserManagementController extends Controller
         $table = new LayoutTable(sort: false, delete: false, edit: true);
 
         $table->addHeader(new LayoutTableHeader('E-mail', 'email'));
-        $table->addHeader(new LayoutTableHeader(__('enabled'), 'enabled'));
+        $table->addHeader(new LayoutTableHeader(__('siteboss::enabled'), 'enabled'));
         $users = CmsUser::get();
 
         foreach ($users as $user) {
@@ -232,12 +232,12 @@ class UserManagementController extends Controller
 
         $form->addText($help);
 
-        $email = new LayoutInputText('email', __('Email'));
+        $email = new LayoutInputText('email', __('siteboss::Email'));
         $email->setValue($user->email ?? '');
         $email->setDisabled();
         $form->addInput($email);
 
-        $rolesTags = new LayoutInputTags('roles', __('Roles'));
+        $rolesTags = new LayoutInputTags('roles', __('siteboss::Roles'));
         $userIsAdmin = false;
 
         $userRoles = [];
@@ -261,12 +261,12 @@ class UserManagementController extends Controller
             $form->addText(new LayoutText('You cannot add administrator rights to a user.'));
         }
 
-        $checkbox = new LayoutInputCheckbox('enabled', __('Enabled'));
+        $checkbox = new LayoutInputCheckbox('enabled', __('siteboss::Enabled'));
         $checkbox->setValue($user->enabled == 1);
         $form->addInput($checkbox);
 
         $form->setMethod(LayoutRequestMethod::PUT);
-        $form->addButton(new LayoutButton(__('ui.save')));
+        $form->addButton(new LayoutButton(__('siteboss::ui.save')));
 
         return $form;
     }

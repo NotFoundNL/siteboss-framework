@@ -118,7 +118,7 @@ class CmsEditorMenuController extends \NotFound\Framework\Http\Controllers\Contr
 
         // We'll read the JSON to get more properties
 
-        $form->addButton(new LayoutButton(__('save')));
+        $form->addButton(new LayoutButton(__('siteboss::ui.save')));
 
         $widgetPage->widget->addForm($form);
 

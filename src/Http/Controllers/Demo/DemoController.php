@@ -16,7 +16,7 @@ class DemoController extends \NotFound\Framework\Http\Controllers\Controller
     public function index()
     {
         $response = new LayoutResponse();
-        $page = new LayoutPage(__('ui.page'));
+        $page = new LayoutPage(__('siteboss::ui.page'));
         $breadcrumb = new LayoutBreadcrumb();
         $breadcrumb->addHome();
         $breadcrumb->addItem('Demo', '/app/demo/');

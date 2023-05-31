@@ -17,8 +17,8 @@ class UserPreferencesController extends Controller
 {
     public function index()
     {
-        $widget = new LayoutWidgetHelper(__('preferences.title'), __('preferences.subtitle'));
-        $widget->addBreadcrumb(__('preferences.title'));
+        $widget = new LayoutWidgetHelper(__('siteboss::preferences.title'), __('siteboss::preferences.subtitle'));
+        $widget->addBreadcrumb(__('siteboss::preferences.title'));
 
         $form = new LayoutForm('app/preferences/');
 
@@ -27,17 +27,17 @@ class UserPreferencesController extends Controller
         foreach ($this->settings() as $setting) {
             switch ($setting->type) {
                 case 'checkbox':
-                    $settingField = new LayoutInputCheckbox($setting->name, __('preferences.settings.'.$setting->name));
+                    $settingField = new LayoutInputCheckbox($setting->name, __('siteboss::preferences.settings.'.$setting->name));
                     $settingField->setValue($preferences->{$setting->name} ?? false);
                     $form->addInput($settingField);
                     break;
                 default:
-                    $header = new LayoutTitle(__('preferences.settings.'.$setting->name));
+                    $header = new LayoutTitle(__('siteboss::preferences.settings.'.$setting->name));
                     $form->addTitle($header);
             }
         }
 
-        $form->addButton(new LayoutButton(__('preferences.save'), 'submit', 'primary'));
+        $form->addButton(new LayoutButton(__('siteboss::preferences.save'), 'submit', 'primary'));
         $widget->widget->addForm($form);
 
         return $widget->response();
@@ -62,7 +62,7 @@ class UserPreferencesController extends Controller
         $user->save();
 
         $response = new LayoutResponse();
-        $action = new Toast(__('preferences.saved'), 'ok');
+        $action = new Toast(__('siteboss::preferences.saved'), 'ok');
         $response->addAction($action);
 
         return $response->build();
