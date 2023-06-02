@@ -2,7 +2,7 @@
 
 namespace NotFound\Framework\Models;
 
-use App\Services\Legacy\StatusColumn;
+use NotFound\Framework\Services\Legacy\StatusColumn;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;

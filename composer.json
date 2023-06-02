@@ -36,7 +36,8 @@
     "autoload": {
         "psr-4": {
             "NotFound\\Framework\\": "src",
-            "NotFound\\Framework\\Database\\Factories\\": "database/factories"
+            "Database\\": "database",
+            "Database\\Seeders\\": "database/seeders"
         }
     },
     "autoload-dev": {
@@ -62,7 +63,11 @@
         "laravel": {
             "providers": [
                 "NotFound\\Framework\\FrameworkServiceProvider"
-            ]
+            ],
+            "aliases":
+            {
+                "Database": "NotFound\\Framework\\Database"
+            }
         }
     },
     "minimum-stability": "dev",

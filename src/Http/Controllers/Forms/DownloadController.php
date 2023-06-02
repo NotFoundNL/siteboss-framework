@@ -16,7 +16,7 @@ class DownloadController extends Controller
 
         $field = Field::where('id', $fieldId)->firstOrFail();
         $filetypeType = $field->properties->filetypes;
-        $mimeTypeConverter = new \App\Services\Forms\MimetypeConverter();
+        $mimeTypeConverter = new \NotFound\Framework\Services\Forms\MimetypeConverter();
         $acceptedFiletypes = $mimeTypeConverter->getMimetype($filetypeType);
 
         if (! in_array($mimeType, $acceptedFiletypes)) {
@@ -83,7 +83,7 @@ class DownloadController extends Controller
             'Pragma' => 'public',
         ];
 
-        $dataHandler = new \App\Services\Forms\UserDataTransformer($id, $type);
+        $dataHandler = new \NotFound\Framework\Services\Forms\UserDataTransformer($id, $type);
         $list = $dataHandler->getDataCsv();
 
         $callback = function () use ($list) {

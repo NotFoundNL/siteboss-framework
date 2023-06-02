@@ -3,9 +3,9 @@
 namespace NotFound\Framework\Http\Controllers\Pages;
 
 use NotFound\Framework\Http\Controllers\Controller;
-use App\Services\Assets\AssetValues;
-use App\Services\Assets\GlobalPageService;
-use App\Services\Assets\PageService;
+use NotFound\Framework\Services\Assets\AssetValues;
+use NotFound\Framework\Services\Assets\GlobalPageService;
+use NotFound\Framework\Services\Assets\PageService;
 use Illuminate\Support\Facades\View;
 use NotFound\Framework\Models\Lang;
 use NotFound\Framework\Models\Menu;

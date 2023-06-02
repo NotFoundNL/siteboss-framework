@@ -3,9 +3,9 @@
 namespace NotFound\Framework\Http\Controllers\Assets;
 
 use NotFound\Framework\Http\Controllers\Controller;
-use App\Services\Assets\Components\AbstractComponent;
-use App\Services\Assets\Components\FactoryComponent;
-use App\Services\Assets\PageService;
+use NotFound\Framework\Services\Assets\Components\AbstractComponent;
+use NotFound\Framework\Services\Assets\Components\FactoryComponent;
+use NotFound\Framework\Services\Assets\PageService;
 use NotFound\Framework\Models\Lang;
 use NotFound\Framework\Models\Menu;
 use NotFound\Framework\Models\TemplateItem;

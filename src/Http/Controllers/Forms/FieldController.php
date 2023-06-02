@@ -3,8 +3,8 @@
 namespace NotFound\Framework\Http\Controllers\Forms;
 
 use NotFound\Framework\Http\Controllers\Controller;
-use App\Services\Forms\MimetypeConverter;
-use App\Services\Legacy\StatusColumn;
+use NotFound\Framework\Services\Forms\MimetypeConverter;
+use NotFound\Framework\Services\Legacy\StatusColumn;
 use Illuminate\Http\Request;
 use NotFound\Framework\Models\Forms\Field;
 use NotFound\Framework\Models\Forms\Form;

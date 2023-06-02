@@ -4,7 +4,7 @@ namespace NotFound\Framework\Http\Controllers\CmsEditor;
 
 use App\Http\Requests\FormDataRequest;
 use NotFound\Framework\Models\Template;
-use App\Services\Editor\FieldsProperties;
+use NotFound\Framework\Services\Editor\FieldsProperties;
 use Illuminate\Http\Request as HttpRequest;
 use NotFound\Layout\Elements\LayoutBreadcrumb;
 use NotFound\Layout\Elements\LayoutButton;

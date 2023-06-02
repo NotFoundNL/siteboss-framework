@@ -2,8 +2,8 @@
 
 namespace NotFound\Framework\Models;
 
-use App\Services\Assets\AssetValues;
-use App\Services\Assets\TableService;
+use NotFound\Framework\Services\Assets\AssetValues;
+use NotFound\Framework\Services\Assets\TableService;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;

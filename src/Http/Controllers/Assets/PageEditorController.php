@@ -3,7 +3,7 @@
 namespace NotFound\Framework\Http\Controllers\Assets;
 
 use App\Http\Requests\FormDataRequest;
-use App\Services\Assets\PageService;
+use NotFound\Framework\Services\Assets\PageService;
 use Illuminate\Support\Collection;
 use NotFound\Framework\Models\Lang;
 use NotFound\Framework\Models\Menu;

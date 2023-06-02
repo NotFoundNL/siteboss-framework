@@ -2,8 +2,8 @@
 
 namespace NotFound\Framework\Models;
 
-use App\Services\Assets\Enums\TemplateType;
-use App\Services\Legacy\StatusColumn;
+use NotFound\Framework\Services\Assets\Enums\TemplateType;
+use NotFound\Framework\Services\Legacy\StatusColumn;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;

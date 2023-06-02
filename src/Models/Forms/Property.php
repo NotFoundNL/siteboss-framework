@@ -3,7 +3,7 @@
 namespace NotFound\Framework\Models\Forms;
 
 use NotFound\Framework\Models\BaseModel;
-use App\Services\Forms\Fields\FactoryType;
+use NotFound\Framework\Services\Forms\Fields\FactoryType;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**

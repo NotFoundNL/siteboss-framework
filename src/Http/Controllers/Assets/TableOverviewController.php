@@ -3,9 +3,9 @@
 namespace NotFound\Framework\Http\Controllers\Assets;
 
 use NotFound\Framework\Http\Controllers\Controller;
-use App\Services\Assets\Components\AbstractComponent;
-use App\Services\Assets\TableQueryService;
-use App\Services\Assets\TableService;
+use NotFound\Framework\Services\Assets\Components\AbstractComponent;
+use NotFound\Framework\Services\Assets\TableQueryService;
+use NotFound\Framework\Services\Assets\TableService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use NotFound\Framework\Models\Lang;

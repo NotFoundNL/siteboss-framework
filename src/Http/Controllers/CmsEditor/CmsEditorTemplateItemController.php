@@ -57,7 +57,7 @@ class CmsEditorTemplateItemController extends \NotFound\Framework\Http\Controlle
 
         $properties = (object) array_merge((array) $tableItem->properties, (array) $tableItem->server_properties);
 
-        $fieldProperties = new \App\Services\Editor\FieldsProperties($properties ?? new stdClass());
+        $fieldProperties = new \NotFound\Framework\Services\Editor\FieldsProperties($properties ?? new stdClass());
         $fieldProperties->getLayoutFields($type, $form);
 
         $form->addButton(new LayoutButton('Save field properties'));
@@ -91,7 +91,7 @@ class CmsEditorTemplateItemController extends \NotFound\Framework\Http\Controlle
         $tableItem->global = $request->global;
         $properties = (object) array_merge((array) $tableItem->properties, (array) $tableItem->server_properties);
 
-        $fieldProperties = new \App\Services\Editor\FieldsProperties($properties);
+        $fieldProperties = new \NotFound\Framework\Services\Editor\FieldsProperties($properties);
         $tableItem->properties = $fieldProperties->updateProperties($tableItem->type, $request);
         $tableItem->server_properties = $fieldProperties->updateServerProperties($tableItem->type, $request);
 
