@@ -2,7 +2,7 @@
 
 namespace NotFound\Framework\Http\Controllers\CmsEditor;
 
-use App\Http\Requests\FormDataRequest;
+use NotFound\Framework\Http\Requests\FormDataRequest;
 use NotFound\Framework\Models\Template;
 use NotFound\Framework\Services\Editor\FieldsProperties;
 use Illuminate\Http\Request as HttpRequest;

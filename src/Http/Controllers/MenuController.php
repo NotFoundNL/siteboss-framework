@@ -2,7 +2,7 @@
 
 namespace NotFound\Framework\Http\Controllers;
 
-use App\Http\Requests\FormDataRequest;
+use NotFound\Framework\Http\Requests\FormDataRequest;
 use NotFound\Framework\Services\Legacy\StatusColumn;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;

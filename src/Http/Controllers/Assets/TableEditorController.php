@@ -4,7 +4,7 @@ namespace NotFound\Framework\Http\Controllers\Assets;
 
 use App\Events\AfterSaveEvent;
 use App\Events\BeforeSaveEvent;
-use App\Http\Requests\FormDataRequest;
+use NotFound\Framework\Http\Requests\FormDataRequest;
 use NotFound\Framework\Services\Assets\Components\ComponentEditorLink;
 use NotFound\Framework\Services\Assets\TableService;
 use Illuminate\Support\Facades\Cache;

@@ -25,7 +25,6 @@ class MigrationServiceProvider extends ServiceProvider
     {
         $this->loadMigrationsFrom([
             base_path('database/migrations'),
-            siteboss_path('database/migrations'),
         ]);
     }
 }

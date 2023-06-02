@@ -15,8 +15,6 @@ class LocalizationServiceProvider extends ServiceProvider
             $this->setDefaultLocale();
             $this->setSupportedLocales();
         }
-
-        $this->loadTranslationsFrom(siteboss_path('lang'), 's');
     }
 
     protected function setSupportedLocales()

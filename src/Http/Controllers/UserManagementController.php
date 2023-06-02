@@ -2,7 +2,7 @@
 
 namespace NotFound\Framework\Http\Controllers;
 
-use App\Http\Requests\FormDataRequest;
+use NotFound\Framework\Http\Requests\FormDataRequest;
 use Illuminate\Support\Arr;
 use NotFound\Framework\Models\CmsGroup;
 use NotFound\Framework\Models\CmsUser;

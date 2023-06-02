@@ -3,7 +3,7 @@
 namespace NotFound\Framework\Http\Controllers\CmsEditor;
 
 use NotFound\Framework\Http\Controllers\Controller;
-use App\Http\Requests\FormDataRequest;
+use NotFound\Framework\Http\Requests\FormDataRequest;
 use NotFound\Framework\Models\Lang;
 use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Facades\Log;

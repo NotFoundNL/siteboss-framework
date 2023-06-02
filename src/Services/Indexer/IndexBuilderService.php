@@ -150,7 +150,7 @@ class IndexBuilderService
         $customValues = [];
 
         $class = $menu->template->filename ?? '';
-        $className = 'Siteboss\App\Http\Controllers\Page\\'.$class.'Controller';
+        $className = 'App\Http\Controllers\Page\\'.$class.'Controller';
         $c = null;
         $priority = 1;
         if (class_exists($className)) {
@@ -186,7 +186,7 @@ class IndexBuilderService
     private function updateSubPages($menu, $lang)
     {
         $class = $menu->template->filename ?? '';
-        $className = 'Siteboss\App\Http\Controllers\Page\\'.$class.'Controller';
+        $className = 'Siteboss\NotFound\Framework\Http\Controllers\Page\\'.$class.'Controller';
         $c = null;
 
         // update subPage if necessary

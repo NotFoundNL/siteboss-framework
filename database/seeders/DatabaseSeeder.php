@@ -14,10 +14,6 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->callFilesFromThisDirectory(__DIR__, 'Database\\Seeders\\');
-
-        if (is_dir(siteboss_path('database/seeders'))) {
-            $this->callFilesFromThisDirectory(siteboss_path('database/seeders'), 'Siteboss\\Database\\Seeders\\');
-        }
     }
 
     private function callFilesFromThisDirectory(string $directory, string $namespace): void

@@ -29,7 +29,6 @@ class PageRouterService
                     'middleware' => ['localeViewPath'],
                 ], function () use ($routes) {
                     $this->setRouteList($routes);
-                    require siteboss_path('routes/web.php');
                 }
             );
         } catch (Exception $e) {
@@ -92,16 +91,6 @@ class PageRouterService
 
     private function getControllerClassName(Menu $page): string
     {
-        if ($page->template !== null) {
-            $pageClassName = sprintf('\\Siteboss\\App\\Http\\Controllers\\Page\\%sController', ucfirst($page->template->filename));
-
-            if (! class_exists($pageClassName)) {
-                dd('Class does not exist: '.$pageClassName);
-            }
-
-            return $pageClassName;
-        }
-
         return '';
     }
 }

@@ -38,11 +38,6 @@ class RouteServiceProvider extends ServiceProvider
         $this->configureRateLimiting();
 
         $this->routes(function () {
-            if (file_exists(siteboss_path('routes/api.php'))) {
-                Route::prefix('/')
-                    ->group(siteboss_path('routes/api.php'));
-            }
-
             Route::middleware('web')
                 ->group(function () {
                     $pageRouter = new PageRouterService();

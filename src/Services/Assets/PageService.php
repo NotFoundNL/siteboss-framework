@@ -2,7 +2,7 @@
 
 namespace NotFound\Framework\Services\Assets;
 
-use App\Http\Requests\FormDataRequest;
+use NotFound\Framework\Http\Requests\FormDataRequest;
 use NotFound\Framework\Services\Assets\Components\AbstractComponent;
 use NotFound\Framework\Services\Assets\Enums\AssetType;
 use NotFound\Framework\Services\Assets\Enums\TemplateType;

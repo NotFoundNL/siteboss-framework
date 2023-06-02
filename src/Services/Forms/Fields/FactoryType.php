@@ -31,7 +31,6 @@ function customclassPath(string $className): string
 
 spl_autoload_register(function ($className) {
     $defaultFieldsPath = app_path().'/Services/Forms/Fields/';
-    $sitebossFieldsPath = siteboss_path().'app/Services/Forms/Fields/';
 
     if (startsWithAndStrip($className, 'App\\Services\\Forms\\Fields\\') || startsWithAndStrip($className, 'Siteboss\\App\\Services\\Forms\\Fields\\')) {
         // Check if siteboss has a field type

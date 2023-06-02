@@ -2,7 +2,7 @@
 
 namespace NotFound\Framework\Services\Editor;
 
-use App\Http\Requests\FormDataRequest;
+use NotFound\Framework\Http\Requests\FormDataRequest;
 use NotFound\Layout\Elements\LayoutForm;
 use NotFound\Layout\Elements\LayoutText;
 use NotFound\Layout\Elements\LayoutTitle;
