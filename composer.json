@@ -43,13 +43,19 @@
         "psr-4": {
             "NotFound\\Framework\\": "src",
             "Database\\": "database",
-            "Database\\Seeders\\": "database/seeders"
-        }
+            "NotFound\\Framework\\Database\\Seeders\\": "database/seeders"
+        },
+        "exclude-from-files": [
+            "notfoundnl/siteboss-framework/database/seeders/DatabaseSeeder.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
             "NotFound\\Framework\\Tests\\": "tests"
-        }
+        },
+        "exclude-from-files": [
+            "notfoundnl/siteboss-framework/database/seeders/DatabaseSeeder.php"
+        ]
     },
     "scripts": {
         "post-autoload-dump": "@php ./vendor/bin/testbench package:discover --ansi",
