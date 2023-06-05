@@ -23,7 +23,7 @@ use Siteboss\Routes\SiteRoutes;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::prefix(config('app.api_prefix'))->group(function () {
+Route::prefix(config('siteboss.api_prefix'))->group(function () {
     // Unauthenticated routes
     Route::prefix('api')->group(function () {
         Route::namespace('Forms')->group(function () {

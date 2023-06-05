@@ -75,7 +75,7 @@ class ForwardsController extends \NotFound\Framework\Http\Controllers\Controller
 
         $widget = new LayoutWidget('Regel');
 
-        $form = new LayoutForm(config('app.api_prefix').'/app/');
+        $form = new LayoutForm(config('siteboss.api_prefix').'/app/');
 
         $button = new LayoutButton('Sla regel op');
         $form->items = [];

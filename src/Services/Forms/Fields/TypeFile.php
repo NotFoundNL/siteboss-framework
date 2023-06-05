@@ -109,7 +109,7 @@ class TypeFile extends AbstractType
             );
 
             $url = sprintf(
-                config('app.api_prefix').'/forms/%d/fields/%d/records/%d/files/%d/',
+                config('siteboss.api_prefix').'/forms/%d/fields/%d/records/%d/files/%d/',
                 $this->validatorInfo->getFormId(),
                 $this->getFieldId(),
                 $recordId,

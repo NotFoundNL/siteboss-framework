@@ -2,7 +2,7 @@
 
 namespace NotFound\Framework\Services\ClamAV;
 
-use App\Exceptions\ClamAV\ClamAVException;
+use NotFound\Framework\Exceptions\ClamAV\ClamAVException;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 

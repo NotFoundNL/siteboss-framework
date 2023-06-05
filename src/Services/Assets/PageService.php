@@ -61,7 +61,7 @@ class PageService extends AbstractAssetService
     {
         $collect = new collection();
 
-        $title = new LayoutInputText('__template_title', __('page.pageTitle'));
+        $title = new LayoutInputText('__template_title', __('siteboss::page.pageTitle'));
         $titleModel = Strings::whereTable('menu')
             ->whereName('name')
             ->whereLangId($this->lang->id)
@@ -71,17 +71,17 @@ class PageService extends AbstractAssetService
         $title->setValue($titleModel->value ?? '');
         $collect->add($title);
 
-        $slug = new LayoutInputText('__template_slug', __('page.slug'));
+        $slug = new LayoutInputText('__template_slug', __('siteboss::page.slug'));
         $slug->setRequired();
-        $slug->setDescription(__('page.slugDescription'));
+        $slug->setDescription(__('siteboss::page.slugDescription'));
         $slug->setValue($this->menu->url ?? '');
         $collect->add($slug);
 
-        $active = new LayoutInputCheckbox('__template_active', __('page.active'));
+        $active = new LayoutInputCheckbox('__template_active', __('siteboss::page.active'));
         $active->setValue((bool) $this->menu->enabled ?? true);
         $collect->add($active);
 
-        $menu = new LayoutInputCheckbox('__template_menu', __('page.inMenu'));
+        $menu = new LayoutInputCheckbox('__template_menu', __('siteboss::page.inMenu'));
         $menu->setValue((bool) $this->menu->menu ?? true);
         $collect->add($menu);
 
@@ -101,12 +101,12 @@ class PageService extends AbstractAssetService
         }
 
         $collect = new collection();
-        $metaTitleInput = new LayoutInputText('__meta_title', __('page.meta_title'));
-        $metaTitleInput->setPlaceholder(__('page.meta_title_placeholder'));
+        $metaTitleInput = new LayoutInputText('__meta_title', __('siteboss::page.meta_title'));
+        $metaTitleInput->setPlaceholder(__('siteboss::page.meta_title_placeholder'));
         $metaTitleInput->setValue($metaStrings->title ?? '');
         $collect->add($metaTitleInput);
 
-        $metaDescriptionInput = new LayoutInputText('__meta_description', __('page.meta_description'));
+        $metaDescriptionInput = new LayoutInputText('__meta_description', __('siteboss::page.meta_description'));
         $metaDescriptionInput->setValue($metaStrings->description ?? '');
         $collect->add($metaDescriptionInput);
 

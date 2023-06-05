@@ -15,13 +15,21 @@ class FrameworkServiceProvider extends ServiceProvider
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'siteboss');
         
         $this->mergeConfigFrom(
-            __DIR__.'/../config/app.php', 'app'
+            __DIR__.'/../config/auth.php', 'auth'
         );
 
+        
 
         $this->loadTranslationsFrom(__DIR__.'/../lang', 'siteboss');
         $this->publishes([
-
+            __DIR__.'/../config/siteboss.php' => config_path('siteboss.php'),
+            __DIR__.'/../config/openid.php' => config_path('openid.php'),
         ], 'laravel-assets');
+    }
+
+    public function register(): void
+    {
+        app('router')->aliasMiddleware('set-forget-locale', \NotFound\Framework\Http\Middleware\SetAndForgetLocale::class);
+        app('router')->aliasMiddleware('role', \NotFound\Framework\Http\Middleware\EnsureUserHasRole::class);
     }
 }

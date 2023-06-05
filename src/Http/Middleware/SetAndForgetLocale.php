@@ -34,7 +34,7 @@ class SetAndForgetLocale
             $currentUri = '/'.$currentUri;
         }
 
-        if (Str::startsWith($currentUri, config('app.api_prefix'))) {
+        if (Str::startsWith($currentUri, config('siteboss.api_prefix'))) {
             $localeSegment = $this->getApiPrefixSegmentsCount() + 1;
         }
 
@@ -49,7 +49,7 @@ class SetAndForgetLocale
      */
     private function getApiPrefixSegmentsCount(): int
     {
-        $prefix = rawurldecode(config('app.api_prefix'));
+        $prefix = rawurldecode(config('siteboss.api_prefix'));
 
         $segments = explode('/', $prefix);
 

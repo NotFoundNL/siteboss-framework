@@ -31,7 +31,7 @@ class AboutController extends Controller
 
         $widget = new LayoutWidget('About '.$productName.' CMS', 6);
 
-        $metadata = json_decode(file_get_contents(base_path('composer.json')));
+        $metadata = json_decode(file_get_contents(__DIR__.'/../../../composer.json'));
 
         $widget->addText(new LayoutText(sprintf('<header style="font-size: 22px;font-weight:bold;border:none">PHP %s</header>', phpversion())));
         $widget->addText(new LayoutText(sprintf('<p>%s: %s</p>', __('siteboss::about.configuration'), php_ini_loaded_file())));

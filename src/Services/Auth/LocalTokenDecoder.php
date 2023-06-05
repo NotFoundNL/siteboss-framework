@@ -2,7 +2,7 @@
 
 namespace NotFound\Framework\Services\Auth;
 
-use App\Exceptions\OpenID\OpenIDException;
+use NotFound\Framework\Exceptions\OpenID\OpenIDException;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use Illuminate\Support\Facades\Cache;
