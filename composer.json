@@ -1,7 +1,6 @@
 {
     "name": "notfoundnl/siteboss-framework",
     "description": "This is my package siteboss-framework",
-    "version": "1.8.0",
     "keywords": [
         "NotFound",
         "laravel",
@@ -21,11 +20,9 @@
         "illuminate/contracts": "^10.0",
         "notfoundnl/siteboss-layout": "^1.3.0",
         "mcamara/laravel-localization": "^1.8",
-        "firebase/php-jwt": "*",
-        "pragmarx/google2fa-laravel": "*",
+        "firebase/php-jwt": "^6.3",
         "xenolope/quahog": "^3.0",
         "intervention/image": "^2.7"
-
     },
     "require-dev": {
         "laravel/pint": "^1.0",
@@ -45,17 +42,14 @@
             "Database\\": "database",
             "NotFound\\Framework\\Database\\Seeders\\": "database/seeders"
         },
-        "exclude-from-files": [
-            "notfoundnl/siteboss-framework/database/seeders/DatabaseSeeder.php"
+        "files": [
+            "src/Http/Helpers.php"
         ]
     },
     "autoload-dev": {
         "psr-4": {
             "NotFound\\Framework\\Tests\\": "tests"
-        },
-        "exclude-from-files": [
-            "notfoundnl/siteboss-framework/database/seeders/DatabaseSeeder.php"
-        ]
+        }
     },
     "scripts": {
         "post-autoload-dump": "@php ./vendor/bin/testbench package:discover --ansi",
@@ -75,11 +69,7 @@
         "laravel": {
             "providers": [
                 "NotFound\\Framework\\FrameworkServiceProvider"
-            ],
-            "aliases":
-            {
-                "Database": "NotFound\\Framework\\Database"
-            }
+            ]
         }
     },
     "minimum-stability": "dev",
