@@ -1,6 +1,6 @@
 <?php
 
-namespace NotFound\Framework\ClamAV;
+namespace NotFound\Framework\Exceptions\ClamAV;
 
 use Exception;
 
