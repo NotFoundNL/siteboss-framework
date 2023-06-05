@@ -17,10 +17,10 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        'NotFound\Framework\Models\Forms\Data' => 'App\Policies\Forms\DataPolicy',
-        'NotFound\Framework\Models\Forms\Form' => 'App\Policies\Forms\FormPolicy',
-        'NotFound\Framework\Models\Forms\Category' => 'App\Policies\Forms\CategoryPolicy',
-        'NotFound\Framework\Models\Table' => 'App\Policies\TablePolicy',
+        'NotFound\Framework\Models\Forms\Data' => 'NotFound\Framework\Policies\Forms\DataPolicy',
+        'NotFound\Framework\Models\Forms\Form' => 'NotFound\Framework\Policies\Forms\FormPolicy',
+        'NotFound\Framework\Models\Forms\Category' => 'NotFound\Framework\Policies\Forms\CategoryPolicy',
+        'NotFound\Framework\Models\Table' => 'NotFound\Framework\Policies\TablePolicy',
     ];
 
     /**
