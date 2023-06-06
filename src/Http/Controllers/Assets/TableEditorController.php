@@ -2,10 +2,10 @@
 
 namespace NotFound\Framework\Http\Controllers\Assets;
 
-use App\Events\AfterSaveEvent;
-use App\Events\BeforeSaveEvent;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
+use NotFound\Framework\Events\AfterSaveEvent;
+use NotFound\Framework\Events\BeforeSaveEvent;
 use NotFound\Framework\Http\Requests\FormDataRequest;
 use NotFound\Framework\Models\Lang;
 use NotFound\Framework\Models\Table;
