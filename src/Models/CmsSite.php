@@ -2,8 +2,8 @@
 
 namespace NotFound\Framework\Models;
 
-use NotFound\Framework\Models\Scopes\EnabledScope;
 use Illuminate\Database\Eloquent\Model;
+use NotFound\Framework\Models\Scopes\EnabledScope;
 
 /**
  * NotFound\Framework\Models\CmsSite

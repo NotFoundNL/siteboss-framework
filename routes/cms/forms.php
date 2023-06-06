@@ -1,11 +1,11 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
 use NotFound\Framework\Http\Controllers\Forms\CategoryController;
 use NotFound\Framework\Http\Controllers\Forms\DataController;
 use NotFound\Framework\Http\Controllers\Forms\DownloadController;
 use NotFound\Framework\Http\Controllers\Forms\FieldController;
 use NotFound\Framework\Http\Controllers\Forms\FormController;
-use Illuminate\Support\Facades\Route;
 
 Route::namespace('Forms')->group(function () {
     // /forms

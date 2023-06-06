@@ -2,9 +2,9 @@
 
 namespace NotFound\Framework\Services\Auth;
 
-use NotFound\Framework\Exceptions\OpenID\OpenIDException;
 use Firebase\JWT\JWT;
 use Illuminate\Support\Facades\Http;
+use NotFound\Framework\Exceptions\OpenID\OpenIDException;
 
 class RemoteTokenDecoder extends AbstractTokenDecoder
 {

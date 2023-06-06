@@ -2,8 +2,8 @@
 
 namespace NotFound\Framework\Models\Indexes;
 
-use NotFound\Framework\Models\BaseModel;
 use Illuminate\Support\Str;
+use NotFound\Framework\Models\BaseModel;
 
 class SolrItem extends BaseModel
 {

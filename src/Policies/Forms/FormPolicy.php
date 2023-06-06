@@ -2,9 +2,9 @@
 
 namespace NotFound\Framework\Policies\Forms;
 
-use NotFound\Framework\Policies\BasePolicy;
 use NotFound\Framework\Models\CmsUser;
 use NotFound\Framework\Models\Forms\Form;
+use NotFound\Framework\Policies\BasePolicy;
 
 class FormPolicy extends BasePolicy
 {

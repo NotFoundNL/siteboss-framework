@@ -2,9 +2,9 @@
 
 namespace NotFound\Framework\Services\ClamAV;
 
-use NotFound\Framework\Exceptions\ClamAV\ClamAVException;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use NotFound\Framework\Exceptions\ClamAV\ClamAVException;
 
 //TODO: Convert to laravel facade
 class ClamAV

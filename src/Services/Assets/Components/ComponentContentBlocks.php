@@ -2,12 +2,12 @@
 
 namespace NotFound\Framework\Services\Assets\Components;
 
-use NotFound\Framework\Services\Assets\TableService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use NotFound\Framework\Models\CmsContentBlocks;
 use NotFound\Framework\Models\Table;
+use NotFound\Framework\Services\Assets\TableService;
 use NotFound\Layout\Elements\AbstractLayout;
 use NotFound\Layout\Inputs\LayoutInputContentBlocks;
 

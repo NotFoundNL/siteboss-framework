@@ -2,11 +2,11 @@
 
 namespace NotFound\Framework\Services\Auth;
 
-use NotFound\Framework\Exceptions\OpenID\OpenIDException;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
+use NotFound\Framework\Exceptions\OpenID\OpenIDException;
 
 class LocalTokenDecoder extends AbstractTokenDecoder
 {

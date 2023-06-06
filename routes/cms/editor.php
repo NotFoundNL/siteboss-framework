@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
 use NotFound\Framework\Http\Controllers\CmsEditor\CmsEditorController;
 use NotFound\Framework\Http\Controllers\CmsEditor\CmsEditorLangController;
 use NotFound\Framework\Http\Controllers\CmsEditor\CmsEditorMenuController;
@@ -7,7 +8,6 @@ use NotFound\Framework\Http\Controllers\CmsEditor\CmsEditorTableController;
 use NotFound\Framework\Http\Controllers\CmsEditor\CmsEditorTableItemController;
 use NotFound\Framework\Http\Controllers\CmsEditor\CmsEditorTemplateController;
 use NotFound\Framework\Http\Controllers\CmsEditor\CmsEditorTemplateItemController;
-use Illuminate\Support\Facades\Route;
 
 Route::get('', [CmsEditorController::class, 'index']);
 

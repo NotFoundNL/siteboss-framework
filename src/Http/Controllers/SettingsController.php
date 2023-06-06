@@ -2,8 +2,8 @@
 
 namespace NotFound\Framework\Http\Controllers;
 
-use NotFound\Framework\Http\Requests\FormDataRequest;
 use Illuminate\Http\Request;
+use NotFound\Framework\Http\Requests\FormDataRequest;
 use NotFound\Framework\Models\CmsConfig;
 use NotFound\Layout\Elements\LayoutButton;
 use NotFound\Layout\Elements\LayoutForm;

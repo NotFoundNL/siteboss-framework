@@ -2,14 +2,14 @@
 
 namespace NotFound\Framework\Http\Controllers\Assets;
 
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use NotFound\Framework\Http\Controllers\Controller;
+use NotFound\Framework\Models\Lang;
+use NotFound\Framework\Models\Table;
 use NotFound\Framework\Services\Assets\Components\AbstractComponent;
 use NotFound\Framework\Services\Assets\TableQueryService;
 use NotFound\Framework\Services\Assets\TableService;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use NotFound\Framework\Models\Lang;
-use NotFound\Framework\Models\Table;
 use NotFound\Layout\Elements\LayoutBar;
 use NotFound\Layout\Elements\LayoutBarButton;
 use NotFound\Layout\Elements\LayoutBreadcrumb;

@@ -2,11 +2,11 @@
 
 namespace NotFound\Framework\Models;
 
-use NotFound\Framework\Services\Legacy\StatusColumn;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
+use NotFound\Framework\Services\Legacy\StatusColumn;
 
 /**
  * NotFound\Framework\Models\Table

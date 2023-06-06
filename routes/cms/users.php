@@ -1,7 +1,7 @@
 <?php
 
-use NotFound\Framework\Http\Controllers\UserManagementController;
 use Illuminate\Support\Facades\Route;
+use NotFound\Framework\Http\Controllers\UserManagementController;
 
 Route::get('', [UserManagementController::class, 'readAll']);
 Route::get('create', [UserManagementController::class, 'create']);

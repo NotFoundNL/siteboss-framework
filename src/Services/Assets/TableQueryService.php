@@ -2,13 +2,13 @@
 
 namespace NotFound\Framework\Services\Assets;
 
-use NotFound\Framework\Services\Assets\Components\AbstractComponent;
-use NotFound\Framework\Services\Legacy\StatusColumn;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use NotFound\Framework\Models\Lang;
 use NotFound\Framework\Models\Table;
+use NotFound\Framework\Services\Assets\Components\AbstractComponent;
+use NotFound\Framework\Services\Legacy\StatusColumn;
 
 class TableQueryService
 {

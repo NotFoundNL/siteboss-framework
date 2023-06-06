@@ -2,12 +2,12 @@
 
 namespace NotFound\Framework\Services\Assets\Components;
 
-use NotFound\Framework\Services\Assets\Enums\AssetType;
 use Illuminate\Http\File;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\ImageManager;
 use NotFound\Framework\Models\EditorSetting;
 use NotFound\Framework\Models\FileUpload;
+use NotFound\Framework\Services\Assets\Enums\AssetType;
 use NotFound\Layout\Elements\AbstractLayout;
 use NotFound\Layout\Inputs\LayoutInputText;
 
