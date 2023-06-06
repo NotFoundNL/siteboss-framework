@@ -2,12 +2,12 @@
 
 namespace NotFound\Framework\Services\Assets;
 
-use NotFound\Framework\Services\Assets\Components\AbstractComponent;
-use NotFound\Framework\Services\Assets\Enums\AssetType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use NotFound\Framework\Models\Lang;
 use NotFound\Framework\Models\Table;
+use NotFound\Framework\Services\Assets\Components\AbstractComponent;
+use NotFound\Framework\Services\Assets\Enums\AssetType;
 
 class TableService extends AbstractAssetService
 {

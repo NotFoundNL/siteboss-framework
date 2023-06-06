@@ -1,9 +1,9 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
 use NotFound\Framework\Http\Controllers\Assets\TableEditorController;
 use NotFound\Framework\Http\Controllers\Assets\TableItemEditorController;
 use NotFound\Framework\Http\Controllers\Assets\TableOverviewController;
-use Illuminate\Support\Facades\Route;
 
 Route::prefix('{table:url}')->group(function () {
     Route::get('', [TableOverviewController::class, 'index']);

@@ -4,10 +4,10 @@
 
 namespace App\Providers;
 
-use NotFound\Framework\Http\Guards\OpenIDGuard;
-use NotFound\Framework\Providers\Auth\OpenIDUserProvider;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Auth;
+use NotFound\Framework\Http\Guards\OpenIDGuard;
+use NotFound\Framework\Providers\Auth\OpenIDUserProvider;
 
 class AuthServiceProvider extends ServiceProvider
 {

@@ -3,12 +3,12 @@
 namespace NotFound\Framework\Http\Controllers\Assets;
 
 use NotFound\Framework\Http\Controllers\Controller;
-use NotFound\Framework\Services\Assets\Components\AbstractComponent;
-use NotFound\Framework\Services\Assets\Components\FactoryComponent;
-use NotFound\Framework\Services\Assets\TableService;
 use NotFound\Framework\Models\Lang;
 use NotFound\Framework\Models\Table;
 use NotFound\Framework\Models\TableItem;
+use NotFound\Framework\Services\Assets\Components\AbstractComponent;
+use NotFound\Framework\Services\Assets\Components\FactoryComponent;
+use NotFound\Framework\Services\Assets\TableService;
 
 class TableItemEditorController extends Controller
 {

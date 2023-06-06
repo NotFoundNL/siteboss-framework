@@ -2,12 +2,12 @@
 
 namespace NotFound\Framework\Models;
 
-use NotFound\Framework\Services\Assets\AssetValues;
-use NotFound\Framework\Services\Assets\TableService;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Cache;
+use NotFound\Framework\Services\Assets\AssetValues;
+use NotFound\Framework\Services\Assets\TableService;
 
 /**
  * NotFound\Framework\Models\BaseModel

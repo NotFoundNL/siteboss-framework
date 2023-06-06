@@ -2,9 +2,9 @@
 
 namespace NotFound\Framework\Services\Assets\Components;
 
-use NotFound\Framework\Services\ClamAV\ClamAV;
 use Illuminate\Http\File;
 use Illuminate\Support\Facades\Storage;
+use NotFound\Framework\Services\ClamAV\ClamAV;
 use NotFound\Layout\Elements\AbstractLayout;
 use NotFound\Layout\Elements\Table\LayoutTableColumn;
 use NotFound\Layout\Inputs\LayoutInputFile;

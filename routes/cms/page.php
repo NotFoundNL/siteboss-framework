@@ -1,9 +1,9 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
 use NotFound\Framework\Http\Controllers\Assets\PageEditorController;
 use NotFound\Framework\Http\Controllers\Assets\PageItemEditorController;
 use NotFound\Framework\Http\Controllers\MenuController;
-use Illuminate\Support\Facades\Route;
 
 // /page/{id}
 Route::post('new', [PageEditorController::class, 'create']);

@@ -2,13 +2,13 @@
 
 namespace NotFound\Framework\Http\Controllers\Pages;
 
+use Illuminate\Support\Facades\View;
 use NotFound\Framework\Http\Controllers\Controller;
+use NotFound\Framework\Models\Lang;
+use NotFound\Framework\Models\Menu;
 use NotFound\Framework\Services\Assets\AssetValues;
 use NotFound\Framework\Services\Assets\GlobalPageService;
 use NotFound\Framework\Services\Assets\PageService;
-use Illuminate\Support\Facades\View;
-use NotFound\Framework\Models\Lang;
-use NotFound\Framework\Models\Menu;
 
 class PageController extends Controller
 {

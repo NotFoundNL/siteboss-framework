@@ -2,11 +2,11 @@
 
 namespace NotFound\Framework\Http\Controllers\ContentBlocks;
 
-use NotFound\Framework\Services\Assets\Components\AbstractComponent;
-use NotFound\Framework\Services\Assets\TableService;
 use Illuminate\Support\Collection;
 use NotFound\Framework\Models\Lang;
 use NotFound\Framework\Models\Table;
+use NotFound\Framework\Services\Assets\Components\AbstractComponent;
+use NotFound\Framework\Services\Assets\TableService;
 
 class ContentBlockController
 {

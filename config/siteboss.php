@@ -5,5 +5,3 @@
 return [
     'api_prefix' => env('API_PREFIX', '/siteboss/api'),
 ];
-
-?>

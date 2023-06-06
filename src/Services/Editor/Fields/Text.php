@@ -2,8 +2,8 @@
 
 namespace NotFound\Framework\Services\Editor\Fields;
 
-use NotFound\Framework\Services\Editor\Properties;
 use NotFound\Framework\Models\EditorSetting;
+use NotFound\Framework\Services\Editor\Properties;
 
 class Text extends Properties
 {

@@ -2,9 +2,9 @@
 
 namespace NotFound\Framework\Models\Forms;
 
+use Illuminate\Database\Eloquent\SoftDeletes;
 use NotFound\Framework\Models\BaseModel;
 use NotFound\Framework\Services\Forms\Fields\FactoryType;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * NotFound\Framework\Models\Forms\Property

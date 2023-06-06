@@ -2,8 +2,8 @@
 
 namespace NotFound\Framework\Models\Forms;
 
-use NotFound\Framework\Models\BaseModel;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use NotFound\Framework\Models\BaseModel;
 
 //TODO: Think of a better name
 /**

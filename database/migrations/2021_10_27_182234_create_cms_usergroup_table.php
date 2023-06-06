@@ -1,10 +1,10 @@
 <?php
 
-use NotFound\Framework\Models\CmsGroup;
-use NotFound\Framework\Models\CmsUser;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use NotFound\Framework\Models\CmsGroup;
+use NotFound\Framework\Models\CmsUser;
 
 class CreateCmsUsergroupTable extends Migration
 {

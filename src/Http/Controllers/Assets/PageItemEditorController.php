@@ -3,12 +3,12 @@
 namespace NotFound\Framework\Http\Controllers\Assets;
 
 use NotFound\Framework\Http\Controllers\Controller;
-use NotFound\Framework\Services\Assets\Components\AbstractComponent;
-use NotFound\Framework\Services\Assets\Components\FactoryComponent;
-use NotFound\Framework\Services\Assets\PageService;
 use NotFound\Framework\Models\Lang;
 use NotFound\Framework\Models\Menu;
 use NotFound\Framework\Models\TemplateItem;
+use NotFound\Framework\Services\Assets\Components\AbstractComponent;
+use NotFound\Framework\Services\Assets\Components\FactoryComponent;
+use NotFound\Framework\Services\Assets\PageService;
 
 class PageItemEditorController extends Controller
 {

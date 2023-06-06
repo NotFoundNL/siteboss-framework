@@ -2,8 +2,8 @@
 
 namespace NotFound\Framework\Services\Assets\Components;
 
-use NotFound\Framework\Services\Legacy\StatusColumn;
 use Illuminate\Support\Facades\DB;
+use NotFound\Framework\Services\Legacy\StatusColumn;
 use NotFound\Layout\Elements\AbstractLayout;
 use NotFound\Layout\Inputs\LayoutInputTags;
 

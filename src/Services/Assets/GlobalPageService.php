@@ -2,12 +2,12 @@
 
 namespace NotFound\Framework\Services\Assets;
 
-use NotFound\Framework\Services\Assets\Components\FactoryComponent;
-use NotFound\Framework\Services\Assets\Enums\AssetType;
 use Illuminate\Support\Collection;
 use NotFound\Framework\Models\Lang;
 use NotFound\Framework\Models\Template;
 use NotFound\Framework\Models\TemplateItem;
+use NotFound\Framework\Services\Assets\Components\FactoryComponent;
+use NotFound\Framework\Services\Assets\Enums\AssetType;
 
 class GlobalPageService extends AbstractAssetService
 {
