@@ -2,14 +2,14 @@
 
 namespace NotFound\Framework\Http\Guards;
 
-use NotFound\Framework\Providers\Auth\OpenIDUserProvider;
-use NotFound\Framework\Services\Auth\Token;
-use NotFound\Framework\Services\Auth\TokenDecoder;
 use Illuminate\Auth\GuardHelpers;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use NotFound\Framework\Models\CmsGroup;
+use NotFound\Framework\Providers\Auth\OpenIDUserProvider;
+use NotFound\Framework\Services\Auth\Token;
+use NotFound\Framework\Services\Auth\TokenDecoder;
 
 class OpenIDGuard implements Guard
 {

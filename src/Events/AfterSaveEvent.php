@@ -2,9 +2,9 @@
 
 namespace NotFound\Framework\Events;
 
-use NotFound\Framework\Models\BaseModel;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use NotFound\Framework\Models\BaseModel;
 
 class AfterSaveEvent
 {

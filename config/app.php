@@ -135,7 +135,7 @@ return [
     */
 
     'providers' => [
-       NotFound\Framework\Providers\LocalizationServiceProvider::class,
+        NotFound\Framework\Providers\LocalizationServiceProvider::class,
 
         /*
          * Laravel Framework Service Providers...
@@ -166,11 +166,11 @@ return [
         /*
          * Application Service Providers...
          */
-       NotFound\Framework\Providers\EventServiceProvider::class,
-       NotFound\Framework\Providers\RouteServiceProvider::class,
-       NotFound\Framework\Providers\AuthServiceProvider::class,
-       NotFound\Framework\Providers\LogServiceProvider::class,
-       NotFound\Framework\Providers\MigrationServiceProvider::class,
+        NotFound\Framework\Providers\EventServiceProvider::class,
+        NotFound\Framework\Providers\RouteServiceProvider::class,
+        NotFound\Framework\Providers\AuthServiceProvider::class,
+        NotFound\Framework\Providers\LogServiceProvider::class,
+        NotFound\Framework\Providers\MigrationServiceProvider::class,
 
     ],
 

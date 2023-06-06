@@ -2,10 +2,10 @@
 
 namespace NotFound\Framework\Services\Indexer;
 
-use NotFound\Framework\Services\Assets\PageService;
 use NotFound\Framework\Models\CmsSite;
 use NotFound\Framework\Models\Lang;
 use NotFound\Framework\Models\Menu;
+use NotFound\Framework\Services\Assets\PageService;
 
 class IndexBuilderService
 {

@@ -2,10 +2,10 @@
 
 namespace NotFound\Framework\Services\Forms\Fields;
 
-use NotFound\Framework\Services\ClamAV\ClamAV;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use NotFound\Framework\Models\Forms\Filetype;
+use NotFound\Framework\Services\ClamAV\ClamAV;
 
 class TypeFile extends AbstractType
 {

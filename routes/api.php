@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
 use NotFound\Framework\Http\Controllers\AboutController;
 use NotFound\Framework\Http\Controllers\ContentBlocks\ContentBlockController;
 use NotFound\Framework\Http\Controllers\Forms\DataController;
@@ -9,7 +10,6 @@ use NotFound\Framework\Http\Controllers\InfoController;
 use NotFound\Framework\Http\Controllers\SettingsController;
 use NotFound\Framework\Http\Controllers\Support\SupportController;
 use NotFound\Framework\Http\Controllers\UserPreferencesController;
-use Illuminate\Support\Facades\Route;
 use Siteboss\Routes\SiteRoutes;
 
 // ContentBlock

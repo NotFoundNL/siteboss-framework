@@ -2,12 +2,12 @@
 
 namespace NotFound\Framework\Http\Controllers;
 
-use NotFound\Framework\Services\Legacy\StatusColumn;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use NotFound\Framework\Models\CmsMenu;
 use NotFound\Framework\Models\CmsUser;
 use NotFound\Framework\Models\Lang;
+use NotFound\Framework\Services\Legacy\StatusColumn;
 use stdClass;
 
 class InfoController extends Controller

@@ -2,8 +2,8 @@
 
 namespace NotFound\Framework\Http\Controllers\Forms;
 
-use NotFound\Framework\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use NotFound\Framework\Http\Controllers\Controller;
 use NotFound\Framework\Models\Forms\Category;
 use NotFound\Framework\Models\Forms\Field;
 use NotFound\Framework\Models\Forms\Form;

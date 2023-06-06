@@ -2,8 +2,8 @@
 
 namespace NotFound\Framework\Services\Editor\Fields;
 
-use NotFound\Framework\Services\Editor\Properties;
 use NotFound\Framework\Models\Table;
+use NotFound\Framework\Services\Editor\Properties;
 
 class ContentBlocks extends Properties
 {

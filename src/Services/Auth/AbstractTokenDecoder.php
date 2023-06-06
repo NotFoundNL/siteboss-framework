@@ -2,9 +2,9 @@
 
 namespace NotFound\Framework\Services\Auth;
 
-use NotFound\Framework\Exceptions\OpenID\OpenIDException;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
+use NotFound\Framework\Exceptions\OpenID\OpenIDException;
 
 abstract class AbstractTokenDecoder
 {

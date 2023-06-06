@@ -2,11 +2,11 @@
 
 namespace NotFound\Framework\Models;
 
-use NotFound\Framework\Services\Assets\Enums\TemplateType;
-use NotFound\Framework\Services\Legacy\StatusColumn;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
+use NotFound\Framework\Services\Assets\Enums\TemplateType;
+use NotFound\Framework\Services\Legacy\StatusColumn;
 
 /**
  * NotFound\Framework\Models\Menu
