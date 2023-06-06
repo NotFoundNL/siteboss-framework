@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\UserManagementController;
+use NotFound\Framework\Http\Controllers\UserManagementController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('', [UserManagementController::class, 'readAll']);

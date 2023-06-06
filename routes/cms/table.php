@@ -1,8 +1,8 @@
 <?php
 
-use App\Http\Controllers\Assets\TableEditorController;
-use App\Http\Controllers\Assets\TableItemEditorController;
-use App\Http\Controllers\Assets\TableOverviewController;
+use NotFound\Framework\Http\Controllers\Assets\TableEditorController;
+use NotFound\Framework\Http\Controllers\Assets\TableItemEditorController;
+use NotFound\Framework\Http\Controllers\Assets\TableOverviewController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('{table:url}')->group(function () {

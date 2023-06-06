@@ -1,10 +1,10 @@
 <?php
 
-use App\Http\Controllers\Forms\CategoryController;
-use App\Http\Controllers\Forms\DataController;
-use App\Http\Controllers\Forms\DownloadController;
-use App\Http\Controllers\Forms\FieldController;
-use App\Http\Controllers\Forms\FormController;
+use NotFound\Framework\Http\Controllers\Forms\CategoryController;
+use NotFound\Framework\Http\Controllers\Forms\DataController;
+use NotFound\Framework\Http\Controllers\Forms\DownloadController;
+use NotFound\Framework\Http\Controllers\Forms\FieldController;
+use NotFound\Framework\Http\Controllers\Forms\FormController;
 use Illuminate\Support\Facades\Route;
 
 Route::namespace('Forms')->group(function () {

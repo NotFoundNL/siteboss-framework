@@ -15,10 +15,10 @@ class CreateMenuTable extends Migration
             $table->id();
             $table->string('rights', 128)->nullable()->default('');
             $table->string('cms_rights', 128)->default('');
-            $table->integer('parent');
+            $table->integer('parent_id');
             $table->string('url', 33);
             $table->tinyInteger('type');
-            $table->integer('template')->default('0');
+            $table->integer('template_id')->default('0');
             $table->integer('language')->default('2');
             $table->tinyInteger('enabled');
             $table->string('link')->nullable();

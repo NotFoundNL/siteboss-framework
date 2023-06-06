@@ -1,14 +1,14 @@
 <?php
 
-use App\Http\Controllers\AboutController;
-use App\Http\Controllers\ContentBlocks\ContentBlockController;
-use App\Http\Controllers\Forms\DataController;
-use App\Http\Controllers\Forms\DownloadController;
-use App\Http\Controllers\Forms\FieldController;
-use App\Http\Controllers\InfoController;
-use App\Http\Controllers\SettingsController;
-use App\Http\Controllers\Support\SupportController;
-use App\Http\Controllers\UserPreferencesController;
+use NotFound\Framework\Http\Controllers\AboutController;
+use NotFound\Framework\Http\Controllers\ContentBlocks\ContentBlockController;
+use NotFound\Framework\Http\Controllers\Forms\DataController;
+use NotFound\Framework\Http\Controllers\Forms\DownloadController;
+use NotFound\Framework\Http\Controllers\Forms\FieldController;
+use NotFound\Framework\Http\Controllers\InfoController;
+use NotFound\Framework\Http\Controllers\SettingsController;
+use NotFound\Framework\Http\Controllers\Support\SupportController;
+use NotFound\Framework\Http\Controllers\UserPreferencesController;
 use Illuminate\Support\Facades\Route;
 use Siteboss\Routes\SiteRoutes;
 
@@ -23,7 +23,7 @@ use Siteboss\Routes\SiteRoutes;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::prefix(config('app.api_prefix'))->group(function () {
+Route::prefix(config('siteboss.api_prefix'))->group(function () {
     // Unauthenticated routes
     Route::prefix('api')->group(function () {
         Route::namespace('Forms')->group(function () {

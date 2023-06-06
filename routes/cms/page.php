@@ -1,8 +1,8 @@
 <?php
 
-use App\Http\Controllers\Assets\PageEditorController;
-use App\Http\Controllers\Assets\PageItemEditorController;
-use App\Http\Controllers\MenuController;
+use NotFound\Framework\Http\Controllers\Assets\PageEditorController;
+use NotFound\Framework\Http\Controllers\Assets\PageItemEditorController;
+use NotFound\Framework\Http\Controllers\MenuController;
 use Illuminate\Support\Facades\Route;
 
 // /page/{id}

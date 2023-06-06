@@ -1,12 +1,12 @@
 <?php
 
-use NotFound\Framework\Http\Controllers\CmsEditorController;
-use NotFound\Framework\Http\Controllers\CmsEditorLangController;
-use NotFound\Framework\Http\Controllers\CmsEditorMenuController;
-use NotFound\Framework\Http\Controllers\CmsEditorTableController;
-use NotFound\Framework\Http\Controllers\CmsEditorTableItemController;
-use NotFound\Framework\Http\Controllers\CmsEditorTemplateController;
-use NotFound\Framework\Http\Controllers\CmsEditorTemplateItemController;
+use NotFound\Framework\Http\Controllers\CmsEditor\CmsEditorController;
+use NotFound\Framework\Http\Controllers\CmsEditor\CmsEditorLangController;
+use NotFound\Framework\Http\Controllers\CmsEditor\CmsEditorMenuController;
+use NotFound\Framework\Http\Controllers\CmsEditor\CmsEditorTableController;
+use NotFound\Framework\Http\Controllers\CmsEditor\CmsEditorTableItemController;
+use NotFound\Framework\Http\Controllers\CmsEditor\CmsEditorTemplateController;
+use NotFound\Framework\Http\Controllers\CmsEditor\CmsEditorTemplateItemController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('', [CmsEditorController::class, 'index']);

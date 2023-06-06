@@ -1,7 +1,7 @@
 <?php
 
-use App\Models\CmsContentBlocks;
-use App\Models\Table;
+use NotFound\Framework\Models\CmsContentBlocks;
+use NotFound\Framework\Models\Table;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;

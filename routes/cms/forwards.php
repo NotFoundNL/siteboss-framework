@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Forwards\ForwardsController;
+use NotFound\Framework\Http\Controllers\Forwards\ForwardsController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [ForwardsController::class, 'getOptions']);
