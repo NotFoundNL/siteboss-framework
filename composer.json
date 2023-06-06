@@ -22,8 +22,8 @@
         "mcamara/laravel-localization": "^1.8",
         "firebase/php-jwt": "^6.3",
         "xenolope/quahog": "^3.0",
-        "intervention/image": "^2.7"
-        "php": "^8.1",
+        "intervention/image": "^2.7",
+        "php": "^8.1"
     },
     "require-dev": {
         "laravel/pint": "^1.0",
