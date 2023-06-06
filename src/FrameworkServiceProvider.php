@@ -2,8 +2,6 @@
 
 namespace NotFound\Framework;
 
-
-use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 
 class FrameworkServiceProvider extends ServiceProvider
@@ -20,6 +18,7 @@ class FrameworkServiceProvider extends ServiceProvider
             __DIR__.'/../config/siteboss.php' => config_path('siteboss.php'),
             __DIR__.'/../config/openid.php' => config_path('openid.php'),
             __DIR__.'/../config/clamav.php' => config_path('clamav.php'),
+            __DIR__.'/../config/database.php' => config_path('database.php'),
             __DIR__.'/Providers/AuthServiceProvider.php' => app_path('Providers/AuthServiceProvider.php'),
             __DIR__.'/../database/seeders/DatabaseSeeder.php' => database_path('seeders/DatabaseSeeder.php'),
         ], 'laravel-assets');
@@ -28,7 +27,6 @@ class FrameworkServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->mergeConfigFrom(__DIR__.'/../config/app.php', 'app');
-        $this->mergeConfigFrom(__DIR__.'/../config/auth.php', 'auth');
 
         app('router')->aliasMiddleware('set-forget-locale', \NotFound\Framework\Http\Middleware\SetAndForgetLocale::class);
         app('router')->aliasMiddleware('role', \NotFound\Framework\Http\Middleware\EnsureUserHasRole::class);

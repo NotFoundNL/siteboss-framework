@@ -1,5 +1,7 @@
 <?php
 
+//this file is published by the siteboss-framework package
+
 return [
 
     /*
