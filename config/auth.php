@@ -69,10 +69,6 @@ return [
             'model' => NotFound\Framework\Models\CmsUser::class,
         ],
 
-        'users' => [
-            'driver' => 'eloquent',
-            'model' => NotFound\Framework\Models\User::class,
-        ],
     ],
 
     'user_management_role' => env('SB_USER_MANAGEMENT_ROLE', 'user-management'),
