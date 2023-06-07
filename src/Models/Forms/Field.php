@@ -66,7 +66,7 @@ class Field extends BaseModel
 
     public function getBladeComponent()
     {
-        return 'forms.fields.'.$this->type;
+        return 'fields::'.$this->type;
     }
 
     public function property()

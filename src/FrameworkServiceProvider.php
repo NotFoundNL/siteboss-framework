@@ -2,7 +2,9 @@
 
 namespace NotFound\Framework;
 
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
+use Notfound\Framework\View\Components\Forms\Form;
 
 class FrameworkServiceProvider extends ServiceProvider
 {
@@ -22,6 +24,9 @@ class FrameworkServiceProvider extends ServiceProvider
             __DIR__.'/Providers/AuthServiceProvider.php' => app_path('Providers/AuthServiceProvider.php'),
             __DIR__.'/../database/seeders/DatabaseSeeder.php' => database_path('seeders/DatabaseSeeder.php'),
         ], 'laravel-assets');
+
+        Blade::component('formbuilder-form', Form::class);
+        Blade::componentNamespace('NotFound\\Framework\\View\\Components\\Forms\\Fields', 'fields');
     }
 
     public function register(): void

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\View\Components\Forms\Fields;
+namespace NotFound\Framework\View\Components\Forms\Fields;
 
 class Date extends AbstractFieldComponent
 {
