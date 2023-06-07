@@ -37,7 +37,6 @@ spl_autoload_register(function ($className) {
     // and preferably have it adhere to PSR-4.
     $sitebossFieldsPath = app_path().'app/Services/Forms/Fields/';
 
-
     if (startsWithAndStrip($className, 'NotFound\\Framework\\Services\\Forms\\Fields\\') || startsWithAndStrip($className, 'App\\Services\\Forms\\Fields\\')) {
         // Check if siteboss has a field type
         $completeClassName = $sitebossFieldsPath.customclassPath($className);
