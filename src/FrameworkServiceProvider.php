@@ -26,10 +26,11 @@ class FrameworkServiceProvider extends ServiceProvider
             __DIR__.'/../config/database.php' => config_path('database.php'),
             __DIR__.'/Providers/AuthServiceProvider.php' => app_path('Providers/AuthServiceProvider.php'),
             __DIR__.'/../database/seeders/DatabaseSeeder.php' => database_path('seeders/DatabaseSeeder.php'),
-        ], 'laravel-assets');
+        ], 'siteboss-framework');
 
         Blade::component('formbuilder-form', Form::class);
         Blade::componentNamespace('NotFound\\Framework\\View\\Components\\Forms\\Fields', 'fields');
+
     }
 
     public function register(): void
