@@ -2,10 +2,8 @@
 
 namespace NotFound\Framework\Providers;
 
-use NotFound\Framework\View\Components\Forms\Form;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
-use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
@@ -32,7 +30,7 @@ class RouteServiceProvider extends ServiceProvider
         resolve(\Illuminate\Routing\UrlGenerator::class)->forceScheme('https');
 
         parent::boot();
-                
+
         $this->configureRateLimiting();
 
         $this->routes(function () {

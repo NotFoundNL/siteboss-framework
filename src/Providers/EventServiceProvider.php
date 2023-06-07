@@ -2,9 +2,9 @@
 
 namespace NotFound\Framework\Providers;
 
+use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use NotFound\Framework\Events\AfterSaveEvent;
 use NotFound\Framework\Events\BeforeSaveEvent;
-use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 class EventServiceProvider extends ServiceProvider
 {
