@@ -1,6 +1,6 @@
 <?php
 
-namespace NotFound\Framework\Views\Components\Forms\Fields;
+namespace NotFound\Framework\View\Components\Forms\Fields;
 
 class File extends AbstractFieldComponent
 {

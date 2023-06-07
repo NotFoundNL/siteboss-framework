@@ -4,6 +4,7 @@ namespace NotFound\Framework;
 
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
+use Notfound\Framework\View\Components\Forms\Form;
 
 class FrameworkServiceProvider extends ServiceProvider
 {
@@ -15,7 +16,7 @@ class FrameworkServiceProvider extends ServiceProvider
         $this->loadTranslationsFrom(__DIR__.'/../lang', 'siteboss');
 
         Blade::component('formbuilder-form', Form::class);
-        Blade::componentNamespace('NotFound\\Framework\\Views\\Components\\Forms\\Fields', 'fields');
+        Blade::componentNamespace('NotFound\\Framework\\View\\Components\\Forms\\Fields', 'fields');
         
         $this->publishes([
             __DIR__.'/../config/auth.php' => config_path('auth.php'),

@@ -1,6 +1,6 @@
 <?php
 
-namespace NotFound\Framework\Views\Components\Forms;
+namespace NotFound\Framework\View\Components\Forms;
 
 use Illuminate\View\Component;
 

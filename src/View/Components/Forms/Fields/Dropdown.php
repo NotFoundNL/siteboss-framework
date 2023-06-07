@@ -1,8 +1,8 @@
 <?php
 
-namespace NotFound\Framework\Views\Components\Forms\Fields;
+namespace NotFound\Framework\View\Components\Forms\Fields;
 
-class Checkbox extends AbstractFieldComponent
+class Dropdown extends AbstractFieldComponent
 {
     public function optionList()
     {

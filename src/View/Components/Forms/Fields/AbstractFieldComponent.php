@@ -1,6 +1,6 @@
 <?php
 
-namespace NotFound\Framework\Views\Components\Forms\Fields;
+namespace NotFound\Framework\View\Components\Forms\Fields;
 
 use Illuminate\View\Component;
 use NotFound\Framework\Models\Forms\Field;
@@ -18,7 +18,7 @@ abstract class AbstractFieldComponent extends Component
             return 'forms.fields.'.$this->field->type;
         }
 
-        return view('siteboss.forms.fields.'.$this->field->type);
+        return view('fields::'.$this->field->type);
     }
 
     public function colClasses(): string
@@ -70,8 +70,11 @@ abstract class AbstractFieldComponent extends Component
         return '';
     }
 
-    public function getByLanguage(?\stdClass $object): string
+    public function getByLanguage(null|object|string $object): string
     {
+        if (is_string($object)) {
+            return $object;
+        }
         $locale = app()->getLocale();
         if (isset($object?->$locale)) {
             return $object->$locale;
