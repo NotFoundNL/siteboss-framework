@@ -17,6 +17,10 @@ class Form extends Component
 
     public function render()
     {
-        return view('siteboss.forms.form', ['submitUrl' => '/siteboss/api/api/forms/'.$this->form->id.'/'.Lang::current()->url.'/']);
+        if (view()->exists('siteboss.forms.form')) {
+            return view('siteboss.forms.form', ['submitUrl' => '/siteboss/api/api/forms/'.$this->form->id.'/'.Lang::current()->url.'/']);
+        }
+
+        return view('siteboss::siteboss.forms.form', ['submitUrl' => '/siteboss/api/api/forms/'.$this->form->id.'/'.Lang::current()->url.'/']);
     }
 }
