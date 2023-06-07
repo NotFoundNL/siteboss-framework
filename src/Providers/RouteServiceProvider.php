@@ -2,10 +2,8 @@
 
 namespace NotFound\Framework\Providers;
 
-use App\View\Components\Forms\Form;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
-use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
@@ -32,8 +30,6 @@ class RouteServiceProvider extends ServiceProvider
         resolve(\Illuminate\Routing\UrlGenerator::class)->forceScheme('https');
 
         parent::boot();
-
-        Blade::component('formbuilder-form', Form::class);
 
         $this->configureRateLimiting();
 
