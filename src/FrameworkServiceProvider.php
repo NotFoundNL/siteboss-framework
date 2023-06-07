@@ -2,6 +2,7 @@
 
 namespace NotFound\Framework;
 
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 
 class FrameworkServiceProvider extends ServiceProvider
@@ -10,9 +11,12 @@ class FrameworkServiceProvider extends ServiceProvider
     {
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
         $this->loadRoutesFrom(__DIR__.'/../routes/api.php');
-        $this->loadViewsFrom(__DIR__.'/../resources/views', 'siteboss');
+        $this->loadViewsFrom(__DIR__.'/../resources/views', 'siteboss');    
         $this->loadTranslationsFrom(__DIR__.'/../lang', 'siteboss');
 
+        Blade::component('formbuilder-form', Form::class);
+        Blade::componentNamespace('NotFound\\Framework\\Views\\Components\\Forms\\Fields', 'fields');
+        
         $this->publishes([
             __DIR__.'/../config/auth.php' => config_path('auth.php'),
             __DIR__.'/../config/siteboss.php' => config_path('siteboss.php'),

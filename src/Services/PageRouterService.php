@@ -93,7 +93,7 @@ class PageRouterService
     {
 
         if ($page->template !== null) {
-            $pageClassName = sprintf('\\App\\Http\\Controllers\\Page\\%sController', ucfirst($page->template->filename));
+            $pageClassName = sprintf('Siteboss\\App\\Http\\Controllers\\Page\\%sController', ucfirst($page->template->filename));
 
             if (! class_exists($pageClassName)) {
                 dd('Class does not exist: '.$pageClassName);

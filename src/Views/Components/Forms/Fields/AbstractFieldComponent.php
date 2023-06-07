@@ -1,6 +1,6 @@
 <?php
 
-namespace App\View\Components\Forms\Fields;
+namespace NotFound\Framework\Views\Components\Forms\Fields;
 
 use Illuminate\View\Component;
 use NotFound\Framework\Models\Forms\Field;

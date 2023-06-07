@@ -2,7 +2,7 @@
 
 namespace NotFound\Framework\Providers;
 
-use App\View\Components\Forms\Form;
+use NotFound\Framework\Views\Components\Forms\Form;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Blade;
@@ -33,8 +33,10 @@ class RouteServiceProvider extends ServiceProvider
 
         parent::boot();
 
-        Blade::component('formbuilder-form', Form::class);
 
+        Blade::component('formbuilder-form', Form::class);
+        Blade::componentNamespace('NotFound\\Framework\\Views\\Components\\Forms\\Fields', 'fields');
+        
         $this->configureRateLimiting();
 
         $this->routes(function () {

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\View\Components\Forms\Fields;
+namespace NotFound\Framework\Views\Components\Forms\Fields;
 
 class Dropdown extends AbstractFieldComponent
 {
