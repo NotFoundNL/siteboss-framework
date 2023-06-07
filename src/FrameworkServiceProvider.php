@@ -15,6 +15,9 @@ class FrameworkServiceProvider extends ServiceProvider
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'siteboss');
         $this->loadTranslationsFrom(__DIR__.'/../lang', 'siteboss');
 
+        Blade::component('formbuilder-form', Form::class);
+        Blade::componentNamespace('NotFound\\Framework\\View\\Components\\Forms\\Fields', 'fields');
+
         $this->publishes([
             __DIR__.'/../config/auth.php' => config_path('auth.php'),
             __DIR__.'/../config/siteboss.php' => config_path('siteboss.php'),

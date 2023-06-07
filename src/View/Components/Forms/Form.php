@@ -1,6 +1,6 @@
 <?php
 
-namespace Notfound\Framework\View\Components\Forms;
+namespace NotFound\Framework\View\Components\Forms;
 
 use Illuminate\View\Component;
 use NotFound\Framework\Models\Forms\Form as FormsForm;
@@ -17,6 +17,10 @@ class Form extends Component
 
     public function render()
     {
+        if (view()->exists('siteboss.forms.form')) {
+            return view('siteboss.forms.form', ['submitUrl' => '/siteboss/api/api/forms/'.$this->form->id.'/'.Lang::current()->url.'/']);
+        }
+
         return view('siteboss::siteboss.forms.form', ['submitUrl' => '/siteboss/api/api/forms/'.$this->form->id.'/'.Lang::current()->url.'/']);
     }
 }

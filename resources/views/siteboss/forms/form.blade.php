@@ -16,5 +16,4 @@
         @endforeach
     </div>
     @include('siteboss::siteboss.forms.submit')
-    PACKAGE
 </form>
