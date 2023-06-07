@@ -32,11 +32,7 @@ class RouteServiceProvider extends ServiceProvider
         resolve(\Illuminate\Routing\UrlGenerator::class)->forceScheme('https');
 
         parent::boot();
-
-
-        Blade::component('formbuilder-form', Form::class);
-        Blade::componentNamespace('NotFound\\Framework\\View\\Components\\Forms\\Fields', 'fields');
-        
+                
         $this->configureRateLimiting();
 
         $this->routes(function () {
