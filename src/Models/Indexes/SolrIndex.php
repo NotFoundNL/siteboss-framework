@@ -83,7 +83,7 @@ class SolrIndex extends BaseModel
 
             $json = json_decode($result);
 
-            if (! $json || ! isset($json->responseHeader) || $json->responseHeader->status !== 0) {
+            if (!$json || !isset($json->responseHeader) || $json->responseHeader->status !== 0) {
                 $this->mailQueryError($url, $result);
 
                 return false;
@@ -100,7 +100,7 @@ class SolrIndex extends BaseModel
     {
         $handler = curl_init();
         curl_setopt($handler, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($handler, CURLOPT_USERPWD, $this->solrUser.':'.$this->solrPass);
+        curl_setopt($handler, CURLOPT_USERPWD, $this->solrUser . ':' . $this->solrPass);
 
         curl_setopt($handler, CURLOPT_POST, true);
 
@@ -136,7 +136,7 @@ class SolrIndex extends BaseModel
 
         $doc = [
             'title' => $title,
-            'content' => html_entity_decode(strip_tags($contents)),
+            'content' => html_entity_decode(trim(preg_replace('/\s+/', ' ', strip_tags($contents)))),
             'type' => $type,
             'url' => $url,
             'priority' => $priority,
@@ -167,7 +167,7 @@ class SolrIndex extends BaseModel
 
     public function removeItem($url)
     {
-        if (! is_null($url)) {
+        if (!is_null($url)) {
             $curl = $this->solrHandler();
 
             $payload = ['delete' => $url];
@@ -284,28 +284,28 @@ class SolrIndex extends BaseModel
             $this->hlmaxAnalyzedChars,
         );
         if ($filter) {
-            $url .= '&fq='.$filter;
+            $url .= '&fq=' . $filter;
         }
         if ($start && is_int($start)) {
-            $url .= '&start='.$start;
+            $url .= '&start=' . $start;
         }
 
         if ($rows && is_int($rows)) {
-            $url .= '&rows='.$rows;
+            $url .= '&rows=' . $rows;
         }
 
         if (count($extraColumns) > 0) {
         }
 
         if ($this->sort) {
-            $url .= '&sort='.urlencode($this->sort);
+            $url .= '&sort=' . urlencode($this->sort);
         }
 
         curl_setopt($curl, CURLOPT_URL, $url);
         $result = curl_exec($curl);
         $json = json_decode($result);
         $searchResults = new SolrItem($json, $query, false, $highlightLength);
-        if (! $searchResults->isValid()) {
+        if (!$searchResults->isValid()) {
             $this->mailQueryError($url, $result);
         }
 
@@ -325,7 +325,7 @@ class SolrIndex extends BaseModel
         $result = curl_exec($curl);
         $json = json_decode($result);
         $suggestions = new SolrItem($json, $query);
-        if (! $suggestions->isValid()) {
+        if (!$suggestions->isValid()) {
             $this->buildSuggester();
             $result = curl_exec($curl);
             $json = json_decode($result);
