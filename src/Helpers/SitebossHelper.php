@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Helpers;
+namespace NotFound\Framework\Helpers;
 
-use App\Models\CmsConfig;
+use NotFound\Framework\Models\CmsConfig;
 
 class SitebossHelper
 {
