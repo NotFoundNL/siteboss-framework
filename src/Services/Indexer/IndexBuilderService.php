@@ -21,8 +21,6 @@ class IndexBuilderService
 
     private AbstractIndexService $searchServer;
 
-    private array $indexableTypes = ['Text'];
-
     public function __construct(string $serverType, $debug = false)
     {
         $this->debug = $debug;
@@ -106,18 +104,17 @@ class IndexBuilderService
 
             $menu = Menu::whereId($page->id)->firstOrFail();
 
-            $languages = Lang::get();
             if ($this->searchServer->urlNeedsUpdate($menu->getPath(), strtotime($menu->updated_at))) {
                 $this->writeDebug(': update needed: ');
 
-                foreach ($languages as $lang) {
+                foreach ($this->locales as $lang) {
                     $this->updatePage($menu, $lang);
                 }
             } else {
                 $this->writeDebug(": Does not need updating\n");
             }
             // index subitems for page
-            foreach ($languages as $lang) {
+            foreach ($this->locales as $lang) {
                 $this->updateSubPages($menu, $lang);
             }
 
@@ -128,6 +125,7 @@ class IndexBuilderService
     private function updatePage($menu, $lang)
     {
         $success = true;
+        app()->setLocale($lang->url);
 
         if ($this->sitemapFile) {
             $sitemap = '';
@@ -135,16 +133,12 @@ class IndexBuilderService
         $searchText = '';
         $pageService = new PageService($menu, $lang);
         $title = $menu->getTitle();
-        $url = $menu->getPath();
-
-        $values = $pageService->getCachedValues();
-        foreach ($values as $internal => $value) {
-            if (in_array($value->type, $this->indexableTypes)) {
-                if ($value->val !== null) {
-                    $searchText .= strip_tags($value->val).', ';
-                }
-            }
+        if (count($this->locales) == 1) {
+            $url = $menu->getPath();
+        } else {
+            $url = $menu->getLocalizedPath();
         }
+        $searchText = $pageService->getContentForIndexer();
 
         // continue with customValues
         $customValues = [];
