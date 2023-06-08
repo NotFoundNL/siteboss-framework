@@ -134,7 +134,7 @@ class IndexBuilderService
         }
         $searchText = '';
         $pageService = new PageService($menu, $lang);
-
+        $title = $menu->getTitle();
         $url = $menu->getPath();
 
         $values = $pageService->getCachedValues();
@@ -164,22 +164,25 @@ class IndexBuilderService
         }
 
         $searchText = rtrim($searchText, ', ');
+        if (! empty($title) && ! empty($searchText)) {
+            $result = $this->searchServer->upsertUrl($url, $title, $searchText, 'page', $lang->id, $customValues, $priority);
 
-        $result = $this->searchServer->upsertUrl($url, $values['title']->val, $searchText, 'page', $lang->id, $customValues, $priority);
+            if ($result->errorCode == 0) {
+                $this->writeDebug(" success\n");
+            } else {
+                $this->writeDebug(" FAILED\n");
+            }
 
-        if ($result->errorCode == 0) {
-            $this->writeDebug(" success\n");
+            if ($this->sitemapFile) {
+                // update sitemap
+                $sitemap .= sprintf(
+                    "%s%s\r\n",
+                    $this->domainName,
+                    $url
+                );
+            }
         } else {
-            $this->writeDebug(" FAILED\n");
-        }
-
-        if ($this->sitemapFile) {
-            // update sitemap
-            $sitemap .= sprintf(
-                "%s%s\r\n",
-                $this->domainName,
-                $url
-            );
+            $this->writeDebug(" empty page or title\n");
         }
     }
 
@@ -188,11 +191,10 @@ class IndexBuilderService
         $class = $menu->template->filename ?? '';
         $className = 'App\Http\Controllers\Page\\'.$class.'Controller';
         $c = null;
-
         // update subPage if necessary
+
         if (class_exists($className)) {
             $c = new $className();
-
             $this->updateSubitems($c, $lang);
         }
     }
@@ -200,7 +202,6 @@ class IndexBuilderService
     private function updateSubitems($class, $lang)
     {
         app()->setLocale($lang->url);
-
         $subPages = $class->searchSubitems();
         foreach ($subPages as $subPage) {
             foreach ($subPage as $searchItem) {
