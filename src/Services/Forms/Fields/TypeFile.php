@@ -47,8 +47,6 @@ class TypeFile extends AbstractType
     {
         $label = $this->getLabel();
 
-
-
         // $baseUrl = sprintf('https://%s/admin/cms/api', $_SERVER['HTTP_HOST']);
         $value = '';
 
