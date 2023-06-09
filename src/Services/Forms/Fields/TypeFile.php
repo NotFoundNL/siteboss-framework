@@ -47,19 +47,26 @@ class TypeFile extends AbstractType
     {
         $label = $this->getLabel();
 
-        $baseUrl = sprintf('https://%s/admin/cms/api', $_SERVER['HTTP_HOST']);
+
+
+        // $baseUrl = sprintf('https://%s/admin/cms/api', $_SERVER['HTTP_HOST']);
         $value = '';
-        foreach ($this->validatorInfo->getFiles() as $file) {
-            $value .= sprintf(
-                "<a href='%s/download/%d/%d/%s' target='_blank'> %s </a>
-            ",
-                $baseUrl,
-                $this->validatorInfo->getDataRecordId(),
-                $this->id,
-                $file->uuid,
-                $file->filename
-            );
+
+        foreach ($this->files as $file) {
+
+            $value .= $file->getClientOriginalName();
         }
+        // foreach ($this->validatorInfo->getFiles() as $file) {
+        //     $value .= sprintf(
+        //         "<a href='%s/download/%d/%d/%s' target='_blank'> %s </a>
+        //     ",
+        //         $baseUrl,
+        //         $this->validatorInfo->getDataRecordId(),
+        //         $this->id,
+        //         $file->uuid,
+        //         $file->filename
+        //     );
+        // }
 
         return "<p><strong>{$label}:</strong> {$value}</p>";
     }
