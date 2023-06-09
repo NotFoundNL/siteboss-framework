@@ -132,7 +132,7 @@ class IndexBuilderService
         }
         $searchText = '';
         $pageService = new PageService($menu, $lang);
-        $title = $menu->getTitle();
+        $title = $menu->getTitle($lang);
         if (count($this->locales) == 1) {
             $url = $menu->getPath();
         } else {
