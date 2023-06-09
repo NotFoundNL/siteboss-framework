@@ -3,6 +3,7 @@
 namespace NotFound\Framework\Http\Controllers\Forms;
 
 use Illuminate\Http\Request;
+use NotFound\Framework\Helpers\SitebossHelper;
 use NotFound\Framework\Http\Controllers\Controller;
 use NotFound\Framework\Models\Forms\Data;
 use NotFound\Framework\Models\Forms\Field;
@@ -10,7 +11,6 @@ use NotFound\Framework\Models\Forms\Form;
 use NotFound\Framework\Models\Lang;
 use NotFound\Framework\Services\Forms\MailHandler;
 use NotFound\Framework\Services\Legacy\StatusColumn;
-use NotFound\Framework\Helpers\SitebossHelper;
 
 class DataController extends Controller
 {
