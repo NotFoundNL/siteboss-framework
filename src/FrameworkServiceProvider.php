@@ -19,6 +19,7 @@ class FrameworkServiceProvider extends ServiceProvider
         Blade::componentNamespace('NotFound\\Framework\\View\\Components\\Forms\\Fields', 'fields');
 
         $this->publishes([
+            __DIR__.'/../config/app.php' => config_path('app.php'),
             __DIR__.'/../config/auth.php' => config_path('auth.php'),
             __DIR__.'/../config/siteboss.php' => config_path('siteboss.php'),
             __DIR__.'/../config/openid.php' => config_path('openid.php'),
@@ -31,8 +32,6 @@ class FrameworkServiceProvider extends ServiceProvider
 
     public function register(): void
     {
-        $this->mergeConfigFrom(__DIR__.'/../config/app.php', 'app');
-
         app('router')->aliasMiddleware('set-forget-locale', \NotFound\Framework\Http\Middleware\SetAndForgetLocale::class);
         app('router')->aliasMiddleware('role', \NotFound\Framework\Http\Middleware\EnsureUserHasRole::class);
     }
