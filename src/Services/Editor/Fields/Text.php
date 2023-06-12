@@ -44,7 +44,7 @@ class Text extends Properties
         ]);
 
         $this->addText('regEx', 'Regular expression (choose custom above)');
-
+        $this->noIndex();
     }
 
     public function rename(): array

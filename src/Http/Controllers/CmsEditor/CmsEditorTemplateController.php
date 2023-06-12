@@ -115,6 +115,8 @@ class CmsEditorTemplateController extends \NotFound\Framework\Http\Controllers\C
         $form->addInput((new LayoutInputCheckbox('enabled', 'Active'))->setValue($table->enabled == 1 ?? false));
         $form->addInput((new LayoutInputCheckbox('meta', 'Add meta fields'))->setValue($table->properties->meta ?? false));
 
+        $form->addInput((new LayoutInputCheckbox('searchable', 'Searchable via SOLR'))->setValue($table->properties->searchable ?? false));
+
         $form->addButton(new LayoutButton('Update template properties'));
         $widget1->addTitle((new LayoutTitle('Edit template'))->setSize(4));
         $widget1->addForm($form);
@@ -176,14 +178,17 @@ class CmsEditorTemplateController extends \NotFound\Framework\Http\Controllers\C
             'params' => 'string|nullable',
             'allow_children' => 'string|nullable',
             'enabled' => 'boolean',
+            'meta' => 'boolean',
+            'searchable' => 'boolean',
         ]);
 
         $properties = (object) array_merge(
             (array) $table->properties,
             [
                 'disable_sticky_submit' => $request->disable_sticky_submit,
-                'stay_on_page' => $request->stay_on_page,
+                //    'stay_on_page' => $request->stay_on_page,
                 'meta' => $request->meta,
+                'searchable' => $request->searchable,
             ]
         );
 
