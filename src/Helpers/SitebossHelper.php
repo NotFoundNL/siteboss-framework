@@ -49,7 +49,7 @@ class SitebossHelper
         $email->setSubject($subject);
 
         if (app()->hasDebugModeEnabled()) {
-            \env('SB_ERROR_EMAIL', $to_email);
+            $email->addTo(\env('SB_ERROR_EMAIL', $to_email));
         } else {
             if (filter_var($to_email, FILTER_VALIDATE_EMAIL)) {
                 $email->addTo($to_email, $to_name);
