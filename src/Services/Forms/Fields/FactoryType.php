@@ -30,7 +30,8 @@ function customclassPath(string $className): string
 }
 
 spl_autoload_register(function ($className) {
-    $defaultFieldsPath = app_path().'/Services/Forms/Fields/';
+    $defaultFieldsPath = __DIR__;
+    $customFieldsPath = app_path().'/Services/Forms/Fields/';
 
     // TODO: BUG: This is not working
     // Quick fix for now, but we need to understand what this does
@@ -38,8 +39,8 @@ spl_autoload_register(function ($className) {
     $sitebossFieldsPath = app_path().'app/Services/Forms/Fields/';
 
     if (startsWithAndStrip($className, 'NotFound\\Framework\\Services\\Forms\\Fields\\') || startsWithAndStrip($className, 'App\\Services\\Forms\\Fields\\')) {
-        // Check if siteboss has a field type
-        $completeClassName = $sitebossFieldsPath.customclassPath($className);
+        // Check if app has a field type
+        $completeClassName = $customFieldsPath.customclassPath($className);
         if (file_exists($completeClassName)) {
             require_once $completeClassName;
 
