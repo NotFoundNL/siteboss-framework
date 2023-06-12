@@ -44,7 +44,7 @@ class CmsConfig extends BaseModel
 {
     protected $table = 'cms_config';
 
-    protected $visible = ['type','value'];
+    protected $visible = ['type', 'value'];
 
     public function hasJsonValue()
     {
