@@ -3,6 +3,7 @@
 namespace NotFound\Framework\Http\Controllers\Forms;
 
 use Illuminate\Http\Request;
+use NotFound\Framework\Helpers\SitebossHelper;
 use NotFound\Framework\Http\Controllers\Controller;
 use NotFound\Framework\Models\Forms\Data;
 use NotFound\Framework\Models\Forms\Field;
@@ -125,12 +126,21 @@ class DataController extends Controller
 
     private function runSuccessAction($langurl, $formInfo, $formValidator)
     {
-        //TODO: use laravel events?
-        if (trim($formInfo->success_action) != '') {
-            $action = trim($formInfo->success_action);
+        // Trigger default form handler
+        $action = SitebossHelper::config('form_success_action') ?? '';
+        if ($action && trim($action !== '')) {
+            $actionClass = new $action($langurl, $formInfo, $formValidator);
+            $actionClass->run();
 
-            $actionObj = new $action($langurl, $formInfo, $formValidator);
-            $actionObj->run();
+        } else {
+
+            //TODO: use Laravel events?
+            if (trim($formInfo->success_action) != '') {
+                $action = trim($formInfo->success_action);
+
+                $actionObj = new $action($langurl, $formInfo, $formValidator);
+                $actionObj->run();
+            }
         }
     }
 }

@@ -106,6 +106,13 @@ abstract class Properties
         return $this;
     }
 
+    protected function noIndex(): self
+    {
+        $this->add((object) ['type' => 'Checkbox', 'name' => 'noIndex', 'display_name' => 'Do not search via SOLR']);
+
+        return $this;
+    }
+
     protected function sortable(): self
     {
         $this->add((object) ['type' => 'Checkbox', 'name' => 'sortable', 'display_name' => 'Sortable in overview']);

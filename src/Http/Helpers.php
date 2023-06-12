@@ -4,19 +4,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
-if (! function_exists('siteboss_path')) {
-    /**
-     * Helper function to return the root of the siteboss folder
-     *
-     * @param $path adds string to the path
-     * @return string root path of the 'site' folder
-     */
-    function siteboss_path(?string $path = null): string
-    {
-        return base_path().'/../site/'.$path;
-    }
-}
-
 if (! function_exists('set_database_prefix')) {
     /**
      * Converts [][] to the DB prefix set in the config

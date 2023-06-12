@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use NotFound\Framework\Exceptions\ClamAV\ClamAVException;
 
-//TODO: Convert to laravel facade
+//TODO: Convert to Laravel facade
 class ClamAV
 {
     /*
@@ -44,6 +44,12 @@ class ClamAV
         $newFilePath = Storage::disk($storageDisk)->path($relativeFilePath);
         if (! move_uploaded_file($filePath, $newFilePath)) {
             throw ClamAVException::unmoveableFile($filePath);
+        }
+
+        if (config('clamav.socket_type') === 'none') {
+            chmod($newFilePath, 0755);
+
+            return true;
         }
         $client = self::GetClient();
         $result = $client->scanFile($newFilePath);

@@ -11,7 +11,7 @@ use NotFound\Framework\Services\PageRouterService;
 
 class RouteServiceProvider extends ServiceProvider
 {
-    const HOME = '/';
+    const HOME = '/home';
 
     /**
      * The controller namespace for the application.
@@ -39,6 +39,9 @@ class RouteServiceProvider extends ServiceProvider
                     $pageRouter = new PageRouterService();
                     $pageRouter->create();
                 });
+
+            Route::middleware('web')
+                ->group(base_path('routes/web.php'));
         });
     }
 

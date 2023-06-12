@@ -136,7 +136,7 @@ class SolrIndex extends BaseModel
 
         $doc = [
             'title' => $title,
-            'content' => html_entity_decode(strip_tags($contents)),
+            'content' => html_entity_decode(trim(preg_replace('/\s+/', ' ', strip_tags($contents)))),
             'type' => $type,
             'url' => $url,
             'priority' => $priority,

@@ -24,5 +24,7 @@ class ContentBlocks extends Properties
 
     public function serverProperties(): void
     {
+        $this->noIndex();
+
     }
 }

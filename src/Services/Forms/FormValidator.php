@@ -195,4 +195,15 @@ class FormValidator
     {
         $this->validatorInfo->setDataRecordId($recordId);
     }
+
+    public function getSummaryHtml()
+    {
+        $summaryHtml = '';
+
+        foreach ($this->validatorInfo->validators() as $validator) {
+            $summaryHtml .= $validator->getEmailHtml(); //"<p><strong>{$label}:</strong> {$value}</p>";
+        }
+
+        return $summaryHtml;
+    }
 }
