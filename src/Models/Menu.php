@@ -217,4 +217,18 @@ class Menu extends LegacyModel
     {
         return $this->url;
     }
+
+    /**
+     * getLocalizedPath
+     *
+     * Get the relative URL from the root of the site with explicit localization
+     *
+     * @return void
+     */
+    public function getLocalizedPath(): string
+    {
+        $res = explode('/', $this->url(), 4);
+
+        return app()->getLocale().'/'.$res[3];
+    }
 }

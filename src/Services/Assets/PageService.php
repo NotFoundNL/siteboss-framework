@@ -2,6 +2,7 @@
 
 namespace NotFound\Framework\Services\Assets;
 
+use App\Services\ContentBlockService;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
@@ -24,6 +25,10 @@ class PageService extends AbstractAssetService
 
     protected bool $valuesSet = false;
 
+    private array $indexableTypes = ['Text'];
+
+    private array $fieldsToIndex;
+
     public function __construct(
         private Menu $menu,
         protected Lang $lang,
@@ -36,6 +41,7 @@ class PageService extends AbstractAssetService
         $this->assetModel = $template;
         $this->fieldComponents = $this->getFieldComponents($menu->id);
         $this->staticInputValues = new Collection;
+        $this->fieldsToIndex = $this->getProperty('indexfields') ?? [];
     }
 
     public function getProperty(string $property): mixed
@@ -152,7 +158,8 @@ class PageService extends AbstractAssetService
         if (Menu::where('parent_id', $this->menu->parent_id)
             ->where('url', $this->staticInputValues['__template_slug'])
             ->where('id', '!=', $this->menu->id)
-            ->first()) {
+            ->first()
+        ) {
             return false;
         }
 
@@ -343,5 +350,35 @@ class PageService extends AbstractAssetService
 
             return $array;
         });
+    }
+
+    public function getContentForIndexer(): string
+    {
+        $searchText = '';
+        $values = $this->getCachedValues();
+        if (count($this->fieldsToIndex) == 0) {
+            foreach ($values as $internal => $value) {
+                if (in_array($value->type, $this->indexableTypes)) {
+                    if ($value->val !== null) {
+                        $searchText .= strip_tags($value->val).', ';
+                    }
+                }
+            }
+        } else {
+            foreach ($values as $internal => $value) {
+                if (in_array($internal, $this->fieldsToIndex)) {
+                    if ($value->type == 'Text') {
+                        if ($value->val !== null) {
+                            $searchText .= strip_tags($value->val).', ';
+                        }
+                    } elseif ($value->type == 'ContentBlocks') {
+                        $cbs = new ContentBlockService($value->val);
+                        $searchText .= $cbs->toText();
+                    }
+                }
+            }
+        }
+
+        return $searchText;
     }
 }
