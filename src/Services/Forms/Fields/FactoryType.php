@@ -30,7 +30,7 @@ function customclassPath(string $className): string
 }
 
 spl_autoload_register(function ($className) {
-    $defaultFieldsPath = __DIR__.'/NotFound/Framework/Services/Forms/Fields';
+    $defaultFieldsPath = __DIR__;
     $customFieldsPath =  app_path().'/Services/Forms/Fields/';
 
     if (startsWithAndStrip($className, 'NotFound\\Framework\\Services\\Forms\\Fields\\') || startsWithAndStrip($className, 'App\\Services\\Forms\\Fields\\')) {
