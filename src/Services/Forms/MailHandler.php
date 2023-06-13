@@ -28,7 +28,7 @@ class MailHandler
         }
 
         if ($this->incorrectFormbuilderSettings()) {
-            if (isset($this->form->notification_address)) {
+            if (isset($this->form->notification_address) && trim($this->form->notification_address) != '' && filter_var($this->form->notification_address, FILTER_VALIDATE_EMAIL)) {
                 Mail::to($this->form->notification_address)->send(new IncorrectSettings($this->form, $this->validatorInfo));
             } else {
                 Log::error('forms things are wrong');
