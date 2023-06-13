@@ -16,7 +16,7 @@ class ContentBlockService
         if (class_exists($className)) {
             return new $className;
         }
-        dd('Unknown class ' . $className);
+        dd('Unknown class '.$className);
     }
 
     public function toText()
@@ -28,7 +28,7 @@ class ContentBlockService
             $indexTypes = $model->indexValues ?? [];
             foreach ($block->values as $t => $v) {
                 if (in_array($t, $indexTypes)) {
-                    $text .= ' ' . $v;
+                    $text .= ' '.$v;
                 }
             }
         }
