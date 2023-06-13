@@ -2,7 +2,7 @@
 
 namespace NotFound\Framework\Services\Assets;
 
-use App\Services\ContentBlockService;
+use NotFound\Framework\Services\Indexer\ContentBlockService;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
@@ -34,7 +34,7 @@ class PageService extends AbstractAssetService
         protected Lang $lang,
     ) {
         $menu->with('template');
-        if (! $template = $menu->template) {
+        if (!$template = $menu->template) {
             abort(500, 'No template set');
         }
 
@@ -171,7 +171,7 @@ class PageService extends AbstractAssetService
                 continue;
             }
 
-            if (! $component->validate($request->{$component->assetItem->internal})) {
+            if (!$component->validate($request->{$component->assetItem->internal})) {
                 return false;
             }
         }
@@ -257,14 +257,14 @@ class PageService extends AbstractAssetService
         foreach ($this->getComponents() as $component) {
             /** @var AbstractComponent $component */
             if (
-                ! $component->usesDefaultStorageMechanism()
+                !$component->usesDefaultStorageMechanism()
                 || $component->isDisabled()
             ) {
                 continue;
             }
 
             $langId = $this->lang->id;
-            if (! $component->isLocalized()) {
+            if (!$component->isLocalized()) {
                 $langId = 0;
             }
 
@@ -313,7 +313,7 @@ class PageService extends AbstractAssetService
 
     protected function getCacheKey(): string
     {
-        return 'page_'.$this->lang->url.'_'.$this->menu->id;
+        return 'page_' . $this->lang->url . '_' . $this->menu->id;
     }
 
     public function getCachedValues(): array
@@ -341,7 +341,7 @@ class PageService extends AbstractAssetService
                 ->get();
 
             foreach ($metaStrings as $string) {
-                $array['meta'.$string->name] = (object) [
+                $array['meta' . $string->name] = (object) [
                     'type' => 'Text',
                     'properties' => new stdClass(),
                     'val' => $string->value,
@@ -360,7 +360,7 @@ class PageService extends AbstractAssetService
             foreach ($values as $internal => $value) {
                 if (in_array($value->type, $this->indexableTypes)) {
                     if ($value->val !== null) {
-                        $searchText .= strip_tags($value->val).', ';
+                        $searchText .= strip_tags($value->val) . ', ';
                     }
                 }
             }
@@ -369,7 +369,7 @@ class PageService extends AbstractAssetService
                 if (in_array($internal, $this->fieldsToIndex)) {
                     if ($value->type == 'Text') {
                         if ($value->val !== null) {
-                            $searchText .= strip_tags($value->val).', ';
+                            $searchText .= strip_tags($value->val) . ', ';
                         }
                     } elseif ($value->type == 'ContentBlocks') {
                         $cbs = new ContentBlockService($value->val);
