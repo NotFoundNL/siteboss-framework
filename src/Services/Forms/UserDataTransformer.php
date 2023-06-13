@@ -124,6 +124,7 @@ class UserDataTransformer
 
     private function setFilledIds()
     {
+        // BUG: Query must be converted to laravel query builder
         $values = [];
         /* Set locale to Dutch */
         setlocale(LC_ALL, 'nl_NL');
