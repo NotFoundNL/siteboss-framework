@@ -26,7 +26,7 @@ class QueryError extends Mailable
      */
     public function build()
     {
-        return $this->markdown('mail.indexer.query-error')
+        return $this->markdown('siteboss::mail.indexer.query-error')
             ->subject('Query error')
             ->with([
                 'query' => $this->query,

@@ -2,10 +2,10 @@
 
 namespace NotFound\Framework\Models\Indexes;
 
-use App\Mail\Indexer\FileIndexError;
-use App\Mail\Indexer\QueryError;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use NotFound\Framework\Mail\Indexer\FileIndexError;
+use NotFound\Framework\Mail\Indexer\QueryError;
 use NotFound\Framework\Models\BaseModel;
 use NotFound\Framework\Models\CmsSearch;
 

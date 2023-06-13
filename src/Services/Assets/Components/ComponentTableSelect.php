@@ -75,7 +75,7 @@ class ComponentTableSelect extends AbstractComponent
      */
     private function getCustomQueryData(): array
     {
-        return Db::select(DB::raw($this->properties()->customQuery));
+        return DB::select(DB::raw($this->properties()->customQuery));
     }
 
     /**

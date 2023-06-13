@@ -2,11 +2,11 @@
 
 namespace NotFound\Framework\Services\Forms;
 
-use App\Mail\Forms\ConfirmationEndUser;
-use App\Mail\Forms\IncorrectSettings;
-use App\Mail\Forms\NotificationFormSubmitted;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use NotFound\Framework\Mail\Forms\ConfirmationEndUser;
+use NotFound\Framework\Mail\Forms\IncorrectSettings;
+use NotFound\Framework\Mail\Forms\NotificationFormSubmitted;
 use NotFound\Framework\Models\Forms\Form;
 use NotFound\Framework\Models\Lang;
 
