@@ -27,8 +27,6 @@ class PageService extends AbstractAssetService
 
     private array $indexableTypes = ['Text'];
 
-    private array $fieldsToIndex;
-
     public function __construct(
         private Menu $menu,
         protected Lang $lang,
@@ -41,7 +39,6 @@ class PageService extends AbstractAssetService
         $this->assetModel = $template;
         $this->fieldComponents = $this->getFieldComponents($menu->id);
         $this->staticInputValues = new Collection;
-        $this->fieldsToIndex = $this->getProperty('indexfields') ?? [];
     }
 
     public function getProperty(string $property): mixed
@@ -356,29 +353,21 @@ class PageService extends AbstractAssetService
     {
         $searchText = '';
         $values = $this->getCachedValues();
-        if (count($this->fieldsToIndex) == 0) {
-            foreach ($values as $internal => $value) {
-                if (in_array($value->type, $this->indexableTypes)) {
+
+        foreach ($values as $value) {
+            if (! (isset($value->properties->noIndex)) || $value->properties->noIndex === 0) {
+
+                if ($value->type == 'Text') {
                     if ($value->val !== null) {
-                        $searchText .= strip_tags($value->val).', ';
+                        $searchText .= $value->val.' ';
                     }
-                }
-            }
-        } else {
-            foreach ($values as $internal => $value) {
-                if (in_array($internal, $this->fieldsToIndex)) {
-                    if ($value->type == 'Text') {
-                        if ($value->val !== null) {
-                            $searchText .= strip_tags($value->val).', ';
-                        }
-                    } elseif ($value->type == 'ContentBlocks') {
-                        $cbs = new ContentBlockService($value->val);
-                        $searchText .= $cbs->toText();
-                    }
+                } elseif ($value->type == 'ContentBlocks') {
+                    $cbs = new ContentBlockService($value->val);
+                    $searchText .= $cbs->toText().' ';
                 }
             }
         }
 
-        return $searchText;
+        return trim($searchText);
     }
 }
