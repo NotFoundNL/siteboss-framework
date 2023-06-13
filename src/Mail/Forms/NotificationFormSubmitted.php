@@ -20,7 +20,7 @@ class NotificationFormSubmitted extends Mailable
 
     public function build()
     {
-        return $this->markdown('mail.formbuilder.notification-form-submitted')
+        return $this->markdown('siteboss::mail.formbuilder.notification-form-submitted')
             ->subject($this->form->name)
             ->with('html', $this->getSummary());
     }

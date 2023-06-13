@@ -22,7 +22,7 @@ class ConfirmationEndUser extends Mailable
 
     public function build()
     {
-        return $this->markdown('mail.formbuilder.confirmation-end-user')
+        return $this->markdown('siteboss::mail.formbuilder.confirmation-end-user')
             ->subject($this->form->name)
             ->with([
                 'form' => $this->form,

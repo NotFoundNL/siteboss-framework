@@ -25,7 +25,7 @@ class IncorrectSettings extends Mailable
      */
     public function build()
     {
-        return $this->markdown('mail.formbuilder.incorrect-settings')
+        return $this->markdown('siteboss::mail.formbuilder.incorrect-settings')
             ->subject($this->form->name.' niet goed geconfigureerd');
     }
 }
