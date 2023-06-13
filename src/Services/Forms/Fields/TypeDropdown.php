@@ -18,8 +18,8 @@ class TypeDropdown extends AbstractType
                 continue;
             }
 
-            if (isset($option->$langurl)) {
-                $returnString[] = $option->$langurl;
+            if (isset($option->option->$langurl)) {
+                $returnString[] = $option->option->$langurl;
             }
         }
 
