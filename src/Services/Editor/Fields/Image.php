@@ -2,9 +2,9 @@
 
 namespace NotFound\Framework\Services\Editor\Fields;
 
+use Doctrine\DBAL\Types\Type;
 use NotFound\Framework\Services\Editor\Properties;
 use NotFound\Framework\Services\Editor\Repeatable;
-use Doctrine\DBAL\Types\Type;
 use stdClass;
 
 class Image extends Properties
