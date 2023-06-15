@@ -22,4 +22,16 @@ class Slug extends Properties
     {
         $this->addText('source', 'Source field internal name', false);
     }
+
+    public function checkColumnType(?\Doctrine\DBAL\Types\Type $type): string
+    {
+        if ($type === null) {
+            return 'COLUMN MISSING';
+        }
+        if (! in_array($type->getName(), ['string'])) {
+            return 'TYPE ERROR: '.$type->getName().' is not a valid type for a slug field';
+        }
+
+        return '';
+    }
 }

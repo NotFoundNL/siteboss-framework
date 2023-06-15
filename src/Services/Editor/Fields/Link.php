@@ -4,16 +4,16 @@ namespace NotFound\Framework\Services\Editor\Fields;
 
 use NotFound\Framework\Services\Editor\Properties;
 
-class Description extends Properties
+class Link extends Properties
 {
     public function description(): string
     {
-        return 'Description';
+        return 'Link';
     }
 
     public function properties(): void
     {
-        $this->addText('desc', 'Description (HTML allowed, no other fields here will be shown)');
+
     }
 
     public function serverProperties(): void
@@ -22,6 +22,9 @@ class Description extends Properties
 
     public function checkColumnType(?\Doctrine\DBAL\Types\Type $type): string
     {
+        if ($type === null) {
+            return 'COLUMN MISSING';
+        }
 
         return '';
     }

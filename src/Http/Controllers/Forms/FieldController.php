@@ -55,6 +55,7 @@ class FieldController extends Controller
         $response->category_slug = $form->category?->slug;
         $response->name = $form->name;
         $response->category_properties = $form->category?->properties;
+        $response->locales = $form->locales;
 
         $propC = new Property();
         $response->available_fields = $propC->getWithCustomCombinations();

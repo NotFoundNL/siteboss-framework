@@ -14,8 +14,7 @@ class FormController extends Controller
     {
         return $form
             ->whereTypeCombination()
-            ->where('archived', 0)
-            ->orWhere('archived', null)
+            ->where('archived', false)
             ->orderBy('name', 'ASC')
             ->get();
     }
@@ -28,12 +27,11 @@ class FormController extends Controller
             ->get();
     }
 
-    public function readAllBasedOnCategory(Form $form, Category $category)
+    public function readAllBasedOnCategory(Category $category)
     {
         $this->authorize('view', $category);
 
-        //TODO: show number of applications
-        return $form->getByCategory($category->slug);
+        return $category->forms->where('archived', false)->where('type', 'form')->values();
     }
 
     public function updateText(Request $request, Form $form)
@@ -83,6 +81,7 @@ class FormController extends Controller
             $form->category_id = $category->id;
 
             $form->notification_address = $request->mail ?? '';
+            $form->locales = $request->locales ?? '';
         }
 
         try {
@@ -101,15 +100,18 @@ class FormController extends Controller
 
     public function update(Request $request, Form $form)
     {
-        $this->authorize('update', $form->category);
+        $this->authorize('view', $form->category);
 
         $request->validate([
             'name' => 'required',
+            'archived' => 'boolean',
+            'notification_address' => 'string',
         ]);
 
         $form->name = $request->name;
+        $form->locales = $request->locales ?? null;
         $form->notification_address = $request->mail ?? '';
-        $form->archived = $request->archived ?? $form->archived;
+        $form->archived = $request->archived;
 
         return $form->save();
     }

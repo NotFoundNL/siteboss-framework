@@ -58,6 +58,7 @@ class Form extends BaseModel
         'id',
         'name',
         'type',
+        'locales',
         'success_text',
         'notification_address',
         'confirmation_mail',
@@ -67,6 +68,7 @@ class Form extends BaseModel
     protected $casts = [
         'success_text' => 'object',
         'confirmation_mail' => 'object',
+        'archived' => 'boolean',
     ];
 
     public function category()
@@ -99,7 +101,7 @@ class Form extends BaseModel
             ->where('archived', 0)
             ->orWhere('archived', null)
             ->orderBy('name', 'ASC')
-            ->get(['id', 'name', 'type', 'notification_address', 'archived']);
+            ->get(['id', 'name', 'type', 'notification_address', 'locales', 'archived']);
     }
 
     public function getNotificationAddresses(): array

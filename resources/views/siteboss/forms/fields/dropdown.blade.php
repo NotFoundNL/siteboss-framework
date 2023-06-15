@@ -8,7 +8,7 @@
 
     @foreach ($optionList as $option)
         @php($optionString = $getByLanguage($option))
-        <option value="{{ $option->id }}">{{ $optionString }}</option>
+        <option value="{{ $option->index }}">{{ $optionString }}</option>
     @endforeach
   </select>
   <label for="{{ $id }}" generated="true" class="error invalid-feedback" style="display: none;"></label>

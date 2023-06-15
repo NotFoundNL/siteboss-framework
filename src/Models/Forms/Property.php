@@ -5,6 +5,12 @@ namespace NotFound\Framework\Models\Forms;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use NotFound\Framework\Models\BaseModel;
 use NotFound\Framework\Services\Forms\Fields\FactoryType;
+use NotFound\Layout\Inputs\LayoutInputCheckbox;
+use NotFound\Layout\Inputs\LayoutInputDropdown;
+use NotFound\Layout\Inputs\LayoutInputRepeatable;
+use NotFound\Layout\Inputs\LayoutInputSlider;
+use NotFound\Layout\Inputs\LayoutInputText;
+use NotFound\Layout\Inputs\LayoutInputTextArea;
 
 /**
  * NotFound\Framework\Models\Forms\Property
@@ -61,7 +67,7 @@ class Property extends BaseModel
         $properties = [];
         foreach ($this->get() as $property) {
             $type = $typeFactory->getByType($property->type, $property->options, 4);
-            $property->{'options'} = $type->getOptions($property->options);
+            $property->{'options'} = $this->makeAutoLayout($type->getOptions($property->options));
 
             $properties[] = $property;
         }
@@ -82,5 +88,64 @@ class Property extends BaseModel
         }
 
         return $properties;
+    }
+
+    private function makeAutoLayout($options)
+    {
+        $autoLayoutOptions = [];
+        foreach ($options as $option) {
+            switch ($option->type) {
+                case 'checkbox':
+                    $checkbox = new LayoutInputCheckbox($option->internal, $option->label);
+                    $autoLayoutOptions[] = $checkbox->build();
+                    break;
+                case 'textarea':
+                    $textArea = new LayoutInputTextArea('textarea'.$option->internal, $option->label);
+                    $autoLayoutOptions[] = $textArea->build();
+                    break;
+                case 'number':
+                    $slider = new LayoutInputSlider($option->internal, $option->label);
+                    $slider->setMin(1);
+                    $slider->setMax(12);
+                    $autoLayoutOptions[] = $slider->build();
+                    break;
+                case 'list':
+                    $optionList = new LayoutInputRepeatable($option->internal, $option->label);
+                    $optionList->setRequired();
+                    $optionList->showDeleted();
+
+                    $form = new \NotFound\Layout\Elements\LayoutForm('form');
+                    //                    $form->addInput((new LayoutInputHidden('id')));
+                    $form->addInput((new LayoutInputText('option', 'Optie'))->setLocalize()->setRequired());
+
+                    $optionList->setForm($form);
+                    $autoLayoutOptions[] = $optionList->build();
+                    break;
+                case 'optionlist':
+                    $optionList = new LayoutInputDropdown($option->internal, $option->label);
+                    $optionList->setRequired();
+                    foreach ($option->options as $item) {
+                        $optionList->addOption($item->value, $item->label);
+                    }
+                    if (isset($option->required) && $option->required === true) {
+                        $optionList->setRequired();
+                    }
+                    $autoLayoutOptions[] = $optionList->build();
+                    break;
+                case 'input':
+                    $textInput = new LayoutInputText($option->internal, $option->label);
+                    if (isset($option->localize) && $option->localize === true) {
+                        $textInput->setLocalize();
+                    }
+                    if (isset($option->required) && $option->required === true) {
+                        $textInput->setRequired();
+                    }
+                    $textInput->setLocalize();
+                    $autoLayoutOptions[] = $textInput->build();
+                    break;
+            }
+        }
+
+        return $autoLayoutOptions;
     }
 }
