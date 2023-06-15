@@ -279,7 +279,7 @@ class CmsEditorTableController extends \NotFound\Framework\Http\Controllers\Cont
 
     private function checkColumn(string $table, object $field): string
     {
-        $className = '\\App\\Services\\Editor\\Fields\\'.$field->type;
+        $className = '\\NotFound\\Framework\\Services\\Editor\\Fields\\'.$field->type;
 
         $fieldClass = new $className(new stdClass());
 
