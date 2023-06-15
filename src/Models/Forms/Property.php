@@ -115,7 +115,7 @@ class Property extends BaseModel
                     $optionList->showDeleted();
 
                     $form = new \NotFound\Layout\Elements\LayoutForm('form');
-//                    $form->addInput((new LayoutInputHidden('id')));
+                    //                    $form->addInput((new LayoutInputHidden('id')));
                     $form->addInput((new LayoutInputText('option', 'Optie'))->setLocalize()->setRequired());
 
                     $optionList->setForm($form);
