@@ -163,9 +163,6 @@ return [
     */
 
     'aliases' => Facade::defaultAliases()->merge([
-        'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
-        'signed' => \NotFound\Framework\Http\Middleware\ValidateSignature::class,
-        'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'Sb' => \NotFound\Framework\Helpers\SitebossHelper::class,
     ])->toArray(),
 
