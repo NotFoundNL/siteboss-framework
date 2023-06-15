@@ -102,7 +102,7 @@ class Menu extends LegacyModel
 
     public function children()
     {
-        return $this->hasMany(self::class, 'parent_id')->orderBy('order');
+        return $this->hasMany(self::class, 'parent_id')->where('enabled', 1)->orderBy('order');
     }
 
     public function getParamsUrl(): string
@@ -167,6 +167,7 @@ class Menu extends LegacyModel
             ->where('parent_id', 0)
             ->whereNot('template_id', 0)
             ->whereNotNull('template_id')
+            ->where('enabled', 1)
             ->orderby('order');
         // ->when($site, function ($q) use ($site) {
         //     return $q->where('url', $site->url);

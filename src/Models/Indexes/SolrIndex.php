@@ -2,10 +2,10 @@
 
 namespace NotFound\Framework\Models\Indexes;
 
-use App\Mail\Indexer\FileIndexError;
-use App\Mail\Indexer\QueryError;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use NotFound\Framework\Mail\Indexer\FileIndexError;
+use NotFound\Framework\Mail\Indexer\QueryError;
 use NotFound\Framework\Models\BaseModel;
 use NotFound\Framework\Models\CmsSearch;
 
@@ -35,7 +35,7 @@ class SolrIndex extends BaseModel
 
     public string $wt = 'json';
 
-    public string $selectOperator = 'AND';
+    public string $selectOperator = 'OR';
 
     public string $hl = 'on';
 
@@ -272,9 +272,11 @@ class SolrIndex extends BaseModel
     {
         $curl = $this->solrHandler();
         $url = sprintf(
-            '%s/select?q=content:%s&wt=%s&hl=%s&q.op=%s&hl.fl=%s&fl=%s&spellcheck=true&hl.fragsize=%d&hl.maxAnalyzedChars=%d',
+            '%s/select?q=title:%s%%20content:%s&spellcheck.q=%s&wt=%s&hl=%s&q.op=%s&hl.fl=%s&fl=%s&spellcheck=true&hl.fragsize=%d&hl.maxAnalyzedChars=%d',
             $this->getSolrBaseUrl(),
             rawurlencode($query), // make sure + between search terms is preserved
+            rawurlencode($query), // make sure + between search terms is preserved
+            rawurlencode($query), // make sure + between search terms is preserved            rawurlencode($query), // make sure + between search terms is preserved
             $this->wt,
             $this->hl,
             $this->selectOperator,

@@ -124,10 +124,11 @@ class UserDataTransformer
 
     private function setFilledIds()
     {
+        // BUG: Query must be converted to laravel query builder
         $values = [];
         /* Set locale to Dutch */
         setlocale(LC_ALL, 'nl_NL');
-        $dataArray = Db::query_rs("
+        $dataArray = DB::query_rs("
             SELECT id, data, timestamp
               FROM `[][]cms_form_data`
             WHERE `form_id` = {$this->formId}

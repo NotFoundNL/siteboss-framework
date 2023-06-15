@@ -69,7 +69,6 @@ class ComponentFile extends AbstractComponent
     {
         $fileId = $this->newValue['files'][0] ?? null;
         if ($fileId === null) {
-
             if (isset($this->getCurrentValue()->name)) {
                 return true;
             } else {

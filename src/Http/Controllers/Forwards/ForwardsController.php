@@ -13,6 +13,7 @@ use NotFound\Layout\Elements\LayoutTableColumn;
 use NotFound\Layout\Elements\LayoutTableHeader;
 use NotFound\Layout\Elements\LayoutTableRow;
 use NotFound\Layout\Elements\LayoutWidget;
+use Sb;
 
 class ForwardsController extends \NotFound\Framework\Http\Controllers\Controller
 {
@@ -26,9 +27,9 @@ class ForwardsController extends \NotFound\Framework\Http\Controllers\Controller
         $table->addHeader(new LayoutTableHeader(title: 'WWW-variant actief'));
 
         $response = Http::withHeaders([
-            'token' => 'B58337F3-E2E4-4003-AB7A-421B2A71D091',
-        ])->acceptJson()->get('https://forward.siteboss.nl/api/v1/domain?token=', [
-            'token' => 'B58337F3-E2E4-4003-AB7A-421B2A71D091',
+            'token' => Sb::config('siteboss_forwards_token'),
+        ])->acceptJson()->get(Sb::config('siteboss_forwards_endpoint').'/domain?token=', [
+            'token' => Sb::config('siteboss_forwards_token'),
         ]);
 
         if ($response->successful()) {

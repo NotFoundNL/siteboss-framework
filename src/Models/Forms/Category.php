@@ -59,4 +59,9 @@ class Category extends BaseModel
 
         return $filteredCategories->values();
     }
+
+    public function forms()
+    {
+        return $this->hasMany(Form::class, 'category_id', 'id');
+    }
 }

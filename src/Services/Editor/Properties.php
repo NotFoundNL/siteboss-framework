@@ -39,6 +39,8 @@ abstract class Properties
 
     abstract public function description(): string;
 
+    abstract public function checkColumnType(?\Doctrine\DBAL\Types\Type $type): string;
+
     protected function addText($property_name, $display_name, $required = false, $default = null)
     {
         $this->add((object) ['type' => 'Text', 'name' => $property_name, 'display_name' => $display_name, 'required' => $required, 'default' => $default]);

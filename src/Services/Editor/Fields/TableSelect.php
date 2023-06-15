@@ -25,6 +25,7 @@ class TableSelect extends Properties
         $this->addText('foreignDisplay', 'Foreign display', true, default: 'name/title');
         $this->addCheckbox('useStatus', 'Use status column', true);
         $this->addCheckbox('useOrder', 'Use order column', true);
+        $this->addCheckbox('localizeForeign', 'Foreign column is localized', true);
         $this->addText('customQuery', 'Custom query (not implemented)');
         $this->addCheckbox('searchForItem', 'Search within results', true);
     }
@@ -37,5 +38,17 @@ class TableSelect extends Properties
             'foreigndisplay' => 'foreignDisplay',
             'customquery' => 'customQuery',
         ];
+    }
+
+    public function checkColumnType(?\Doctrine\DBAL\Types\Type $type): string
+    {
+        if ($type === null) {
+            return 'COLUMN MISSING';
+        }
+        if (! in_array($type->getName(), ['string', 'integer'])) {
+            return 'TYPE ERROR: '.$type->getName().' is not a valid type for a table select field';
+        }
+
+        return '';
     }
 }

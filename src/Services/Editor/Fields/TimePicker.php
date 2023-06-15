@@ -4,25 +4,21 @@ namespace NotFound\Framework\Services\Editor\Fields;
 
 use NotFound\Framework\Services\Editor\Properties;
 
-class Description extends Properties
+class TimePicker extends Properties
 {
     public function description(): string
     {
-        return 'Description';
+        return 'TimePicker';
     }
 
     public function properties(): void
     {
-        $this->addText('desc', 'Description (HTML allowed, no other fields here will be shown)');
+        $this->overview();
+        $this->sortable();
+        $this->required();
     }
 
     public function serverProperties(): void
     {
-    }
-
-    public function checkColumnType(?\Doctrine\DBAL\Types\Type $type): string
-    {
-
-        return '';
     }
 }

@@ -35,7 +35,7 @@ class FileIndexError extends Mailable
      */
     public function build()
     {
-        return $this->markdown('mail.indexer.file-index-error')
+        return $this->markdown('siteboss::mail.indexer.file-index-error')
             ->subject('File index error')
             ->with([
                 'error' => $this->error,

@@ -10,7 +10,7 @@
                 type="checkbox"
                 name="{{ $id }}[]"
                 id="radio{{ $id }}{{ $optionString }}"
-                value="{{ $option->id }}"
+                value="{{ $option->index }}"
                 {{$required}}
             >
             <label class="form-check-label" for="radio{{ $id }}{{ $optionString }}">

@@ -42,7 +42,7 @@ class ComponentSlug extends AbstractComponent
             $sourceValue = $this->assetService->getComponents()->get($sourceInput)->newValue;
             $newValue = preg_replace('/ /', '-', preg_replace('/[ ]{2,100}/', ' ', trim(preg_replace('/[^a-z0-9]/', ' ', strtolower($sourceValue)))));
         } else {
-            $newValue = $this->newValue;
+            $newValue = preg_replace('/ /', '-', preg_replace('/[ ]{2,100}/', ' ', trim(preg_replace('/[^a-z0-9]/', ' ', strtolower($this->newValue)))));
         }
 
         // No need to check current value

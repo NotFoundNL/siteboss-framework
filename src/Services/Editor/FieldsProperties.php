@@ -25,7 +25,7 @@ class FieldsProperties
 
     public function availableFields()
     {
-        $fields = ['Text', 'Checkbox', 'DropDown', 'Tags', 'Description', 'TableSelect', 'Header', 'DatePicker', 'DateTimePicker', 'Image', 'File', 'ContentBlocks', 'Button', 'Slug', 'Number'];
+        $fields = ['Text', 'Checkbox', 'DropDown', 'Tags', 'Description', 'TableSelect', 'Header', 'DatePicker', 'TimePicker', 'DateTimePicker', 'Image', 'File', 'ContentBlocks', 'Button', 'Slug', 'Number'];
         sort($fields);
 
         return $fields;
@@ -150,7 +150,7 @@ class FieldsProperties
                         //     $checkboxField->setValue(true);
                         // } else {
                         $checkboxField->setValue(false);
-                    // }
+                        // }
                     } else {
                         $checkboxField->setValue($value ?? false);
                     }

@@ -18,7 +18,7 @@ class ComponentDateTimePicker extends AbstractComponent
     public function setValue($value)
     {
         if ($value === null || empty(trim($value))) {
-            $this->currentValue = '';
+            $this->currentValue = null;
 
             return;
         }
@@ -43,7 +43,10 @@ class ComponentDateTimePicker extends AbstractComponent
 
     public function validate($newValue): bool
     {
-        // TODO: Implement validate() method.
+        if (! $this->isRequired() && $newValue == '') {
+            $this->setNewValue(null);
+        }
+
         return true;
     }
 }

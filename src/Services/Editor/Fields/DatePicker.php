@@ -13,6 +13,7 @@ class DatePicker extends Properties
 
     public function properties(): void
     {
+        $this->overview();
         $this->sortable();
         $this->localize();
         $this->required();
@@ -22,7 +23,6 @@ class DatePicker extends Properties
 
     public function serverProperties(): void
     {
-        $this->overview();
     }
 
     protected function rename(): array
@@ -30,5 +30,17 @@ class DatePicker extends Properties
         return [
             'allowempty' => 'allowEmpty',
         ];
+    }
+
+    public function checkColumnType(?\Doctrine\DBAL\Types\Type $type): string
+    {
+        if ($type === null) {
+            return 'COLUMN MISSING';
+        }
+        if (! in_array($type->getName(), ['int'])) {
+            return 'TYPE ERROR: '.$type->getName().' is not a valid type for a text field';
+        }
+
+        return '';
     }
 }
