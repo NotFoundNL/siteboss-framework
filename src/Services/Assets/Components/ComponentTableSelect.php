@@ -3,6 +3,7 @@
 namespace NotFound\Framework\Services\Assets\Components;
 
 use Illuminate\Support\Facades\DB;
+use NotFound\Framework\Models\Lang;
 use NotFound\Framework\Services\Legacy\StatusColumn;
 use NotFound\Layout\Elements\AbstractLayout;
 use NotFound\Layout\Elements\Table\LayoutTableColumn;
@@ -44,8 +45,18 @@ class ComponentTableSelect extends AbstractComponent
 
     public function getTableOverviewContent(): LayoutTableColumn
     {
-        $tableName = remove_database_prefix($this->properties()->foreignTable);
-        $value = DB::table($tableName)->whereId($this->getCurrentValue())->value($this->properties()->foreignDisplay);
+        $table = remove_database_prefix($this->properties()->foreignTable);
+
+        $properties = $this->properties();
+        if (isset($properties->localizeForeign) && $properties->localizeForeign == true) {
+            $value = DB::table($table)//
+                ->join($table.'_tr', $table.'_tr.entity_id', '=', $table.'.id')
+                ->where($table.'_tr.lang_id', Lang::current()->id)
+                ->where($table.'.id', $this->getCurrentValue())
+                ->value($properties->foreignDisplay);
+        } else {
+            $value = DB::table($table)->whereId($this->getCurrentValue())->value($this->properties()->foreignDisplay);
+        }
 
         return new LayoutTableColumn($value ?? '-', $this->type);
     }
@@ -64,6 +75,13 @@ class ComponentTableSelect extends AbstractComponent
             $builder->orderBy('order', 'asc');
         } else {
             $builder->orderBy($properties->foreignDisplay, 'asc');
+        }
+
+        if (isset($properties->localizeForeign) && $properties->localizeForeign == true) {
+
+            $builder->join($tableName.'_tr', $tableName.'_tr.entity_id', '=', $tableName.'.id');
+            $builder->where($tableName.'_tr.lang_id', Lang::current()->id);
+            // $builder->dd();
         }
 
         return $builder->get()->toArray();

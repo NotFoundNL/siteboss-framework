@@ -25,6 +25,7 @@ class TableSelect extends Properties
         $this->addText('foreignDisplay', 'Foreign display', true, default: 'name/title');
         $this->addCheckbox('useStatus', 'Use status column', true);
         $this->addCheckbox('useOrder', 'Use order column', true);
+        $this->addCheckbox('localizeForeign', 'Foreign column is localized', true);
         $this->addText('customQuery', 'Custom query (not implemented)');
         $this->addCheckbox('searchForItem', 'Search within results', true);
     }
