@@ -18,7 +18,7 @@ abstract class AbstractFieldComponent extends Component
             return 'siteboss.forms.fields.'.$this->field->type;
         }
 
-        return view('fields::'.$this->field->type);
+        return view('siteboss::siteboss.forms.fields.'.$this->field->type);
     }
 
     public function colClasses(): string
