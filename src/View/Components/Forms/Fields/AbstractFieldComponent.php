@@ -14,11 +14,12 @@ abstract class AbstractFieldComponent extends Component
 
     public function render()
     {
-        if (view()->exists('siteboss.forms.fields.'.$this->field->type)) {
-            return 'siteboss.forms.fields.'.$this->field->type;
+        $typeFile = strtolower( $this->field->type);
+        if (view()->exists('siteboss.forms.fields.'. $typeFile)) {
+            return 'siteboss.forms.fields.'.$typeFile;
         }
 
-        return view('siteboss::siteboss.forms.fields.'.$this->field->type);
+        return view('siteboss::siteboss.forms.fields.'. $typeFile);
     }
 
     public function colClasses(): string
