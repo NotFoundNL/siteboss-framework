@@ -2,9 +2,9 @@
 
 namespace NotFound\Framework\Models\Forms;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use NotFound\Framework\Models\BaseModel;
-use Illuminate\Database\Eloquent\Collection;
 
 /**
  * NotFound\Framework\Models\Forms\Field
