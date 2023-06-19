@@ -4,6 +4,7 @@ namespace NotFound\Framework\Models\Forms;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
 use NotFound\Framework\Models\BaseModel;
+use Illuminate\Database\Eloquent\Collection;
 
 /**
  * NotFound\Framework\Models\Forms\Field
@@ -163,7 +164,7 @@ class Field extends BaseModel
         return $returnArray;
     }
 
-    public function GetChildrenOfCombination(int $formId, int $combinationId): array
+    public function GetChildrenOfCombination(int $formId, int $combinationId): Collection
     {
         $fieldQuery = $this
             ->where('form_id', $formId);
@@ -174,8 +175,7 @@ class Field extends BaseModel
 
         return $fieldQuery
             ->orderBy('order')
-            ->get()
-            ->toArray();
+            ->get();
     }
 
     private function setParentRecursive(&$fields, $parentId, $fieldToSet)
