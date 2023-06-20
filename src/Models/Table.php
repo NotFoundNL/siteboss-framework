@@ -138,6 +138,10 @@ class Table extends AssetModel
 
         $tableName = $this->getSiteTableName();
 
+        if (Schema::hasColumn($tableName, 'updated_at')) {
+            $record['updated_at'] = now();
+        }
+
         DB::table($tableName)->where('id', $record['id'])->update($record);
 
         return $record['id'];
@@ -156,6 +160,10 @@ class Table extends AssetModel
         if (Schema::hasColumn($tableName, 'status')) {
             // Remove when support for status column is dropped
             $record['status'] = 'PUBLISHED';
+        }
+
+        if (Schema::hasColumn($tableName, 'created_at')) {
+            $record['created_at'] = now();
         }
 
         DB::table($tableName)->insert($record);
