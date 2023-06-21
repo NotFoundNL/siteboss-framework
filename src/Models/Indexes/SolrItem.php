@@ -110,7 +110,7 @@ class SolrItem extends BaseModel
     public function getSuggestions()
     {
         $suggestions = $this->suggestions();
-        if (! $suggestions) {
+        if (!$suggestions) {
             $suggestions = $this->collations();
         }
 
@@ -149,7 +149,7 @@ class SolrItem extends BaseModel
                     }
                     $queries[] = [
                         'term' => implode(' ', $emphasizedArray),
-                        'payload' => '?q='.urlencode($querytext).'',
+                        'payload' => '?q=' . urlencode($querytext) . '',
                     ];
                 }
             }
@@ -167,10 +167,10 @@ class SolrItem extends BaseModel
             $next = next($this->predictions);
             if (is_string($current) && is_int($next)) {
                 $resultList[$current]['count'] = $next;
-                $fullTerm = $term.' '.$current;
+                $fullTerm = $term . ' ' . $current;
                 $queries[] = [
                     'term' => $fullTerm,
-                    'payload' => '?q='.urlencode($fullTerm).'',
+                    'payload' => '?q=' . urlencode($fullTerm) . '',
                 ];
             }
         }
@@ -181,18 +181,18 @@ class SolrItem extends BaseModel
     public function spellcheckList()
     {
         $items = [];
-        $query = $this->header->params->q;
+        $query = $this->q;
 
         if (isset($this->spellcheck)) {
             foreach ($this->spellcheck->suggestions as $suggestion) {
                 if (isset($suggestion->startOffset)) {
-                    $suggest = substr($query, 0, $suggestion->startOffset).'<em>'.$suggestion->suggestion[0].'</em>'.substr($query, $suggestion->endOffset);
+                    $suggest = substr($query, 0, $suggestion->startOffset) . '<em>' . $suggestion->suggestion[0] . '</em>' . substr($query, $suggestion->endOffset);
                     $suggestTerm = preg_replace('/^([a-zA-Z])+(_[a-zA-Z]{2})?:/', '', $suggest); // remove search field if necessary
 
-                    $suggest_url = substr($query, 0, $suggestion->startOffset).$suggestion->suggestion[0].substr($query, $suggestion->endOffset);
+                    $suggest_url = substr($query, 0, $suggestion->startOffset) . $suggestion->suggestion[0] . substr($query, $suggestion->endOffset);
                     $suggest_url = preg_replace('/^([a-zA-Z])+(_[a-zA-Z]{2})?:/', '', $suggest_url); // remove search field if necessary
 
-                    $items[] = (object) ['link' => '?q='.rawurlencode(urldecode($suggest_url)), 'text' => urldecode($suggestTerm)];
+                    $items[] = (object) ['link' => '?q=' . rawurlencode(urldecode($suggest_url)), 'text' => urldecode($suggestTerm)];
                 }
             }
         }
