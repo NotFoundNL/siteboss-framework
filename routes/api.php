@@ -10,7 +10,6 @@ use NotFound\Framework\Http\Controllers\InfoController;
 use NotFound\Framework\Http\Controllers\SettingsController;
 use NotFound\Framework\Http\Controllers\Support\SupportController;
 use NotFound\Framework\Http\Controllers\UserPreferencesController;
-use Siteboss\Routes\SiteRoutes;
 
 // ContentBlock
 /*
@@ -39,12 +38,6 @@ Route::prefix(config('siteboss.api_prefix'))->group(function () {
     // Settings for the login page
     Route::get('settings', [InfoController::class, 'settings']);
 
-    if (class_exists(SiteRoutes::class)) {
-        Route::group(['middleware' => ['api']], function () {
-            Route::prefix('public')->group(SiteRoutes::getPublic());
-        });
-    }
-
     // Authenticated routes
     Route::group(['middleware' => ['auth:openid', 'api']], function () {
         // Language for messages (not the language used for storing data)
@@ -61,9 +54,10 @@ Route::prefix(config('siteboss.api_prefix'))->group(function () {
             Route::middleware('role:forms')->group(__DIR__.'/cms/forms.php');
 
             Route::prefix('app')->group(function () {
-                if (class_exists(SiteRoutes::class)) {
-                    // /site for custom
-                    Route::prefix('site')->group(SiteRoutes::getAppSiteRoutes());
+                if (file_exists(base_path().'/routes/siteboss.php')) {
+                    Route::prefix('site')->group(
+                        base_path().'/routes/siteboss.php'
+                    );
                 }
 
                 // /menu
