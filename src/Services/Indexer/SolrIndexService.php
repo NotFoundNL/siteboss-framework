@@ -32,7 +32,7 @@ class SolrIndexService extends AbstractIndexService
         return true;
     }
 
-    public function upsertUrl(string $url, string $title, string $contents, string $type, int $lang, array $customValues = [], $priority = 1): object
+    public function upsertUrl(string $url, string $title, string $contents, string $type, string $lang, array $customValues = [], $priority = 1): object
     {
         $result = $this->solrIndex->addOrUpdateItem($this->siteUrl($url), $title, $contents, $type, $lang, $this->siteId, $customValues, $priority);
         $return = $this->returnvalue();
@@ -51,7 +51,7 @@ class SolrIndexService extends AbstractIndexService
         return $return;
     }
 
-    public function upsertFile(string $url, string $title, string $file, string $type, int $lang, array $customValues = [], $priority = 1): object
+    public function upsertFile(string $url, string $title, string $file, string $type, string $lang, array $customValues = [], $priority = 1): object
     {
         $result = $this->solrIndex->addOrUpdateFile($this->siteUrl($url), $title, $file, $type, $lang, $this->siteId, $customValues, $priority);
 
@@ -107,7 +107,6 @@ class SolrIndexService extends AbstractIndexService
     {
         $return = $this->removeAllPending();
 
-        $this->solrIndex->suggester = ['fulltextsuggester', 'titlesuggester'];
         $build = $this->solrIndex->buildSuggester();
 
         if ($build->error) {

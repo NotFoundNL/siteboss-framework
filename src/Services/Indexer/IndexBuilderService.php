@@ -159,7 +159,7 @@ class IndexBuilderService
 
         $searchText = rtrim($searchText, ', ');
         if (! empty($title) && ! empty($searchText)) {
-            $result = $this->searchServer->upsertUrl($url, $title, $searchText, 'page', $lang->id, $customValues, $priority);
+            $result = $this->searchServer->upsertUrl($url, $title, $searchText, 'page', $lang->url, $customValues, $priority);
 
             if ($result->errorCode == 0) {
                 $this->writeDebug(" success\n");
@@ -207,9 +207,9 @@ class IndexBuilderService
                     $success = true;
 
                     if ($searchItem['isFile']) {
-                        $success = $this->searchServer->upsertFile($url, $searchItem['title'], $searchItem['file'], $searchItem['type'], $lang->id, $searchItem['customValues'], $searchItem['priority']);
+                        $success = $this->searchServer->upsertFile($url, $searchItem['title'], $searchItem['file'], $searchItem['type'], $lang->url, $searchItem['customValues'], $searchItem['priority']);
                     } else { // subitem is table row
-                        $success = $this->searchServer->upsertUrl($url, $searchItem['title'], $searchItem['content'], $searchItem['type'], $lang->id, $searchItem['customValues'], $searchItem['priority']);
+                        $success = $this->searchServer->upsertUrl($url, $searchItem['title'], $searchItem['content'], $searchItem['type'], $lang->url, $searchItem['customValues'], $searchItem['priority']);
                     }
 
                     if ($this->sitemapFile && $searchItem['sitemap']) {

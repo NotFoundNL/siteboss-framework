@@ -83,7 +83,7 @@ class SolrIndex extends BaseModel
 
             $json = json_decode($result);
 
-            if (! $json || ! isset($json->responseHeader) || $json->responseHeader->status !== 0) {
+            if (!$json || !isset($json->responseHeader) || $json->responseHeader->status !== 0) {
                 $this->mailQueryError($url, $result);
 
                 return false;
@@ -100,7 +100,7 @@ class SolrIndex extends BaseModel
     {
         $handler = curl_init();
         curl_setopt($handler, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($handler, CURLOPT_USERPWD, $this->solrUser.':'.$this->solrPass);
+        curl_setopt($handler, CURLOPT_USERPWD, $this->solrUser . ':' . $this->solrPass);
 
         curl_setopt($handler, CURLOPT_POST, true);
 
@@ -130,13 +130,13 @@ class SolrIndex extends BaseModel
         return false;
     }
 
-    public function addOrUpdateItem(string $url, string $title, string $contents, string $type, int $lang, int $siteId, array $customValues, int $priority): bool
+    public function addOrUpdateItem(string $url, string $title, string $contents, string $type, string $lang, int $siteId, array $customValues, int $priority): bool
     {
         $curl = $this->solrHandler();
 
         $doc = [
-            'title' => $title,
-            'content' => html_entity_decode(trim(preg_replace('/\s+/', ' ', strip_tags($contents)))),
+            sprintf('title_%s', $lang) => $title,
+            sprintf('content_%s', $lang) => html_entity_decode(trim(preg_replace('/\s+/', ' ', strip_tags($contents)))),
             'type' => $type,
             'url' => $url,
             'priority' => $priority,
@@ -167,7 +167,7 @@ class SolrIndex extends BaseModel
 
     public function removeItem($url)
     {
-        if (! is_null($url)) {
+        if (!is_null($url)) {
             $curl = $this->solrHandler();
 
             $payload = ['delete' => $url];
@@ -192,7 +192,7 @@ class SolrIndex extends BaseModel
         return false;
     }
 
-    public function addOrUpdateFile(string $url, string $title, string $file, string $type, int $lang, int $siteId, array $customValues, int $priority): string
+    public function addOrUpdateFile(string $url, string $title, string $file, string $type, string $lang, int $siteId, array $customValues, int $priority): string
     {
         // find out of document exists
         $result = 0;
@@ -202,9 +202,10 @@ class SolrIndex extends BaseModel
             $curl = $this->solrHandler();
 
             $endpoint = sprintf(
-                '%s/update/extract?literal.url=%s&literal.title=%s&literal.type=%s&literal.site=%s&literal.language=%d&commit=true',
+                '%s/update/extract?literal.url=%s&literal.title_%s=%s&literal.type=%s&literal.site=%s&literal.language=%d&commit=true',
                 $this->getSolrBaseUrl(),
                 urlencode($url),
+                $lang,
                 urlencode($title),
                 $type,
                 $siteId,
@@ -268,46 +269,48 @@ class SolrIndex extends BaseModel
         }
     }
 
-    public function selectItems($query, $filter = null, $start = null, $rows = null, $extraColumns = [], $highlightLength = 50)
+    public function selectItems($query, $lang = 'nl', $filter = null, $start = null, $rows = null, $extraColumns = [], $highlightLength = 50)
     {
         $curl = $this->solrHandler();
         $url = sprintf(
-            '%s/select?q=title:%s%%20content:%s&spellcheck.q=%s&wt=%s&hl=%s&q.op=%s&hl.fl=%s&fl=%s&spellcheck=true&hl.fragsize=%d&hl.maxAnalyzedChars=%d',
+            '%s/select?q=title_%s:%s%%20content_%s:%s&spellcheck.q=%s&wt=%s&hl=%s&q.op=%s&hl.fl=%s&fl=%s&spellcheck=true&hl.fragsize=%d&hl.maxAnalyzedChars=%d&spellcheck.dictionary=spellcheck_%s',
             $this->getSolrBaseUrl(),
+            sprintf($lang),
+            rawurlencode($query), // make sure + between search terms is preserved
+            sprintf($lang),
             rawurlencode($query), // make sure + between search terms is preserved
             rawurlencode($query), // make sure + between search terms is preserved
-            rawurlencode($query), // make sure + between search terms is preserved            rawurlencode($query), // make sure + between search terms is preserved
             $this->wt,
             $this->hl,
             $this->selectOperator,
-            $this->hlfl,
+            sprintf('%s_%s', $this->hlfl, $lang),
             urlencode($this->fl),
             $this->hlfragsize,
             $this->hlmaxAnalyzedChars,
+            $lang
         );
         if ($filter) {
-            $url .= '&fq='.$filter;
+            $url .= '&fq=' . $filter;
         }
         if ($start && is_int($start)) {
-            $url .= '&start='.$start;
+            $url .= '&start=' . $start;
         }
 
         if ($rows && is_int($rows)) {
-            $url .= '&rows='.$rows;
+            $url .= '&rows=' . $rows;
         }
 
         if (count($extraColumns) > 0) {
         }
 
         if ($this->sort) {
-            $url .= '&sort='.urlencode($this->sort);
+            $url .= '&sort=' . urlencode($this->sort);
         }
-
         curl_setopt($curl, CURLOPT_URL, $url);
         $result = curl_exec($curl);
         $json = json_decode($result);
         $searchResults = new SolrItem($json, $query, false, $highlightLength);
-        if (! $searchResults->isValid()) {
+        if (!$searchResults->isValid()) {
             $this->mailQueryError($url, $result);
         }
 
@@ -327,7 +330,7 @@ class SolrIndex extends BaseModel
         $result = curl_exec($curl);
         $json = json_decode($result);
         $suggestions = new SolrItem($json, $query);
-        if (! $suggestions->isValid()) {
+        if (!$suggestions->isValid()) {
             $this->buildSuggester();
             $result = curl_exec($curl);
             $json = json_decode($result);
@@ -359,7 +362,6 @@ class SolrIndex extends BaseModel
         $url = sprintf('%s&suggest.build=true', $this->suggestUrl());
 
         curl_setopt($curl, CURLOPT_URL, $url);
-
         $result = curl_exec($curl);
         $json = json_decode($result);
         $searchResults = new SolrItem($json, null);
@@ -367,10 +369,45 @@ class SolrIndex extends BaseModel
         return $searchResults;
     }
 
+    private function getConfig()
+    {
+        $curl = $this->solrHandler();
+        $url = sprintf('%s/config/searchComponent?componentName=suggest', $this->getSolrBaseUrl());
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_POST, false);
+
+        $result = curl_exec($curl);
+        $json = json_decode($result);
+
+        return $json;
+    }
+
+    private function allSuggesters()
+    {
+        $json = $this->getConfig();
+        $suggesters = [];
+        if (
+            $json && isset($json->responseHeader)
+            && $json->responseHeader->status == 0
+            && isset($json->config->searchComponent->suggest->suggester)
+        ) {
+            $list = $json->config->searchComponent->suggest->suggester;
+            foreach ($list as $s) {
+                $suggesters[] = $s->name;
+            }
+        }
+
+        return $suggesters;
+    }
+
     private function explodeSuggesters(): string
     {
         $suggesterString = '';
-        foreach ($this->suggester as $s) {
+        $suggesters = $this->suggester;
+        if (count($suggesters) == 0) {
+            $suggesters = $this->allSuggesters();
+        }
+        foreach ($suggesters as $s) {
             $suggesterString .= sprintf('&suggest.dictionary=%s', $s);
         }
 
