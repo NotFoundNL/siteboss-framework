@@ -5,6 +5,7 @@
     enctype="multipart/form-data"
 >
 
+    <x-honeypot />
     <div class="row">
         @foreach ($form->fields as $item)
             <div>
