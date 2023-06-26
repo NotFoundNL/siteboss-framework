@@ -275,9 +275,9 @@ class SolrIndex extends BaseModel
         $url = sprintf(
             '%s/select?q=title_%s:%s%%20content_%s:%s&spellcheck.q=%s&wt=%s&hl=%s&q.op=%s&hl.fl=%s&fl=%s&spellcheck=true&hl.fragsize=%d&hl.maxAnalyzedChars=%d&spellcheck.dictionary=spellcheck_%s',
             $this->getSolrBaseUrl(),
-            sprintf($lang),
+            $lang,
             rawurlencode($query), // make sure + between search terms is preserved
-            sprintf($lang),
+            $lang,
             rawurlencode($query), // make sure + between search terms is preserved
             rawurlencode($query), // make sure + between search terms is preserved
             $this->wt,
