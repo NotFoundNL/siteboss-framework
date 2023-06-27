@@ -10,6 +10,6 @@ class SpamDetectedResponder implements SpamResponder
 {
     public function respond(Request $request, Closure $next)
     {
-        return response('Deze request is gemarkeerd as spam.');
+        return response('Deze request is gemarkeerd als spam.');
     }
 }
