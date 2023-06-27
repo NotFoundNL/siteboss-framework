@@ -21,6 +21,7 @@ class FrameworkServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/../config/app.php' => config_path('app.php'),
             __DIR__.'/../config/auth.php' => config_path('auth.php'),
+            __DIR__.'/../config/honeypot.php' => config_path('honeypot.php'),
             __DIR__.'/../config/siteboss.php' => config_path('siteboss.php'),
             __DIR__.'/../config/openid.php' => config_path('openid.php'),
             __DIR__.'/../config/clamav.php' => config_path('clamav.php'),
