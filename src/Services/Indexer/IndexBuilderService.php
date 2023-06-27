@@ -44,7 +44,7 @@ class IndexBuilderService
 
         if (count($sites) > 0) {
             $startResult = $this->searchServer->startUpdate();
-            if (! $startResult) {
+            if (!$startResult) {
                 $this->writeDebug("\n\n Error when emptying core! \n\n");
             }
 
@@ -85,13 +85,13 @@ class IndexBuilderService
         foreach ($childPages as $page) {
             $this->writeDebug(sprintf("    * Page \e[1m%s\e[0m (id: %d)", $page->url, $page->id));
 
-            if (! isset($page->template->id)) {
+            if (!isset($page->template->id)) {
                 $this->writeDebug("   skipping, no template found\n");
 
                 continue;
             }
 
-            if (! isset($page->template->properties->searchable) || $page->template->properties->searchable == 0) {
+            if (!isset($page->template->properties->searchable) || $page->template->properties->searchable == 0) {
                 $this->writeDebug("   skipping, template not searchable\n");
 
                 continue;
@@ -144,13 +144,13 @@ class IndexBuilderService
         $customValues = [];
 
         $class = $menu->template->filename ?? '';
-        $className = 'App\Http\Controllers\Page\\'.$class.'Controller';
+        $className = 'App\Http\Controllers\Page\\' . $class . 'Controller';
         $c = null;
         $priority = 1;
         if (class_exists($className)) {
             $c = new $className();
             if (method_exists($className, 'customSearchValues')) {
-                $customValues = $c->customSearchValues();
+                $customValues = $c->customSearchValues($menu->id);
             }
             if (method_exists($className, 'searchPriority')) {
                 $priority = $c->searchPriority();
@@ -158,7 +158,7 @@ class IndexBuilderService
         }
 
         $searchText = rtrim($searchText, ', ');
-        if (! empty($title) && ! empty($searchText)) {
+        if (!empty($title) && !empty($searchText)) {
             $result = $this->searchServer->upsertUrl($url, $title, $searchText, 'page', $lang->url, $customValues, $priority);
 
             if ($result->errorCode == 0) {
@@ -183,7 +183,7 @@ class IndexBuilderService
     private function updateSubPages($menu, $lang)
     {
         $class = $menu->template->filename ?? '';
-        $className = 'App\Http\Controllers\Page\\'.$class.'Controller';
+        $className = 'App\Http\Controllers\Page\\' . $class . 'Controller';
         $c = null;
         // update subPage if necessary
 
@@ -235,8 +235,8 @@ class IndexBuilderService
     private function createFolderIfNotExists($fullFilePath)
     {
         $path_parts = pathinfo($fullFilePath);
-        if (! file_exists($path_parts['dirname'])) {
-            if (! mkdir($path_parts['dirname'])) {
+        if (!file_exists($path_parts['dirname'])) {
+            if (!mkdir($path_parts['dirname'])) {
                 printf("\n\n### Error creating sitemap folder");
             }
         }
