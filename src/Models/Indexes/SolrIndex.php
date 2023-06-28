@@ -133,7 +133,6 @@ class SolrIndex extends BaseModel
     public function addOrUpdateItem(string $url, string $title, string $contents, string $type, string $lang, int $siteId, array $customValues, int $priority): bool
     {
         $curl = $this->solrHandler();
-
         $doc = [
             sprintf('title_%s', $lang) => $title,
             sprintf('content_%s', $lang) => html_entity_decode(trim(preg_replace('/\s+/', ' ', strip_tags($contents)))),
@@ -157,6 +156,7 @@ class SolrIndex extends BaseModel
         curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($payload));
 
         $result = curl_exec($curl);
+
         $json = json_decode($result);
         if ($json && isset($json->responseHeader) && $json->responseHeader->status == 0) {
             return true;
@@ -269,7 +269,7 @@ class SolrIndex extends BaseModel
         }
     }
 
-    public function selectItems($query, $lang = 'nl', $filter = null, $start = null, $rows = null, $extraColumns = [], $highlightLength = 50)
+    public function selectItems($query, $lang = 'nl', $filter = null, $start = null, $rows = null, $extraColumns = [], $highlightLength = 50, $sortField = NULL, $sortDirection = 'desc')
     {
         $curl = $this->solrHandler();
         $url = sprintf(
@@ -299,13 +299,15 @@ class SolrIndex extends BaseModel
         if ($rows && is_int($rows)) {
             $url .= '&rows=' . $rows;
         }
-
         if (count($extraColumns) > 0) {
         }
 
-        if ($this->sort) {
-            $url .= '&sort=' . urlencode($this->sort);
+        if ($sortField) {
+            $url .= '&sort=' . urlencode($sortField . " " . $sortDirection);
         }
+
+        echo $url;
+
         curl_setopt($curl, CURLOPT_URL, $url);
         $result = curl_exec($curl);
         $json = json_decode($result);
