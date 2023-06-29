@@ -209,9 +209,17 @@ class ComponentImage extends AbstractComponent
      */
     private function makeParentDirectories(): bool
     {
-        return make_directories(
+        $createDirs = make_directories(
             Storage::path('public'),
             $this->subFolderPublic.$this->assetModel->getIdentifier().'/'.$this->assetItem->internal.'/'
         );
+
+        // if app is running in debug mode, throw an error if the directories could not be created
+        if (env('APP_DEBUG') === true && ! $createDirs) {
+            exit('Could not create directories');
+        }
+
+        return $createDirs;
+
     }
 }
