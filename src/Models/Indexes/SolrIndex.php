@@ -306,8 +306,6 @@ class SolrIndex extends BaseModel
             $url .= '&sort=' . urlencode($sortField . " " . $sortDirection);
         }
 
-        echo $url;
-
         curl_setopt($curl, CURLOPT_URL, $url);
         $result = curl_exec($curl);
         $json = json_decode($result);
