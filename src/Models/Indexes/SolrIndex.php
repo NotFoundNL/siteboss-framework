@@ -157,6 +157,10 @@ class SolrIndex extends BaseModel
 
         $result = curl_exec($curl);
 
+        if (curl_errno($curl) === 6) {
+            exit('[ERROR] Could not resolve solr host: '.$this->getSolrBaseUrl());
+        }
+
         $json = json_decode($result);
         if ($json && isset($json->responseHeader) && $json->responseHeader->status == 0) {
             return true;
