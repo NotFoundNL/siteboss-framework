@@ -13,9 +13,8 @@ class IndexBuilderService
 
     private $locales;
 
-    private $defaultLocale;
 
-    private $domainName;
+    private $domain;
 
     private $sitemapFile;
 
@@ -28,7 +27,7 @@ class IndexBuilderService
 
         $locale = env('SB_LOCALES_DEFAULT', 'nl');
         $this->defaultLocale = Lang::where('url', $locale)->get();
-        $this->domainName = env('APP_NAME');
+        $this->domain = rtrim(env('APP_URL', ""), "/");
         switch ($serverType) {
             case 'solr':
                 $this->searchServer = new SolrIndexService($this->debug);
@@ -44,7 +43,7 @@ class IndexBuilderService
 
         if (count($sites) > 0) {
             $startResult = $this->searchServer->startUpdate();
-            if (! $startResult) {
+            if (!$startResult) {
                 $this->writeDebug("\n\n Error when emptying core! \n\n");
             }
 
@@ -85,13 +84,13 @@ class IndexBuilderService
         foreach ($childPages as $page) {
             $this->writeDebug(sprintf("    * Page \e[1m%s\e[0m (id: %d)", $page->url, $page->id));
 
-            if (! isset($page->template->id)) {
+            if (!isset($page->template->id)) {
                 $this->writeDebug("   skipping, no template found\n");
 
                 continue;
             }
 
-            if (! isset($page->template->properties->searchable) || $page->template->properties->searchable == 0) {
+            if (!isset($page->template->properties->searchable) || $page->template->properties->searchable == 0) {
                 $this->writeDebug("   skipping, template not searchable\n");
 
                 continue;
@@ -104,15 +103,11 @@ class IndexBuilderService
 
             $menu = Menu::whereId($page->id)->firstOrFail();
 
-            if ($this->searchServer->urlNeedsUpdate($menu->getPath(), strtotime($menu->updated_at))) {
-                $this->writeDebug(': update needed: ');
 
-                foreach ($this->locales as $lang) {
-                    $this->updatePage($menu, $lang);
-                }
-            } else {
-                $this->writeDebug(": Does not need updating\n");
+            foreach ($this->locales as $lang) {
+                $this->updatePage($menu, $lang);
             }
+
             // index subitems for page
             foreach ($this->locales as $lang) {
                 $this->updateSubPages($menu, $lang);
@@ -124,66 +119,72 @@ class IndexBuilderService
 
     private function updatePage($menu, $lang)
     {
-        $success = true;
         app()->setLocale($lang->url);
-
-        if ($this->sitemapFile) {
-            $sitemap = '';
-        }
-        $searchText = '';
-        $pageService = new PageService($menu, $lang);
-        $title = $menu->getTitle($lang);
         if (count($this->locales) == 1) {
             $url = $menu->getPath();
         } else {
             $url = $menu->getLocalizedPath();
         }
-        $searchText = $pageService->getContentForIndexer();
 
-        // continue with customValues
-        $customValues = [];
+        if ($this->searchServer->urlNeedsUpdate($menu->getPath(), strtotime($menu->updated_at))) {
+            $this->writeDebug(': update needed: ');
 
-        $class = $menu->template->filename ?? '';
-        $className = 'App\Http\Controllers\Page\\'.$class.'Controller';
-        $c = null;
-        $priority = 1;
-        if (class_exists($className)) {
-            $c = new $className();
-            if (method_exists($className, 'customSearchValues')) {
-                $customValues = $c->customSearchValues($menu->id);
+
+
+            $searchText = '';
+            $pageService = new PageService($menu, $lang);
+            $title = $menu->getTitle($lang);
+
+            $searchText = $pageService->getContentForIndexer();
+
+            // continue with customValues
+            $customValues = [];
+
+            $class = $menu->template->filename ?? '';
+            $className = 'App\Http\Controllers\Page\\' . $class . 'Controller';
+            $c = null;
+            $priority = 1;
+            if (class_exists($className)) {
+                $c = new $className();
+                if (method_exists($className, 'customSearchValues')) {
+                    $customValues = $c->customSearchValues($menu->id);
+                }
+                if (method_exists($className, 'searchPriority')) {
+                    $priority = $c->searchPriority();
+                }
             }
-            if (method_exists($className, 'searchPriority')) {
-                $priority = $c->searchPriority();
-            }
-        }
 
-        $searchText = rtrim($searchText, ', ');
-        if (! empty($title) && ! empty($searchText)) {
-            $result = $this->searchServer->upsertUrl($url, $title, $searchText, 'page', $lang->url, $customValues, $priority);
+            $searchText = rtrim($searchText, ', ');
+            if (!empty($title) && !empty($searchText)) {
+                $result = $this->searchServer->upsertUrl($url, $title, $searchText, 'page', $lang->url, $customValues, $priority);
 
-            if ($result->errorCode == 0) {
-                $this->writeDebug(" success\n");
+                if ($result->errorCode == 0) {
+                    $this->writeDebug(" success\n");
+                } else {
+                    $this->writeDebug(" FAILED\n");
+                }
             } else {
-                $this->writeDebug(" FAILED\n");
-            }
-
-            if ($this->sitemapFile) {
-                // update sitemap
-                $sitemap .= sprintf(
-                    "%s%s\r\n",
-                    $this->domainName,
-                    $url
-                );
+                $this->writeDebug(" empty page or title\n");
             }
         } else {
-            $this->writeDebug(" empty page or title\n");
+            $this->writeDebug(": Does not need updating\n");
+        }
+
+        if ($this->sitemapFile) {
+            // update sitemap
+            $sitemap = sprintf(
+                "%s%s\r\n",
+                $this->domain,
+                $url
+            );
+            fwrite($this->sitemapFile, $sitemap);
         }
     }
 
     private function updateSubPages($menu, $lang)
     {
         $class = $menu->template->filename ?? '';
-        $className = 'App\Http\Controllers\Page\\'.$class.'Controller';
+        $className = 'App\Http\Controllers\Page\\' . $class . 'Controller';
         $c = null;
         // update subPage if necessary
 
@@ -215,7 +216,7 @@ class IndexBuilderService
                     if ($this->sitemapFile && $searchItem['sitemap']) {
                         $sitemap = sprintf(
                             "%s%s\r\n",
-                            $this->domainName,
+                            $this->domain,
                             $url
                         );
                     }
@@ -228,6 +229,15 @@ class IndexBuilderService
                 } else {
                     $this->writeDebug(": Does not need updating\n");
                 }
+
+                if ($this->sitemapFile) {
+                    $sitemap = sprintf(
+                        "%s%s\r\n",
+                        $this->domain,
+                        $url
+                    );
+                    fwrite($this->sitemapFile, $sitemap);
+                }
             }
         }
     }
@@ -235,8 +245,8 @@ class IndexBuilderService
     private function createFolderIfNotExists($fullFilePath)
     {
         $path_parts = pathinfo($fullFilePath);
-        if (! file_exists($path_parts['dirname'])) {
-            if (! mkdir($path_parts['dirname'])) {
+        if (!file_exists($path_parts['dirname'])) {
+            if (!mkdir($path_parts['dirname'])) {
                 printf("\n\n### Error creating sitemap folder");
             }
         }
