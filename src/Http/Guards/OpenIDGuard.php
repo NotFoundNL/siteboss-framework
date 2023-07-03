@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use NotFound\Framework\Models\CmsGroup;
 use NotFound\Framework\Providers\Auth\OpenIDUserProvider;
-use NotFound\Framework\Services\Auth\Token;
 use NotFound\Framework\Services\Auth\TokenDecoder;
 
 class OpenIDGuard implements Guard
