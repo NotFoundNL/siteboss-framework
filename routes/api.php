@@ -10,7 +10,6 @@ use NotFound\Framework\Http\Controllers\InfoController;
 use NotFound\Framework\Http\Controllers\SettingsController;
 use NotFound\Framework\Http\Controllers\Support\SupportController;
 use NotFound\Framework\Http\Controllers\UserPreferencesController;
-use Siteboss\Routes\SiteRoutes;
 use Spatie\Honeypot\ProtectAgainstSpam;
 
 // ContentBlock
@@ -51,23 +50,23 @@ Route::prefix(config('siteboss.api_prefix'))->group(function () {
             Route::get('contentblocks/{csvTables}', [ContentBlockController::class, 'get']);
 
             // Table editor
-            Route::prefix('table')->group(__DIR__ . '/cms/table.php');
+            Route::prefix('table')->group(__DIR__.'/cms/table.php');
 
             // Form builder
-            Route::middleware('role:forms')->group(__DIR__ . '/cms/forms.php');
+            Route::middleware('role:forms')->group(__DIR__.'/cms/forms.php');
 
             Route::prefix('app')->group(function () {
-                if (file_exists(base_path() . '/routes/siteboss.php')) {
+                if (file_exists(base_path().'/routes/siteboss.php')) {
                     Route::prefix('site')->group(
-                        base_path() . '/routes/siteboss.php'
+                        base_path().'/routes/siteboss.php'
                     );
                 }
 
                 // /menu
-                Route::prefix('menu')->group(__DIR__ . '/cms/menu.php');
+                Route::prefix('menu')->group(__DIR__.'/cms/menu.php');
 
                 // Page editor
-                Route::prefix('page')->group(__DIR__ . '/cms/page.php');
+                Route::prefix('page')->group(__DIR__.'/cms/page.php');
 
                 // Settings
                 Route::get('settings', [SettingsController::class, 'index']);
@@ -78,10 +77,10 @@ Route::prefix(config('siteboss.api_prefix'))->group(function () {
                 Route::get('preferences', [UserPreferencesController::class, 'index']);
                 Route::post('preferences', [UserPreferencesController::class, 'update']);
 
-                Route::prefix('users')->group(__DIR__ . '/cms/users.php');
+                Route::prefix('users')->group(__DIR__.'/cms/users.php');
 
                 // CMS Editor
-                Route::prefix('editor')->group(__DIR__ . '/cms/editor.php');
+                Route::prefix('editor')->group(__DIR__.'/cms/editor.php');
 
                 // About SiteBoss CMS page
                 Route::get('about', [AboutController::class, 'index']);
@@ -93,10 +92,10 @@ Route::prefix(config('siteboss.api_prefix'))->group(function () {
                 });
 
                 // AutoLayout Demo pages
-                Route::prefix('demo')->group(__DIR__ . '/cms/demo.php');
+                Route::prefix('demo')->group(__DIR__.'/cms/demo.php');
 
                 // Domain forward manager
-                Route::prefix('forwards')->group(__DIR__ . '/cms/forwards.php');
+                Route::prefix('forwards')->group(__DIR__.'/cms/forwards.php');
             });
         });
     });
