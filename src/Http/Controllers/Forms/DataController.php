@@ -127,7 +127,7 @@ class DataController extends Controller
     private function runSuccessAction($langurl, $formInfo, $formValidator)
     {
         // Trigger default form handler
-        $action = SitebossHelper::config('form_success_action') ?? '';
+        $action = SitebossHelper::config('form_success_action', false) ?? '';
         if ($action && trim($action !== '')) {
             $actionClass = new $action($langurl, $formInfo, $formValidator);
             $actionClass->run();

@@ -27,15 +27,15 @@ class GlobalPageService extends AbstractAssetService
         return AssetType::PAGE;
     }
 
-     public function getComponents(): Collection
-     {
-         return $this->fieldComponents;
-     }
+    public function getComponents(): Collection
+    {
+        return $this->fieldComponents;
+    }
 
-     protected function getCacheKey(): string
-     {
-         return $this->lang->url.'page_globals';
-     }
+    protected function getCacheKey(): string
+    {
+        return $this->lang->url.'page_globals';
+    }
 
     /**
      * Loops through all the table items and return them with the appropriate Input Class
