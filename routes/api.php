@@ -10,6 +10,7 @@ use NotFound\Framework\Http\Controllers\InfoController;
 use NotFound\Framework\Http\Controllers\SettingsController;
 use NotFound\Framework\Http\Controllers\Support\SupportController;
 use NotFound\Framework\Http\Controllers\UserPreferencesController;
+use Siteboss\Routes\SiteRoutes;
 use Spatie\Honeypot\ProtectAgainstSpam;
 
 // ContentBlock
