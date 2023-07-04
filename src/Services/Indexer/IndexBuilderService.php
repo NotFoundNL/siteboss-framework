@@ -24,8 +24,6 @@ class IndexBuilderService
         $this->debug = $debug;
         $this->locales = Lang::all();
 
-        $locale = env('SB_LOCALES_DEFAULT', 'nl');
-        $this->defaultLocale = Lang::where('url', $locale)->get();
         $this->domain = rtrim(env('APP_URL', ''), '/');
         switch ($serverType) {
             case 'solr':
