@@ -41,7 +41,7 @@ class SolrItem extends BaseModel
         $this->fl = explode(' ', $fl);
         $this->results = isset($solr->response->docs) ? $solr->response->docs : null;
         $this->highlights = isset($solr->highlighting) ? $solr->highlighting : null;
-        $this->spellcheck = $solr->spellcheck ?? null;
+        $this->spellcheck = isset($solr->spellcheck) ? $solr->spellcheck : null;
         $this->suggest = isset($solr->suggest) ? $solr->suggest : null;
         $this->number = isset($solr->response->numFound) ? $solr->response->numFound : 0;
 
@@ -84,7 +84,8 @@ class SolrItem extends BaseModel
                     if ($column == 'url') {
                         $resultArray[$column] = $this->parseUrl($result->{$column});
                     } else {
-                        $resultArray[$column] = isset($result->{$column}[0]) ? $result->{$column}[0] : '';
+                        $columnName = preg_replace('/(_[a-zA-Z]{2}$)/', '', $column);
+                        $resultArray[$columnName] = isset($result->{$column}) ? $result->{$column} : '';
                     }
                 }
 
@@ -186,12 +187,12 @@ class SolrItem extends BaseModel
             foreach ($this->spellcheck->suggestions as $suggestion) {
                 if (isset($suggestion->startOffset)) {
                     $suggest = substr($query, 0, $suggestion->startOffset).'<em>'.$suggestion->suggestion[0].'</em>'.substr($query, $suggestion->endOffset);
-                    $suggest = preg_replace('/^([a-zA-Z])+:/', '', $suggest); // remove search field if necessary
+                    $suggestTerm = preg_replace('/^([a-zA-Z])+(_[a-zA-Z]{2})?:/', '', $suggest); // remove search field if necessary
 
                     $suggest_url = substr($query, 0, $suggestion->startOffset).$suggestion->suggestion[0].substr($query, $suggestion->endOffset);
-                    $suggest_url = preg_replace('/^([a-zA-Z])+:/', '', $suggest_url); // remove search field if necessary
+                    $suggest_url = preg_replace('/^([a-zA-Z])+(_[a-zA-Z]{2})?:/', '', $suggest_url); // remove search field if necessary
 
-                    $items[] = (object) ['link' => '?q='.rawurlencode(urldecode($suggest_url)), 'text' => urldecode($suggest)];
+                    $items[] = (object) ['link' => '?q='.rawurlencode(urldecode($suggest_url)), 'text' => urldecode($suggestTerm)];
                 }
             }
         }

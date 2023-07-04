@@ -10,6 +10,7 @@ use NotFound\Framework\Http\Controllers\InfoController;
 use NotFound\Framework\Http\Controllers\SettingsController;
 use NotFound\Framework\Http\Controllers\Support\SupportController;
 use NotFound\Framework\Http\Controllers\UserPreferencesController;
+use Spatie\Honeypot\ProtectAgainstSpam;
 
 // ContentBlock
 /*
@@ -22,11 +23,12 @@ use NotFound\Framework\Http\Controllers\UserPreferencesController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
 Route::prefix(config('siteboss.api_prefix'))->group(function () {
     // Unauthenticated routes
     Route::prefix('api')->group(function () {
         Route::namespace('Forms')->group(function () {
-            Route::post('forms/{form:id}/{langurl}', [DataController::class, 'create'])->name('formbuilder.post');
+            Route::post('forms/{form:id}/{langurl}', [DataController::class, 'create'])->middleware(ProtectAgainstSpam::class)->name('formbuilder.post');
             Route::get('fields/{id}', [FieldController::class, 'readOneJson']);
             // RIGHTS!!!!!
             Route::get('download/{submitid}/{fieldId}/{UUID}', [DownloadController::class, 'unauthenticatedDownload']);
