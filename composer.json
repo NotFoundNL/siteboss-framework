@@ -7,7 +7,7 @@
         "siteboss-framework"
     ],
     "homepage": "https://github.com/notfoundnl/siteboss-framework",
-    "license": "MIT",
+    "license": "AGPL-3.0-or-later",
     "authors": [
         {
             "name": "NotFound Digital Creativity",
