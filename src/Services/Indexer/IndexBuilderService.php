@@ -122,7 +122,7 @@ class IndexBuilderService
             $url = $menu->getLocalizedPath();
         }
 
-        if ($this->searchServer->urlNeedsUpdate($menu->getPath(), strtotime($menu->updated_at))) {
+        if ($this->searchServer->urlNeedsUpdate($url, strtotime($menu->updated_at))) {
             $this->writeDebug(': update needed: ');
 
             $searchText = '';
