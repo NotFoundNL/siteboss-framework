@@ -14,10 +14,16 @@ class TypeDropdown extends AbstractType
 
         foreach ($this->properties->options->list as $option) {
             // if id is in array value
-            if ($option->index != $this->getValue()) {
-                continue;
-            }
 
+            // For legacy support we also check for the id,
+            // This will be removed in the future
+            if (isset($option->index)) {
+                if ($option->index != $this->getValue()) {
+                    continue;
+                } elseif ($option->id != $this->getValue()) {
+                    continue;
+                }
+            }
             if (isset($option->option->$langurl)) {
                 $returnString[] = $option->option->$langurl;
             }
