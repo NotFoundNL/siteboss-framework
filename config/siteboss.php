@@ -16,7 +16,6 @@ return [
 
     'api_prefix' => env('SITEBOSS_BACKEND_API_PREFIX', '/siteboss/api'),
 
-
     /*
     |--------------------------------------------------------------------------
     | API prefix
