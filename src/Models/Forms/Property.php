@@ -101,6 +101,7 @@ class Property extends BaseModel
                     break;
                 case 'textarea':
                     $textArea = new LayoutInputTextArea('textarea'.$option->internal, $option->label);
+                    $textArea->setLocalize();
                     $autoLayoutOptions[] = $textArea->build();
                     break;
                 case 'number':
