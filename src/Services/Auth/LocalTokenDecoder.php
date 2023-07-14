@@ -14,6 +14,10 @@ class LocalTokenDecoder extends AbstractTokenDecoder
 
     protected function decodeToken(): void
     {
+        if (count(explode('.', $this->token)) !== 3) {
+            throw new \Exception('Invalid token format.');
+        }
+
         $keys = $this->parseJwtVerificationKeys();
 
         $this->decodedToken = JWT::decode($this->token, $keys);
@@ -25,7 +29,7 @@ class LocalTokenDecoder extends AbstractTokenDecoder
     protected function verifyToken(): void
     {
         // Validate the ID token claims:
-        if ($this->decodedToken->iss != config('openid.issuer')) {
+        if (!in_array($this->decodedToken->iss, explode(',', config('openid.issuer')))) {
             throw OpenIDException::invalidIssuer($this->decodedToken->iss, config('openid.issuer'));
         }
 

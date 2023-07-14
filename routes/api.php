@@ -2,6 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use NotFound\Framework\Http\Controllers\AboutController;
+use NotFound\Framework\Http\Controllers\Auth\EmailVerificationNotificationController;
+use NotFound\Framework\Http\Controllers\Auth\EmailVerificationPromptController;
+use NotFound\Framework\Http\Controllers\Auth\VerifyEmailController;
 use NotFound\Framework\Http\Controllers\ContentBlocks\ContentBlockController;
 use NotFound\Framework\Http\Controllers\Forms\DataController;
 use NotFound\Framework\Http\Controllers\Forms\DownloadController;
@@ -24,6 +27,18 @@ use Spatie\Honeypot\ProtectAgainstSpam;
 |
 */
 
+Route::get('email/verify', [EmailVerificationPromptController::class, '__invoke'])
+    ->middleware('auth')
+    ->name('verification.notice');
+
+Route::get('email/verify/{id}/{hash}', [VerifyEmailController::class, '__invoke'])
+    ->middleware(['signed', 'throttle:6,1'])
+    ->name('verification.verify');
+
+Route::post('email/verification-notification', [EmailVerificationNotificationController::class, '__invoke'])
+    ->middleware(['throttle:6,1','auth'])
+    ->name('verification.send');
+
 Route::prefix(config('siteboss.api_prefix'))->group(function () {
     // Unauthenticated routes
     Route::prefix('api')->group(function () {
@@ -41,7 +56,7 @@ Route::prefix(config('siteboss.api_prefix'))->group(function () {
     Route::get('settings', [InfoController::class, 'settings']);
 
     // Authenticated routes
-    Route::group(['middleware' => ['auth:openid', 'api']], function () {
+    Route::group(['middleware' => ['auth:openid', 'api','verified']], function () {
         // Language for messages (not the language used for storing data)
         Route::group(['prefix' => '/{locale}', 'middleware' => 'set-forget-locale'], function () {
             Route::get('info', [InfoController::class, 'index']);

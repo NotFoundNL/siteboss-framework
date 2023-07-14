@@ -2,6 +2,7 @@
 
 namespace NotFound\Framework\Providers\Auth;
 
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\UserProvider;
 use Illuminate\Support\Facades\Log;
@@ -99,6 +100,8 @@ class OpenIDUserProvider implements UserProvider
             $user->sub = $token->sub;
             $user->enabled = 1;
             $user->save();
+
+            event(new Registered($user));
 
             return $user;
         }
