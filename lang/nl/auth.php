@@ -16,4 +16,6 @@ return [
     'throttle' => 'Te veel mislukte loginpogingen. Probeer het over :seconds seconden nogmaals.',
     'password' => 'Het opgegeven wachtwoord is onjuist.',
     'verify_email' => 'Verifieer uw e-mailadres.',
+    'verify_email_resend' => 'Verificatiemail opnieuw verzenden',
+    'verify_email_link_sent' => 'Er is een nieuwe verificatielink naar jouw e-mailadres verzonden.',
 ];

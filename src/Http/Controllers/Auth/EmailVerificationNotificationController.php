@@ -11,6 +11,6 @@ class EmailVerificationNotificationController extends Controller
     {
         $request->user()->sendEmailVerificationNotification();
 
-        return ['status' => 'ok', 'message' => 'siteboss::email_verification_link_send'];
+        return ['status' => 'ok', 'message' => 'siteboss::auth.verify_email_link_sent'];
     }
 }
