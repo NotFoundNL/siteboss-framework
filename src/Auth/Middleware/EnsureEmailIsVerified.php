@@ -31,7 +31,7 @@ class EnsureEmailIsVerified
         if (! $request->user() ||
             ($request->user() instanceof MustVerifyEmail &&
             ! $request->user()->hasVerifiedEmail())) {
-            return ['status' => 'ok', 'message' => 'mailnietgoederror'];
+            return ['status' => 'error', 'message' => __('siteboss::auth.verify_email')];
         }
 
         return $next($request);
