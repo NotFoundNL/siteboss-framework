@@ -70,6 +70,15 @@ class OpenIDUserProvider implements UserProvider
         $model = $this->retrieveById($identifier);
         // Sub exists in the database
         if ($model) {
+            $emailInToken = $this->getEmailFromToken($token);
+            if($model->email != $emailInToken)
+            {
+                $model->email = $emailInToken;
+                $model->save();
+
+                event(new Registered($model));
+            }
+
             return $model;
         }
 
@@ -79,7 +88,7 @@ class OpenIDUserProvider implements UserProvider
             $model = $this->retrieveByEmail($emailInToken);
 
             if ($model) {
-                if ($model->enabled !== 1) {
+                if ($model->enabled !== 1 && $model->sub !== null) {
                     return;
                 }
                 $model->sub = $identifier;
