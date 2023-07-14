@@ -36,10 +36,6 @@ Route::prefix(config('siteboss.api_prefix'))->group(function () {
             ->middleware(['signed', 'throttle:6,1'])
             ->name('verification.verify');
 
-        Route::post('email/verification-notification', [EmailVerificationNotificationController::class, '__invoke'])
-            ->middleware(['throttle:6,1', 'auth'])
-            ->name('verification.send');
-
         // Unauthenticated routes
         Route::namespace('Forms')->group(function () {
             Route::post('forms/{form:id}/{langurl}', [DataController::class, 'create'])->middleware(ProtectAgainstSpam::class)->name('formbuilder.post');
@@ -48,6 +44,10 @@ Route::prefix(config('siteboss.api_prefix'))->group(function () {
             Route::get('download/{submitid}/{fieldId}/{UUID}', [DownloadController::class, 'unauthenticatedDownload']);
         });
     });
+
+    Route::post('{locale}/email/verification-notification', [EmailVerificationNotificationController::class, '__invoke'])
+        ->middleware(['throttle:6,1', 'auth', 'set-forget-locale'])
+        ->name('verification.send');
 
     Route::get('{locale}/oidc', [InfoController::class, 'oidc'])->where('name', '[A-Za-z]{2}');
 
