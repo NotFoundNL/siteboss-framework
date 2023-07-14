@@ -36,7 +36,7 @@ Route::get('email/verify/{id}/{hash}', [VerifyEmailController::class, '__invoke'
     ->name('verification.verify');
 
 Route::post('email/verification-notification', [EmailVerificationNotificationController::class, '__invoke'])
-    ->middleware(['throttle:6,1','auth'])
+    ->middleware(['throttle:6,1', 'auth'])
     ->name('verification.send');
 
 Route::prefix(config('siteboss.api_prefix'))->group(function () {
@@ -56,7 +56,7 @@ Route::prefix(config('siteboss.api_prefix'))->group(function () {
     Route::get('settings', [InfoController::class, 'settings']);
 
     // Authenticated routes
-    Route::group(['middleware' => ['auth:openid', 'api','verified']], function () {
+    Route::group(['middleware' => ['auth:openid', 'api', 'verified']], function () {
         // Language for messages (not the language used for storing data)
         Route::group(['prefix' => '/{locale}', 'middleware' => 'set-forget-locale'], function () {
             Route::get('info', [InfoController::class, 'index']);

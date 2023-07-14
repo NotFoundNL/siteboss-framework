@@ -33,7 +33,7 @@ class OpenIDUserProvider implements UserProvider
      *
      * @param  mixed  $identifier
      */
-    public function retrieveById($identifier): Authenticatable|null
+    public function retrieveById($identifier): ?Authenticatable
     {
         return $this->model->where('enabled', true)->where('sub', $identifier)->first();
     }
@@ -41,12 +41,12 @@ class OpenIDUserProvider implements UserProvider
     /**
      * Retrieve a user by their e-mail address.
      */
-    public function retrieveByEmail(string $email): CmsUser|null
+    public function retrieveByEmail(string $email): ?CmsUser
     {
         return $this->model->where('email', $email)->first();
     }
 
-    private function getEmailFromToken(object $token): null|string
+    private function getEmailFromToken(object $token): ?string
     {
         $mailClaim = config('openid.mail_claim');
         if (! isset($token->$mailClaim)) {

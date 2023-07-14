@@ -17,7 +17,7 @@ abstract class AbstractTokenDecoder
         $this->token = $token;
 
         $this->getOpenIdConfiguration();
-        
+
         $this->decodeToken();
         $this->verifyToken();
     }

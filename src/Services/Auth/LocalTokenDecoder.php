@@ -29,7 +29,7 @@ class LocalTokenDecoder extends AbstractTokenDecoder
     protected function verifyToken(): void
     {
         // Validate the ID token claims:
-        if (!in_array($this->decodedToken->iss, explode(',', config('openid.issuer')))) {
+        if (! in_array($this->decodedToken->iss, explode(',', config('openid.issuer')))) {
             throw OpenIDException::invalidIssuer($this->decodedToken->iss, config('openid.issuer'));
         }
 

@@ -5,7 +5,6 @@ namespace NotFound\Framework\Auth\Middleware;
 use Closure;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\URL;
 
 class EnsureEmailIsVerified
 {
@@ -24,7 +23,6 @@ class EnsureEmailIsVerified
      * Handle an incoming request.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
      * @param  string|null  $redirectToRoute
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse|null
      */

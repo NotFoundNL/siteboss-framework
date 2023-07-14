@@ -2,10 +2,9 @@
 
 namespace NotFound\Framework\Http\Controllers\Auth;
 
+use Illuminate\Http\Request;
 use NotFound\Framework\Http\Controllers\Controller;
 use NotFound\Framework\Providers\RouteServiceProvider;
-use Illuminate\Http\Request;
-use NotFound\Framework\Models\CmsUser;
 
 class EmailVerificationPromptController extends Controller
 {

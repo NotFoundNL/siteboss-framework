@@ -4,7 +4,6 @@ namespace NotFound\Framework\Services\Auth;
 
 use Illuminate\Support\Facades\Http;
 use NotFound\Framework\Exceptions\OpenID\OpenIDException;
-use NotFound\Framework\Services\Auth\LocalTokenDecoder;
 
 class RemoteTokenDecoder extends AbstractTokenDecoder
 {
@@ -22,7 +21,7 @@ class RemoteTokenDecoder extends AbstractTokenDecoder
         $decodedIdToken = $decoder->getDecodedToken();
 
         // Check if tokens exist
-        if(!$decodedIdToken || !$this->decodedToken) {
+        if (! $decodedIdToken || ! $this->decodedToken) {
             throw OpenIDException::invalidVerification($this->decodedToken->email, config('openid.client_id')); //TODO change exception
         }
 

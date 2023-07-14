@@ -15,7 +15,7 @@ class TokenDecoder
         } else {
             throw OpenIDException::invalidAuthenticationMethod($authenticationMethod);
         }
-        
+
         return $decoder->getDecodedToken();
     }
 }

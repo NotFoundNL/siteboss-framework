@@ -2,9 +2,8 @@
 
 namespace NotFound\Framework\Http\Controllers\Auth;
 
-use NotFound\Framework\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use NotFound\Framework\Models\CmsUser;
+use NotFound\Framework\Http\Controllers\Controller;
 
 class EmailVerificationNotificationController extends Controller
 {
