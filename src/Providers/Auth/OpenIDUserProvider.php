@@ -71,9 +71,11 @@ class OpenIDUserProvider implements UserProvider
         // Sub exists in the database
         if ($model) {
             $emailInToken = $this->getEmailFromToken($token);
-            if($model->email != $emailInToken)
+            
+            if($model->email !== $emailInToken)
             {
                 $model->email = $emailInToken;
+                $model->email_verified_at = null;
                 $model->save();
 
                 event(new Registered($model));

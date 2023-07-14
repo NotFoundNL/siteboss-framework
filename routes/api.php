@@ -26,22 +26,21 @@ use Spatie\Honeypot\ProtectAgainstSpam;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
-Route::get('email/verify', [EmailVerificationPromptController::class, '__invoke'])
-    ->middleware('auth')
-    ->name('verification.notice');
-
-Route::get('email/verify/{id}/{hash}', [VerifyEmailController::class, '__invoke'])
-    ->middleware(['signed', 'throttle:6,1'])
-    ->name('verification.verify');
-
-Route::post('email/verification-notification', [EmailVerificationNotificationController::class, '__invoke'])
-    ->middleware(['throttle:6,1', 'auth'])
-    ->name('verification.send');
-
 Route::prefix(config('siteboss.api_prefix'))->group(function () {
-    // Unauthenticated routes
     Route::prefix('api')->group(function () {
+        Route::get('email/verify', [EmailVerificationPromptController::class, '__invoke'])
+            ->middleware('auth')
+            ->name('verification.notice');
+
+        Route::get('email/verify/{id}/{hash}', [VerifyEmailController::class, '__invoke'])
+            ->middleware(['signed', 'throttle:6,1'])
+            ->name('verification.verify');
+
+        Route::post('email/verification-notification', [EmailVerificationNotificationController::class, '__invoke'])
+            ->middleware(['throttle:6,1', 'auth'])
+            ->name('verification.send');
+
+        // Unauthenticated routes
         Route::namespace('Forms')->group(function () {
             Route::post('forms/{form:id}/{langurl}', [DataController::class, 'create'])->middleware(ProtectAgainstSpam::class)->name('formbuilder.post');
             Route::get('fields/{id}', [FieldController::class, 'readOneJson']);
