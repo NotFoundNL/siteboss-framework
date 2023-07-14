@@ -53,6 +53,9 @@ class FieldController extends Controller
 
         $response->category = $form->category?->name;
         $response->category_slug = $form->category?->slug;
+        $response->enable_notification = $form->category?->enable_notification;
+        $response->enable_export = $form->category?->enable_export;
+        $response->enable_confirmation = $form->category?->enable_confirmation;
         $response->name = $form->name;
         $response->category_properties = $form->category?->properties;
         $response->locales = $form->locales;
