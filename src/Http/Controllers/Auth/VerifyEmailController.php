@@ -4,7 +4,7 @@ namespace NotFound\Framework\Http\Controllers\Auth;
 
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\Events\Verified;
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Http\Request;
 use NotFound\Framework\Http\Controllers\Controller;
 use NotFound\Framework\Models\CmsUser;
 
@@ -15,7 +15,7 @@ class VerifyEmailController extends Controller
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function __invoke(EmailVerificationRequest $request)
+    public function __invoke(Request $request)
     {
         $user = CmsUser::find($request->route('id'));
 
