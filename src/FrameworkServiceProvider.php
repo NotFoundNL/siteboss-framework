@@ -42,7 +42,7 @@ class FrameworkServiceProvider extends ServiceProvider
             $blockUrl = $url.'&block=1';
 
             return (new MailMessage)
-                ->subject(__('Bevestig email siteboss CMS'))
+                ->subject(__('siteboss::auth.verify_email_button').' '.config('app.name'))
                 ->markdown('siteboss::emails.verify-email', ['url' => $url, 'blockUrl' => $blockUrl]);
         });
     }

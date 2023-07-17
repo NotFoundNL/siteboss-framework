@@ -28,7 +28,7 @@ class VerifyEmailController extends Controller
 
             Mail::to(env('SB_ADMIN_EMAIL'))->send(new AccountBlocked($user));
 
-            return ['status' => 'ok', 'message' => 'account is geblokkeerd.'];
+            return ['status' => 'ok', 'message' => __('siteboss::auth.block_account_message')];
         }
 
         if (! hash_equals((string) $request->route('hash'), sha1($user->getEmailForVerification())) || ! $user->enabled) {

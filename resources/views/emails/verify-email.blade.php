@@ -1,6 +1,6 @@
 {{-- blade-formatter-disable --}}
 <x-mail::message>
-# {{ __('Welkom bij Veiligheids Coalitie') }}
+# {{ __('siteboss::auth.verify_email_header') }} {{ config('app.name') }}
 
 {{ __('siteboss::auth.verify_email_link') }}
 
@@ -11,5 +11,5 @@
 Thanks,<br>
 {{ config('app.name') }}
 
-[{{__('siteboss::auth.verify_wrong_email')}}]({{$blockUrl}}) 
+[<h4>{{__('siteboss::auth.verify_wrong_email')}}</h4>]({{$blockUrl}})
 </x-mail::message>
