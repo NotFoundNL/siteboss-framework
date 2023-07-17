@@ -2,8 +2,12 @@
 
 namespace NotFound\Framework;
 
+use Illuminate\Auth\Notifications\VerifyEmail;
+use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
+use NotFound\Framework\Models\Lang;
 use NotFound\Framework\View\Components\Forms\Form;
 
 class FrameworkServiceProvider extends ServiceProvider
@@ -29,6 +33,18 @@ class FrameworkServiceProvider extends ServiceProvider
             __DIR__.'/Providers/AuthServiceProvider.php' => app_path('Providers/AuthServiceProvider.php'),
             __DIR__.'/../database/seeders/DatabaseSeeder.php' => database_path('seeders/DatabaseSeeder.php'),
         ], 'siteboss-framework');
+
+        VerifyEmail::toMailUsing(function (object $notifiable, string $url) {
+
+            // todo: get value from users current lang;
+            App::setLocale(Lang::current()->url);
+
+            $blockUrl = $url.'&block=1';
+
+            return (new MailMessage)
+                ->subject(__('siteboss::auth.verify_email_button').' '.config('app.name'))
+                ->markdown('siteboss::emails.verify-email', ['url' => $url, 'blockUrl' => $blockUrl]);
+        });
     }
 
     public function register(): void

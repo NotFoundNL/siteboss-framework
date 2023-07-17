@@ -117,12 +117,14 @@ class InfoController extends Controller
 
             if ($menuitem->level !== 0) {
                 $lastKey = array_key_last($orderedMenu);
-                if (! $orderedMenu[$lastKey]->submenu) {
-                    $orderedMenu[$lastKey]->submenu = [];
-                }
+                if ($lastKey !== null) {
+                    if (! $orderedMenu[$lastKey]->submenu) {
+                        $orderedMenu[$lastKey]->submenu = [];
+                    }
 
-                $orderedMenu[$lastKey]->path = '';
-                $orderedMenu[$lastKey]->submenu[] = $menuObj;
+                    $orderedMenu[$lastKey]->path = '';
+                    $orderedMenu[$lastKey]->submenu[] = $menuObj;
+                }
             } else {
                 $orderedMenu[] = $menuObj;
             }

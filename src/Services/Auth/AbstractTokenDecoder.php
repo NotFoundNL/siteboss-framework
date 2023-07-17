@@ -15,14 +15,6 @@ abstract class AbstractTokenDecoder
     public function __construct($token)
     {
         $this->token = $token;
-        $this->tokenParts = explode('.', $token);
-
-        // Ensure there's exactly 3 parts in the token
-        if (count($this->tokenParts) !== 3) {
-            throw new \Exception('Invalid token format.');
-
-            return false;
-        }
 
         $this->getOpenIdConfiguration();
 

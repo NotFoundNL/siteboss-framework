@@ -2,6 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use NotFound\Framework\Http\Controllers\AboutController;
+use NotFound\Framework\Http\Controllers\Auth\EmailVerificationNotificationController;
+use NotFound\Framework\Http\Controllers\Auth\EmailVerificationPromptController;
+use NotFound\Framework\Http\Controllers\Auth\VerifyEmailController;
 use NotFound\Framework\Http\Controllers\ContentBlocks\ContentBlockController;
 use NotFound\Framework\Http\Controllers\Forms\DataController;
 use NotFound\Framework\Http\Controllers\Forms\DownloadController;
@@ -23,10 +26,17 @@ use Spatie\Honeypot\ProtectAgainstSpam;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
 Route::prefix(config('siteboss.api_prefix'))->group(function () {
-    // Unauthenticated routes
     Route::prefix('api')->group(function () {
+        Route::get('email/verify', [EmailVerificationPromptController::class, '__invoke'])
+            ->middleware('auth')
+            ->name('verification.notice');
+
+        Route::get('email/verify/{id}/{hash}', [VerifyEmailController::class, '__invoke'])
+            ->middleware(['signed', 'throttle:6,1'])
+            ->name('verification.verify');
+
+        // Unauthenticated routes
         Route::namespace('Forms')->group(function () {
             Route::post('forms/{form:id}/{langurl}', [DataController::class, 'create'])->middleware(ProtectAgainstSpam::class)->name('formbuilder.post');
             Route::get('fields/{id}', [FieldController::class, 'readOneJson']);
@@ -35,13 +45,17 @@ Route::prefix(config('siteboss.api_prefix'))->group(function () {
         });
     });
 
+    Route::post('{locale}/email/verification-notification', [EmailVerificationNotificationController::class, '__invoke'])
+        ->middleware(['throttle:6,1', 'auth', 'set-forget-locale'])
+        ->name('verification.send');
+
     Route::get('{locale}/oidc', [InfoController::class, 'oidc'])->where('name', '[A-Za-z]{2}');
 
     // Settings for the login page
     Route::get('settings', [InfoController::class, 'settings']);
 
     // Authenticated routes
-    Route::group(['middleware' => ['auth:openid', 'api']], function () {
+    Route::group(['middleware' => ['auth:openid', 'api', 'verified']], function () {
         // Language for messages (not the language used for storing data)
         Route::group(['prefix' => '/{locale}', 'middleware' => 'set-forget-locale'], function () {
             Route::get('info', [InfoController::class, 'index']);
