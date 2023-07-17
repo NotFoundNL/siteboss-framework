@@ -27,7 +27,6 @@ use Spatie\Honeypot\ProtectAgainstSpam;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
 Route::prefix(config('siteboss.api_prefix'))->group(function () {
     Route::prefix('api')->group(function () {
         Route::get('email/verify/{id}/{hash}', [VerifyEmailController::class, '__invoke'])
