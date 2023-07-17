@@ -31,7 +31,7 @@ class VerifyEmailController extends Controller
             return ['status' => 'ok', 'message' => __('siteboss::auth.block_account_message')];
         }
 
-        if (!$user) {
+        if (! $user) {
             throw new AuthorizationException;
         }
 
