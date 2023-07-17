@@ -46,7 +46,7 @@ class RouteServiceProvider extends ServiceProvider
             // Optionally load API routes
             if (file_exists(base_path('routes/api.php'))) {
                 Route::middleware('api')
-                    ->prefix('api')
+                    ->prefix(config('siteboss.frontend_api_prefix'))
                     ->group(base_path('routes/api.php'));
             }
         });

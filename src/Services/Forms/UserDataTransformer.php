@@ -28,25 +28,25 @@ class UserDataTransformer
      * this array is an array of field ids. Populating this array will allow the function 'getDataArray' to dynamically fill
      * array and remain the same order everytime. This also makes old data submitted to have the same headers as new data submitted.
      */
-    private array  $headerIdArray = [];
+    private array $headerIdArray = [];
 
     /**
      * sometimes we don't want to return certain types. For example when exporting a csv. We don't want to show
      * the files since a csv can't do anything with them.
      */
-    private array  $ignoredTypes = [];
+    private array $ignoredTypes = [];
 
     /**
      * This array can be used to ignore certain ids. For example it is now used to either display deleted items or not.
      */
-    private array  $filterIds = [];
+    private array $filterIds = [];
 
     /**
      * Contains all the \nfapi\formbuilder\fields\AbstractType fields based on their id.
      *
      * @var asspctiative array
      */
-    private array  $idToTypeClass = [];
+    private array $idToTypeClass = [];
 
     /**
      * This will be set when the class is called. Mainly to chenge how the data is outputted.
