@@ -2,6 +2,7 @@
 
 namespace NotFound\Framework\Models;
 
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User;
@@ -58,7 +59,7 @@ use Illuminate\Notifications\Notifiable;
  *
  * @mixin \Eloquent
  */
-class CmsUser extends User
+class CmsUser extends User implements MustVerifyEmail
 {
     use HasFactory, Notifiable, SoftDeletes;
 
@@ -90,6 +91,7 @@ class CmsUser extends User
     protected $casts = [
         'properties' => 'object',
         'preferences' => 'object',
+        'email_verified_at' => 'datetime',
     ];
 
     public function groups()
@@ -209,5 +211,10 @@ class CmsUser extends User
         $roles = $groupC->getRolesByUser($this);
 
         return $roles->contains($role);
+    }
+
+    public function getEmailVerifiedAttribute(): bool
+    {
+        return $this->email_verified_at ? true : false;
     }
 }
