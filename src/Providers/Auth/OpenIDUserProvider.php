@@ -103,9 +103,7 @@ class OpenIDUserProvider implements UserProvider
             // Create user
             $user = new $this->model();
 
-            if (config('openid.create_user_with_email')) {
-                $user->email = $this->getEmailFromToken($token);
-            }
+            $user->email = $this->getEmailFromToken($token);
 
             $user->sub = $token->sub;
             $user->enabled = 1;
