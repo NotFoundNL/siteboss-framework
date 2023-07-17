@@ -39,7 +39,7 @@ class FrameworkServiceProvider extends ServiceProvider
             // todo: get value from users current lang;
             App::setLocale(Lang::current()->url);
 
-            $blockUrl = $url . '&block=1';
+            $blockUrl = $url.'&block=1';
 
             return (new MailMessage)
                 ->subject(__('Bevestig email siteboss CMS'))
