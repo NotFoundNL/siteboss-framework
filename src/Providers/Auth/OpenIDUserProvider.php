@@ -2,7 +2,6 @@
 
 namespace NotFound\Framework\Providers\Auth;
 
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\UserProvider;
 use Illuminate\Support\Facades\Log;
@@ -77,7 +76,7 @@ class OpenIDUserProvider implements UserProvider
                 $model->email_verified_at = null;
                 $model->save();
 
-                event(new Registered($model));
+                $model->sendEmailVerificationNotification();
             }
 
             return $model;
@@ -109,7 +108,7 @@ class OpenIDUserProvider implements UserProvider
             $user->enabled = 1;
             $user->save();
 
-            event(new Registered($user));
+            $user->sendEmailVerificationNotification();
 
             return $user;
         }
