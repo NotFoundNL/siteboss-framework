@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use NotFound\Framework\Auth\Middleware\EnsureEmailIsVerified;
 use NotFound\Framework\Http\Controllers\AboutController;
 use NotFound\Framework\Http\Controllers\Auth\EmailVerificationNotificationController;
 use NotFound\Framework\Http\Controllers\Auth\EmailVerificationPromptController;
@@ -55,7 +56,7 @@ Route::prefix(config('siteboss.api_prefix'))->group(function () {
     Route::get('settings', [InfoController::class, 'settings']);
 
     // Authenticated routes
-    Route::group(['middleware' => ['auth:openid', 'api', 'verified']], function () {
+    Route::group(['middleware' => ['auth:openid', 'api', EnsureEmailIsVerified::class]], function () {
         // Language for messages (not the language used for storing data)
         Route::group(['prefix' => '/{locale}', 'middleware' => 'set-forget-locale'], function () {
             Route::get('info', [InfoController::class, 'index']);
