@@ -21,6 +21,6 @@ return [
     'verify_email_link' => 'Klik op onderstaande link om je e-mailadres te bevestigen.',
     'verify_email_resend' => 'Verificatiemail opnieuw verzenden',
     'verify_email_link_sent' => 'Er is een nieuwe verificatielink naar jouw e-mailadres verzonden.',
-    'verify_wrong_email' => 'Klik hier als dit bericht niet van jou komt.',
+    'verify_wrong_email' => 'Heb je zelf niet geprobeerd in te loggen? Klik dan hier om deze poging te blokkeren.',
     'block_account_message' => 'Account succesvol geblokkeerd.',
 ];
