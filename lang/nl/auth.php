@@ -15,7 +15,7 @@ return [
     'failed' => 'Deze combinatie van e-mailadres en wachtwoord is niet geldig.',
     'throttle' => 'Te veel mislukte loginpogingen. Probeer het over :seconds seconden nogmaals.',
     'password' => 'Het opgegeven wachtwoord is onjuist.',
-    'verify_email' => 'Verifieer uw e-mailadres.',
+    'verify_email' => 'Verifieer je e-mailadres.',
     'verify_email_header' => 'Inloggen bij',
     'verify_email_button' => 'Bevestig e-mailadres',
     'verify_email_link' => 'Klik op onderstaande link om je e-mailadres te bevestigen.',
