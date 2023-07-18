@@ -14,6 +14,7 @@ use NotFound\Framework\Http\Controllers\InfoController;
 use NotFound\Framework\Http\Controllers\SettingsController;
 use NotFound\Framework\Http\Controllers\Support\SupportController;
 use NotFound\Framework\Http\Controllers\UserPreferencesController;
+use NotFound\Framework\Http\Middleware\ValidateSignature;
 use Spatie\Honeypot\ProtectAgainstSpam;
 
 // ContentBlock
@@ -34,7 +35,7 @@ Route::prefix(config('siteboss.api_prefix'))->group(function () {
             ->name('verification.notice');
 
         Route::get('email/verify/{id}/{hash}', [VerifyEmailController::class, '__invoke'])
-            ->middleware(['signed', 'throttle:6,1'])
+            ->middleware([ValidateSignature::class, 'throttle:6,1'])
             ->name('verification.verify');
 
         // Unauthenticated routes
