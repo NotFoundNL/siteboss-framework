@@ -47,9 +47,14 @@ class TypeDropdown extends AbstractType
 
         // Check if the value exists as an option in the field properties
         foreach ($this->properties->options->list as $option) {
-            if ($this->getValue() == $option->index) {
+            if (isset($option->index) && $this->getValue() == $option->index) {
                 return true;
             }
+
+            if (isset($option->id) && $this->getValue() == $option->id) {
+                return true;
+            }
+
         }
 
         return false;
