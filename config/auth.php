@@ -16,7 +16,7 @@ return [
     */
 
     'defaults' => [
-        'guard' => 'openid',
+        'guard' => 'web',
         'passwords' => 'users',
     ],
 
@@ -78,7 +78,7 @@ return [
     ],
 
     'user_management_role' => env('SB_USER_MANAGEMENT_ROLE', 'user-management'),
-    
+
     /*
     |--------------------------------------------------------------------------
     | Resetting Passwords
