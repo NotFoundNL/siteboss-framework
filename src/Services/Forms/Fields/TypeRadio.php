@@ -53,9 +53,15 @@ class TypeRadio extends AbstractType
         foreach ($value as $optionId) {
             $optionIdExist = false;
             foreach ($this->properties->options->list as $option) {
-                if ($optionId == $option->index) {
+
+                if (isset($option->index) && $optionId == $option->index) {
                     $optionIdExist = true;
                 }
+
+                if (isset($option->id) && $optionId == $option->id) {
+                    $optionIdExist = true;
+                }
+
             }
 
             if (! $optionIdExist) {
