@@ -71,10 +71,14 @@ return [
             'model' => NotFound\Framework\Models\CmsUser::class,
         ],
 
+        'users' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\User::class,
+        ],
     ],
 
     'user_management_role' => env('SB_USER_MANAGEMENT_ROLE', 'user-management'),
-
+    
     /*
     |--------------------------------------------------------------------------
     | Resetting Passwords
