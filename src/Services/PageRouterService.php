@@ -6,6 +6,7 @@ use Exception;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
+use Mcamara\LaravelLocalization\Middleware\LaravelLocalizationViewPath;
 use NotFound\Framework\Models\Menu;
 
 class PageRouterService
@@ -26,7 +27,7 @@ class PageRouterService
             Route::group(
                 [
                     'prefix' => LaravelLocalization::setLocale(),
-                    'middleware' => ['localeViewPath'],
+                    'middleware' => [LaravelLocalizationViewPath::class],
                 ], function () use ($routes) {
                     $this->setRouteList($routes);
                 }
