@@ -75,10 +75,15 @@
                             style="box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'; position: relative; padding: 25px 0; text-align: center;"
                         >
                             <a
-                                href="https://u6553085.ct.sendgrid.net/ls/click?upn=8yyPVpQ1LGA0mo6J37zrYDoo27x-2FfxFXlorOM4vmNGA-3D6WM9_H5Q4kWF217WpQ0qctSHyQeUWzTYYqpr6VUz1PETS3OTX1fCF8JmLXcwZWEr-2FwapVNcWhI4VDIApckrbp6BT5cWzTGGDwquV3QqNRiitSPnNR5HWadvgOOfN3hy63UvxfnQrJvA-2FyJGDeQ-2Bge3LBJD-2BH24Ponnk5gc7HSB8FhLDezn3hkocx3-2BvSyIp6NqlVdYIwYzqwmoIaLFm6YGxEmgQ-3D-3D"
+                                href="{{ config('app.url') }}"
                                 style="box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'; position: relative; color: #3d4852; font-size: 19px; font-weight: bold; text-decoration: none; display: inline-block;"
                             >
-                                {{ $title }}
+                                <img
+                                    src="{{ config('app.url') }}/siteboss/images/sb-mail-logo.png"
+                                    alt="SiteBoss"
+                                    width="207"
+                                    height="41"
+                                >
                             </a>
                         </td>
                     </tr>
