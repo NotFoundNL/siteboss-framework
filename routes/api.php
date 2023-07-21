@@ -43,7 +43,7 @@ Route::prefix(config('siteboss.api_prefix'))->group(function () {
     });
 
     Route::post('{locale}/email/verification-notification', [EmailVerificationNotificationController::class, '__invoke'])
-        ->middleware(['throttle:6,1', 'auth', 'set-forget-locale'])
+        ->middleware(['throttle:6,1', 'auth:openid', 'set-forget-locale'])
         ->name('siteboss.verification.send');
 
     Route::get('{locale}/oidc', [InfoController::class, 'oidc'])->where('name', '[A-Za-z]{2}');
