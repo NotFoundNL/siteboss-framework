@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Notifications\Notifiable;
+use NotFound\Framework\Auth\Notifications\VerifyEmail;
 
 /**
  * NotFound\Framework\Models\CmsUser
@@ -216,5 +217,10 @@ class CmsUser extends User implements MustVerifyEmail
     public function getEmailVerifiedAttribute(): bool
     {
         return $this->email_verified_at ? true : false;
+    }
+
+    public function sendEmailVerificationNotification()
+    {
+        $this->notify(new VerifyEmail);
     }
 }
