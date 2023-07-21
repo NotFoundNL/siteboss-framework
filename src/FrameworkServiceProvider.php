@@ -2,7 +2,7 @@
 
 namespace NotFound\Framework;
 
-use Illuminate\Auth\Notifications\VerifyEmail;
+use NotFound\Framework\Auth\Notifications\VerifyEmail;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Blade;
