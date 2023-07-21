@@ -2,11 +2,11 @@
 
 namespace NotFound\Framework;
 
-use NotFound\Framework\Auth\Notifications\VerifyEmail;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
+use NotFound\Framework\Auth\Notifications\VerifyEmail;
 use NotFound\Framework\Models\Lang;
 use NotFound\Framework\View\Components\Forms\Form;
 
