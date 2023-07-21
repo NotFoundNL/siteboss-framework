@@ -43,7 +43,7 @@ class TableEditorController extends AssetEditorController
         $form = new LayoutForm($formUrl);
 
         $tableService->getComponents()->each(function ($component) use ($form, $tableService) {
-            if (auth()->user()->hasRole('admin') && request()->query('editor') === '1') {
+            if (auth('openid')->user()->hasRole('admin') && request()->query('editor') === '1') {
                 $editorLink = new ComponentEditorLink($tableService, $component->assetItem);
                 $form->addComponent($editorLink);
             }
@@ -73,7 +73,7 @@ class TableEditorController extends AssetEditorController
         $form->addButton($saveButton);
 
         $widget = new LayoutWidget($upsertingText);
-        if (auth()->user()->hasRole('admin') && request()->query('editor') !== '1') {
+        if (auth('openid')->user()->hasRole('admin') && request()->query('editor') !== '1') {
             $bar = new LayoutBar();
             $bar->removePadding();
             $editButton = new LayoutBarButton(__('siteboss::ui.edit'));

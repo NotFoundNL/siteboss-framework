@@ -1,15 +1,27 @@
-{{-- blade-formatter-disable --}}
-<x-mail::message>
-# {{ __('siteboss::auth.verify_email_header') }} {{ config('app.name') }}
+@component('siteboss::emails.components.template', ['title' => config('app.name')])
+    @component('siteboss::emails.components.header')
+        {{ __('siteboss::auth.verify_email_header') }} {{ config('app.name') }}
+    @endcomponent
+    @component('siteboss::emails.components.paragraph')
+        {{ __('siteboss::auth.verify_email_link') }}
+    @endcomponent
 
-{{ __('siteboss::auth.verify_email_link') }}
+    @component('siteboss::emails.components.button', [
+        'title' => __('siteboss::auth.verify_email_button'),
+        'url' => $url,
+    ])
+    @endcomponent
 
-<x-mail::button :url="$url">
-{{ __('siteboss::auth.verify_email_button') }}
-</x-mail::button>
+    @component('siteboss::emails.components.paragraph')
+        Thanks,<br>
+        {{ config('app.name') }}
+    @endcomponent
 
-Thanks,<br>
-{{ config('app.name') }}
-
-[<h4>{{__('siteboss::auth.verify_wrong_email')}}</h4>]({{$blockUrl}})
-</x-mail::message>
+    @component('siteboss::emails.components.paragraph')
+        @component('siteboss::emails.components.link', [
+            'title' => __('siteboss::auth.verify_wrong_email'),
+            'url' => $blockUrl,
+        ])
+        @endcomponent
+    @endcomponent
+@endcomponent

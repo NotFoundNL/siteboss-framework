@@ -35,7 +35,7 @@ class EnsureEmailIsVerified
                 'result' => 'error',
                 'message' => __('siteboss::auth.verify_email'),
                 'buttonText' => __('siteboss::auth.verify_email_resend'),
-                'link' => route('verification.send', ['locale' => app()->getLocale()]),
+                'link' => route('siteboss.verification.send', ['locale' => app()->getLocale()]),
             ];
         }
 
