@@ -4,7 +4,6 @@ use Illuminate\Support\Facades\Route;
 use NotFound\Framework\Auth\Middleware\EnsureEmailIsVerified;
 use NotFound\Framework\Http\Controllers\AboutController;
 use NotFound\Framework\Http\Controllers\Auth\EmailVerificationNotificationController;
-use NotFound\Framework\Http\Controllers\Auth\EmailVerificationPromptController;
 use NotFound\Framework\Http\Controllers\Auth\VerifyEmailController;
 use NotFound\Framework\Http\Controllers\ContentBlocks\ContentBlockController;
 use NotFound\Framework\Http\Controllers\Forms\DataController;
@@ -30,13 +29,9 @@ use Spatie\Honeypot\ProtectAgainstSpam;
 */
 Route::prefix(config('siteboss.api_prefix'))->group(function () {
     Route::prefix('api')->group(function () {
-        Route::get('email/verify', [EmailVerificationPromptController::class, '__invoke'])
-            ->middleware('auth')
-            ->name('verification.notice');
-
         Route::get('email/verify/{id}/{hash}', [VerifyEmailController::class, '__invoke'])
             ->middleware([ValidateSignature::class, 'throttle:6,1'])
-            ->name('verification.verify');
+            ->name('siteboss.verification.verify');
 
         // Unauthenticated routes
         Route::namespace('Forms')->group(function () {
@@ -48,8 +43,8 @@ Route::prefix(config('siteboss.api_prefix'))->group(function () {
     });
 
     Route::post('{locale}/email/verification-notification', [EmailVerificationNotificationController::class, '__invoke'])
-        ->middleware(['throttle:6,1', 'auth', 'set-forget-locale'])
-        ->name('verification.send');
+        ->middleware(['throttle:6,1', 'auth:openid', 'set-forget-locale'])
+        ->name('siteboss.verification.send');
 
     Route::get('{locale}/oidc', [InfoController::class, 'oidc'])->where('name', '[A-Za-z]{2}');
 

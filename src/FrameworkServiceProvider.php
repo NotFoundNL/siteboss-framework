@@ -2,11 +2,11 @@
 
 namespace NotFound\Framework;
 
-use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
+use NotFound\Framework\Auth\Notifications\VerifyEmail;
 use NotFound\Framework\Models\Lang;
 use NotFound\Framework\View\Components\Forms\Form;
 
@@ -44,7 +44,7 @@ class FrameworkServiceProvider extends ServiceProvider
 
             return (new MailMessage)
                 ->subject(__('siteboss::auth.verify_email_button').' '.config('app.name'))
-                ->markdown('siteboss::emails.verify-email', ['url' => $url, 'blockUrl' => $blockUrl]);
+                ->view('siteboss::emails.verify-email', ['url' => $url, 'blockUrl' => $blockUrl]);
         });
     }
 

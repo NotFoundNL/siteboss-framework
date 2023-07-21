@@ -42,10 +42,10 @@ class InfoController extends Controller
         $settings->productLogo = env('APP_WHITELABEL_LOGO', '/siteboss/images/logo.svg');
 
         $settings->background = (object) [
-            'url' => env('APP_LOGIN_IMAGE_URL', '/assets/siteboss/images/back.jpg'),
+            'url' => env('APP_LOGIN_IMAGE_URL', '/siteboss/images/back.jpg'),
             'credits' => (object) [
-                'name' => env('APP_LOGIN_IMAGE_SOURCE_NAME', 'Frédéric BISSON'),
-                'url' => env('APP_LOGIN_IMAGE_SOURCE_URL', 'https://openverse.org/image/612671f4-9c1b-4ce7-88d1-d5128ba10229'),
+                'name' => env('APP_LOGIN_IMAGE_SOURCE_NAME', 'Dr. Matthias Ripp'),
+                'url' => env('APP_LOGIN_IMAGE_SOURCE_URL', 'https://www.flickr.com/photos/56218409@N03/14605956625'),
                 'license' => env('APP_LOGIN_IMAGE_SOURCE_LICENSE', 'CC BY 2.0'),
             ],
         ];
@@ -89,7 +89,7 @@ class InfoController extends Controller
         $orderedMenu = [];
 
         foreach ($menus as $menuitem) {
-            if ($menuitem->rights && ! auth()->user()->checkRights($menuitem->rights)) {
+            if ($menuitem->rights && ! auth('openid')->user()->checkRights($menuitem->rights)) {
                 continue;
             }
 
@@ -135,7 +135,7 @@ class InfoController extends Controller
 
     private function preferences()
     {
-        $user = auth()->user();
+        $user = auth('openid')->user();
         $user = CmsUser::find($user->id);
         if (! $user->preferences) {
             return (object) [];
