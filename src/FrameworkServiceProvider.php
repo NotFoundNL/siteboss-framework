@@ -44,7 +44,7 @@ class FrameworkServiceProvider extends ServiceProvider
 
             return (new MailMessage)
                 ->subject(__('siteboss::auth.verify_email_button').' '.config('app.name'))
-                ->markdown('siteboss::emails.verify-email', ['url' => $url, 'blockUrl' => $blockUrl]);
+                ->view('siteboss::emails.verify-email', ['url' => $url, 'blockUrl' => $blockUrl]);
         });
     }
 
