@@ -4,7 +4,6 @@ use Illuminate\Support\Facades\Route;
 use NotFound\Framework\Auth\Middleware\EnsureEmailIsVerified;
 use NotFound\Framework\Http\Controllers\AboutController;
 use NotFound\Framework\Http\Controllers\Auth\EmailVerificationNotificationController;
-use NotFound\Framework\Http\Controllers\Auth\EmailVerificationPromptController;
 use NotFound\Framework\Http\Controllers\Auth\VerifyEmailController;
 use NotFound\Framework\Http\Controllers\ContentBlocks\ContentBlockController;
 use NotFound\Framework\Http\Controllers\Forms\DataController;
