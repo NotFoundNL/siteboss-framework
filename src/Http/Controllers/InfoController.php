@@ -89,7 +89,7 @@ class InfoController extends Controller
         $orderedMenu = [];
 
         foreach ($menus as $menuitem) {
-            if ($menuitem->rights && ! auth()->user()->checkRights($menuitem->rights)) {
+            if ($menuitem->rights && ! auth('openid')->user()->checkRights($menuitem->rights)) {
                 continue;
             }
 
@@ -135,7 +135,7 @@ class InfoController extends Controller
 
     private function preferences()
     {
-        $user = auth()->user();
+        $user = auth('openid')->user();
         $user = CmsUser::find($user->id);
         if (! $user->preferences) {
             return (object) [];

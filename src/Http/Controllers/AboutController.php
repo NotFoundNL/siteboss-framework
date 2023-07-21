@@ -55,7 +55,7 @@ class AboutController extends Controller
         foreach ($groups as $group) {
             $widget2->addTitle(new LayoutTitle($group->name));
             $widget2->addText(new LayoutText($group->description));
-            if (auth()->user()->hasRole($group->internal)) {
+            if (auth('openid')->user()->hasRole($group->internal)) {
                 $widget2->addText(new LayoutText(__('siteboss::about.rights_assigned')));
             } else {
                 $widget2->addText(new LayoutText(__('siteboss::about.rights_not_assigned')));

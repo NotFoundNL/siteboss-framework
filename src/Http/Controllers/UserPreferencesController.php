@@ -70,7 +70,8 @@ class UserPreferencesController extends Controller
 
     private function getUser(): CmsUser
     {
-        $user = auth()->user();
+        //force update from database       
+        $user = auth('openid')->user();
 
         return CmsUser::find($user->id);
     }

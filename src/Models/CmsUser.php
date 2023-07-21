@@ -189,7 +189,7 @@ class CmsUser extends User implements MustVerifyEmail
         $roles = explode(',', $rolesToCheck);
         foreach ($roles as $role) {
             // OpenID roles from SSO
-            // if (auth()->hasRole(trim($role))) {
+            // if (auth('openid')->hasRole(trim($role))) {
             //     return true;
             // // Local SiteBoss roles
             // } else
