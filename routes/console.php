@@ -10,4 +10,4 @@ Artisan::command('siteboss:indexSite {--debug : Whether debug messages should be
     $indexer->run();
 
     return Command::SUCCESS;
-})->purpose('Index site of Veiligheidscoalitie with SOLR');
+})->purpose('Index site with SOLR');

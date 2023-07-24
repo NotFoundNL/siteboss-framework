@@ -16,6 +16,7 @@ class FrameworkServiceProvider extends ServiceProvider
     {
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
         $this->loadRoutesFrom(__DIR__.'/../routes/api.php');
+        $this->loadRoutesFrom(__DIR__.'/../routes/console.php');
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'siteboss');
         $this->loadTranslationsFrom(__DIR__.'/../lang', 'siteboss');
 
