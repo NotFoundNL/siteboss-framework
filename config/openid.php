@@ -99,16 +99,4 @@ return [
     |
     */
     'create_user' => env('OIDC_CREATE_USER', true),
-
-    /*
-    |--------------------------------------------------------------------------
-    | Create user with an email address
-    |--------------------------------------------------------------------------
-    |
-    | This needs 'create_user' to be enabled.
-    | If so, the user is also created with the email address from the token
-    |
-    */
-    'create_user_with_email' => env('OIDC_CREATE_USER_WITH_EMAIL', false),
-
 ];
