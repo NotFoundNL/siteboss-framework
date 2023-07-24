@@ -21,5 +21,9 @@ return [
     'users' => [
         'list' => 'Gebruikers',
         'new' => 'Nieuwe gebruiker',
+        'new_explain' => 'Voeg een nieuwe gebruiker toe die al bestaat op de gekoppelde OpenID Connect provider.',
+        'roles' => 'Rollen',
     ],
+    'email' => 'E-mail',
+    'enabled' => 'Geactiveerd',
 ];
