@@ -100,7 +100,8 @@ class Property extends BaseModel
                     $autoLayoutOptions[] = $checkbox->build();
                     break;
                 case 'textarea':
-                    $textArea = new LayoutInputTextArea('textarea'.$option->internal, $option->label);
+                    $textArea = new LayoutInputTextArea($option->internal, $option->label);
+                    $textArea->setLocalize();
                     $autoLayoutOptions[] = $textArea->build();
                     break;
                 case 'number':

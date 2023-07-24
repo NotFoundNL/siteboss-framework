@@ -14,7 +14,7 @@ return [
     |
     */
 
-    'api_prefix' => env('SITEBOSS_BACKEND_API_PREFIX', '/siteboss/api'),
+    'api_prefix' => env('SB_BACKEND_API_PREFIX', '/siteboss/api'),
 
     /*
     |--------------------------------------------------------------------------
@@ -25,6 +25,6 @@ return [
     |
     */
 
-    'frontend_api_prefix' => env('SITEBOSS_FRONTEND_API_PREFIX', 'api'),
+    'frontend_api_prefix' => env('SB_FRONTEND_API_PREFIX', 'api'),
 
 ];

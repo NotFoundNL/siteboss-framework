@@ -34,7 +34,17 @@ class SetAndForgetLocale
             $currentUri = '/'.$currentUri;
         }
 
-        if (Str::startsWith($currentUri, config('siteboss.api_prefix'))) {
+        /*
+
+        Public URL's can optionally use the localization
+        To allow this we first check the public prefix
+        you'll have to add the set-and-forget middleware
+        to the public routes in your api.php file
+
+        */
+        if (Str::startsWith($currentUri, config('siteboss.api_prefix').'/public')) {
+            $localeSegment = $this->getApiPrefixSegmentsCount() + 2;
+        } elseif (Str::startsWith($currentUri, config('siteboss.api_prefix'))) {
             $localeSegment = $this->getApiPrefixSegmentsCount() + 1;
         }
 
