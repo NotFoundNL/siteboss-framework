@@ -15,7 +15,7 @@ class EnsureUserHasRole
 
     public function handle(Request $request, Closure $next, string $role)
     {
-        if (! auth()->user()->checkRights($role)) {
+        if (! auth('openid')->user()->checkRights($role)) {
             return abort(403, 'No permission for this resource');
         }
 

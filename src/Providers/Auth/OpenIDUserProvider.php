@@ -94,6 +94,8 @@ class OpenIDUserProvider implements UserProvider
                 $model->sub = $identifier;
                 $model->save();
 
+                $model->sendEmailVerificationNotification();
+
                 return $model;
             }
         }

@@ -46,11 +46,11 @@ class UserManagementController extends Controller
 
         $form = new LayoutForm(sprintf('/app/users/create/'));
 
-        $help = new LayoutText('Je maakt nu een lokale gebruiker aan. De gebruiker wordt niet automatisch aangemaakt in de login provider zoals KeyCloak, Azure of een andere OpenID Connect provider.');
+        $help = new LayoutText(__('siteboss::ui.users.new_explain'));
 
         $form->addText($help);
 
-        $email = new LayoutInputText('email', __('siteboss::Email'));
+        $email = new LayoutInputText('email', __('siteboss::ui.email'));
 
         $email->setRequired();
         $form->addInput($email);
@@ -195,8 +195,8 @@ class UserManagementController extends Controller
     {
         $table = new LayoutTable(sort: false, delete: false, edit: true);
 
-        $table->addHeader(new LayoutTableHeader('E-mail', 'email'));
-        $table->addHeader(new LayoutTableHeader(__('siteboss::enabled'), 'enabled'));
+        $table->addHeader(new LayoutTableHeader(__('siteboss::ui.email'), 'email'));
+        $table->addHeader(new LayoutTableHeader(__('siteboss::ui.enabled'), 'enabled'));
         $users = CmsUser::get();
 
         foreach ($users as $user) {
@@ -232,12 +232,12 @@ class UserManagementController extends Controller
 
         $form->addText($help);
 
-        $email = new LayoutInputText('email', __('siteboss::Email'));
+        $email = new LayoutInputText('email', __('siteboss::ui.email'));
         $email->setValue($user->email ?? '');
         $email->setDisabled();
         $form->addInput($email);
 
-        $rolesTags = new LayoutInputTags('roles', __('siteboss::Roles'));
+        $rolesTags = new LayoutInputTags('roles', __('siteboss::ui.users.roles'));
         $userIsAdmin = false;
 
         $userRoles = [];
@@ -261,7 +261,7 @@ class UserManagementController extends Controller
             $form->addText(new LayoutText('You cannot add administrator rights to a user.'));
         }
 
-        $checkbox = new LayoutInputCheckbox('enabled', __('siteboss::Enabled'));
+        $checkbox = new LayoutInputCheckbox('enabled', __('siteboss::ui.enabled'));
         $checkbox->setValue($user->enabled == 1);
         $form->addInput($checkbox);
 

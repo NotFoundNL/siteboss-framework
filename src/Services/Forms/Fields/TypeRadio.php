@@ -14,10 +14,19 @@ class TypeRadio extends AbstractType
         $returnString = [];
 
         foreach ($this->properties->options->list as $option) {
-            // if id is in array value
-            if (in_array($option->index, $this->getValue())) {
-                if (isset($option->option->$langurl)) {
-                    $returnString[] = $option->option->$langurl;
+
+            // For legacy support we also check for the id,
+            // This will be removed in the future
+            if (isset($option->index)) {
+                // if id is in array value
+                if (in_array($option->index, $this->getValue())) {
+                    if (isset($option->option->$langurl)) {
+                        $returnString[] = $option->option->$langurl;
+                    }
+                } elseif (in_array($option->id, $this->getValue())) {
+                    if (isset($option->option->$langurl)) {
+                        $returnString[] = $option->option->$langurl;
+                    }
                 }
             }
         }
@@ -53,9 +62,15 @@ class TypeRadio extends AbstractType
         foreach ($value as $optionId) {
             $optionIdExist = false;
             foreach ($this->properties->options->list as $option) {
-                if ($optionId == $option->index) {
+
+                if (isset($option->index) && $optionId == $option->index) {
                     $optionIdExist = true;
                 }
+
+                if (isset($option->id) && $optionId == $option->id) {
+                    $optionIdExist = true;
+                }
+
             }
 
             if (! $optionIdExist) {

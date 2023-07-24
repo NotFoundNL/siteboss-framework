@@ -21,5 +21,9 @@ return [
     'users' => [
         'list' => 'Users',
         'new' => 'Add new user',
+        'new_explain' => 'Add a new user that already exists on the linked OpenID Connect provider.',
+        'roles' => 'Roles',
     ],
+    'email' => 'E-mail',
+    'enabled' => 'Enabled',
 ];

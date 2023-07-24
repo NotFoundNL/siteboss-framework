@@ -57,6 +57,8 @@ class DownloadController extends Controller
 
             if (Storage::disk('formbuilder')->exists($file->loc)) {
                 return Storage::disk('formbuilder')->download($file->loc, $file->filename);
+            } else {
+                abort(403, 'File not found on server');
             }
         }
 

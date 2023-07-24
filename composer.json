@@ -42,7 +42,6 @@
     "autoload": {
         "psr-4": {
             "NotFound\\Framework\\": "src",
-            "Database\\": "database",
             "NotFound\\Framework\\Database\\Seeders\\": "database/seeders"
         },
         "files": [

@@ -1,9 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use NotFound\Framework\Auth\Middleware\EnsureEmailIsVerified;
 use NotFound\Framework\Http\Controllers\AboutController;
 use NotFound\Framework\Http\Controllers\Auth\EmailVerificationNotificationController;
-use NotFound\Framework\Http\Controllers\Auth\EmailVerificationPromptController;
 use NotFound\Framework\Http\Controllers\Auth\VerifyEmailController;
 use NotFound\Framework\Http\Controllers\ContentBlocks\ContentBlockController;
 use NotFound\Framework\Http\Controllers\Forms\DataController;
@@ -13,6 +13,7 @@ use NotFound\Framework\Http\Controllers\InfoController;
 use NotFound\Framework\Http\Controllers\SettingsController;
 use NotFound\Framework\Http\Controllers\Support\SupportController;
 use NotFound\Framework\Http\Controllers\UserPreferencesController;
+use NotFound\Framework\Http\Middleware\ValidateSignature;
 use Spatie\Honeypot\ProtectAgainstSpam;
 
 // ContentBlock
@@ -28,13 +29,9 @@ use Spatie\Honeypot\ProtectAgainstSpam;
 */
 Route::prefix(config('siteboss.api_prefix'))->group(function () {
     Route::prefix('api')->group(function () {
-        Route::get('email/verify', [EmailVerificationPromptController::class, '__invoke'])
-            ->middleware('auth')
-            ->name('verification.notice');
-
         Route::get('email/verify/{id}/{hash}', [VerifyEmailController::class, '__invoke'])
-            ->middleware(['signed', 'throttle:6,1'])
-            ->name('verification.verify');
+            ->middleware([ValidateSignature::class, 'throttle:6,1'])
+            ->name('siteboss.verification.verify');
 
         // Unauthenticated routes
         Route::namespace('Forms')->group(function () {
@@ -46,8 +43,8 @@ Route::prefix(config('siteboss.api_prefix'))->group(function () {
     });
 
     Route::post('{locale}/email/verification-notification', [EmailVerificationNotificationController::class, '__invoke'])
-        ->middleware(['throttle:6,1', 'auth', 'set-forget-locale'])
-        ->name('verification.send');
+        ->middleware(['throttle:6,1', 'auth:openid', 'set-forget-locale'])
+        ->name('siteboss.verification.send');
 
     Route::get('{locale}/oidc', [InfoController::class, 'oidc'])->where('name', '[A-Za-z]{2}');
 
@@ -55,7 +52,7 @@ Route::prefix(config('siteboss.api_prefix'))->group(function () {
     Route::get('settings', [InfoController::class, 'settings']);
 
     // Authenticated routes
-    Route::group(['middleware' => ['auth:openid', 'api', 'verified']], function () {
+    Route::group(['middleware' => ['auth:openid', 'api', EnsureEmailIsVerified::class]], function () {
         // Language for messages (not the language used for storing data)
         Route::group(['prefix' => '/{locale}', 'middleware' => 'set-forget-locale'], function () {
             Route::get('info', [InfoController::class, 'index']);

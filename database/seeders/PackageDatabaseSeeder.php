@@ -20,7 +20,7 @@ class PackageDatabaseSeeder extends Seeder
     {
         $seeders = scandir($directory);
         foreach ($seeders as $file) {
-            if (in_array($file, ['.', '..', 'DatabaseSeeder.php']) || in_array($file, ['.', '..', 'PackageDatabaseSeeder.php']) || substr($file, -4) !== '.php') {
+            if (in_array($file, ['.', '..', 'PackageDatabaseSeeder.php']) || substr($file, -4) !== '.php') {
                 continue;
             }
 
