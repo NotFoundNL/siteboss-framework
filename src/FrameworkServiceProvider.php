@@ -16,6 +16,7 @@ class FrameworkServiceProvider extends ServiceProvider
     {
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
         $this->loadRoutesFrom(__DIR__.'/../routes/api.php');
+        $this->loadRoutesFrom(__DIR__.'/../routes/console.php');
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'siteboss');
         $this->loadTranslationsFrom(__DIR__.'/../lang', 'siteboss');
 
@@ -30,6 +31,7 @@ class FrameworkServiceProvider extends ServiceProvider
             __DIR__.'/../config/openid.php' => config_path('openid.php'),
             __DIR__.'/../config/clamav.php' => config_path('clamav.php'),
             __DIR__.'/../config/database.php' => config_path('database.php'),
+            __DIR__.'/../config/solr.php' => config_path('solr.php'),
             __DIR__.'/../config/laravellocalization.php' => config_path('laravellocalization.php'),
             __DIR__.'/Providers/AuthServiceProvider.php' => app_path('Providers/AuthServiceProvider.php'),
             __DIR__.'/../database/seeders/DatabaseSeeder.php' => database_path('seeders/DatabaseSeeder.php'),
