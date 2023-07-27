@@ -4,6 +4,8 @@ namespace NotFound\Framework\Http\Controllers\CmsEditor;
 
 use NotFound\Framework\Http\Requests\FormDataRequest;
 use NotFound\Framework\Models\AssetModel;
+use NotFound\Framework\Models\Table;
+use NotFound\Framework\Models\Template;
 use NotFound\Layout\Elements\LayoutButton;
 use NotFound\Layout\Elements\LayoutForm;
 use NotFound\Layout\Elements\LayoutText;
@@ -12,15 +14,13 @@ use NotFound\Layout\Inputs\LayoutInputTextArea;
 use NotFound\Layout\LayoutResponse;
 use NotFound\Layout\Responses\Redirect;
 use NotFound\Layout\Responses\Toast;
-use NotFound\Framework\Models\Template;
-use NotFound\Framework\Models\Table;
 
 class CmsEditorImportExportController extends \NotFound\Framework\Http\Controllers\Controller
 {
     public static function getImport($table_id, $type)
     {
         $importWidget = new LayoutWidget('Import', 1);
-        $importForm = new LayoutForm('/app/editor/' . $type . '/' . $table_id . '/import');
+        $importForm = new LayoutForm('/app/editor/'.$type.'/'.$table_id.'/import');
         $importForm->addInput(new LayoutInputTextArea('import'));
         $importForm->addButton(new LayoutButton('Import'));
         $importWidget->addForm($importForm);
@@ -68,7 +68,7 @@ class CmsEditorImportExportController extends \NotFound\Framework\Http\Controlle
     {
         $response = new LayoutResponse();
         $data = json_decode($request->import);
-        if (!$data || $data == '') {
+        if (! $data || $data == '') {
             $response->addAction(new Toast('Foutieve JSON data', 'error'));
 
             return $response->build();
@@ -91,10 +91,10 @@ class CmsEditorImportExportController extends \NotFound\Framework\Http\Controlle
                     ]
                 );
             }
-            $response->addAction(new Redirect('/app/editor/' . $redirect . '/' . $table->id));
+            $response->addAction(new Redirect('/app/editor/'.$redirect.'/'.$table->id));
             $response->addAction(new Toast('Succesvol geimporteerd'));
         } catch (\Exception $e) {
-            $response->addAction(new Toast('Fout bij uploaden. ' . $e->getMessage(), 'error'));
+            $response->addAction(new Toast('Fout bij uploaden. '.$e->getMessage(), 'error'));
         }
 
         return $response->build();
