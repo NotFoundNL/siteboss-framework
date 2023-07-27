@@ -91,7 +91,7 @@ class CmsEditorImportExportController extends \NotFound\Framework\Http\Controlle
                     ]
                 );
             }
-            $response->addAction(new Toast('Succesvol geimporteerd'));
+            $response->addAction(new Toast('Succesvol geimporteerd (Refresh om de wijzigingen te zien)'));
         } catch (\Exception $e) {
             $response->addAction(new Toast('Fout bij uploaden. '.$e->getMessage(), 'error'));
         }
