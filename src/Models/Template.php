@@ -67,14 +67,6 @@ class Template extends AssetModel
         'enabled',
         'params',
         'allow_children',
-        'properties',
-        'type',
-        'internal',
-        'order',
-        'server_properties',
-        'global',
-        'rights',
-        'description',
     ];
 
     public function items()
