@@ -68,6 +68,9 @@ class TableItem extends AssetItem
         'properties',
         'server_properties',
         'global',
+        'rights',
+        'description',
+        'enabled',
     ];
 
     protected $casts = [
