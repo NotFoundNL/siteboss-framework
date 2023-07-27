@@ -71,6 +71,10 @@ class TemplateItem extends AssetItem
         'order',
         'enabled',
         'global',
+        'properties',
+        'server_properties',
+        'rights',
+        'description',
     ];
 
     protected $casts = [
