@@ -12,7 +12,6 @@ use NotFound\Layout\Elements\LayoutText;
 use NotFound\Layout\Elements\LayoutWidget;
 use NotFound\Layout\Inputs\LayoutInputTextArea;
 use NotFound\Layout\LayoutResponse;
-use NotFound\Layout\Responses\Redirect;
 use NotFound\Layout\Responses\Toast;
 
 class CmsEditorImportExportController extends \NotFound\Framework\Http\Controllers\Controller
@@ -41,7 +40,7 @@ class CmsEditorImportExportController extends \NotFound\Framework\Http\Controlle
                 'description' => $tableItem->description,
                 'properties' => $tableItem->properties,
                 'enabled' => $tableItem->enabled,
-                'global' => $tableItem->global,
+                'global' => $tableItem->global ?? 0,
                 'server_properties' => $tableItem->server_properties,
             ];
         }
@@ -56,15 +55,15 @@ class CmsEditorImportExportController extends \NotFound\Framework\Http\Controlle
 
     public function importTemplate(FormDataRequest $request, Template $table)
     {
-        return $this->import($request, $table, 'page');
+        return $this->import($request, $table);
     }
 
     public function importTable(FormDataRequest $request, Table $table)
     {
-        return $this->import($request, $table, 'table');
+        return $this->import($request, $table);
     }
 
-    private function import(FormDataRequest $request, AssetModel $table, $redirect)
+    private function import(FormDataRequest $request, AssetModel $table)
     {
         $response = new LayoutResponse();
         $data = json_decode($request->import);
@@ -86,12 +85,12 @@ class CmsEditorImportExportController extends \NotFound\Framework\Http\Controlle
                         'description' => $tableItem->description,
                         'properties' => $tableItem->properties,
                         'order' => ++$max,
+                        'global' => $tableItem->global ?? 0,
                         'enabled' => $tableItem->enabled,
                         'server_properties' => $tableItem->server_properties,
                     ]
                 );
             }
-            $response->addAction(new Redirect('/app/editor/'.$redirect.'/'.$table->id));
             $response->addAction(new Toast('Succesvol geimporteerd'));
         } catch (\Exception $e) {
             $response->addAction(new Toast('Fout bij uploaden. '.$e->getMessage(), 'error'));
