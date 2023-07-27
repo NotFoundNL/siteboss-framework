@@ -20,7 +20,7 @@ Route::prefix('table')->group(function () {
     Route::prefix('{table}')->group(function () {
         Route::get('', [CmsEditorTableController::class, 'readOne']);
         Route::post('', [CmsEditorTableController::class, 'update']);
-        Route::post('import', [CmsEditorImportExportController::class, 'import']);
+        Route::post('import', [CmsEditorImportExportController::class, 'importTable']);
 
         Route::put('move', [CmsEditorTableController::class, 'updatePosition']);
         Route::post('add-field', [CmsEditorTableController::class, 'addField']);
@@ -40,7 +40,7 @@ Route::prefix('page')->group(function () {
     Route::prefix('{table}')->group(function () {
         Route::get('', [CmsEditorTemplateController::class, 'readOne']);
         Route::post('', [CmsEditorTemplateController::class, 'update']);
-        Route::post('import', [CmsEditorImportExportController::class, 'import']);
+        Route::post('import', [CmsEditorImportExportController::class, 'importTemplate']);
 
         Route::put('move', [CmsEditorTemplateController::class, 'updatePosition']);
         Route::post('add-field', [CmsEditorTemplateController::class, 'addField']);

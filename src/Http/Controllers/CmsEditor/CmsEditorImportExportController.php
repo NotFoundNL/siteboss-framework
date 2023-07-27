@@ -12,13 +12,15 @@ use NotFound\Layout\Inputs\LayoutInputTextArea;
 use NotFound\Layout\LayoutResponse;
 use NotFound\Layout\Responses\Redirect;
 use NotFound\Layout\Responses\Toast;
+use NotFound\Framework\Models\Template;
+use NotFound\Framework\Models\Table;
 
 class CmsEditorImportExportController extends \NotFound\Framework\Http\Controllers\Controller
 {
     public static function getImport($table_id, $type)
     {
         $importWidget = new LayoutWidget('Import', 1);
-        $importForm = new LayoutForm('/app/editor/'.$type.'/'.$table_id.'/import');
+        $importForm = new LayoutForm('/app/editor/' . $type . '/' . $table_id . '/import');
         $importForm->addInput(new LayoutInputTextArea('import'));
         $importForm->addButton(new LayoutButton('Import'));
         $importWidget->addForm($importForm);
@@ -52,21 +54,29 @@ class CmsEditorImportExportController extends \NotFound\Framework\Http\Controlle
         return $exportWidget;
     }
 
-    public function import(FormDataRequest $request, AssetModel $table)
+    public function importTemplate(FormDataRequest $request, Template $table)
+    {
+        return $this->import($request, $table, 'page');
+    }
+
+    public function importTable(FormDataRequest $request, Table $table)
+    {
+        return $this->import($request, $table, 'table');
+    }
+
+    private function import(FormDataRequest $request, AssetModel $table, $redirect)
     {
         $response = new LayoutResponse();
         $data = json_decode($request->import);
-        if (! $data || $data == '') {
+        if (!$data || $data == '') {
             $response->addAction(new Toast('Foutieve JSON data', 'error'));
 
             return $response->build();
         }
-
         $max = $table->items()->max('order');
 
         try {
             foreach ($data as $tableItem) {
-
                 $table->items()->create(
                     [
                         'rights' => $tableItem->rights,
@@ -77,15 +87,14 @@ class CmsEditorImportExportController extends \NotFound\Framework\Http\Controlle
                         'properties' => $tableItem->properties,
                         'order' => ++$max,
                         'enabled' => $tableItem->enabled,
-                        'global' => $tableItem->global,
-                        'server_properties' => $tableItem->server_properties ?? '{}',
+                        'server_properties' => $tableItem->server_properties,
                     ]
                 );
             }
+            $response->addAction(new Redirect('/app/editor/' . $redirect . '/' . $table->id));
             $response->addAction(new Toast('Succesvol geimporteerd'));
-            $response->addAction(new Redirect('/app/editor/table/'.$table->id));
         } catch (\Exception $e) {
-            $response->addAction(new Toast('Fout bij uploaden. '.$e->getMessage(), 'error'));
+            $response->addAction(new Toast('Fout bij uploaden. ' . $e->getMessage(), 'error'));
         }
 
         return $response->build();

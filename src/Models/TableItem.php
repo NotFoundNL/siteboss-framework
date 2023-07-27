@@ -67,7 +67,6 @@ class TableItem extends AssetItem
         'order',
         'properties',
         'server_properties',
-        'global',
         'rights',
         'description',
         'enabled',
