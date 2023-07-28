@@ -135,6 +135,7 @@ class CmsEditorMenuController extends \NotFound\Framework\Http\Controllers\Contr
         ]));
         $response = new LayoutResponse();
         $response->addAction(new Toast('Field properties updated'));
+        $response->addAction(new Redirect('/app/editor/menu/'));
 
         return $response->build();
     }
