@@ -78,7 +78,7 @@ class Form extends BaseModel
 
     public function fields()
     {
-        return $this->hasMany(Field::class, 'form_id', 'id');
+        return $this->hasMany(Field::class, 'form_id', 'id')->orderBy('order');
     }
 
     public function whereTypeForm(): Builder
