@@ -77,7 +77,7 @@ class IndexBuilderService
 
     private function indexChildPages($parentId)
     {
-        $childPages = Menu::whereParent_id($parentId)->get();
+        $childPages = Menu::whereParent_id($parentId)->whereEnabled(1)->get();
         foreach ($childPages as $page) {
             $this->writeDebug(sprintf("    * Page \e[1m%s\e[0m (id: %d)", $page->url, $page->id));
 
