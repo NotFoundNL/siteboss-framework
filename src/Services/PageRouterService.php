@@ -11,11 +11,12 @@ use NotFound\Framework\Models\Menu;
 
 class PageRouterService
 {
+    private bool $output = false;
+
     public function create()
     {
         try {
             // Do not use cache when running in console, as cache may be faulty
-            // TODO: see if we can skip routing entirely when running cli
             if (app()->runningInConsole()) {
                 $routes = Menu::siteRoutes()->with(['template', 'children'])->get();
             } else {
@@ -34,15 +35,11 @@ class PageRouterService
             );
         } catch (Exception $e) {
             if (app()->runningInConsole()) {
-                echo '
-                ---------------------------------------------------------------
-                    SITEBOSS: Unable to set site routes.
-
-                    Error:
-                    '.$e->getMessage().'
-                ---------------------------------------------------------------
-            ';
+                $this->cliError($e->getMessage());
             }
+        }
+        if ($this->output) {
+            echo "\n\t---------------------------------------------------------------\n";
         }
     }
 
@@ -85,24 +82,41 @@ class PageRouterService
 
         $className = $this->getControllerClassName($page);
 
-        Route::get($route, [$className, '__invoke'])
-            ->name('page.'.$page->id)
-            ->defaults('page_id', $page->id);
+        if ($className) {
+            Route::get($route, [$className, '__invoke'])
+                ->name('page.'.$page->id)
+                ->defaults('page_id', $page->id);
+        }
     }
 
-    private function getControllerClassName(Menu $page): string
+    private function getControllerClassName(Menu $page): string|false
     {
+        if ($page->template === null) {
+            return false;
+        }
 
-        if ($page->template !== null) {
-            $pageClassName = sprintf('App\\Http\\Controllers\\Page\\%sController', ucfirst($page->template->filename));
+        $pageClassName = sprintf('App\\Http\\Controllers\\Page\\%sController', ucfirst($page->template->filename));
 
-            if (! class_exists($pageClassName)) {
-                dd('Class does not exist: '.$pageClassName);
-            }
-
+        if (class_exists($pageClassName)) {
             return $pageClassName;
         }
 
-        return '';
+        if (app()->runningInConsole()) {
+            $this->cliError($pageClassName.' does not exist.');
+        } else {
+            dd('Class does not exist: '.$pageClassName);
+        }
+
+        return false;
+    }
+
+    private function cliError($message): void
+    {
+        if (! $this->output) {
+            printf("\n\t---------------------------------------------------------------");
+            printf("\n\tSITEBOSS: Unable to set site routes.\n\n\tError:");
+            $this->output = true;
+        }
+        printf("\n\t- %s", $message);
     }
 }
