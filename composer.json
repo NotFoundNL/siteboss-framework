@@ -1,6 +1,6 @@
 {
     "name": "notfoundnl/siteboss-framework",
-    "description": "This is my package siteboss-framework",
+    "description": "SiteBoss® framework is a headless CMS for Laravel. It will produce a JSON for a UI to consume.",
     "keywords": [
         "NotFound",
         "laravel",
