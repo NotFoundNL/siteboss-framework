@@ -318,4 +318,22 @@ abstract class AbstractComponent
     {
         $this->asyncPostRequest();
     }
+
+    /**
+     * Converts [][] to the DB prefix set in the config
+     * Also accepts tablename without [][]
+     *
+     * @param $tableName for example: '[][]user' or 'user'
+     * @return string 'cc_user'
+     */
+    protected function removeDatabasePrefix(string $tableName)
+    {
+        $prefix = config('database.prefix');
+        $tableName = str_replace('[][]', $prefix, $tableName);
+        if (strpos($tableName, $prefix) === 0) {
+            $tableName = substr($tableName, strlen($prefix));
+        }
+
+        return $tableName;
+    }
 }
