@@ -39,7 +39,7 @@ class ComponentTags extends AbstractComponent
     private function getTagsData()
     {
         $properties = $this->properties();
-        $foreignTable = remove_database_prefix($properties->foreignTable);
+        $foreignTable = $this->removeDatabasePrefix($properties->foreignTable);
 
         $builder = DB::table($foreignTable)
             ->select($foreignTable.'.'.$properties->foreignTagId, $foreignTable.'.'.$properties->foreignDisplayColumn.' AS label');
@@ -54,8 +54,8 @@ class ComponentTags extends AbstractComponent
     public function getCurrentValue()
     {
         $p = $this->properties();
-        $foreignTable = remove_database_prefix($p->foreignTable);
-        $linkTable = remove_database_prefix($p->linkTable);
+        $foreignTable = $this->removeDatabasePrefix($p->foreignTable);
+        $linkTable = $this->removeDatabasePrefix($p->linkTable);
 
         if (isset($p->tagsSortable) && $p->tagsSortable === true) {
             return DB::table($foreignTable)
@@ -132,7 +132,7 @@ class ComponentTags extends AbstractComponent
     public function deleteTag($id)
     {
         $p = $this->properties();
-        $linkTable = remove_database_prefix($p->linkTable);
+        $linkTable = $this->removeDatabasePrefix($p->linkTable);
 
         return DB::table($linkTable)
             ->where($p->linkItemId, $this->recordId)
@@ -143,7 +143,7 @@ class ComponentTags extends AbstractComponent
     public function addTag($id)
     {
         $p = $this->properties();
-        $linkTable = remove_database_prefix($p->linkTable);
+        $linkTable = $this->removeDatabasePrefix($p->linkTable);
 
         return DB::table($linkTable)->insert([
             [$p->linkItemId => $this->recordId, $p->linkTagId => $id],
@@ -153,7 +153,7 @@ class ComponentTags extends AbstractComponent
     private function upsertTag($order, $id)
     {
         $p = $this->properties();
-        $linkTable = remove_database_prefix($p->linkTable);
+        $linkTable = $this->removeDatabasePrefix($p->linkTable);
 
         return DB::table($linkTable)->upsert(
             [$p->linkItemId => $this->recordId, $p->linkTagId => $id, 'order' => $order],
@@ -174,7 +174,7 @@ class ComponentTags extends AbstractComponent
         }
 
         $queryString = $requestValues['q'];
-        $foreignTable = remove_database_prefix($properties->foreignTable);
+        $foreignTable = $this->removeDatabasePrefix($properties->foreignTable);
 
         $builder = DB::table($foreignTable)
             ->select($foreignTable.'.'.$properties->foreignTagId, $foreignTable.'.'.$properties->foreignDisplayColumn.' AS label')

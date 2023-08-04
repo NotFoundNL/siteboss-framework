@@ -47,7 +47,7 @@ class ComponentDropDown extends AbstractComponent
 
     private function getNormalTableData($properties): array
     {
-        $tableName = remove_database_prefix($this->properties()->foreignTable);
+        $tableName = $this->removeDatabasePrefix($this->properties()->foreignTable);
 
         $properties = $this->properties();
         $builder = DB::table($tableName);

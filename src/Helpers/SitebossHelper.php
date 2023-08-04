@@ -2,6 +2,8 @@
 
 namespace NotFound\Framework\Helpers;
 
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use NotFound\Framework\Models\CmsConfig;
 
 class SitebossHelper
@@ -75,5 +77,44 @@ class SitebossHelper
         } catch (\Exception $e) {
             echo 'Caught exception: '.$e->getMessage()."\n";
         }
+    }
+
+    public static function makeDirectory($root, $dir): bool
+    {
+        $dir = Str::lower($dir);
+        if (substr($dir, 0, 1) !== '/') {
+            $dir = '/'.$dir;
+        }
+
+        if (! is_dir($root)) {
+            // Root folder must exist!
+            Log::error('[makeDirIfNotExist] Root directory does not exist: '.$root);
+
+            return false;
+        }
+        // No sneaky going up paths
+        if (str_contains($dir, '..')) {
+            Log::error('[makeDirIfNotExist] Directory contains ..: '.$dir);
+
+            return false;
+        }
+        if (is_dir($root.$dir)) {
+            // All set
+            return true;
+        } else {
+            // Directory does not exist, so lets check the parent directory
+            $parentDir = dirname($dir);
+            if (! is_dir($root.$parentDir)) {
+                // Parent directory does not exist, so lets create it
+                make_directories($root, $parentDir);
+            }
+        }
+        if (! mkdir($root.$dir)) {
+            Log::error('[makeDirIfNotExist] Permission denied: '.$dir);
+
+            return false;
+        }
+
+        return true;
     }
 }
