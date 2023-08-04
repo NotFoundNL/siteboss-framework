@@ -31,10 +31,15 @@ class AboutController extends Controller
 
         $widget = new LayoutWidget('About '.$productName.' CMS', 6);
 
+        $processUser = posix_getpwuid(posix_geteuid());
+        $processUser = $processUser['name'];
+
         $widget->addText(new LayoutText(sprintf('<header style="font-size: 22px;font-weight:bold;border:none">PHP %s</header>', phpversion())));
         $widget->addText(new LayoutText(sprintf('<p>%s: %s</p>', __('siteboss::about.configuration'), php_ini_loaded_file())));
         $widget->addText(new LayoutText(sprintf('<p>%s: %s</p>', __('siteboss::about.server'), gethostname())));
         $widget->addText(new LayoutText(sprintf('<p>%s: %s</p>', __('siteboss::about.maxUploadSize'), $this->getMaximumFileUploadSize())));
+
+        $widget->addText(new LayoutText(sprintf('<p>%s: %s</p>', __('siteboss::about.phpUser'), $processUser)));
 
         $widget->addText(new LayoutText($productName.' server '.__('siteboss::about.version').' '.'1.3.1'));
 

@@ -10,4 +10,5 @@ return [
     'configuration' => 'Configuration',
     'server' => 'Server',
     'maxUploadSize' => 'Maximum upload size',
+    'phpUser' => 'PHP runs as user',
 ];
