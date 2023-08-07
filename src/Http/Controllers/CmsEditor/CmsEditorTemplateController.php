@@ -165,6 +165,10 @@ class CmsEditorTemplateController extends \NotFound\Framework\Http\Controllers\C
         $widget2->addTable($UItable);
 
         $page->addWidget($widget2);
+
+        $page->addWidget(CmsEditorImportExportController::getExport($tables));
+        $page->addWidget(CmsEditorImportExportController::getImport($table->id, 'page'));
+
         $response->addUIElement($page);
 
         return $response->build();

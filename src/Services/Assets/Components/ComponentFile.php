@@ -99,10 +99,18 @@ class ComponentFile extends AbstractComponent
         $value = json_decode($this->currentValue) ?? new \stdClass();
 
         if (isset($value->name)) {
-            return (object) ['name' => $value->name, 'size' => format_size($value->size ?? 0)];
+            return (object) ['name' => $value->name, 'size' => $this->formatSize($value->size ?? 0)];
         }
 
         return (object) ['empty' => true];
+    }
+
+    private function formatSize($size, $precision = 2)
+    {
+        $base = log($size, 1024);
+        $suffixes = ['', 'K', 'M', 'G', 'T'];
+
+        return round(pow(1024, $base - floor($base)), $precision).$suffixes[floor($base)];
     }
 
     /**

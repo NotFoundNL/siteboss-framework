@@ -183,6 +183,11 @@ class CmsEditorTableController extends \NotFound\Framework\Http\Controllers\Cont
         $widget2->addTable($UItable);
 
         $page->addWidget($widget2);
+
+        $page->addWidget(CmsEditorImportExportController::getExport($tables));
+
+        $page->addWidget(CmsEditorImportExportController::getImport($table->id, 'table'));
+
         $response->addUIElement($page);
 
         return $response->build();
@@ -285,7 +290,6 @@ class CmsEditorTableController extends \NotFound\Framework\Http\Controllers\Cont
 
         if (Schema::hasColumn($table, $field->internal)) {
             return $fieldClass->checkColumnType(DB::getDoctrineColumn(set_database_prefix($table), $field->internal)->getType());
-
         } else {
             return $fieldClass->checkColumnType(null);
         }

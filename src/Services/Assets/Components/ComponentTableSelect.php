@@ -45,7 +45,7 @@ class ComponentTableSelect extends AbstractComponent
 
     public function getTableOverviewContent(): LayoutTableColumn
     {
-        $table = remove_database_prefix($this->properties()->foreignTable);
+        $table = $this->removeDatabasePrefix($this->properties()->foreignTable);
 
         $properties = $this->properties();
         if (isset($properties->localizeForeign) && $properties->localizeForeign == true) {
@@ -64,7 +64,7 @@ class ComponentTableSelect extends AbstractComponent
     private function getNormalTableData(): array
     {
         $properties = $this->properties();
-        $tableName = remove_database_prefix($properties->foreignTable);
+        $tableName = $this->removeDatabasePrefix($properties->foreignTable);
 
         $builder = DB::table($tableName);
         if (isset($properties->useStatus) && $properties->useStatus == true) {
