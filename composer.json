@@ -72,7 +72,10 @@
         "laravel": {
             "providers": [
                 "NotFound\\Framework\\FrameworkServiceProvider"
-            ]
+            ],
+            "aliases": {
+                "Sb": "NotFound\\Framework\\Helpers\\SitebossHelper"
+            }
         }
     },
     "minimum-stability": "dev",
