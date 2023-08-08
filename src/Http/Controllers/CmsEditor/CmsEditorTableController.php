@@ -289,9 +289,20 @@ class CmsEditorTableController extends \NotFound\Framework\Http\Controllers\Cont
         $fieldClass = new $className(new stdClass());
 
         if (Schema::hasColumn($table, $field->internal)) {
-            return $fieldClass->checkColumnType(DB::getDoctrineColumn(set_database_prefix($table), $field->internal)->getType());
+            return $fieldClass->checkColumnType(DB::getDoctrineColumn($this->setDatabasePrefix($table), $field->internal)->getType());
         } else {
             return $fieldClass->checkColumnType(null);
         }
+    }
+
+    private function setDatabasePrefix(string $tableName)
+    {
+        $prefix = config('database.prefix');
+        $tableName = str_replace('[][]', $prefix, $tableName);
+        if (strpos($tableName, $prefix) !== 0) {
+            $tableName = $prefix.$tableName;
+        }
+
+        return $tableName;
     }
 }
