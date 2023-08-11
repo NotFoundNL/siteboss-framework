@@ -150,6 +150,10 @@ class IndexBuilderService
 
             $searchText = rtrim($searchText, ', ');
             if (! empty($title) && ! empty($searchText)) {
+
+                $searchItem = new SearchItem($url, $title);
+                $searchItem->setContent($searchText)->setType('page')->setLanguage($lang->url)->setCustomValues($customValues)->setPriority($priority);
+
                 $result = $this->searchServer->upsertUrl($url, $title, $searchText, 'page', $lang->url, $customValues, $priority);
 
                 if ($result->errorCode == 0) {
