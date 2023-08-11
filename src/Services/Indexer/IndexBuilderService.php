@@ -167,7 +167,7 @@ class IndexBuilderService
         if ($this->sitemapFile) {
             // update sitemap
             $sitemap = sprintf(
-                "%s%s\r\n",
+                "%s/%s\r\n",
                 $this->domain,
                 $url
             );
