@@ -32,60 +32,65 @@ class SolrIndexService extends AbstractIndexService
         return true;
     }
 
-    public function upsertUrl(string $url, string $title, string $contents, string $type, string $lang, array $customValues = [], $priority = 1): object
+    public function upsertItem(SearchItem $searchItem): bool
     {
-        $result = $this->solrIndex->addOrUpdateItem($this->siteUrl($url), $title, $contents, $type, $lang, $this->siteId, $customValues, $priority);
-        $return = $this->returnvalue();
-
-        if ($result) {
-            $cmsSearchItem = CmsSearch::firstOrNew(['url' => $url]);
-            $cmsSearchItem->type = $type;
-            $cmsSearchItem->url = $url;
-            $cmsSearchItem->search_status = 'UPDATED';
-            $cmsSearchItem->language = $lang;
-            $cmsSearchItem->save();
-        } else {
-            $return->errorCode = 1;
-        }
-
-        return $return;
+        return true;
     }
 
-    public function upsertFile(string $url, string $title, string $file, string $type, string $lang, array $customValues = [], $priority = 1): object
-    {
-        $result = $this->solrIndex->addOrUpdateFile($this->siteUrl($url), $title, $file, $type, $lang, $this->siteId, $customValues, $priority);
+    // public function upsertUrl(string $url, string $title, string $contents, string $type, string $lang, array $customValues = [], $priority = 1): object
+    // {
+    //     $result = $this->solrIndex->addOrUpdateItem($this->siteUrl($url), $title, $contents, $type, $lang, $this->siteId, $customValues, $priority);
+    //     $return = $this->returnvalue();
 
-        $return = $this->returnvalue();
+    //     if ($result) {
+    //         $cmsSearchItem = CmsSearch::firstOrNew(['url' => $url]);
+    //         $cmsSearchItem->type = $type;
+    //         $cmsSearchItem->url = $url;
+    //         $cmsSearchItem->search_status = 'UPDATED';
+    //         $cmsSearchItem->language = $lang;
+    //         $cmsSearchItem->save();
+    //     } else {
+    //         $return->errorCode = 1;
+    //     }
 
-        if ($result == 'success') {
-            $cmsSearchItem = CmsSearch::firstOrNew(['url' => $url]);
-            $cmsSearchItem->type = $type;
-            $cmsSearchItem->url = $url;
-            $cmsSearchItem->search_status = 'UPDATED';
-            $cmsSearchItem->language = $lang;
-            $cmsSearchItem->save();
-        } elseif ($result == 'fileNotFound') {
-            $cmsSearchItem = CmsSearch::firstOrNew(['url' => $url]);
-            $cmsSearchItem->type = $type;
-            $cmsSearchItem->url = $url;
-            $cmsSearchItem->search_status = 'NOT_FOUND';
-            $cmsSearchItem->language = $lang;
-            $cmsSearchItem->save();
-            $return->errorCode = 1;
-            $return->message = "failed: file not found \n";
-        } else {
-            $cmsSearchItem = CmsSearch::firstOrNew(['url' => $url]);
-            $cmsSearchItem->type = $type;
-            $cmsSearchItem->url = $url;
-            $cmsSearchItem->search_status = 'NOT_INDEXABLE';
-            $cmsSearchItem->language = $lang;
-            $cmsSearchItem->save();
-            $return->errorCode = 1;
-            $return->message = "failed: file not indexable \n";
-        }
+    //     return $return;
+    // }
 
-        return $return;
-    }
+    // public function upsertFile(string $url, string $title, string $file, string $type, string $lang, array $customValues = [], $priority = 1): object
+    // {
+    //     $result = $this->solrIndex->addOrUpdateFile($this->siteUrl($url), $title, $file, $type, $lang, $this->siteId, $customValues, $priority);
+
+    //     $return = $this->returnvalue();
+
+    //     if ($result == 'success') {
+    //         $cmsSearchItem = CmsSearch::firstOrNew(['url' => $url]);
+    //         $cmsSearchItem->type = $type;
+    //         $cmsSearchItem->url = $url;
+    //         $cmsSearchItem->search_status = 'UPDATED';
+    //         $cmsSearchItem->language = $lang;
+    //         $cmsSearchItem->save();
+    //     } elseif ($result == 'fileNotFound') {
+    //         $cmsSearchItem = CmsSearch::firstOrNew(['url' => $url]);
+    //         $cmsSearchItem->type = $type;
+    //         $cmsSearchItem->url = $url;
+    //         $cmsSearchItem->search_status = 'NOT_FOUND';
+    //         $cmsSearchItem->language = $lang;
+    //         $cmsSearchItem->save();
+    //         $return->errorCode = 1;
+    //         $return->message = "failed: file not found \n";
+    //     } else {
+    //         $cmsSearchItem = CmsSearch::firstOrNew(['url' => $url]);
+    //         $cmsSearchItem->type = $type;
+    //         $cmsSearchItem->url = $url;
+    //         $cmsSearchItem->search_status = 'NOT_INDEXABLE';
+    //         $cmsSearchItem->language = $lang;
+    //         $cmsSearchItem->save();
+    //         $return->errorCode = 1;
+    //         $return->message = "failed: file not indexable \n";
+    //     }
+
+    //     return $return;
+    // }
 
     private function siteUrl($url): string
     {

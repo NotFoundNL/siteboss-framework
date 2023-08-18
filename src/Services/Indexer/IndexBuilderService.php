@@ -19,8 +19,9 @@ class IndexBuilderService
 
     private AbstractIndexService $searchServer;
 
-    public function __construct(string $serverType, $debug = false)
+    public function __construct($debug = false)
     {
+        $serverType = config('indexer.engine');
         $this->debug = $debug;
         $this->locales = Lang::all();
 
@@ -46,7 +47,7 @@ class IndexBuilderService
 
             foreach ($sites as $site) {
                 $siteName = $site->name;
-                $sitemapFileName = config('solr.sitemap');
+                $sitemapFileName = config('indexer.sitemap');
                 if ($sitemapFileName) {
                     $this->createFolderIfNotExists($sitemapFileName);
                     $this->sitemapFile = fopen($sitemapFileName, 'w') or exit('Could not open sitemap file for writing');
@@ -205,11 +206,27 @@ class IndexBuilderService
                     $this->writeDebug(': update needed: ');
                     $success = true;
 
+                    $indexItem = new SearchItem($url, $searchItem['title']);
                     if ($searchItem['isFile']) {
-                        $success = $this->searchServer->upsertFile($url, $searchItem['title'], $searchItem['file'], $searchItem['type'], $lang->url, $searchItem['customValues'], $searchItem['priority']);
-                    } else { // subitem is table row
-                        $success = $this->searchServer->upsertUrl($url, $searchItem['title'], $searchItem['content'], $searchItem['type'], $lang->url, $searchItem['customValues'], $searchItem['priority']);
+                        $indexItem->setType('file');
+                        $indexItem->setContent($searchItem['file']);
+                    } else {
+                        $indexItem->setType($searchItem['type']);
+                        $indexItem->setContent($searchItem['content']);
                     }
+                    $indexItem->setLanguage($lang->url);
+                    foreach ($searchItem['customValues'] as $key => $value) {
+                        $indexItem->setCustomValue($key, $value);
+                    }
+                    $indexItem->setPriority($searchItem['priority']);
+
+                    $success = $this->searchServer->upsertItem($indexItem);
+
+                    // if ($searchItem['isFile']) {
+                    //     $success = $this->searchServer->upsertFile($url, $searchItem['title'], $searchItem['file'], $searchItem['type'],
+                    // } else { // subitem is table row
+                    //     $success = $this->searchServer->upsertUrl($url, $searchItem['title'], $searchItem['content'], $searchItem['type'], $lang->url, $searchItem['customValues'], $searchItem['priority']);
+                    // }
 
                     if ($this->sitemapFile && $searchItem['sitemap']) {
                         $sitemap = sprintf(
