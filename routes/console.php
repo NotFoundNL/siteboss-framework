@@ -6,7 +6,7 @@ use NotFound\Framework\Services\Indexer\IndexBuilderService;
 
 Artisan::command('siteboss:indexSite {--debug : Whether debug messages should be displayed}', function ($debug) {
     //
-    $indexer = new IndexBuilderService('solr', $debug);
+    $indexer = new IndexBuilderService($debug);
     $indexer->run();
 
     return Command::SUCCESS;
