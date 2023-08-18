@@ -12,6 +12,6 @@ return [
     | Relative path to the sitemap.txt created by the SOLR indexer.
     |
     */
-    'engine' => env('INDEXER_ENGINE', 'solr'),// 'solr' or 'elastic
+    'engine' => env('INDEXER_ENGINE', 'solr'), // 'solr' or 'elastic
     'sitemap' => env('INDEXER_SITEMAP', 'public/sitemap.txt'),
 ];

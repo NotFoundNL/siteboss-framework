@@ -2,7 +2,7 @@
 
 namespace NotFound\Framework\Services\Indexer;
 
-abstract class SearchItem
+class SearchItem
 {
     protected ?string $content = null;
 
@@ -73,6 +73,7 @@ abstract class SearchItem
 
     public function setPriorityHigh(): self
     {
+        trigger_error('Method '.__METHOD__.' is not implemented for production use', E_USER_DEPRECATED);
         $this->priority = 2;
 
         return $this;

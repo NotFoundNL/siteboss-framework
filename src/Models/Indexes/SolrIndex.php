@@ -247,7 +247,7 @@ class SolrIndex extends BaseModel
                 if ($result) {
                     return 'fileIsNotIndexable';
                 } else {
-                    return 'unkownFileError';
+                    return 'unknownFileError';
                 }
             }
         } else {
