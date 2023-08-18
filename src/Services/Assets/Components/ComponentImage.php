@@ -112,16 +112,22 @@ class ComponentImage extends AbstractComponent
 
         if (isset($value->uploaded) && $value->uploaded === true && isset($this->properties()->sizes[0])) {
             // Set the default url
+            
+            $prefix = '';
+            if ( config('siteboss.cache_prefix') === true && isset( $this->assetItem->updated_at))
+            {
+                $prefix= '/'. $this->assetItem->updated_at->timestamp;
+            }
             $name = $this->properties()->sizes[0]->filename;
             $filename = $this->recordId.'_'.$name.'.jpg';
-            $values->url = '/assets/public'.$this->relativePathToPublicDisk().$filename;
+            $values->url = $prefix. '/assets/public'.$this->relativePathToPublicDisk().$filename;
 
             // Set the url for each size
             foreach ($this->properties()->sizes as $size) {
                 $name = $size->filename;
                 $filename = $this->recordId.'_'.$name.'.jpg';
                 $values->sizes[$name] = (object) [
-                    'url' => '/assets/public'.$this->relativePathToPublicDisk().$filename,
+                    'url' => $prefix.'/assets/public'.$this->relativePathToPublicDisk().$filename,
                     'width' => $size->width,
                     'height' => $size->height,
                 ];

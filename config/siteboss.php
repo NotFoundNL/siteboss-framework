@@ -13,8 +13,19 @@ return [
     | are using a different API prefix for your application.
     |
     */
-
     'api_prefix' => env('SB_BACKEND_API_PREFIX', '/siteboss/api'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Cache prefix
+    |--------------------------------------------------------------------------
+    |
+    | Boolean to prefix the asset URL with a number based on the updated_at 
+    | of the AssetItem.
+    |
+    */
+
+    'cache_prefix' => env('SB_CACHE_PREFIX', false),
 
     /*
     |--------------------------------------------------------------------------
