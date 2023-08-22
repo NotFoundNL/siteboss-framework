@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use NotFound\Framework\Auth\Notifications\VerifyEmail;
 use NotFound\Framework\Models\Lang;
+use NotFound\Framework\View\Components\ConfigurationCheck;
 use NotFound\Framework\View\Components\Forms\Form;
 
 class FrameworkServiceProvider extends ServiceProvider
@@ -21,6 +22,7 @@ class FrameworkServiceProvider extends ServiceProvider
         $this->loadTranslationsFrom(__DIR__.'/../lang', 'siteboss');
 
         Blade::component('formbuilder-form', Form::class);
+        Blade::component('configuration-check', ConfigurationCheck::class);
         Blade::componentNamespace('NotFound\\Framework\\View\\Components\\Forms\\Fields', 'fields');
 
         $this->publishes([
