@@ -17,7 +17,6 @@ class TableService extends AbstractAssetService
         private Table $table,
         protected Lang $lang,
         private ?int $recordId = null,
-        private ?int $parentId = null,
     ) {
         $this->assetModel = $table;
         $this->fieldComponents = $this->getFieldComponents($this->recordId);
