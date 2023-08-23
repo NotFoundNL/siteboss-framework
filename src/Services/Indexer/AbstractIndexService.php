@@ -4,8 +4,6 @@ namespace NotFound\Framework\Services\Indexer;
 
 abstract class AbstractIndexService
 {
-    private Bool $debug;
-
     public Int $languageId;
 
     public Int $siteId;
