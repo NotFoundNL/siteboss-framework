@@ -22,12 +22,12 @@ class ComponentChildTable extends AbstractComponent
             return true;
         }
 
-        if (!is_array($newValue)) {
+        if (! is_array($newValue)) {
             return false;
         }
 
         foreach ($newValue as $block) {
-            if (!isset($block['items']) || !isset($block['tableId'])) {
+            if (! isset($block['items']) || ! isset($block['tableId'])) {
                 Log::withContext(['value' => $newValue])->warning('[ContentBlock] Wrong value submitted');
 
                 return false;
@@ -146,7 +146,7 @@ class ComponentChildTable extends AbstractComponent
 
     public function setNewValue(mixed $value): void
     {
-        if (!is_array($value)) {
+        if (! is_array($value)) {
             $this->newValue = [];
 
             return;
