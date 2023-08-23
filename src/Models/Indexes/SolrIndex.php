@@ -201,8 +201,6 @@ class SolrIndex extends BaseModel
         if (curl_errno($curl) === 6) {
             exit('[ERROR] Could not resolve solr host: '.$this->getSolrBaseUrl());
         }
-
-        dd($result);
         $json = json_decode($result);
         if ($json && isset($json->responseHeader) && $json->responseHeader->status == 0) {
             return true;
@@ -304,22 +302,24 @@ class SolrIndex extends BaseModel
         $indexItem = $searchItem->get();
         // find out of document exists
         $result = 0;
-        $file = Storage::disk('private')->path($indexItem->content);
+        $file = Storage::disk('private')->path($indexItem->getContent());
 
         if (file_exists($file)) {
             $curl = $this->solrHandler();
 
             $endpoint = sprintf(
-                '%s/update/extract?literal.url=%s&literal.title_%s=%s&literal.type=%s&literal.site=%s&literal.language=%d&uprefix=ignored_"&commit=true',
+                '%s/update/extract?literal.url=%s&literal.title_%s=%s&literal.type=%s&literal.site=%s&literal.language=%d&uprefix=ignored_&fmap.content=content_%s&commit=true',
                 $this->getSolrBaseUrl(),
-                urlencode($indexItem->url),
-                $indexItem->language,
-                urlencode($indexItem->title),
-                $indexItem->type,
+                urlencode($indexItem->getUrl()),
+                $indexItem->getLanguage(),
+                urlencode($indexItem->getTitle()),
+                $indexItem->getType(),
                 $siteId,
-                $indexItem->language
+                $indexItem->getLanguage(),
+                $indexItem->getLanguage()
+
             );
-            foreach ($indexItem->customValues as $key => $value) {
+            foreach ($indexItem->getCustomValues() as $key => $value) {
                 if (is_array($value)) {
                     foreach ($value as $v) {
                         $endpoint .= sprintf('&literal.%s=%s', $key, $v);
@@ -343,12 +343,12 @@ class SolrIndex extends BaseModel
             }
 
             if (\filesize($file) == 0) {
-                $this->mailFileError($indexItem->title, $indexItem->url, 'file is leeg');
+                $this->mailFileError($indexItem->getTitle(), $indexItem->getUrl(), 'file is leeg');
 
                 return 'fileIsEmpty';
             } else {
 
-                $result = $this->upsertItem($indexItem->setContent($indexItem->title));
+                $result = $this->upsertItem($indexItem->setContent($indexItem->getTitle()));
                 if ($result) {
                     return 'fileIsNotIndexable';
                 } else {
@@ -356,7 +356,7 @@ class SolrIndex extends BaseModel
                 }
             }
         } else {
-            $this->mailFileError($indexItem->title, $indexItem->url, 'file bestaat niet');
+            $this->mailFileError($indexItem->getTitle(), $indexItem->getUrl(), 'file bestaat niet');
 
             return 'fileNotFound';
         }
