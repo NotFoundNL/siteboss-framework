@@ -20,7 +20,7 @@ return [
     | Cache prefix
     |--------------------------------------------------------------------------
     |
-    | Boolean to prefix the asset URL with a number based on the updated_at 
+    | Boolean to prefix the asset URL with a number based on the updated_at
     | of the AssetItem.
     |
     */
