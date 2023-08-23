@@ -54,7 +54,7 @@ class TableService extends AbstractAssetService
                 continue;
             }
 
-            if (!$component->validate($request->{$component->assetItem->internal})) {
+            if (! $component->validate($request->{$component->assetItem->internal})) {
                 return false;
             }
         }
@@ -109,18 +109,18 @@ class TableService extends AbstractAssetService
         foreach ($this->fieldComponents as $component) {
             /** @var AbstractComponent $component */
             if (
-                !$component->usesDefaultStorageMechanism()
+                ! $component->usesDefaultStorageMechanism()
                 || $component->isDisabled()
             ) {
                 continue;
             }
 
-            if (!$this->assetModel->isLocalized() || !$component->isLocalized()) {
+            if (! $this->assetModel->isLocalized() || ! $component->isLocalized()) {
                 $record[$component->assetItem->internal] = $component->getValueForStorage();
             }
         }
 
-        if (!$new) {
+        if (! $new) {
             $record['id'] = $this->recordId;
 
             return $this->assetModel->updateRecord($record);
@@ -135,7 +135,7 @@ class TableService extends AbstractAssetService
         foreach ($this->fieldComponents as $component) {
             /** @var AbstractComponent $component */
             if (
-                !$component->usesDefaultStorageMechanism()
+                ! $component->usesDefaultStorageMechanism()
                 || $component->isDisabled()
             ) {
                 continue;
@@ -175,6 +175,6 @@ class TableService extends AbstractAssetService
 
     protected function getCacheKey(): string
     {
-        return 'table_' . $this->table->id . '_' . $this->recordId . '_' . $this->lang->url;
+        return 'table_'.$this->table->id.'_'.$this->recordId.'_'.$this->lang->url;
     }
 }

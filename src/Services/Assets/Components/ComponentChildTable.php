@@ -2,14 +2,14 @@
 
 namespace NotFound\Framework\Services\Assets\Components;
 
-use NotFound\Layout\Elements\AbstractLayout;
-use NotFound\Layout\Inputs\LayoutInputContentBlocks;
-use NotFound\Framework\Models\Table;
-use NotFound\Framework\Services\Assets\TableService;
+use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Http\Request;
+use NotFound\Framework\Models\Table;
+use NotFound\Framework\Services\Assets\TableService;
+use NotFound\Layout\Elements\AbstractLayout;
+use NotFound\Layout\Inputs\LayoutInputContentBlocks;
 
 class ComponentChildTable extends AbstractComponent
 {
@@ -21,12 +21,12 @@ class ComponentChildTable extends AbstractComponent
             return true;
         }
 
-        if (!is_array($newValue)) {
+        if (! is_array($newValue)) {
             return false;
         }
 
         foreach ($newValue as $block) {
-            if (!isset($block['items']) || !isset($block['tableId'])) {
+            if (! isset($block['items']) || ! isset($block['tableId'])) {
                 Log::withContext(['value' => $newValue])->warning('[ContentBlock] Wrong value submitted');
 
                 return false;
@@ -75,7 +75,6 @@ class ComponentChildTable extends AbstractComponent
         $contentBlocksWithValues = [];
         foreach ($contentBlocks as $contentBlock) {
             /** @var CmsContentBlocks $contentBlock */
-
             $ts = new TableService($table, $this->assetService->getLang(), $contentBlock->id);
             $fieldComponents = $ts->getComponents();
 
@@ -97,7 +96,6 @@ class ComponentChildTable extends AbstractComponent
         $newValue = [];
         foreach ($this->newValue as $block) {
             $block['items'][$this->properties()->foreignKey] = $this->recordId ?? 1;
-
 
             $newValue[] = $block;
         }
@@ -121,11 +119,10 @@ class ComponentChildTable extends AbstractComponent
             /** @var Table $table */
             $table = $tables->where('id', $block['tableId'])->first();
             $ts = new TableService($table, $this->assetService->getLang(), $block['recordId']);
-            if (!isset($block['items'][$this->properties()->foreignKey])) dd($block);
+            if (! isset($block['items'][$this->properties()->foreignKey])) {
+                dd($block);
+            }
             // Recursively update the table that is set inside this component
-
-
-
 
             if ($block['recordId'] === null) {
                 $recordId = $ts->create();
@@ -140,7 +137,7 @@ class ComponentChildTable extends AbstractComponent
 
     public function setNewValue(mixed $value): void
     {
-        if (!is_array($value)) {
+        if (! is_array($value)) {
             $this->newValue = [];
 
             return;

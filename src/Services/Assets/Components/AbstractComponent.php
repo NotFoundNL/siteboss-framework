@@ -44,7 +44,7 @@ abstract class AbstractComponent
     ) {
         $this->assetModel = $assetService->getAssetModel();
         $this->assetType = $assetService->getType();
-        $this->type = 'Input' . ucfirst($assetItem->type);
+        $this->type = 'Input'.ucfirst($assetItem->type);
     }
 
     abstract protected function getAutoLayoutClass(): ?AbstractLayout;
@@ -83,7 +83,7 @@ abstract class AbstractComponent
     public function buildAutoLayoutClass()
     {
         $layoutClass = $this->getAutoLayoutClass();
-        if (!$layoutClass) {
+        if (! $layoutClass) {
             return [];
         }
 
@@ -213,7 +213,7 @@ abstract class AbstractComponent
     {
         // TODO: Remove this function, use setValueFromStorage as that's where
         //       the value is coming from.
-        trigger_error('Method ' . __METHOD__ . ' is deprecated', E_USER_DEPRECATED);
+        trigger_error('Method '.__METHOD__.' is deprecated', E_USER_DEPRECATED);
         $this->currentValue = $value;
     }
 
@@ -303,7 +303,7 @@ abstract class AbstractComponent
     public function asyncPostRequest()
     {
         if (App::hasDebugModeEnabled()) {
-            throw new NotImplementedException('Async request not implemented for: ' . $this);
+            throw new NotImplementedException('Async request not implemented for: '.$this);
         } else {
             abort(404);
         }
