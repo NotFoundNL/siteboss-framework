@@ -31,6 +31,20 @@ class TableService extends AbstractAssetService
         return $this->fieldComponents;
     }
 
+    /**
+     * addCustomComponent
+     *
+     * Add a new component to the table
+     * this is used by the ComponentChildTable class primarily
+     *
+     * @param  mixed  $internal
+     * @param  mixed  $component
+     */
+    public function addCustomComponent(string $internal, AbstractComponent $component): void
+    {
+        $this->fieldComponents->put($internal, $component);
+    }
+
     public function getType(): AssetType
     {
         return AssetType::TABLE;

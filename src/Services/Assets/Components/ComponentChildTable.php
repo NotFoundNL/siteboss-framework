@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use NotFound\Framework\Models\AssetItem;
 use NotFound\Framework\Models\Table;
 use NotFound\Framework\Services\Assets\TableService;
 use NotFound\Layout\Elements\AbstractLayout;
@@ -91,20 +92,24 @@ class ComponentChildTable extends AbstractComponent
         return $contentBlocksWithValues;
     }
 
-    public function beforeSave(): void
-    {
-        $newValue = [];
-        foreach ($this->newValue as $block) {
-            $block['items'][$this->properties()->foreignKey] = $this->recordId ?? 1;
-
-            $newValue[] = $block;
-        }
-        $this->setNewValue($newValue);
-    }
-
     public function afterSave(): void
     {
-        $tables = Table::all();
+        $parentId = $this->recordId;
+        $foreignKey = $this->properties()->foreignKey;
+
+        $assetItem = new AssetItem();
+        $assetItem->type = 'text';
+        $assetItem->internal = $foreignKey;
+        $parentIdComponent = new ComponentStaticValue($this->assetService, $assetItem);
+        $parentIdComponent->setStaticValue($parentId ?? 0);
+
+        $assetItem = new AssetItem();
+        $assetItem->type = 'text';
+        $assetItem->internal = 'order';
+        $orderComponent = new ComponentStaticValue($this->assetService, $assetItem);
+
+        $order = 1;
+
         foreach ($this->newValue as $block) {
             // new values are given a string(for frontend purposes). So set them to null
             if (is_string($block['recordId'])) {
@@ -117,21 +122,21 @@ class ComponentChildTable extends AbstractComponent
             }
 
             /** @var Table $table */
-            $table = $tables->where('id', $block['tableId'])->first();
+            $table = Table::where('id', $block['tableId'])->first();
             $ts = new TableService($table, $this->assetService->getLang(), $block['recordId']);
-            if (! isset($block['items'][$this->properties()->foreignKey])) {
-                dd($block);
-            }
-            // Recursively update the table that is set inside this component
+
+            $orderComponent->setStaticValue($block['order']);
+
+            $ts->addCustomComponent('order', $orderComponent);
+
+            $ts->validate(new Request($block['items']));
 
             if ($block['recordId'] === null) {
+                $ts->addCustomComponent($foreignKey, $parentIdComponent);
                 $recordId = $ts->create();
             } else {
                 $recordId = $ts->update();
             }
-            $block['items'][$this->properties()->foreignKey] = $recordId;
-
-            $ts->validate(new Request($block['items']));
         }
     }
 
@@ -146,8 +151,13 @@ class ComponentChildTable extends AbstractComponent
         $this->newValue = $value;
     }
 
-    private function getChildren()
+    /**
+     * getChildren
+     *
+     * Get child rows from the linked table for the current record
+     */
+    private function getChildren(): Collection
     {
-        return DB::table($this->properties()->foreignTable)->where($this->properties()->foreignKey, $this->recordId)->where('deleted_at', null)->get();
+        return DB::table($this->properties()->foreignTable)->where($this->properties()->foreignKey, $this->recordId)->where('deleted_at', null)->orderBy('order')->get();
     }
 }
