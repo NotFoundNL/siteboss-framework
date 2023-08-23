@@ -22,12 +22,12 @@ class ComponentChildTable extends AbstractComponent
             return true;
         }
 
-        if (! is_array($newValue)) {
+        if (!is_array($newValue)) {
             return false;
         }
 
         foreach ($newValue as $block) {
-            if (! isset($block['items']) || ! isset($block['tableId'])) {
+            if (!isset($block['items']) || !isset($block['tableId'])) {
                 Log::withContext(['value' => $newValue])->warning('[ContentBlock] Wrong value submitted');
 
                 return false;
@@ -108,8 +108,6 @@ class ComponentChildTable extends AbstractComponent
         $assetItem->internal = 'order';
         $orderComponent = new ComponentStaticValue($this->assetService, $assetItem);
 
-        $order = 1;
-
         foreach ($this->newValue as $block) {
             // new values are given a string(for frontend purposes). So set them to null
             if (is_string($block['recordId'])) {
@@ -126,23 +124,22 @@ class ComponentChildTable extends AbstractComponent
             $ts = new TableService($table, $this->assetService->getLang(), $block['recordId']);
 
             $orderComponent->setStaticValue($block['order']);
-
             $ts->addCustomComponent('order', $orderComponent);
 
             $ts->validate(new Request($block['items']));
 
             if ($block['recordId'] === null) {
                 $ts->addCustomComponent($foreignKey, $parentIdComponent);
-                $recordId = $ts->create();
+                $ts->create();
             } else {
-                $recordId = $ts->update();
+                $ts->update();
             }
         }
     }
 
     public function setNewValue(mixed $value): void
     {
-        if (! is_array($value)) {
+        if (!is_array($value)) {
             $this->newValue = [];
 
             return;
