@@ -108,6 +108,8 @@ class ComponentChildTable extends AbstractComponent
         $assetItem->internal = 'order';
         $orderComponent = new ComponentStaticValue($this->assetService, $assetItem);
 
+        $deleted = 0;
+
         foreach ($this->newValue as $block) {
             // new values are given a string(for frontend purposes). So set them to null
             if (is_string($block['recordId'])) {
@@ -118,6 +120,8 @@ class ComponentChildTable extends AbstractComponent
             if ($block['deleted'] === true && $block['recordId'] == null) {
                 continue;
             }
+
+            $block['order'] -= $deleted;
 
             /** @var Table $table */
             $table = Table::where('id', $block['tableId'])->first();
@@ -131,6 +135,9 @@ class ComponentChildTable extends AbstractComponent
             if ($block['recordId'] === null) {
                 $ts->addCustomComponent($foreignKey, $parentIdComponent);
                 $ts->create();
+            } elseif ($block['deleted']) {
+                $deleted++;
+                $ts->delete();
             } else {
                 $ts->update();
             }
