@@ -48,7 +48,7 @@ class CmsEditorTableController extends \NotFound\Framework\Http\Controllers\Cont
         $tables = Table::orderBy('name')->get();
 
         foreach ($tables as $cmsTable) {
-            $row = new LayoutTableRow($cmsTable->id, '/app/editor/table/'.$cmsTable->id);
+            $row = new LayoutTableRow($cmsTable->id, '/app/editor/table/' . $cmsTable->id);
             $row->addColumn(new LayoutTableColumn($cmsTable->name, 'table'));
             $table->addRow($row);
         }
@@ -89,7 +89,7 @@ class CmsEditorTableController extends \NotFound\Framework\Http\Controllers\Cont
         $response = new LayoutResponse();
 
         $response->addAction(new Toast('Table added'));
-        $action = new Redirect('/app/editor/table/'.$tableId);
+        $action = new Redirect('/app/editor/table/' . $tableId);
         $response->addAction($action);
 
         return $response->build();
@@ -110,7 +110,7 @@ class CmsEditorTableController extends \NotFound\Framework\Http\Controllers\Cont
 
         $widget1 = new LayoutWidget($table->name ?? 'New table', 6);
 
-        $form = new LayoutForm('/app/editor/table/'.$table->id);
+        $form = new LayoutForm('/app/editor/table/' . $table->id);
 
         $form->addInput((new LayoutInputText('name', 'Name'))->setValue($table->name ?? '')->setRequired());
         $form->addInput((new LayoutInputText('table', 'Table'))->setValue($table->table ?? '')->setRequired());
@@ -131,7 +131,7 @@ class CmsEditorTableController extends \NotFound\Framework\Http\Controllers\Cont
         $widget1->addTitle((new LayoutTitle('Edit table'))->setSize(4));
         $widget1->addForm($form);
 
-        $newFieldForm = new LayoutForm('/app/editor/table/'.$table->id.'/add-field');
+        $newFieldForm = new LayoutForm('/app/editor/table/' . $table->id . '/add-field');
 
         $newFieldDropDown = new LayoutInputDropdown('new_field', 'New field');
         $newFieldDropDown->setRequired();
@@ -165,12 +165,12 @@ class CmsEditorTableController extends \NotFound\Framework\Http\Controllers\Cont
         $tables = $table->items()->orderBy('order', 'asc')->get();
 
         foreach ($tables as $cmsTable) {
-            $row = new LayoutTableRow($cmsTable->id, '/app/editor/table/'.$table->id.'/'.$cmsTable->id);
+            $row = new LayoutTableRow($cmsTable->id, '/app/editor/table/' . $table->id . '/' . $cmsTable->id);
             $row->addColumn(new LayoutTableColumn($cmsTable->name, 'text'));
             $row->addColumn(new LayoutTableColumn($cmsTable->type, 'text'));
 
             if (isset($cmsTable->properties->localize) && $cmsTable->properties->localize == 1) {
-                $tableName = $table->table.'_tr';
+                $tableName = $table->table . '_tr';
             } else {
                 $tableName = $table->table;
             }
@@ -248,7 +248,7 @@ class CmsEditorTableController extends \NotFound\Framework\Http\Controllers\Cont
         $fields = (new FieldsProperties())->availableFields();
 
         $max = $table->items()->max('order') + 1;
-        if (! in_array($request->new_field, $fields)) {
+        if (!in_array($request->new_field, $fields)) {
             $response->addAction(new Toast('Field not found', 'error'));
         } else {
             $newField = $table->items()->create([
@@ -257,7 +257,7 @@ class CmsEditorTableController extends \NotFound\Framework\Http\Controllers\Cont
                 'type' => $request->new_field,
                 'internal' => $request->internal,
             ]);
-            $response->addAction(new Redirect('/app/editor/table/'.$table->id.'/'.$newField->id));
+            $response->addAction(new Redirect('/app/editor/table/' . $table->id . '/' . $newField->id));
         }
 
         return $response->build();
@@ -284,7 +284,7 @@ class CmsEditorTableController extends \NotFound\Framework\Http\Controllers\Cont
 
     private function checkColumn(string $table, object $field): string
     {
-        $className = '\\NotFound\\Framework\\Services\\Editor\\Fields\\'.$field->type;
+        $className = '\\NotFound\\Framework\\Services\\Editor\\Fields\\' . $field->type;
 
         $fieldClass = new $className(new stdClass());
 
@@ -300,7 +300,7 @@ class CmsEditorTableController extends \NotFound\Framework\Http\Controllers\Cont
         $prefix = config('database.prefix');
         $tableName = str_replace('[][]', $prefix, $tableName);
         if (strpos($tableName, $prefix) !== 0) {
-            $tableName = $prefix.$tableName;
+            $tableName = $prefix . $tableName;
         }
 
         return $tableName;

@@ -25,7 +25,7 @@ class FieldsProperties
 
     public function availableFields()
     {
-        $fields = ['Text', 'Checkbox', 'DropDown', 'Tags', 'Description', 'TableSelect', 'Header', 'DatePicker', 'TimePicker', 'DateTimePicker', 'Image', 'File', 'ContentBlocks', 'Button', 'Slug', 'Number'];
+        $fields = ['Text', 'Checkbox', 'ChildTable', 'DropDown', 'Tags', 'Description', 'TableSelect', 'Header', 'DatePicker', 'TimePicker', 'DateTimePicker', 'Image', 'File', 'ContentBlocks', 'Button', 'Slug', 'Number'];
         sort($fields);
 
         return $fields;
@@ -33,7 +33,7 @@ class FieldsProperties
 
     private function getClass($fieldType)
     {
-        $className = '\\NotFound\\Framework\\Services\\Editor\\Fields\\'.$fieldType;
+        $className = '\\NotFound\\Framework\\Services\\Editor\\Fields\\' . $fieldType;
 
         return new $className($this->values);
     }
@@ -65,7 +65,7 @@ class FieldsProperties
     {
         foreach ($properties as $field) {
             $setDefaults = false;
-            if (! isset($this->values->{$field->name})) {
+            if (!isset($this->values->{$field->name})) {
                 $setDefaults = true;
             }
             $value = $this->values->{$field->name} ?? null;
@@ -158,7 +158,7 @@ class FieldsProperties
                     break;
                 default:
                     $textField = new LayoutText(
-                        'Not implemented type ('.$field->type.') for '.$field->name ?? 'Geen naam voor dit veld'
+                        'Not implemented type (' . $field->type . ') for ' . $field->name ?? 'Geen naam voor dit veld'
                     );
                     $form->addText($textField);
             }
