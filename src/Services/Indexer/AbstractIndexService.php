@@ -2,6 +2,8 @@
 
 namespace NotFound\Framework\Services\Indexer;
 
+// @TODO: change to interface
+
 abstract class AbstractIndexService
 {
     public Int $languageId;
@@ -16,5 +18,7 @@ abstract class AbstractIndexService
 
     abstract public function urlNeedsUpdate(string $url, $updated): bool;
 
-    abstract public function upsertItem(SearchItem $searchItem): bool;
+    abstract public function upsertItem(SearchItem $searchItem): object;
+
+    // @TODO: add checkConnection function
 }
