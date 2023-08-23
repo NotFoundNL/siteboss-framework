@@ -8,6 +8,7 @@ use NotFound\Framework\Mail\Indexer\FileIndexError;
 use NotFound\Framework\Mail\Indexer\QueryError;
 use NotFound\Framework\Models\BaseModel;
 use NotFound\Framework\Models\CmsSearch;
+use NotFound\Framework\Services\Indexer\SearchItem;
 
 /**
  * NotFound\Framework\Models\Indexes\SolrIndex
@@ -83,7 +84,7 @@ class SolrIndex extends BaseModel
 
             $json = json_decode($result);
 
-            if (! $json || ! isset($json->responseHeader) || $json->responseHeader->status !== 0) {
+            if (!$json || !isset($json->responseHeader) || $json->responseHeader->status !== 0) {
                 $this->mailQueryError($url, $result);
 
                 return false;
@@ -100,7 +101,7 @@ class SolrIndex extends BaseModel
     {
         $handler = curl_init();
         curl_setopt($handler, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($handler, CURLOPT_USERPWD, $this->solrUser.':'.$this->solrPass);
+        curl_setopt($handler, CURLOPT_USERPWD, $this->solrUser . ':' . $this->solrPass);
 
         curl_setopt($handler, CURLOPT_POST, true);
 
@@ -130,7 +131,7 @@ class SolrIndex extends BaseModel
         return false;
     }
 
-    public function addOrUpdateItem(string $url, string $title, string $contents, string $type, string $lang, int $siteId, array $customValues, int $priority): bool
+    /*public function addOrUpdateItem(string $url, string $title, string $contents, string $type, string $lang, int $siteId, array $customValues, int $priority): bool
     {
         $curl = $this->solrHandler();
         $doc = [
@@ -158,9 +159,50 @@ class SolrIndex extends BaseModel
         $result = curl_exec($curl);
 
         if (curl_errno($curl) === 6) {
-            exit('[ERROR] Could not resolve solr host: '.$this->getSolrBaseUrl());
+            exit('[ERROR] Could not resolve solr host: ' . $this->getSolrBaseUrl());
         }
 
+        $json = json_decode($result);
+        if ($json && isset($json->responseHeader) && $json->responseHeader->status == 0) {
+            return true;
+        }
+
+        return false;
+    }*/
+
+    public function upsertItem(SearchItem $searchItem, int $siteId = 1): bool
+    {
+        $indexItem = $searchItem->get();
+        $curl = $this->solrHandler();
+        $doc = [
+            sprintf('title_%s', $indexItem->getLanguage()) => $indexItem->getTitle(),
+            sprintf('content_%s', $indexItem->getLanguage()) => html_entity_decode(trim(preg_replace('/\s+/', ' ', preg_replace('#<[^>]+>#', ' ', $indexItem->getContent())))),
+            'type' => $indexItem->getType(),
+            'url' => $indexItem->getUrl(),
+            'priority' => $indexItem->getPriority(),
+            'site' => $siteId,
+            'language' => $indexItem->getLanguage(),
+        ];
+        foreach ($indexItem->getCustomValues() as $key => $value) {
+            $doc[$key] = $value;
+        }
+
+        $payload = ['add' => [
+            'doc' => $doc,
+            'commitWithin' => 1000,
+            'overwrite' => true,
+        ]];
+        curl_setopt($curl, CURLOPT_URL, sprintf('%s/update/?wt=%s', $this->getSolrBaseUrl(), $this->wt));
+
+        curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($payload));
+
+        $result = curl_exec($curl);
+
+        if (curl_errno($curl) === 6) {
+            exit('[ERROR] Could not resolve solr host: ' . $this->getSolrBaseUrl());
+        }
+
+        dd($result);
         $json = json_decode($result);
         if ($json && isset($json->responseHeader) && $json->responseHeader->status == 0) {
             return true;
@@ -171,7 +213,7 @@ class SolrIndex extends BaseModel
 
     public function removeItem($url)
     {
-        if (! is_null($url)) {
+        if (!is_null($url)) {
             $curl = $this->solrHandler();
 
             $payload = ['delete' => $url];
@@ -196,7 +238,7 @@ class SolrIndex extends BaseModel
         return false;
     }
 
-    public function addOrUpdateFile(string $url, string $title, string $file, string $type, string $lang, int $siteId, array $customValues, int $priority): string
+    /*public function addOrUpdateFile(string $url, string $title, string $file, string $type, string $lang, int $siteId, array $customValues, int $priority): string
     {
         // find out of document exists
         $result = 0;
@@ -255,6 +297,69 @@ class SolrIndex extends BaseModel
 
             return 'fileNotFound';
         }
+    }*/
+
+    public function upsertFile(SearchItem $searchItem, int $siteId = 1): string
+    {
+        $indexItem = $searchItem->get();
+        // find out of document exists
+        $result = 0;
+        $file = Storage::disk('private')->path($indexItem->content);
+
+        if (file_exists($file)) {
+            $curl = $this->solrHandler();
+
+            $endpoint = sprintf(
+                '%s/update/extract?literal.url=%s&literal.title_%s=%s&literal.type=%s&literal.site=%s&literal.language=%d&uprefix=ignored_"&commit=true',
+                $this->getSolrBaseUrl(),
+                urlencode($indexItem->url),
+                $indexItem->language,
+                urlencode($indexItem->title),
+                $indexItem->type,
+                $siteId,
+                $indexItem->language
+            );
+            foreach ($indexItem->customValues as $key => $value) {
+                if (is_array($value)) {
+                    foreach ($value as $v) {
+                        $endpoint .= sprintf('&literal.%s=%s', $key, $v);
+                    }
+                } else {
+                    $endpoint .= sprintf('&literal.%s=%s', $key, $value);
+                }
+            }
+
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($curl, CURLOPT_POST, 1);
+            $cFile = curl_file_create($file);
+            curl_setopt($curl, CURLOPT_HTTPHEADER, ['Content-Type: multipart/form-data']);
+            curl_setopt($curl, CURLOPT_URL, $endpoint);
+            $post = ['file_contents' => $cFile];
+            curl_setopt($curl, CURLOPT_POSTFIELDS, $post);
+            $result = curl_exec($curl);
+            $json = json_decode($result);
+            if ($json && isset($json->responseHeader) && $json->responseHeader->status == 0) {
+                return 'success';
+            }
+
+            if (\filesize($file) == 0) {
+                $this->mailFileError($indexItem->title, $indexItem->url, 'file is leeg');
+
+                return 'fileIsEmpty';
+            } else {
+
+                $result = $this->upsertItem($indexItem->setContent($indexItem->title));
+                if ($result) {
+                    return 'fileIsNotIndexable';
+                } else {
+                    return 'unknownFileError';
+                }
+            }
+        } else {
+            $this->mailFileError($indexItem->title, $indexItem->url, 'file bestaat niet');
+
+            return 'fileNotFound';
+        }
     }
 
     private function mailFileError($title, $file, $error)
@@ -294,27 +399,27 @@ class SolrIndex extends BaseModel
             $lang
         );
         if ($filter) {
-            $url .= '&fq='.$filter;
+            $url .= '&fq=' . $filter;
         }
         if ($start && is_int($start)) {
-            $url .= '&start='.$start;
+            $url .= '&start=' . $start;
         }
 
         if ($rows && is_int($rows)) {
-            $url .= '&rows='.$rows;
+            $url .= '&rows=' . $rows;
         }
         if (count($extraColumns) > 0) {
         }
 
         if ($sortField) {
-            $url .= '&sort='.urlencode($sortField.' '.$sortDirection);
+            $url .= '&sort=' . urlencode($sortField . ' ' . $sortDirection);
         }
 
         curl_setopt($curl, CURLOPT_URL, $url);
         $result = curl_exec($curl);
         $json = json_decode($result);
         $searchResults = new SolrItem($json, $query, false, $highlightLength);
-        if (! $searchResults->isValid()) {
+        if (!$searchResults->isValid()) {
             $this->mailQueryError($url, $result);
         }
 
@@ -334,7 +439,7 @@ class SolrIndex extends BaseModel
         $result = curl_exec($curl);
         $json = json_decode($result);
         $suggestions = new SolrItem($json, $query);
-        if (! $suggestions->isValid()) {
+        if (!$suggestions->isValid()) {
             $this->buildSuggester();
             $result = curl_exec($curl);
             $json = json_decode($result);
