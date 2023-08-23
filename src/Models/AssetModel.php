@@ -38,6 +38,8 @@ abstract class AssetModel extends BaseModel
 {
     protected $casts = [
         'properties' => 'object',
+        'updated_at' => 'datetime',
+        'created_at' => 'datetime',
     ];
 
     abstract public function items();
