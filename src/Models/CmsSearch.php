@@ -4,6 +4,7 @@ namespace NotFound\Framework\Models;
 
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
+use NotFound\Framework\Services\Indexer\SearchItem;
 
 /**
  * NotFound\Framework\Models\CmsSearch
@@ -49,9 +50,17 @@ class CmsSearch extends BaseModel
     {
         try {
             CmsSearch::query()->whereNotIn('search_status', self::$skipStatus)
-                ->update(['search_status' => 'PENDING', 'updated_at' => DB::raw('updated_at')]); // ignore timestamps
+                ->update(['search_status' => 'PENDING', 'updated_at' => DB::raw('updated_at')]); // do not change timestamps at this point
         } catch (QueryException $ex) {
             dd($ex->getMessage());
         }
+    }
+
+    public function setValues(SearchItem $searchItem, string $status = 'UPDATED')
+    {
+        $this->type = $searchItem->getType();
+        $this->url = $searchItem->getUrl();
+        $this->search_status = $status;
+        $this->language = $searchItem->getLanguage();
     }
 }

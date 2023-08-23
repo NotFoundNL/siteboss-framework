@@ -32,14 +32,47 @@ class SolrIndexService extends AbstractIndexService
         return true;
     }
 
-    public function upsertItem(SearchItem $searchItem): bool
+    public function upsertItem(SearchItem $searchItem): object
     {
-        return true;
+        $return = $this->returnvalue();
+        $cmsSearchItemStatus = '';
+
+        if ($searchItem->getType() === 'file') {
+            $result = $this->solrIndex->upsertFile($searchItem, $this->siteId);
+
+            $return = $this->returnvalue();
+            if ($result == 'success') {
+                $cmsSearchItemStatus = 'UPDATED';
+            } elseif ($result == 'fileNotFound') {
+                $cmsSearchItemStatus = 'NOT_FOUND';
+                $return->errorCode = 1;
+                $return->message = "failed: file not found \n";
+            } else {
+                $cmsSearchItemStatus = 'NOT_INDFdd(EXABLE';
+                $return->errorCode = 1;
+                $return->message = "failed: file not indexable \n";
+            }
+        } else {
+            $result = $this->solrIndex->upsertItem($searchItem, $this->siteId);
+
+            if ($result) {
+                $cmsSearchItemStatus = 'UPDATED';
+            } else {
+                $cmsSearchItemStatus = 'FAILED';
+                $return->errorCode = 1;
+                $return->message = "failed: item not indexed \n";
+            }
+        }
+        $cmsSearchItem = CmsSearch::firstOrNew(['url' => $searchItem->getUrl()]);
+        $cmsSearchItem->setValues($searchItem, $cmsSearchItemStatus);
+        $cmsSearchItem->save();
+
+        return $return;
     }
 
     // public function upsertUrl(string $url, string $title, string $contents, string $type, string $lang, array $customValues = [], $priority = 1): object
     // {
-    //     $result = $this->solrIndex->addOrUpdateItem($this->siteUrl($url), $title, $contents, $type, $lang, $this->siteId, $customValues, $priority);
+    //     $result = $this->solrIndex->FaF($this->siteUrl($url), $title, $contents, $type, $lang, $this->siteId, $customValues, $priority);
     //     $return = $this->returnvalue();
 
     //     if ($result) {
