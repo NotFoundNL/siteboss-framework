@@ -2,6 +2,8 @@
 
 namespace NotFound\Framework\Services\Indexer;
 
+use Illuminate\Support\Arr;
+
 class SearchItem
 {
     protected ?string $content = null;
@@ -73,7 +75,7 @@ class SearchItem
 
     public function setPriorityHigh(): self
     {
-        trigger_error('Method '.__METHOD__.' is not implemented for production use', E_USER_DEPRECATED);
+        trigger_error('Method ' . __METHOD__ . ' is not implemented for production use', E_USER_DEPRECATED);
         $this->priority = 2;
 
         return $this;
@@ -82,5 +84,45 @@ class SearchItem
     public function get(): object
     {
         return $this;
+    }
+
+    public function getLanguage(): ?string
+    {
+        return $this->language;
+    }
+
+    public function getUrl(): ?string
+    {
+        return $this->url;
+    }
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function getTitle(): ?string
+    {
+        return $this->title;
+    }
+
+    public function getContent(): ?string
+    {
+        return $this->content;
+    }
+
+    public function getCreatedAt(): ?string
+    {
+        return $this->created_at;
+    }
+
+    public function getCustomValues(): ?array
+    {
+        return $this->customValues;
+    }
+
+    public function getPriority(): int
+    {
+        return $this->priority;
     }
 }
