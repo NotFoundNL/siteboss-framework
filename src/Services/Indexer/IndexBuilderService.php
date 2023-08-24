@@ -158,8 +158,6 @@ class IndexBuilderService
                 }
                 $result = $this->searchServer->upsertItem($searchItem);
 
-                //$result = $this->searchServer->upsertUrl($url, $title, $searchText, 'page', $lang->url, $customValues, $priority);
-
                 if ($result->errorCode == 0) {
                     $this->writeDebug(" success\n");
                 } else {
@@ -224,12 +222,6 @@ class IndexBuilderService
                     $indexItem->setPriority($searchItem['priority']);
 
                     $success = $this->searchServer->upsertItem($indexItem);
-
-                    // if ($searchItem['isFile']) {
-                    //     $success = $this->searchServer->upsertFile($url, $searchItem['title'], $searchItem['file'], $searchItem['type'],
-                    // } else { // subitem is table row
-                    //     $success = $this->searchServer->upsertUrl($url, $searchItem['title'], $searchItem['content'], $searchItem['type'], $lang->url, $searchItem['customValues'], $searchItem['priority']);
-                    // }
 
                     if ($this->sitemapFile && $searchItem['sitemap']) {
                         $sitemap = sprintf(
