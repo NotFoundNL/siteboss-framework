@@ -74,8 +74,8 @@ class ConfigurationCheck extends Component
     {
         $result = true;
         try {
-            //     $indexer = new IndexBuilderService();
-            //  $indexer->checkConnection();
+            $indexer = new IndexBuilderService();
+            $indexer->checkConnection();
         } catch (Exception $e) {
             $result = (ConfigurationCheck::debug) ? $e : 'Failed to connect to indexer';
         }
