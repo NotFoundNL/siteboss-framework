@@ -18,6 +18,8 @@ class SearchItem
 
     protected array $customValues = [];
 
+    protected ?string $filePath = null;
+
     public function __construct(protected string $url, protected string $title)
     {
     }
@@ -46,6 +48,13 @@ class SearchItem
     public function setLanguage(string $language): self
     {
         $this->language = $language;
+
+        return $this;
+    }
+
+    public function setFilePath(string $filePath): self
+    {
+        $this->filePath = $filePath;
 
         return $this;
     }
@@ -122,5 +131,10 @@ class SearchItem
     public function getPriority(): int
     {
         return $this->priority;
+    }
+
+    public function getFilePath(): ?string
+    {
+        return $this->filePath;
     }
 }

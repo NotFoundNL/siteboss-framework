@@ -49,8 +49,13 @@ class SolrIndexService extends AbstractIndexService
                 $return->message = "failed: file not found \n";
             } else {
                 $cmsSearchItemStatus = 'NOT_INDEXABLE';
-                $return->errorCode = 1;
-                $return->message = "failed: file not indexable \n";
+                $result = $this->solrIndex->upsertItem($searchItem, $this->siteId);
+                if ($result) {
+                    $cmsSearchItemStatus = 'UPDATED';
+                } else {
+                    $return->errorCode = 1;
+                    $return->message = "failed: file not indexable \n";
+                }
             }
         } else {
             $result = $this->solrIndex->upsertItem($searchItem, $this->siteId);

@@ -210,11 +210,12 @@ class IndexBuilderService
                     $indexItem = new SearchItem($url, $searchItem['title']);
                     if ($searchItem['isFile']) {
                         $indexItem->setType('file');
-                        $indexItem->setContent($searchItem['file']);
+                        $indexItem->setFilePath($searchItem['file']);
                     } else {
                         $indexItem->setType($searchItem['type']);
-                        $indexItem->setContent($searchItem['content']);
                     }
+                    $indexItem->setContent($searchItem['content']);
+
                     $indexItem->setLanguage($lang->url);
                     foreach ($searchItem['customValues'] as $key => $value) {
                         $indexItem->setCustomValue($key, $value);
