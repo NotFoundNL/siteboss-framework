@@ -20,6 +20,8 @@ class SearchItem
 
     protected ?string $filePath = null;
 
+    protected ?string $solrDate = null;
+
     public function __construct(protected string $url, protected string $title)
     {
     }
@@ -80,6 +82,13 @@ class SearchItem
         return $this;
     }
 
+    public function setSolrDate(string $solrDate): self
+    {
+        $this->solrDate = $solrDate;
+
+        return $this;
+    }
+
     public function setPriorityHigh(): self
     {
         trigger_error('Method '.__METHOD__.' is not implemented for production use', E_USER_DEPRECATED);
@@ -136,5 +145,10 @@ class SearchItem
     public function getFilePath(): ?string
     {
         return $this->filePath;
+    }
+
+    public function getSolrDate(): ?string
+    {
+        return $this->solrDate;
     }
 }

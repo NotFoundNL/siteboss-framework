@@ -2,6 +2,7 @@
 
 namespace NotFound\Framework\Http\Controllers\Pages;
 
+use App\Http\Helpers\VCHelper;
 use Illuminate\Support\Facades\View;
 use NotFound\Framework\Http\Controllers\Controller;
 use NotFound\Framework\Models\Lang;
@@ -158,5 +159,12 @@ class PageController extends Controller
     public function searchSubitems(): array
     {
         return [];
+    }
+
+    public function solrDate($pageId)
+    {
+        $this->pageId = $pageId;
+
+        return VCHelper::createSolrDateFromMysqlTimestamp($this->menuItem()->updated_at);
     }
 }

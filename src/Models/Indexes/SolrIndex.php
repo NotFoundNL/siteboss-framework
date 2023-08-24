@@ -182,6 +182,7 @@ class SolrIndex extends BaseModel
             'priority' => $indexItem->getPriority(),
             'site' => $siteId,
             'language' => $indexItem->getLanguage(),
+            'solr_date' => $indexItem->getSolrDate(),
         ];
         foreach ($indexItem->getCustomValues() as $key => $value) {
             $doc[$key] = $value;
@@ -306,9 +307,8 @@ class SolrIndex extends BaseModel
 
         if (file_exists($file)) {
             $curl = $this->solrHandler();
-
             $endpoint = sprintf(
-                '%s/update/extract?literal.url=%s&literal.title_%s=%s&literal.type=%s&literal.site=%s&literal.language=%d&uprefix=ignored_&fmap.content=content_%s&commit=true',
+                '%s/update/extract?literal.url=%s&literal.title_%s=%s&literal.type=%s&literal.site=%s&literal.language=%d&literal.solr_date=%s&uprefix=ignored_&fmap.content=content_%s&commit=true',
                 $this->getSolrBaseUrl(),
                 urlencode($indexItem->getUrl()),
                 $indexItem->getLanguage(),
@@ -316,6 +316,7 @@ class SolrIndex extends BaseModel
                 $indexItem->getType(),
                 $siteId,
                 $indexItem->getLanguage(),
+                $indexItem->getSolrDate(),
                 $indexItem->getLanguage()
 
             );

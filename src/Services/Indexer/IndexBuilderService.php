@@ -138,6 +138,7 @@ class IndexBuilderService
             $className = 'App\Http\Controllers\Page\\'.$class.'Controller';
             $c = null;
             $priority = 1;
+            $solrDate = '';
             if (class_exists($className)) {
                 $c = new $className();
                 if (method_exists($className, 'customSearchValues')) {
@@ -146,13 +147,15 @@ class IndexBuilderService
                 if (method_exists($className, 'searchPriority')) {
                     $priority = $c->searchPriority();
                 }
+                if (method_exists($className, 'solrDate')) {
+                    $solrDate = $c->solrDate($menu->id);
+                }
             }
-
             $searchText = rtrim($searchText, ', ');
             if (! empty($title) && ! empty($searchText)) {
 
                 $searchItem = new SearchItem($url, $title);
-                $searchItem->setContent($searchText)->setType('page')->setLanguage($lang->url)->setPriority($priority);
+                $searchItem->setContent($searchText)->setType('page')->setLanguage($lang->url)->setPriority($priority)->setSolrDate($solrDate);
                 foreach ($customValues as $key => $value) {
                     $searchItem->setCustomValue($key, $value);
                 }
@@ -215,13 +218,14 @@ class IndexBuilderService
                         $indexItem->setType($searchItem['type']);
                     }
                     $indexItem->setContent($searchItem['content']);
+                    $indexItem->setSolrDate($searchItem['solr_date']);
 
                     $indexItem->setLanguage($lang->url);
                     foreach ($searchItem['customValues'] as $key => $value) {
                         $indexItem->setCustomValue($key, $value);
                     }
                     $indexItem->setPriority($searchItem['priority']);
-
+                    $indexItem->setSolrDate($searchItem['solr_date']);
                     $success = $this->searchServer->upsertItem($indexItem);
 
                     if ($this->sitemapFile && $searchItem['sitemap']) {
