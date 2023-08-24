@@ -42,7 +42,7 @@ class CmsSearch extends BaseModel
 
     private array $status = ['PENDING', 'ADDED', 'SKIPPED', 'UPDATED', 'NOT_INDEXABLE', 'NOT_FOUND'];
 
-    private static array $skipStatus = []; //['NOT_INDEXABLE', 'NOT_FOUND'];
+    private static array $skipStatus = ['NOT_INDEXABLE', 'NOT_FOUND'];
 
     protected $fillable = ['url'];
 
