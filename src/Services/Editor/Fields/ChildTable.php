@@ -24,8 +24,6 @@ class ChildTable extends Properties
 
     public function serverProperties(): void
     {
-        $this->addText('foreignTable', 'Foreign table', true);
-        $this->addText('foreignKey', 'Foreign key', required: true, default: 'id');
     }
 
     public function checkColumnType(?\Doctrine\DBAL\Types\Type $type): string

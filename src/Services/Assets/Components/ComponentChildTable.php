@@ -44,7 +44,7 @@ class ComponentChildTable extends AbstractComponent
 
     public function setValueFromStorage(mixed $value): bool
     {
-        $table = Table::whereTable($this->properties()->foreignTable)->first();
+        $table = Table::whereTable($this->properties()->allowedBlocks)->first();
 
         $contentBlocksWithValues = new Collection();
 
@@ -71,7 +71,7 @@ class ComponentChildTable extends AbstractComponent
     {
         $contentBlocks = $this->getChildren();
 
-        $table = Table::whereTable($this->properties()->foreignTable)->first();
+        $table = Table::whereTable($this->properties()->allowedBlocks)->first();
 
         $contentBlocksWithValues = [];
         foreach ($contentBlocks as $contentBlock) {
@@ -95,7 +95,7 @@ class ComponentChildTable extends AbstractComponent
     public function afterSave(): void
     {
         $parentId = $this->recordId;
-        $foreignKey = $this->properties()->foreignKey;
+        $foreignKey = rtrim($this->assetModel->table, 's').'_id';
 
         $assetItem = new AssetItem();
         $assetItem->type = 'text';
@@ -162,6 +162,6 @@ class ComponentChildTable extends AbstractComponent
      */
     private function getChildren(): Collection
     {
-        return DB::table($this->properties()->foreignTable)->where($this->properties()->foreignKey, $this->recordId)->where('deleted_at', null)->orderBy('order')->get();
+        return DB::table($this->properties()->allowedBlocks)->where(rtrim($this->assetModel->table, 's').'_id', $this->recordId)->where('deleted_at', null)->orderBy('order')->get();
     }
 }
