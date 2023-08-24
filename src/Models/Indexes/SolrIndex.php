@@ -522,4 +522,19 @@ class SolrIndex extends BaseModel
 
         return $suggesterString;
     }
+
+    public function checkConnection(): bool
+    {
+        $curl = $this->solrHandler();
+        curl_setopt($curl, CURLOPT_URL, sprintf('%s/admin/ping', $this->getSolrBaseUrl()));
+
+        $result = curl_exec($curl);
+        $json = json_decode($result);
+
+        if (curl_errno($curl) !== 6 && $json && isset($json->status) && $json->status === 'OK') {
+            return true;
+        }
+
+        return false;
+    }
 }

@@ -186,4 +186,10 @@ class SolrIndexService extends AbstractIndexService
 
         return $return;
     }
+
+    public function checkConnection(): bool
+    {
+
+        return $this->solrIndex->checkConnection();
+    }
 }
