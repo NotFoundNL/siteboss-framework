@@ -92,7 +92,7 @@ class InfoController extends Controller
             Sb::makeDirectory(base_path(), 'resources/siteboss');
             $menuItems = $this->menuFromDatabase();
             if (file_put_contents($menuConfigFile, json_encode($menuItems, JSON_PRETTY_PRINT))) {
-                 Schema::rename('cms_menu', 'cms_menu_backup')) {
+                Schema::rename('cms_menu', 'cms_menu_backup');
             } else {
                 throw new \Exception('Could not write menu JSON file');
             }
