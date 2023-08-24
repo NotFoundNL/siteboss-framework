@@ -4,10 +4,12 @@ namespace NotFound\Framework\Http\Controllers;
 
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Schema;
 use NotFound\Framework\Models\CmsMenu;
 use NotFound\Framework\Models\CmsUser;
 use NotFound\Framework\Models\Lang;
 use NotFound\Framework\Services\Legacy\StatusColumn;
+use Sb;
 use stdClass;
 
 class InfoController extends Controller
@@ -82,16 +84,73 @@ class InfoController extends Controller
 
     private function menu()
     {
+        $menuConfigFile = base_path('resources/siteboss/menu.json');
+        if (file_exists($menuConfigFile)) {
+            $menuItems = json_decode(file_get_contents($menuConfigFile));
+        } else {
+            // Fetch data from database
+            Sb::makeDirectory(base_path(), 'resources/siteboss');
+            $menuItems = $this->menuFromDatabase();
+            if (file_put_contents($menuConfigFile, json_encode($menuItems, JSON_PRETTY_PRINT))) {
+                 Schema::rename('cms_menu', 'cms_menu_backup')) {
+            } else {
+                throw new \Exception('Could not write menu JSON file');
+            }
+        }
+
+        return $this->filterRights($menuItems);
+    }
+
+    /**
+     * filterRights
+     *
+     * This function will filter the menu items based on the rights of the user.
+     */
+    private function filterRights(array $menuItems): array
+    {
+        $menu = [];
+        foreach ($menuItems as $menuitem) {
+            // If rights are defined, we'll check them here.
+            if (! isset($menuitem->rights) || auth('openid')->user()->checkRights($menuitem->rights)) {
+                unset($menuitem->rights);
+
+                // Check if there are subitems and if the user has rights to see them.
+                if (isset($menuitem->submenu) && count($menuitem->submenu) > 0) {
+                    $submenu = $this->filterRights($menuitem->submenu);
+                    if (count($submenu) > 0) {
+
+                        $menuitem->submenu = $submenu;
+                        $menu[] = $menuitem;
+                    }
+
+                } else {
+                    // No submenu, so we'll add it directly to the menu.
+                    $menu[] = $menuitem;
+                }
+            }
+        }
+
+        return $menu;
+    }
+
+    /**
+     * menuFromDatabase
+     *
+     * This function will convert the menu from the database to the new format
+     * and store the file in the resources/siteboss folder.
+     *
+     * The table
+     *
+     * @return void
+     */
+    private function menuFromDatabase()
+    {
         $menu = new CmsMenu();
         $menu = StatusColumn::wherePublished($menu, 'cms_menu');
         $menus = $menu->whereEnabled(true)->whereNot('to', '')->orderBy('order')->get();
-
         $orderedMenu = [];
 
         foreach ($menus as $menuitem) {
-            if ($menuitem->rights && ! auth('openid')->user()->checkRights($menuitem->rights)) {
-                continue;
-            }
 
             if ($menuitem->to == null) {
                 if (str_starts_with($menuitem->target, 'table-') || str_starts_with($menuitem->target, '#table-')) {
@@ -104,21 +163,24 @@ class InfoController extends Controller
             $menuitem->target = ltrim($menuitem->target, '#');
 
             $menuObj = (object) [
-                'id' => $menuitem->id,
                 'icon' => $menuitem->icon,
                 'title' => $menuitem->title,
                 'path' => $menuitem->to ?? $menuitem->target,
-                'submenu' => false,
+
             ];
 
             if ($menuitem->to) {
                 $menuObj->path = $menuitem->to;
             }
 
+            if (trim($menuitem->rights) !== '') {
+                $menuObj->rights = $menuitem->rights;
+            }
+
             if ($menuitem->level !== 0) {
                 $lastKey = array_key_last($orderedMenu);
                 if ($lastKey !== null) {
-                    if (! $orderedMenu[$lastKey]->submenu) {
+                    if (! isset($orderedMenu[$lastKey]->submenu)) {
                         $orderedMenu[$lastKey]->submenu = [];
                     }
 
