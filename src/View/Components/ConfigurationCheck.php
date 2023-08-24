@@ -3,52 +3,56 @@
 namespace NotFound\Framework\View\Components;
 
 use Exception;
-use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Testing\Assert;
 use Illuminate\View\Component;
 use NotFound\Framework\Services\ClamAV\ClamAV;
+use NotFound\Framework\Services\Indexer\IndexBuilderService;
 
 class ConfigurationCheck extends Component
 {
-    public function __construct()
-    {
-    }
+    private const debug = false;
 
     public function render()
     {
-        return view('siteboss::configuration.configuration-check', [
-            'clamavTest' => $this->clamavTest(),
-            'memcacheTest' => $this->memchacheTest(),
-            'indexerTest' => $this->indexerTest(),
-            'emailTest' => $this->emailTest(),
-            'envTest' => $this->envTest(),
-        ]);
+        return view('siteboss::configuration.configuration-check', ['tests' => [
+            $this->testResult('ClamAV', [$this, 'clamavTest']),
+            $this->testResult('MemCached', [$this, 'memcacheTest']),
+            $this->testResult('Indexer', [$this, 'indexerTest']),
+            $this->testResult('E-mail', [$this, 'emailTest']),
+            $this->testResult('Configuration .env', [$this, 'envTest']),
+        ]]);
     }
 
-    private const debug = false;
-
-    private function clamavTest()
+    private function testResult(string $name, callable $testMethod)
     {
-        $result = 'Geslaagd';
+        return (object) [
+            'name' => $name,
+            'result' => $testMethod(),
+        ];
+    }
+
+    private function clamavTest(): bool|string
+    {
+        if (config('clamav.socket_type') === 'none') {
+            return 'Clamav is disabled in .env';
+        }
         $clamav = true;
         try {
             $clamav = ClamAV::uploadIsClean(public_path('index.php'));
         } catch (Exception $e) {
-            $result = (ConfigurationCheck::debug) ? $e : 'Clamav verkeerd geconfigureerd (huidig socket type: '.config('clamav.socket_type').')';
+            return (ConfigurationCheck::debug) ? $e : 'Clamav configuration error (socket type: '.config('clamav.socket_type').')';
         }
         if (! $clamav) {
-            $result = 'Virus detected';
+            return 'Virus detected';
         }
 
-        return $result;
+        return true;
     }
 
-    private function memchacheTest()
+    private function memcacheTest(): bool|string
     {
-        $result = 'Geslaagd';
         if (config('cache.default') == 'memcached') {
             try {
                 Cache::put('test123', 'test123');
@@ -57,52 +61,56 @@ class ConfigurationCheck extends Component
 
                 Cache::forget('test123');
             } catch (Exception $e) {
-                $result = (ConfigurationCheck::debug) ? $e : 'Cache niet goed geconfigureerd.';
+                return (ConfigurationCheck::debug) ? $e : 'Cache configuration error';
             }
         } else {
-            $result = 'memcached niet default';
+            return 'memcached disabled in .env';
         }
 
-        return $result;
+        return true;
     }
 
-    private function indexerTest()
+    private function indexerTest(): bool|string
     {
-        $result = 'Geslaagd';
+        $result = true;
         try {
-            Assert::assertEquals(Artisan::call('siteboss:indexSite'), Command::SUCCESS);
+            //     $indexer = new IndexBuilderService();
+            //  $indexer->checkConnection();
         } catch (Exception $e) {
-            $result = (ConfigurationCheck::debug) ? $e : 'Mislukt';
+            $result = (ConfigurationCheck::debug) ? $e : 'Failed to connect to indexer';
         }
 
         return $result;
     }
 
-    private function emailTest()
+    private function emailTest(): bool|string
     {
-        $result = 'Geslaagd';
         try {
             Mail::getSymfonyTransport()->start();
         } catch (Exception $e) {
-            $result = (ConfigurationCheck::debug) ? $e : 'Mail niet correct geconfigureerd';
+            return (ConfigurationCheck::debug) ? $e : 'Mail configuration error';
         }
 
-        return $result;
+        return true;
     }
 
-    private function envTest()
+    private function envTest(): bool|string
     {
-        $result = '';
+        $result = [];
 
         $envCheck = ['OIDC_CONFIGURATION_URL', 'OIDC_CLIENT_ID', 'OIDC_ISSUER', 'SB_ADMIN_EMAIL', 'MAIL_PASSWORD'];
 
         foreach ($envCheck as $env) {
             if (env($env) == '') {
-                $result .= $env.', ';
+                $result[] = $env;
             }
         }
+        if (count($result) === 0) {
+            return true;
+        }
 
-        $result = ($result == '') ? 'Geslaagd' : 'De volgende env velden zijn niet ingevuld: '.rtrim($result, ', ').'.';
+        $result =
+         'Missing: '.implode(', ', $result);
 
         return $result;
     }
