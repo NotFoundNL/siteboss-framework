@@ -1,36 +1,34 @@
 <?php
 
 namespace NotFound\Framework\Services\Indexer;
+use NotFound\Framework\Models\Lang;
 
-class SearchItem
+final class SearchItem
 {
-    protected ?string $content = null;
+    private string $type = 'page';
+    private ?string $language = null;
 
-    protected ?string $image = null;
+    private ?string $content = null;
+    private ?string $image = null;
+    
+    private bool $inSitemap = true;
 
-    protected ?string $updated = null;
+    private ?string $publicationDate = null;
+    private ?string $lastUpdated = null;
 
-    protected string $type = 'page';
+    private int $priority = 1;
 
-    protected bool $inSitemap = true;
+    private array $customValues = [];
 
-    protected ?string $language = null;
+    private ?string $filePath = null;
 
-    protected ?string $created_at = null;
+    // Minimum required fields
 
-    protected int $priority = 1;
-
-    protected bool $isFile = false;
-
-    protected array $customValues = [];
-
-    protected ?string $filePath = null;
-
-    protected ?string $solrDate = null;
-
-    public function __construct(protected string $url, protected string $title)
+    public function __construct(private string $url, private string $title)
     {
     }
+
+    // Setters
 
     public function setContent(string $content): self
     {
@@ -39,16 +37,9 @@ class SearchItem
         return $this;
     }
 
-    public function setImage(string $image): self
+    public function setImage(string $imageUrl): self
     {
-        $this->image = $image;
-
-        return $this;
-    }
-
-    public function setUpdated(?string $updated): self
-    {
-        $this->updated = $updated;
+        $this->image = $imageUrl;
 
         return $this;
     }
@@ -60,9 +51,9 @@ class SearchItem
         return $this;
     }
 
-    public function setInSitemap(bool $inSitemap): self
+    public function hideFromSiteMap(): self
     {
-        $this->inSitemap = $inSitemap;
+        $this->inSitemap = false;
 
         return $this;
     }
@@ -74,23 +65,17 @@ class SearchItem
         return $this;
     }
 
-    public function setIsFile(bool $isFile): self
+    public function setFile(string $filePath): self
     {
-        $this->isFile = $isFile;
-
-        return $this;
-    }
-
-    public function setFilePath(string $filePath): self
-    {
+        $this->type = 'file';
         $this->filePath = $filePath;
 
         return $this;
     }
 
-    public function setCreatedAt(string $created_at): self
+    public function setLastUpdated(string $lastUpdated): self
     {
-        $this->created_at = $created_at;
+        $this->lastUpdated = $lastUpdated;
 
         return $this;
     }
@@ -109,82 +94,89 @@ class SearchItem
         return $this;
     }
 
-    public function setSolrDate(string $solrDate): self
+    public function setPublicationDate(string $publicationDate): self
     {
-        $this->solrDate = $solrDate;
+        $this->publicationDate = $publicationDate;
 
         return $this;
     }
 
-    public function setPriorityHigh(): self
-    {
-        trigger_error('Method '.__METHOD__.' is not implemented for production use', E_USER_DEPRECATED);
-        $this->priority = 2;
+    // Getters
 
-        return $this;
+    public function language(): ?string
+    {
+        return $this->language ?? Lang::default()->url;
     }
 
-    public function get(): object
-    {
-        return $this;
-    }
 
-    public function getLanguage(): ?string
+    public function image(): ?string
     {
-        return $this->language;
+        return $this->image;
     }
-
-    public function getUpdated(): ?string
-    {
-        return $this->updated;
-    }
-
-    public function getUrl(): ?string
+    
+    public function url(): ?string
     {
         return $this->url;
     }
 
-    public function getType(): ?string
+    public function type(): ?string
     {
         return $this->type;
     }
 
-    public function getTitle(): ?string
+    public function title(): ?string
     {
         return $this->title;
     }
 
-    public function getContent(): ?string
+    public function content(): ?string
     {
         return $this->content;
     }
-
-    public function getCreatedAt(): ?string
+    
+    /**
+     * publicationDate
+     *
+     * Get the publication date of the content
+     * This can be used for sorting and prioritizing content
+     * 
+     * @return string
+     */
+    public function publicationDate(): ?string
     {
-        return $this->created_at;
+        return $this->publicationDate;
+    }
+    
+    /**
+     * lastUpdated
+     * 
+     * This is when the content was last updated
+     * This is used to determine if the content needs to be re-indexed
+     * 
+     * @return string
+     */
+    public function lastUpdated(): ?string
+    {
+        return $this->lastUpdated;
     }
 
-    public function getCustomValues(): ?array
+    public function customValues(): ?array
     {
         return $this->customValues;
     }
 
-    public function getPriority(): int
+    public function priority(): int
     {
         return $this->priority;
     }
 
-    public function getFilePath(): ?string
+    public function file(): ?string
     {
         return $this->filePath;
     }
 
-    public function getSolrDate(): ?string
-    {
-        return $this->solrDate;
-    }
 
-    public function getInSitemap(): bool
+    public function sitemap(): bool
     {
         return $this->inSitemap;
     }

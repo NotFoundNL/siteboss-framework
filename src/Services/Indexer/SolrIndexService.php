@@ -20,18 +20,6 @@ class SolrIndexService extends AbstractIndexService
         $this->solrIndex = new SolrIndex();
     }
 
-    public function urlNeedsUpdate(string $url, $updated): bool
-    {
-        $searchItem = CmsSearch::whereUrl($url)->first();
-        if ($searchItem && $searchItem->updated_at->timestamp > $updated) {
-            CmsSearch::whereUrl($url)->update(['search_status' => 'SKIPPED']);
-
-            return false;
-        }
-
-        return true;
-    }
-
     public function upsertItem(SearchItem $searchItem): object
     {
         $return = $this->returnvalue();
@@ -68,17 +56,14 @@ class SolrIndexService extends AbstractIndexService
                 $return->message = "failed: item not indexed \n";
             }
         }
-        $cmsSearchItem = CmsSearch::firstOrNew(['url' => $searchItem->getUrl()]);
+        $cmsSearchItem = CmsSearch::firstOrNew(['url' => $searchItem->url()]);
         $cmsSearchItem->setValues($searchItem, $cmsSearchItemStatus);
         $cmsSearchItem->save();
 
         return $return;
     }
 
-    private function siteUrl($url): string
-    {
-        return sprintf('{{%d}}%s', $this->siteId, $url);
-    }
+
 
     public function startUpdate(): bool
     {
@@ -139,7 +124,6 @@ class SolrIndexService extends AbstractIndexService
 
     public function checkConnection(): bool
     {
-
         return $this->solrIndex->checkConnection();
     }
 }
