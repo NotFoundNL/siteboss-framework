@@ -39,7 +39,7 @@ class IndexBuilderService
     public function run()
     {
         if (! $this->searchServer->checkConnection()) {
-            $this->writeDebug("\n\nError connecting to search server! \n\n");
+            $this->writeDebug("\n\n Error connecting to search server! \n\n");
 
             return;
         }
@@ -205,7 +205,6 @@ class IndexBuilderService
 
     private function updateSubitems($class, $lang)
     {
-        return true; // BUG: this is not working
         app()->setLocale($lang->url);
         $subPages = $class->searchSubitems();
         foreach ($subPages as $subPage) {
@@ -238,7 +237,7 @@ class IndexBuilderService
                         $this->writeDebug(": Does not need updating\n");
                     }
                 } else {
-                    dd('Please use the SearchItem class'.type_of($class));
+                    dd('Please use the SearchItem class');
                 }
             }
         }
