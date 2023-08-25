@@ -2,6 +2,8 @@
 
 namespace NotFound\Framework\Services\Indexer;
 
+use NotFound\Framework\Models\CmsSearch;
+
 abstract class AbstractIndexService
 {
     public Int $languageId;

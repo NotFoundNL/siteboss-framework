@@ -25,7 +25,7 @@ class SolrIndexService extends AbstractIndexService
         $return = $this->returnvalue();
         $cmsSearchItemStatus = '';
 
-        if ($searchItem->getType() === 'file') {
+        if ($searchItem->type() === 'file') {
             $result = $this->solrIndex->upsertFile($searchItem, $this->siteId);
 
             $return = $this->returnvalue();

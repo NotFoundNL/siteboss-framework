@@ -131,9 +131,8 @@ class SolrIndex extends BaseModel
         return false;
     }
 
-    public function upsertItem(SearchItem $searchItem, int $siteId = 1): bool
+    public function upsertItem(SearchItem $indexItem, int $siteId = 1): bool
     {
-        $indexItem = $searchItem->get();
         $curl = $this->solrHandler();
         $doc = [
             sprintf('title_%s', $indexItem->language()) => $indexItem->title(),
@@ -198,67 +197,6 @@ class SolrIndex extends BaseModel
         return false;
     }
 
-    /*public function addOrUpdateFile(string $url, string $title, string $file, string $type, string $lang, int $siteId, array $customValues, int $priority): string
-    {
-        // find out of document exists
-        $result = 0;
-        $file = Storage::disk('private')->path($file);
-
-        if (file_exists($file)) {
-            $curl = $this->solrHandler();
-
-            $endpoint = sprintf(
-                '%s/update/extract?literal.url=%s&literal.title_%s=%s&literal.type=%s&literal.site=%s&literal.language=%d&commit=true',
-                $this->getSolrBaseUrl(),
-                urlencode($url),
-                $lang,
-                urlencode($title),
-                $type,
-                $siteId,
-                $lang
-            );
-            foreach ($customValues as $key => $value) {
-                if (is_array($value)) {
-                    foreach ($value as $v) {
-                        $endpoint .= sprintf('&literal.%s=%s', $key, $v);
-                    }
-                } else {
-                    $endpoint .= sprintf('&literal.%s=%s', $key, $value);
-                }
-            }
-
-            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($curl, CURLOPT_POST, 1);
-            $cFile = curl_file_create($file);
-            curl_setopt($curl, CURLOPT_HTTPHEADER, ['Content-Type: multipart/form-data']);
-            curl_setopt($curl, CURLOPT_URL, $endpoint);
-            $post = ['file_contents' => $cFile];
-            curl_setopt($curl, CURLOPT_POSTFIELDS, $post);
-            $result = curl_exec($curl);
-            $json = json_decode($result);
-            if ($json && isset($json->responseHeader) && $json->responseHeader->status == 0) {
-                return 'success';
-            }
-
-            if (\filesize($file) == 0) {
-                $this->mailFileError($title, $url, 'file is leeg');
-
-                return 'fileIsEmpty';
-            } else {
-                $result = $this->addOrUpdateItem($url, $title, '', $type, $lang, $siteId, $customValues, $priority);
-                if ($result) {
-                    return 'fileIsNotIndexable';
-                } else {
-                    return 'unknownFileError';
-                }
-            }
-        } else {
-            $this->mailFileError($title, $url, 'file bestaat niet');
-
-            return 'fileNotFound';
-        }
-    }*/
-
     public function upsertFile(SearchItem $searchItem, int $siteId = 1): string
     {
         $indexItem = $searchItem->get();
@@ -271,14 +209,14 @@ class SolrIndex extends BaseModel
             $endpoint = sprintf(
                 '%s/update/extract?literal.url=%s&literal.title_%s=%s&literal.type=%s&literal.site=%s&literal.language=%d&literal.solr_date=%s&uprefix=ignored_&fmap.content=content_%s&commit=true',
                 $this->getSolrBaseUrl(),
-                urlencode($indexItem->getUrl()),
-                $indexItem->getLanguage(),
-                urlencode($indexItem->getTitle()),
-                $indexItem->getType(),
+                urlencode($indexItem->url()),
+                $indexItem->language(),
+                urlencode($indexItem->title()),
+                $indexItem->type(),
                 $siteId,
-                $indexItem->getLanguage(),
-                $indexItem->getSolrDate(),
-                $indexItem->getLanguage()
+                $indexItem->language(),
+                $indexItem->publicationDate(),
+                $indexItem->language()
 
             );
             foreach ($indexItem->getCustomValues() as $key => $value) {

@@ -58,9 +58,9 @@ class CmsSearch extends BaseModel
 
     public function setValues(SearchItem $searchItem, string $status = 'UPDATED')
     {
-        $this->type = $searchItem->getType();
-        $this->url = $searchItem->getUrl();
+        $this->type = $searchItem->type();
+        $this->url = $searchItem->url();
         $this->search_status = $status;
-        $this->language = $searchItem->getLanguage();
+        $this->language = $searchItem->language();
     }
 }
