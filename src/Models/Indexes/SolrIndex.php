@@ -64,10 +64,10 @@ class SolrIndex extends BaseModel
 
     public function __construct($debug = false)
     {
-        $this->solrHost = env('SOLR_HOST', true);
-        $this->solrUser = env('SOLR_USER', true);
-        $this->solrCore = env('SOLR_CORE', true);
-        $this->solrPass = env('SOLR_PASS', true);
+        $this->solrHost = config('indexer.solr.host');
+        $this->solrUser = config('indexer.solr.user');
+        $this->solrCore = config('indexer.solr.core');
+        $this->solrPass = config('indexer.solr.pass');
     }
 
     public function emptyCore()
@@ -131,60 +131,21 @@ class SolrIndex extends BaseModel
         return false;
     }
 
-    /*public function addOrUpdateItem(string $url, string $title, string $contents, string $type, string $lang, int $siteId, array $customValues, int $priority): bool
-    {
-        $curl = $this->solrHandler();
-        $doc = [
-            sprintf('title_%s', $lang) => $title,
-            sprintf('content_%s', $lang) => html_entity_decode(trim(preg_replace('/\s+/', ' ', preg_replace('#<[^>]+>#', ' ', $contents)))),
-            'type' => $type,
-            'url' => $url,
-            'priority' => $priority,
-            'site' => $siteId,
-            'language' => $lang,
-        ];
-        foreach ($customValues as $key => $value) {
-            $doc[$key] = $value;
-        }
-
-        $payload = ['add' => [
-            'doc' => $doc,
-            'commitWithin' => 1000,
-            'overwrite' => true,
-        ]];
-        curl_setopt($curl, CURLOPT_URL, sprintf('%s/update/?wt=%s', $this->getSolrBaseUrl(), $this->wt));
-
-        curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($payload));
-
-        $result = curl_exec($curl);
-
-        if (curl_errno($curl) === 6) {
-            exit('[ERROR] Could not resolve solr host: ' . $this->getSolrBaseUrl());
-        }
-
-        $json = json_decode($result);
-        if ($json && isset($json->responseHeader) && $json->responseHeader->status == 0) {
-            return true;
-        }
-
-        return false;
-    }*/
-
     public function upsertItem(SearchItem $searchItem, int $siteId = 1): bool
     {
         $indexItem = $searchItem->get();
         $curl = $this->solrHandler();
         $doc = [
-            sprintf('title_%s', $indexItem->getLanguage()) => $indexItem->getTitle(),
-            sprintf('content_%s', $indexItem->getLanguage()) => html_entity_decode(trim(preg_replace('/\s+/', ' ', preg_replace('#<[^>]+>#', ' ', $indexItem->getContent())))),
-            'type' => $indexItem->getType(),
-            'url' => $indexItem->getUrl(),
-            'priority' => $indexItem->getPriority(),
+            sprintf('title_%s', $indexItem->language()) => $indexItem->title(),
+            sprintf('content_%s', $indexItem->language()) => html_entity_decode(trim(preg_replace('/\s+/', ' ', preg_replace('#<[^>]+>#', ' ', $indexItem->content())))),
+            'type' => $indexItem->type(),
+            'url' => $indexItem->url(),
+            'priority' => $indexItem->priority(),
             'site' => $siteId,
-            'language' => $indexItem->getLanguage(),
-            'solr_date' => $indexItem->getSolrDate(),
+            'language' => $indexItem->language(),
+            'solr_date' => $indexItem->publicationDate(),
         ];
-        foreach ($indexItem->getCustomValues() as $key => $value) {
+        foreach ($indexItem->customValues() as $key => $value) {
             $doc[$key] = $value;
         }
 
