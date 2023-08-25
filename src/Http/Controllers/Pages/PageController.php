@@ -2,7 +2,6 @@
 
 namespace NotFound\Framework\Http\Controllers\Pages;
 
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\View;
 use NotFound\Framework\Http\Controllers\Controller;
 use NotFound\Framework\Models\Lang;
@@ -27,7 +26,7 @@ class PageController extends Controller
             $this->currentPage = true;
         }
 
-        if (! app()->runningInConsole()) {
+        if (!app()->runningInConsole()) {
             $gp = new GlobalPageService();
             $globalPageValues = new AssetValues($gp->getCachedValues());
 
@@ -130,7 +129,7 @@ class PageController extends Controller
         $siblingPages = [];
         $siblingItems = $this->parent()->menuItem()->children;
         foreach ($siblingItems as $siblingItem) {
-            if (! $includeSelf && $siblingItem->id == $this->id()) {
+            if (!$includeSelf && $siblingItem->id == $this->id()) {
                 continue;
             }
             if ($siblingItem->enabled && ($ignoreMenu || $siblingItem->menu)) {
@@ -168,7 +167,7 @@ class PageController extends Controller
         if ($date) {
             return $date->toIso8601String();
         } else {
-            return Carbon::now();
+            return '2023-01-01T10:00:00Z';
         }
     }
 }

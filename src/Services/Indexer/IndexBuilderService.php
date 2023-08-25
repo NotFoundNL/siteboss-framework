@@ -41,7 +41,7 @@ class IndexBuilderService
 
         if (count($sites) > 0) {
             $startResult = $this->searchServer->startUpdate();
-            if (! $startResult) {
+            if (!$startResult) {
                 $this->writeDebug("\n\n Error when emptying core! \n\n");
             }
 
@@ -81,13 +81,13 @@ class IndexBuilderService
         foreach ($childPages as $page) {
             $this->writeDebug(sprintf("    * Page \e[1m%s\e[0m (id: %d)", $page->url, $page->id));
 
-            if (! isset($page->template->id)) {
+            if (!isset($page->template->id)) {
                 $this->writeDebug("   skipping, no template found\n");
 
                 continue;
             }
 
-            if (! isset($page->template->properties->searchable) || $page->template->properties->searchable == 0) {
+            if (!isset($page->template->properties->searchable) || $page->template->properties->searchable == 0) {
                 $this->writeDebug("   skipping, template not searchable\n");
 
                 continue;
@@ -135,7 +135,7 @@ class IndexBuilderService
             $customValues = [];
 
             $class = $menu->template->filename ?? '';
-            $className = 'App\Http\Controllers\Page\\'.$class.'Controller';
+            $className = 'App\Http\Controllers\Page\\' . $class . 'Controller';
             $c = null;
             $priority = 1;
             $solrDate = '';
@@ -152,7 +152,7 @@ class IndexBuilderService
                 }
             }
             $searchText = rtrim($searchText, ', ');
-            if (! empty($title) && ! empty($searchText)) {
+            if (!empty($title) && !empty($searchText)) {
 
                 $searchItem = new SearchItem($url, $title);
                 $searchItem->setContent($searchText)->setType('page')->setLanguage($lang->url)->setPriority($priority)->setSolrDate($solrDate);
@@ -187,7 +187,7 @@ class IndexBuilderService
     private function updateSubPages($menu, $lang)
     {
         $class = $menu->template->filename ?? '';
-        $className = 'App\Http\Controllers\Page\\'.$class.'Controller';
+        $className = 'App\Http\Controllers\Page\\' . $class . 'Controller';
         $c = null;
         // update subPage if necessary
 
@@ -202,31 +202,64 @@ class IndexBuilderService
         app()->setLocale($lang->url);
         $subPages = $class->searchSubitems();
         foreach ($subPages as $subPage) {
+
             foreach ($subPage as $searchItem) {
-                $url = $searchItem['url'];
-                $this->writeDebug($url);
+                $success = false;
+                if ((new \ReflectionClass($searchItem))->getShortName() == 'SearchItem') {
+                    $url = $searchItem->getUrl();
+                    $this->writeDebug($url);
 
-                if ($this->searchServer->urlNeedsUpdate($url, strtotime($searchItem['updated']))) {
-                    $this->writeDebug(': update needed: ');
-                    $success = true;
+                    if ($this->searchServer->urlNeedsUpdate($url, strtotime($searchItem->getUpdated()))) {
 
-                    $indexItem = new SearchItem($url, $searchItem['title']);
-                    if ($searchItem['isFile']) {
-                        $indexItem->setType('file');
-                        $indexItem->setFilePath($searchItem['file']);
+                        $searchItem->setLanguage($lang->url);
+                        $success = $this->searchServer->upsertItem($searchItem);
+                        if ($this->sitemapFile && $searchItem->getInSitemap()) {
+                            $sitemap = sprintf(
+                                "%s%s\r\n",
+                                $this->domain,
+                                $url
+                            );
+                            fwrite($this->sitemapFile, $sitemap);
+                        }
+
+                        if ($success->errorCode == 0) {
+                            $this->writeDebug(" success\n");
+                        } else {
+                            $this->writeDebug($success->message);
+                        }
                     } else {
-                        $indexItem->setType($searchItem['type']);
+                        $this->writeDebug(": Does not need updating\n");
                     }
-                    $indexItem->setContent($searchItem['content']);
-                    $indexItem->setSolrDate($searchItem['solr_date']);
+                } else {
+                    dd('Please use the SearchItem class');
+                }
+                /*$url = $searchItem['url'];
+                    $this->writeDebug($url);
 
-                    $indexItem->setLanguage($lang->url);
-                    foreach ($searchItem['customValues'] as $key => $value) {
-                        $indexItem->setCustomValue($key, $value);
-                    }
-                    $indexItem->setPriority($searchItem['priority']);
-                    $indexItem->setSolrDate($searchItem['solr_date']);
-                    $success = $this->searchServer->upsertItem($indexItem);
+                    if ($this->searchServer->urlNeedsUpdate($url, strtotime($searchItem['updated']))) {
+                        $this->writeDebug(': update needed: ');
+                        $success = true;
+
+                        $indexItem = new SearchItem($url, $searchItem['title']);
+                        if ($searchItem['isFile']) {
+                            $indexItem->setType('file');
+                            $indexItem->setFilePath($searchItem['file']);
+                        } else {
+                            $indexItem->setType($searchItem['type']);
+                        }
+                        $indexItem->setContent($searchItem['content']);
+                        $indexItem->setSolrDate($searchItem['solr_date']);
+
+                        $indexItem->setLanguage($lang->url);
+                        foreach ($searchItem['customValues'] as $key => $value) {
+                            $indexItem->setCustomValue($key, $value);
+                        }
+                        $indexItem->setPriority($searchItem['priority']);
+                        $indexItem->setSolrDate($searchItem['solr_date']);
+                        $success = $this->searchServer->upsertItem($indexItem);
+
+                }
+
 
                     if ($this->sitemapFile && $searchItem['sitemap']) {
                         $sitemap = sprintf(
@@ -243,16 +276,16 @@ class IndexBuilderService
                     }
                 } else {
                     $this->writeDebug(": Does not need updating\n");
-                }
+                }*/
 
-                if ($this->sitemapFile) {
+                /*if ($this->sitemapFile) {
                     $sitemap = sprintf(
                         "%s%s\r\n",
                         $this->domain,
                         $url
                     );
                     fwrite($this->sitemapFile, $sitemap);
-                }
+                }*/
             }
         }
     }
@@ -260,8 +293,8 @@ class IndexBuilderService
     private function createFolderIfNotExists($fullFilePath)
     {
         $path_parts = pathinfo($fullFilePath);
-        if (! file_exists($path_parts['dirname'])) {
-            if (! mkdir($path_parts['dirname'])) {
+        if (!file_exists($path_parts['dirname'])) {
+            if (!mkdir($path_parts['dirname'])) {
                 printf("\n\n### Error creating sitemap folder");
             }
         }

@@ -8,13 +8,19 @@ class SearchItem
 
     protected ?string $image = null;
 
+    protected ?string $updated = null;
+
     protected string $type = 'page';
+
+    protected bool $inSitemap = true;
 
     protected ?string $language = null;
 
     protected ?string $created_at = null;
 
     protected int $priority = 1;
+
+    protected bool $isFile = false;
 
     protected array $customValues = [];
 
@@ -40,6 +46,13 @@ class SearchItem
         return $this;
     }
 
+    public function setUpdated(?string $updated): self
+    {
+        $this->updated = $updated;
+
+        return $this;
+    }
+
     public function setType(string $type): self
     {
         $this->type = $type;
@@ -47,9 +60,23 @@ class SearchItem
         return $this;
     }
 
+    public function setInSitemap(bool $inSitemap): self
+    {
+        $this->inSitemap = $inSitemap;
+
+        return $this;
+    }
+
     public function setLanguage(string $language): self
     {
         $this->language = $language;
+
+        return $this;
+    }
+
+    public function setIsFile(bool $isFile): self
+    {
+        $this->isFile = $isFile;
 
         return $this;
     }
@@ -91,7 +118,7 @@ class SearchItem
 
     public function setPriorityHigh(): self
     {
-        trigger_error('Method '.__METHOD__.' is not implemented for production use', E_USER_DEPRECATED);
+        trigger_error('Method ' . __METHOD__ . ' is not implemented for production use', E_USER_DEPRECATED);
         $this->priority = 2;
 
         return $this;
@@ -105,6 +132,11 @@ class SearchItem
     public function getLanguage(): ?string
     {
         return $this->language;
+    }
+
+    public function getUpdated(): ?string
+    {
+        return $this->updated;
     }
 
     public function getUrl(): ?string
@@ -150,5 +182,10 @@ class SearchItem
     public function getSolrDate(): ?string
     {
         return $this->solrDate;
+    }
+
+    public function getInSitemap(): bool
+    {
+        return $this->inSitemap;
     }
 }
