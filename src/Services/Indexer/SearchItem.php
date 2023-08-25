@@ -1,19 +1,23 @@
 <?php
 
 namespace NotFound\Framework\Services\Indexer;
+
 use NotFound\Framework\Models\Lang;
 
 final class SearchItem
 {
     private string $type = 'page';
+
     private ?string $language = null;
 
     private ?string $content = null;
+
     private ?string $image = null;
-    
+
     private bool $inSitemap = true;
 
     private ?string $publicationDate = null;
+
     private ?string $lastUpdated = null;
 
     private int $priority = 1;
@@ -108,12 +112,11 @@ final class SearchItem
         return $this->language ?? Lang::default()->url;
     }
 
-
     public function image(): ?string
     {
         return $this->image;
     }
-    
+
     public function url(): ?string
     {
         return $this->url;
@@ -133,26 +136,26 @@ final class SearchItem
     {
         return $this->content;
     }
-    
+
     /**
      * publicationDate
      *
      * Get the publication date of the content
      * This can be used for sorting and prioritizing content
-     * 
+     *
      * @return string
      */
     public function publicationDate(): ?string
     {
         return $this->publicationDate;
     }
-    
+
     /**
      * lastUpdated
-     * 
+     *
      * This is when the content was last updated
      * This is used to determine if the content needs to be re-indexed
-     * 
+     *
      * @return string
      */
     public function lastUpdated(): ?string
@@ -174,7 +177,6 @@ final class SearchItem
     {
         return $this->filePath;
     }
-
 
     public function sitemap(): bool
     {

@@ -63,8 +63,6 @@ class SolrIndexService extends AbstractIndexService
         return $return;
     }
 
-
-
     public function startUpdate(): bool
     {
         if ($this->debug) {
