@@ -26,7 +26,7 @@ class PageController extends Controller
             $this->currentPage = true;
         }
 
-        if (!app()->runningInConsole()) {
+        if (! app()->runningInConsole()) {
             $gp = new GlobalPageService();
             $globalPageValues = new AssetValues($gp->getCachedValues());
 
@@ -129,7 +129,7 @@ class PageController extends Controller
         $siblingPages = [];
         $siblingItems = $this->parent()->menuItem()->children;
         foreach ($siblingItems as $siblingItem) {
-            if (!$includeSelf && $siblingItem->id == $this->id()) {
+            if (! $includeSelf && $siblingItem->id == $this->id()) {
                 continue;
             }
             if ($siblingItem->enabled && ($ignoreMenu || $siblingItem->menu)) {
