@@ -233,59 +233,6 @@ class IndexBuilderService
                 } else {
                     dd('Please use the SearchItem class');
                 }
-                /*$url = $searchItem['url'];
-                    $this->writeDebug($url);
-
-                    if ($this->searchServer->urlNeedsUpdate($url, strtotime($searchItem['updated']))) {
-                        $this->writeDebug(': update needed: ');
-                        $success = true;
-
-                        $indexItem = new SearchItem($url, $searchItem['title']);
-                        if ($searchItem['isFile']) {
-                            $indexItem->setType('file');
-                            $indexItem->setFilePath($searchItem['file']);
-                        } else {
-                            $indexItem->setType($searchItem['type']);
-                        }
-                        $indexItem->setContent($searchItem['content']);
-                        $indexItem->setSolrDate($searchItem['solr_date']);
-
-                        $indexItem->setLanguage($lang->url);
-                        foreach ($searchItem['customValues'] as $key => $value) {
-                            $indexItem->setCustomValue($key, $value);
-                        }
-                        $indexItem->setPriority($searchItem['priority']);
-                        $indexItem->setSolrDate($searchItem['solr_date']);
-                        $success = $this->searchServer->upsertItem($indexItem);
-
-                }
-
-
-                    if ($this->sitemapFile && $searchItem['sitemap']) {
-                        $sitemap = sprintf(
-                            "%s%s\r\n",
-                            $this->domain,
-                            $url
-                        );
-                    }
-
-                    if ($success->errorCode == 0) {
-                        $this->writeDebug(" success\n");
-                    } else {
-                        $this->writeDebug($success->message);
-                    }
-                } else {
-                    $this->writeDebug(": Does not need updating\n");
-                }*/
-
-                /*if ($this->sitemapFile) {
-                    $sitemap = sprintf(
-                        "%s%s\r\n",
-                        $this->domain,
-                        $url
-                    );
-                    fwrite($this->sitemapFile, $sitemap);
-                }*/
             }
         }
     }
