@@ -7,6 +7,7 @@ use NotFound\Framework\Models\Lang;
 use NotFound\Framework\Models\Menu;
 use NotFound\Framework\Services\Assets\PageService;
 
+// BUG: pages with status 'FAILED' are never re-indexed and will be set to 'SKIPPED' on next run
 class IndexBuilderService
 {
     private Bool $debug;
@@ -37,6 +38,11 @@ class IndexBuilderService
 
     public function run()
     {
+        if (! $this->searchServer->checkConnection()) {
+            $this->writeDebug("\n\nError connecting to search server! \n\n");
+
+            return;
+        }
         $sites = CmsSite::whereIndex(1)->get();
 
         if (count($sites) > 0) {
@@ -155,7 +161,7 @@ class IndexBuilderService
             if (! empty($title) && ! empty($searchText)) {
 
                 $searchItem = new SearchItem($url, $title);
-                $searchItem->setContent($searchText)->setType('page')->setLanguage($lang->url)->setPriority($priority)->setSolrDate($solrDate);
+                $searchItem->setContent($searchText)->setLanguage($lang->url)->setPriority($priority)->setPublicationDate($solrDate);
                 foreach ($customValues as $key => $value) {
                     $searchItem->setCustomValue($key, $value);
                 }
@@ -199,6 +205,7 @@ class IndexBuilderService
 
     private function updateSubitems($class, $lang)
     {
+        return true; // BUG: this is not working
         app()->setLocale($lang->url);
         $subPages = $class->searchSubitems();
         foreach ($subPages as $subPage) {
@@ -206,7 +213,7 @@ class IndexBuilderService
             foreach ($subPage as $searchItem) {
                 $success = false;
                 if ((new \ReflectionClass($searchItem))->getShortName() == 'SearchItem') {
-                    $url = $searchItem->getUrl();
+                    $url = $searchItem->url();
                     $this->writeDebug($url);
 
                     if ($this->searchServer->urlNeedsUpdate($url, strtotime($searchItem->getUpdated()))) {
@@ -231,7 +238,7 @@ class IndexBuilderService
                         $this->writeDebug(": Does not need updating\n");
                     }
                 } else {
-                    dd('Please use the SearchItem class');
+                    dd('Please use the SearchItem class'.type_of($class));
                 }
             }
         }
