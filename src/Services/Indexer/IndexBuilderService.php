@@ -215,11 +215,11 @@ class IndexBuilderService
                     $url = $searchItem->url();
                     $this->writeDebug($url);
 
-                    if ($this->searchServer->urlNeedsUpdate($url, strtotime($searchItem->getUpdated()))) {
+                    if ($this->searchServer->urlNeedsUpdate($url, strtotime($searchItem->lastUpdated()))) {
 
                         $searchItem->setLanguage($lang->url);
                         $success = $this->searchServer->upsertItem($searchItem);
-                        if ($this->sitemapFile && $searchItem->getInSitemap()) {
+                        if ($this->sitemapFile && $searchItem->sitemap()) {
                             $sitemap = sprintf(
                                 "%s%s\r\n",
                                 $this->domain,

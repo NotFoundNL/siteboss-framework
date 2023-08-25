@@ -197,12 +197,12 @@ class SolrIndex extends BaseModel
         return false;
     }
 
-    public function upsertFile(SearchItem $searchItem, int $siteId = 1): string
+    public function upsertFile(SearchItem $indexItem, int $siteId = 1): string
     {
-        $indexItem = $searchItem->get();
+
         // find out of document exists
         $result = 0;
-        $file = Storage::disk('private')->path($indexItem->getFilePath());
+        $file = Storage::disk('private')->path($indexItem->file());
 
         if (file_exists($file)) {
             $curl = $this->solrHandler();
@@ -219,7 +219,7 @@ class SolrIndex extends BaseModel
                 $indexItem->language()
 
             );
-            foreach ($indexItem->getCustomValues() as $key => $value) {
+            foreach ($indexItem->customValues() as $key => $value) {
                 if (is_array($value)) {
                     foreach ($value as $v) {
                         $endpoint .= sprintf('&literal.%s=%s', $key, $v);
@@ -243,12 +243,12 @@ class SolrIndex extends BaseModel
             }
 
             if (\filesize($file) == 0) {
-                $this->mailFileError($indexItem->getTitle(), $indexItem->getUrl(), 'file is leeg');
+                $this->mailFileError($indexItem->title(), $indexItem->url(), 'file is leeg');
 
                 return 'fileIsEmpty';
             } else {
 
-                $result = $this->upsertItem($indexItem->setContent($indexItem->getTitle()));
+                $result = $this->upsertItem($indexItem->setContent($indexItem->title()));
                 if ($result) {
                     return 'fileIsNotIndexable';
                 } else {
@@ -256,7 +256,7 @@ class SolrIndex extends BaseModel
                 }
             }
         } else {
-            $this->mailFileError($indexItem->getTitle(), $indexItem->getUrl(), 'file bestaat niet');
+            $this->mailFileError($indexItem->title(), $indexItem->url(), 'file bestaat niet');
 
             return 'fileNotFound';
         }
