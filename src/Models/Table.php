@@ -151,7 +151,7 @@ class Table extends AssetModel
     {
         $tableName = $this->getSiteTableName();
 
-        if (Schema::hasColumn($tableName, 'order')) {
+        if (Schema::hasColumn($tableName, 'order') && $this->allow_sort) {
             DB::table($tableName)->increment('order');
 
             $record['order'] = 1;

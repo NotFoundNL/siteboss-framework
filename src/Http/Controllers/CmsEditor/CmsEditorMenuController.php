@@ -10,11 +10,8 @@ use NotFound\Layout\Elements\LayoutBreadcrumb;
 use NotFound\Layout\Elements\LayoutButton;
 use NotFound\Layout\Elements\LayoutForm;
 use NotFound\Layout\Elements\LayoutPage;
+use NotFound\Layout\Elements\LayoutText;
 use NotFound\Layout\Elements\LayoutWidget;
-use NotFound\Layout\Elements\Table\LayoutTable;
-use NotFound\Layout\Elements\Table\LayoutTableColumn;
-use NotFound\Layout\Elements\Table\LayoutTableHeader;
-use NotFound\Layout\Elements\Table\LayoutTableRow;
 use NotFound\Layout\Helpers\LayoutWidgetHelper;
 use NotFound\Layout\Inputs\LayoutInputCheckbox;
 use NotFound\Layout\Inputs\LayoutInputDropdown;
@@ -39,39 +36,9 @@ class CmsEditorMenuController extends \NotFound\Framework\Http\Controllers\Contr
 
         $widget1 = new LayoutWidget('CMS Menu', 12);
 
-        $table = new LayoutTable(delete: true, edit: true, create: true, sort: true);
-        $table->addHeader(new LayoutTableHeader('Name', 'table'));
-        $table->addHeader(new LayoutTableHeader('Level', 'level'));
-        $table->addHeader(new LayoutTableHeader('Icon', 'icon'));
-        $table->addHeader(new LayoutTableHeader('Rights', 'rights'));
-        $table->addHeader(new LayoutTableHeader('Enabled', 'enabled'));
-        $tables = CmsMenu::orderBy('order')->get();
-
-        foreach ($tables as $cmsTable) {
-            $row = new LayoutTableRow($cmsTable->id, '/app/editor/menu/'.$cmsTable->id);
-            $row->addColumn(new LayoutTableColumn($cmsTable->level == 1 ? '- '.$cmsTable->title : $cmsTable->title, 'table'));
-            $row->addColumn(new LayoutTableColumn($cmsTable->level, 'level'));
-            $row->addColumn(new LayoutTableColumn($cmsTable->icon, 'icon'));
-            $row->addColumn(new LayoutTableColumn($cmsTable->rights, 'rights'));
-            $row->addColumn(new LayoutTableColumn($cmsTable->enabled, 'enabled'));
-            $table->addRow($row);
-        }
-        $widget1->addTable($table);
-        $widget1->noPadding();
+        $widget1->addText(new LayoutText('Menu is editable in the file resources/siteboss/menu.json'));
 
         $page->addWidget($widget1);
-
-        $widget2 = new LayoutWidget('Add new item', 12);
-
-        $newFieldForm = new LayoutForm('/app/editor/menu/');
-
-        $newFieldForm->addInput((new LayoutInputText('name', 'Display name'))->setRequired());
-        $newFieldForm->addInput((new LayoutInputText('to', 'Target Path'))->setRequired());
-        $newFieldForm->addButton(new LayoutButton('Add menuitem'));
-
-        $widget2->addForm($newFieldForm);
-
-        $page->addWidget($widget2);
 
         $response->addUIElement($page);
 

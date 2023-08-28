@@ -7,6 +7,7 @@ use NotFound\Framework\Models\Lang;
 use NotFound\Framework\Models\Menu;
 use NotFound\Framework\Services\Assets\PageService;
 
+// BUG: pages with status 'FAILED' are never re-indexed and will be set to 'SKIPPED' on next run
 class IndexBuilderService
 {
     private Bool $debug;
@@ -19,8 +20,9 @@ class IndexBuilderService
 
     private AbstractIndexService $searchServer;
 
-    public function __construct(string $serverType, $debug = false)
+    public function __construct($debug = false)
     {
+        $serverType = config('indexer.engine');
         $this->debug = $debug;
         $this->locales = Lang::all();
 
@@ -36,6 +38,11 @@ class IndexBuilderService
 
     public function run()
     {
+        if (! $this->searchServer->checkConnection()) {
+            $this->writeDebug("\n\n Error connecting to search server! \n\n");
+
+            return;
+        }
         $sites = CmsSite::whereIndex(1)->get();
 
         if (count($sites) > 0) {
@@ -45,8 +52,7 @@ class IndexBuilderService
             }
 
             foreach ($sites as $site) {
-                $siteName = $site->name;
-                $sitemapFileName = config('solr.sitemap');
+                $sitemapFileName = config('indexer.sitemap');
                 if ($sitemapFileName) {
                     $this->createFolderIfNotExists($sitemapFileName);
                     $this->sitemapFile = fopen($sitemapFileName, 'w') or exit('Could not open sitemap file for writing');
@@ -138,6 +144,7 @@ class IndexBuilderService
             $className = 'App\Http\Controllers\Page\\'.$class.'Controller';
             $c = null;
             $priority = 1;
+            $solrDate = '';
             if (class_exists($className)) {
                 $c = new $className();
                 if (method_exists($className, 'customSearchValues')) {
@@ -146,11 +153,19 @@ class IndexBuilderService
                 if (method_exists($className, 'searchPriority')) {
                     $priority = $c->searchPriority();
                 }
+                if (method_exists($className, 'solrDate')) {
+                    $solrDate = $c->solrDate($menu->id);
+                }
             }
-
             $searchText = rtrim($searchText, ', ');
             if (! empty($title) && ! empty($searchText)) {
-                $result = $this->searchServer->upsertUrl($url, $title, $searchText, 'page', $lang->url, $customValues, $priority);
+
+                $searchItem = new SearchItem($url, $title);
+                $searchItem->setContent($searchText)->setLanguage($lang->url)->setPriority($priority)->setPublicationDate($solrDate);
+                foreach ($customValues as $key => $value) {
+                    $searchItem->setCustomValue($key, $value);
+                }
+                $result = $this->searchServer->upsertItem($searchItem);
 
                 if ($result->errorCode == 0) {
                     $this->writeDebug(" success\n");
@@ -167,7 +182,7 @@ class IndexBuilderService
         if ($this->sitemapFile) {
             // update sitemap
             $sitemap = sprintf(
-                "%s%s\r\n",
+                "%s/%s\r\n",
                 $this->domain,
                 $url
             );
@@ -193,44 +208,36 @@ class IndexBuilderService
         app()->setLocale($lang->url);
         $subPages = $class->searchSubitems();
         foreach ($subPages as $subPage) {
+
             foreach ($subPage as $searchItem) {
-                $url = $searchItem['url'];
-                $this->writeDebug($url);
+                $success = false;
+                if ((new \ReflectionClass($searchItem))->getShortName() == 'SearchItem') {
+                    $url = $searchItem->url();
+                    $this->writeDebug($url);
 
-                if ($this->searchServer->urlNeedsUpdate($url, strtotime($searchItem['updated']))) {
-                    $this->writeDebug(': update needed: ');
-                    $success = true;
+                    if ($this->searchServer->urlNeedsUpdate($url, strtotime($searchItem->lastUpdated()))) {
 
-                    if ($searchItem['isFile']) {
-                        $success = $this->searchServer->upsertFile($url, $searchItem['title'], $searchItem['file'], $searchItem['type'], $lang->url, $searchItem['customValues'], $searchItem['priority']);
-                    } else { // subitem is table row
-                        $success = $this->searchServer->upsertUrl($url, $searchItem['title'], $searchItem['content'], $searchItem['type'], $lang->url, $searchItem['customValues'], $searchItem['priority']);
-                    }
+                        $searchItem->setLanguage($lang->url);
+                        $success = $this->searchServer->upsertItem($searchItem);
+                        if ($this->sitemapFile && $searchItem->sitemap()) {
+                            $sitemap = sprintf(
+                                "%s%s\r\n",
+                                $this->domain,
+                                $url
+                            );
+                            fwrite($this->sitemapFile, $sitemap);
+                        }
 
-                    if ($this->sitemapFile && $searchItem['sitemap']) {
-                        $sitemap = sprintf(
-                            "%s%s\r\n",
-                            $this->domain,
-                            $url
-                        );
-                    }
-
-                    if ($success->errorCode == 0) {
-                        $this->writeDebug(" success\n");
+                        if ($success->errorCode == 0) {
+                            $this->writeDebug(" success\n");
+                        } else {
+                            $this->writeDebug($success->message);
+                        }
                     } else {
-                        $this->writeDebug($success->message);
+                        $this->writeDebug(": Does not need updating\n");
                     }
                 } else {
-                    $this->writeDebug(": Does not need updating\n");
-                }
-
-                if ($this->sitemapFile) {
-                    $sitemap = sprintf(
-                        "%s%s\r\n",
-                        $this->domain,
-                        $url
-                    );
-                    fwrite($this->sitemapFile, $sitemap);
+                    dd('Please use the SearchItem class');
                 }
             }
         }
