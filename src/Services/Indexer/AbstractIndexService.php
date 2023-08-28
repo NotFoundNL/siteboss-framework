@@ -2,10 +2,10 @@
 
 namespace NotFound\Framework\Services\Indexer;
 
+use NotFound\Framework\Models\CmsSearch;
+
 abstract class AbstractIndexService
 {
-    private Bool $debug;
-
     public Int $languageId;
 
     public Int $siteId;
@@ -16,9 +16,24 @@ abstract class AbstractIndexService
 
     abstract public function finishUpdate(): object;
 
-    abstract public function urlNeedsUpdate(string $url, $updated): bool;
+    abstract public function upsertItem(SearchItem $searchItem): object;
 
-    abstract public function upsertUrl(string $url, string $title, string $contents, string $type, string $lang, array $customValues = []): object;
+    abstract public function checkConnection(): bool;
 
-    abstract public function upsertFile(string $url, string $title, string $file, string $type, string $lang, array $customValues): object;
+    public function urlNeedsUpdate(string $url, $updated): bool
+    {
+        $searchItem = CmsSearch::whereUrl($url)->first();
+        if ($searchItem && $searchItem->updated_at->timestamp > $updated) {
+            CmsSearch::whereUrl($url)->update(['search_status' => 'SKIPPED']);
+
+            return false;
+        }
+
+        return true;
+    }
+
+    protected function siteUrl($url): string
+    {
+        return sprintf('{{%d}}%s', $this->siteId, $url);
+    }
 }

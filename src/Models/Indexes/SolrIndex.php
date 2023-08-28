@@ -8,6 +8,7 @@ use NotFound\Framework\Mail\Indexer\FileIndexError;
 use NotFound\Framework\Mail\Indexer\QueryError;
 use NotFound\Framework\Models\BaseModel;
 use NotFound\Framework\Models\CmsSearch;
+use NotFound\Framework\Services\Indexer\SearchItem;
 
 /**
  * NotFound\Framework\Models\Indexes\SolrIndex
@@ -63,10 +64,10 @@ class SolrIndex extends BaseModel
 
     public function __construct($debug = false)
     {
-        $this->solrHost = env('SOLR_HOST', true);
-        $this->solrUser = env('SOLR_USER', true);
-        $this->solrCore = env('SOLR_CORE', true);
-        $this->solrPass = env('SOLR_PASS', true);
+        $this->solrHost = config('indexer.solr.host');
+        $this->solrUser = config('indexer.solr.user');
+        $this->solrCore = config('indexer.solr.core');
+        $this->solrPass = config('indexer.solr.pass');
     }
 
     public function emptyCore()
@@ -130,19 +131,20 @@ class SolrIndex extends BaseModel
         return false;
     }
 
-    public function addOrUpdateItem(string $url, string $title, string $contents, string $type, string $lang, int $siteId, array $customValues, int $priority): bool
+    public function upsertItem(SearchItem $indexItem, int $siteId = 1): bool
     {
         $curl = $this->solrHandler();
         $doc = [
-            sprintf('title_%s', $lang) => $title,
-            sprintf('content_%s', $lang) => html_entity_decode(trim(preg_replace('/\s+/', ' ', preg_replace('#<[^>]+>#', ' ', $contents)))),
-            'type' => $type,
-            'url' => $url,
-            'priority' => $priority,
+            sprintf('title_%s', $indexItem->language()) => $indexItem->title(),
+            sprintf('content_%s', $indexItem->language()) => html_entity_decode(trim(preg_replace('/\s+/', ' ', preg_replace('#<[^>]+>#', ' ', $indexItem->content())))),
+            'type' => $indexItem->type(),
+            'url' => $indexItem->url(),
+            'priority' => $indexItem->priority(),
             'site' => $siteId,
-            'language' => $lang,
+            'language' => $indexItem->language(),
+            'solr_date' => $indexItem->publicationDate(),
         ];
-        foreach ($customValues as $key => $value) {
+        foreach ($indexItem->customValues() as $key => $value) {
             $doc[$key] = $value;
         }
 
@@ -160,7 +162,6 @@ class SolrIndex extends BaseModel
         if (curl_errno($curl) === 6) {
             exit('[ERROR] Could not resolve solr host: '.$this->getSolrBaseUrl());
         }
-
         $json = json_decode($result);
         if ($json && isset($json->responseHeader) && $json->responseHeader->status == 0) {
             return true;
@@ -196,26 +197,29 @@ class SolrIndex extends BaseModel
         return false;
     }
 
-    public function addOrUpdateFile(string $url, string $title, string $file, string $type, string $lang, int $siteId, array $customValues, int $priority): string
+    public function upsertFile(SearchItem $indexItem, int $siteId = 1): string
     {
+
         // find out of document exists
         $result = 0;
-        $file = Storage::disk('private')->path($file);
+        $file = Storage::disk('private')->path($indexItem->file());
 
         if (file_exists($file)) {
             $curl = $this->solrHandler();
-
             $endpoint = sprintf(
-                '%s/update/extract?literal.url=%s&literal.title_%s=%s&literal.type=%s&literal.site=%s&literal.language=%d&commit=true',
+                '%s/update/extract?literal.url=%s&literal.title_%s=%s&literal.type=%s&literal.site=%s&literal.language=%d&literal.solr_date=%s&uprefix=ignored_&fmap.content=content_%s&commit=true',
                 $this->getSolrBaseUrl(),
-                urlencode($url),
-                $lang,
-                urlencode($title),
-                $type,
+                urlencode($indexItem->url()),
+                $indexItem->language(),
+                urlencode($indexItem->title()),
+                $indexItem->type(),
                 $siteId,
-                $lang
+                $indexItem->language(),
+                $indexItem->publicationDate(),
+                $indexItem->language()
+
             );
-            foreach ($customValues as $key => $value) {
+            foreach ($indexItem->customValues() as $key => $value) {
                 if (is_array($value)) {
                     foreach ($value as $v) {
                         $endpoint .= sprintf('&literal.%s=%s', $key, $v);
@@ -239,19 +243,20 @@ class SolrIndex extends BaseModel
             }
 
             if (\filesize($file) == 0) {
-                $this->mailFileError($title, $url, 'file is leeg');
+                $this->mailFileError($indexItem->title(), $indexItem->url(), 'file is leeg');
 
                 return 'fileIsEmpty';
             } else {
-                $result = $this->addOrUpdateItem($url, $title, '', $type, $lang, $siteId, $customValues, $priority);
+
+                $result = $this->upsertItem($indexItem->setContent($indexItem->title()));
                 if ($result) {
                     return 'fileIsNotIndexable';
                 } else {
-                    return 'unkownFileError';
+                    return 'unknownFileError';
                 }
             }
         } else {
-            $this->mailFileError($title, $url, 'file bestaat niet');
+            $this->mailFileError($indexItem->title(), $indexItem->url(), 'file bestaat niet');
 
             return 'fileNotFound';
         }
@@ -416,5 +421,20 @@ class SolrIndex extends BaseModel
         }
 
         return $suggesterString;
+    }
+
+    public function checkConnection(): bool
+    {
+        $curl = $this->solrHandler();
+        curl_setopt($curl, CURLOPT_URL, sprintf('%s/admin/ping', $this->getSolrBaseUrl()));
+
+        $result = curl_exec($curl);
+        $json = json_decode($result);
+
+        if (curl_errno($curl) !== 6 && $json && isset($json->status) && $json->status === 'OK') {
+            return true;
+        }
+
+        return false;
     }
 }

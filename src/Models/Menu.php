@@ -63,6 +63,7 @@ class Menu extends LegacyModel
         'properties' => 'object',
         'enabled' => 'boolean',
         'menu' => 'boolean',
+        'updated_at' => 'datetime',
     ];
 
     protected $fillable = [

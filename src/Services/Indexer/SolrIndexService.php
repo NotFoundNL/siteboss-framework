@@ -20,76 +20,47 @@ class SolrIndexService extends AbstractIndexService
         $this->solrIndex = new SolrIndex();
     }
 
-    public function urlNeedsUpdate(string $url, $updated): bool
+    public function upsertItem(SearchItem $searchItem): object
     {
-        $searchItem = CmsSearch::whereUrl($url)->first();
-        if ($searchItem && $searchItem->updated_at->timestamp > $updated) {
-            CmsSearch::whereUrl($url)->update(['search_status' => 'SKIPPED']);
-
-            return false;
-        }
-
-        return true;
-    }
-
-    public function upsertUrl(string $url, string $title, string $contents, string $type, string $lang, array $customValues = [], $priority = 1): object
-    {
-        $result = $this->solrIndex->addOrUpdateItem($this->siteUrl($url), $title, $contents, $type, $lang, $this->siteId, $customValues, $priority);
         $return = $this->returnvalue();
+        $cmsSearchItemStatus = '';
 
-        if ($result) {
-            $cmsSearchItem = CmsSearch::firstOrNew(['url' => $url]);
-            $cmsSearchItem->type = $type;
-            $cmsSearchItem->url = $url;
-            $cmsSearchItem->search_status = 'UPDATED';
-            $cmsSearchItem->language = $lang;
-            $cmsSearchItem->save();
+        if ($searchItem->type() === 'file') {
+            $result = $this->solrIndex->upsertFile($searchItem, $this->siteId);
+
+            $return = $this->returnvalue();
+            if ($result == 'success') {
+                $cmsSearchItemStatus = 'UPDATED';
+            } elseif ($result == 'fileNotFound') {
+                $cmsSearchItemStatus = 'NOT_FOUND';
+                $return->errorCode = 1;
+                $return->message = "failed: file not found \n";
+            } else {
+                $cmsSearchItemStatus = 'NOT_INDEXABLE';
+                $result = $this->solrIndex->upsertItem($searchItem, $this->siteId);
+                if ($result) {
+                    $cmsSearchItemStatus = 'UPDATED';
+                } else {
+                    $return->errorCode = 1;
+                    $return->message = "failed: file not indexable \n";
+                }
+            }
         } else {
-            $return->errorCode = 1;
+            $result = $this->solrIndex->upsertItem($searchItem, $this->siteId);
+
+            if ($result) {
+                $cmsSearchItemStatus = 'UPDATED';
+            } else {
+                $cmsSearchItemStatus = 'FAILED';
+                $return->errorCode = 1;
+                $return->message = "failed: item not indexed \n";
+            }
         }
+        $cmsSearchItem = CmsSearch::firstOrNew(['url' => $searchItem->url()]);
+        $cmsSearchItem->setValues($searchItem, $cmsSearchItemStatus);
+        $cmsSearchItem->save();
 
         return $return;
-    }
-
-    public function upsertFile(string $url, string $title, string $file, string $type, string $lang, array $customValues = [], $priority = 1): object
-    {
-        $result = $this->solrIndex->addOrUpdateFile($this->siteUrl($url), $title, $file, $type, $lang, $this->siteId, $customValues, $priority);
-
-        $return = $this->returnvalue();
-
-        if ($result == 'success') {
-            $cmsSearchItem = CmsSearch::firstOrNew(['url' => $url]);
-            $cmsSearchItem->type = $type;
-            $cmsSearchItem->url = $url;
-            $cmsSearchItem->search_status = 'UPDATED';
-            $cmsSearchItem->language = $lang;
-            $cmsSearchItem->save();
-        } elseif ($result == 'fileNotFound') {
-            $cmsSearchItem = CmsSearch::firstOrNew(['url' => $url]);
-            $cmsSearchItem->type = $type;
-            $cmsSearchItem->url = $url;
-            $cmsSearchItem->search_status = 'NOT_FOUND';
-            $cmsSearchItem->language = $lang;
-            $cmsSearchItem->save();
-            $return->errorCode = 1;
-            $return->message = "failed: file not found \n";
-        } else {
-            $cmsSearchItem = CmsSearch::firstOrNew(['url' => $url]);
-            $cmsSearchItem->type = $type;
-            $cmsSearchItem->url = $url;
-            $cmsSearchItem->search_status = 'NOT_INDEXABLE';
-            $cmsSearchItem->language = $lang;
-            $cmsSearchItem->save();
-            $return->errorCode = 1;
-            $return->message = "failed: file not indexable \n";
-        }
-
-        return $return;
-    }
-
-    private function siteUrl($url): string
-    {
-        return sprintf('{{%d}}%s', $this->siteId, $url);
     }
 
     public function startUpdate(): bool
@@ -147,5 +118,10 @@ class SolrIndexService extends AbstractIndexService
         $return->data = [];
 
         return $return;
+    }
+
+    public function checkConnection(): bool
+    {
+        return $this->solrIndex->checkConnection();
     }
 }

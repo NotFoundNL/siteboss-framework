@@ -18,7 +18,7 @@ class CreateCmsSearchTable extends Migration
             $table->string('type', 64)->nullable();
             $table->integer('updated')->nullable();
             $table->integer('site_id')->nullable();
-            $table->set('search_status', ['PENDING', 'UPDATED', 'SKIPPED', 'INSERTED', 'NOT_INDEXABLE', 'NOT_FOUND'])->nullable();
+            $table->set('search_status', ['PENDING', 'UPDATED', 'SKIPPED', 'INSERTED', 'NOT_INDEXABLE', 'NOT_FOUND', 'FAILED'])->nullable();
         });
     }
 
