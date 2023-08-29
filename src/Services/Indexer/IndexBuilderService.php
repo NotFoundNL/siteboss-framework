@@ -259,4 +259,9 @@ class IndexBuilderService
             printf($text);
         }
     }
+
+    public function checkConnection(): bool
+    {
+        return $this->searchServer->checkConnection();
+    }
 }
