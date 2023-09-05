@@ -56,12 +56,15 @@ class SolrIndexService extends AbstractIndexService
                 $return->message = "failed: item not indexed \n";
             }
         }
+
         $cmsSearchItem = CmsSearch::firstOrNew(['url' => $searchItem->url()]);
         $cmsSearchItem->setValues($searchItem, $cmsSearchItemStatus);
-        if ($cmsSearchItemStatus === 'FAILED') {
-            $cmsSearchItem->updated_at = null;
-        }
+
         $cmsSearchItem->save();
+        if ($cmsSearchItemStatus == 'FAILED') {
+            $cmsSearchItem->updated_at = null;
+            $cmsSearchItem->save();
+        }
 
         return $return;
     }
