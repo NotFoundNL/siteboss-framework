@@ -7,7 +7,6 @@ use NotFound\Framework\Models\Lang;
 use NotFound\Framework\Models\Menu;
 use NotFound\Framework\Services\Assets\PageService;
 
-// BUG: pages with status 'FAILED' are never re-indexed and will be set to 'SKIPPED' on next run
 class IndexBuilderService
 {
     private Bool $debug;
