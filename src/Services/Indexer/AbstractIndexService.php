@@ -23,7 +23,7 @@ abstract class AbstractIndexService
     public function urlNeedsUpdate(string $url, $updated): bool
     {
         $searchItem = CmsSearch::whereUrl($url)->first();
-        if ($searchItem && $searchItem->updated_at->timestamp > $updated) {
+        if ($searchItem && ($searchItem->updated_at !== null && $searchItem->updated_at->timestamp > $updated)) {
             CmsSearch::whereUrl($url)->update(['search_status' => 'SKIPPED']);
 
             return false;
