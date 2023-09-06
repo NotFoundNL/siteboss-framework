@@ -20,6 +20,13 @@ abstract class AbstractIndexService
 
     abstract public function checkConnection(): bool;
 
+    public function clean(): bool
+    {
+        CmsSearch::truncate();
+
+        return true;
+    }
+
     public function urlNeedsUpdate(string $url, $updated): bool
     {
         $searchItem = CmsSearch::whereUrl($url)->first();

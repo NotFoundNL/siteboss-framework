@@ -9,7 +9,9 @@ use NotFound\Framework\Services\Assets\PageService;
 
 class IndexBuilderService
 {
-    private Bool $debug;
+    private bool $debug;
+
+    private bool $clean;
 
     private $locales;
 
@@ -19,10 +21,11 @@ class IndexBuilderService
 
     private AbstractIndexService $searchServer;
 
-    public function __construct($debug = false)
+    public function __construct($debug = false, $clean = false)
     {
         $serverType = config('indexer.engine');
         $this->debug = $debug;
+        $this->clean = $clean;
         $this->locales = Lang::all();
 
         $this->domain = rtrim(env('APP_URL', ''), '/');
@@ -41,6 +44,9 @@ class IndexBuilderService
             $this->writeDebug("\n\n Error connecting to search server! \n\n");
 
             return;
+        }
+        if ($this->clean) {
+            $this->searchServer->clean();
         }
         $sites = CmsSite::whereIndex(1)->get();
 
