@@ -38,7 +38,7 @@ abstract class AbstractType
      */
     public function setValueFromPost(): void
     {
-        if (null !== request($this->id)) {
+        if (request($this->id) !== null) {
             $this->setValue(request($this->id) ?? null);
         }
     }

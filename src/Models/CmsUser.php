@@ -119,7 +119,7 @@ class CmsUser extends User implements MustVerifyEmail
             return true;
         }
 
-        if (! isset($expression) || empty(trim($expression))) {
+        if ($expression === null || empty(trim($expression))) {
             // Rights have not been set => return true;
             // This is to make things backwards compatible
             return $default;

@@ -1,5 +1,7 @@
 <?php
 
+// This file is published by the siteboss-framework package
+
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\ServiceProvider;
 
