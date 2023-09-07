@@ -1,5 +1,7 @@
 <?php
 
+// This file is published by the siteboss-framework package
+
 namespace App\Providers;
 
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
@@ -14,15 +16,18 @@ class AuthServiceProvider extends ServiceProvider
      *
      * @var array
      */
-    protected $policies = [];
+    protected $policies = [
+        'NotFound\Framework\Models\Forms\Data' => 'NotFound\Framework\Policies\Forms\DataPolicy',
+        'NotFound\Framework\Models\Forms\Form' => 'NotFound\Framework\Policies\Forms\FormPolicy',
+        'NotFound\Framework\Models\Forms\Category' => 'NotFound\Framework\Policies\Forms\CategoryPolicy',
+        'NotFound\Framework\Models\Table' => 'NotFound\Framework\Policies\TablePolicy',
+    ];
 
     /**
      * Register any authentication / authorization services.
      */
     public function boot()
     {
-        // $this->registerPolicies();
-
         Auth::extend('openid-token', function ($app, $name, array $config) {
             return new OpenIDGuard(Auth::createUserProvider($config['provider']), $app->request);
         });
