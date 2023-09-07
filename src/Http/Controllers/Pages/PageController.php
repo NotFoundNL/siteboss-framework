@@ -33,6 +33,7 @@ class PageController extends Controller
             $pageValues = $this->getPageValues();
             $pvObj = new AssetValues($pageValues);
             if ($this->currentPage) {
+                View::share('title', $this->getFullTitle());
                 View::share('p', $pvObj);
                 View::share('c', $this);
                 View::share('g', $globalPageValues);
@@ -63,6 +64,11 @@ class PageController extends Controller
     public function getTitle(): ?string
     {
         return $this->menuItem()->getTitle() ?? '';
+    }
+
+    public function getFullTitle(): string
+    {
+        return $this->getTitle().' - '.config('app.name');
     }
 
     public function slug(): string
