@@ -54,6 +54,13 @@ class PageController extends Controller
         return $this->pageId;
     }
 
+    /**
+     * menuItem
+     *
+     * This will fetch the Menu model for the current page.
+     * You can subclass Menu and add a custom model to the
+     * $model property to use a custom model.
+     */
     protected function menuItem(): Menu
     {
         if ($this->menuItem === null) {
