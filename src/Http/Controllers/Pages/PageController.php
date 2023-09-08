@@ -18,6 +18,8 @@ class PageController extends Controller
 
     protected bool $currentPage = false;
 
+    protected string $model = Menu::class;
+
     public function __construct(
         protected ?int $pageId = null
     ) {
@@ -52,10 +54,17 @@ class PageController extends Controller
         return $this->pageId;
     }
 
+    /**
+     * menuItem
+     *
+     * This will fetch the Menu model for the current page.
+     * You can subclass Menu and add a custom model to the
+     * $model property to use a custom model.
+     */
     protected function menuItem(): Menu
     {
         if ($this->menuItem === null) {
-            $this->menuItem = Menu::whereId($this->id())->firstOrFail();
+            $this->menuItem = $this->model::whereId($this->id())->firstOrFail();
         }
 
         return $this->menuItem;
