@@ -16,7 +16,7 @@ class CreateCmsUploadTable extends Migration
         Schema::create('cms_upload', function (Blueprint $table) {
             $table->id();
             $table->integer('containerId')->nullable();
-            $table->string('containerType', 8)->nullable();
+            $table->string('containerType', 256)->nullable();
             $table->string('filename')->nullable();
             $table->string('mimetype', 128)->nullable();
         });
