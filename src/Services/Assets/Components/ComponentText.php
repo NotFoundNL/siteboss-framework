@@ -42,6 +42,7 @@ class ComponentText extends AbstractComponent
                 case 'custom': return $this->assetItem->server_properties->regEx ?? '';
             }
         }
+
         //$inputText->setEndpoint($endPoint);
         return null;
     }

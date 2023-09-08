@@ -103,6 +103,7 @@ class DownloadController extends Controller
     {
         $dataContainer = Data::where('id', $dataId)->first();
         $field = $dataContainer->data->$fieldId;
+
         // array index added 1, since it doesn't accept 0 as a paramter
         return $field->value[$arrayIndex - 1];
     }

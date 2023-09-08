@@ -1,6 +1,6 @@
 <?php
 
-//this file is published by the siteboss-framework package
+// This file is published by the siteboss-framework package
 
 use NotFound\Framework\SpamResponder\SpamDetectedResponder;
 
