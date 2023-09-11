@@ -22,7 +22,16 @@ class SupportController extends Controller
     {
         $response = new LayoutResponse();
         $page = new LayoutPage(__('siteboss::support.title'));
+dd(config('support.api_key'));
 
+if(config('support.api_key') == '') {
+    $toast = new Toast(__('siteboss::support.noApiKey'), 'error');
+    $response->addAction($toast);
+
+    $response->addUIElement($page);
+
+    return response()->json($response->build());
+}
         $breadcrumb = new LayoutBreadcrumb();
         $breadcrumb->addHome();
         $breadcrumb->addItem(__('siteboss::support.breadcrumb'));
@@ -78,10 +87,11 @@ class SupportController extends Controller
             'priority' => 2,
             'subject' => $request->input('subject'),
         ]);
-        $url = 'https://a-p-i.nl/cms/tickets/create.php?api_key='.urlencode(env('APP_NOTFOUND_SUPPORT_API'));
+        $url = config('support.endpoint');
         $ch = curl_init($url);
 
         $header[] = 'Content-type: application/json';
+        $header[] = 'Bearer: '.config('support.api_key');
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
         curl_setopt($ch, CURLOPT_HEADER, false);
