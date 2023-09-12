@@ -11,6 +11,7 @@ return [
     'description' => 'Beschrijf het probleem of stel je vraag.',
     'descriptionDescription' => 'Vergeet niet te vermelden op welke pagina het probleem optreedt, bij voorkeur kopieer je de hele URL.',
     'done' => 'We\'ve received your request. We\'ll contact you as soon as possible.',
+    'no_endpoint' => 'For support please contact your supplier.',
 ];
 
 // TODO: translate

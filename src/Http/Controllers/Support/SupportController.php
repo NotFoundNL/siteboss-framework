@@ -22,16 +22,7 @@ class SupportController extends Controller
     {
         $response = new LayoutResponse();
         $page = new LayoutPage(__('siteboss::support.title'));
-dd(config('support.api_key'));
 
-if(config('support.api_key') == '') {
-    $toast = new Toast(__('siteboss::support.noApiKey'), 'error');
-    $response->addAction($toast);
-
-    $response->addUIElement($page);
-
-    return response()->json($response->build());
-}
         $breadcrumb = new LayoutBreadcrumb();
         $breadcrumb->addHome();
         $breadcrumb->addItem(__('siteboss::support.breadcrumb'));
@@ -39,30 +30,34 @@ if(config('support.api_key') == '') {
 
         $widget = new LayoutWidget(__('siteboss::support.widgetTitle'));
 
-        $widget->addText(new LayoutText(__('siteboss::support.intro')));
+        if (config('support.endpoint') === null) {
+            $widget->addText(new LayoutText(__('siteboss::support.no_endpoint')));
+        } else {
+            $widget->addText(new LayoutText(__('siteboss::support.intro')));
 
-        $form = new LayoutForm('/app/support');
+            $form = new LayoutForm('/app/support');
 
-        $email = new LayoutInputEmail('email', 'E-mail');
-        $email->setRequired();
+            $email = new LayoutInputEmail('email', 'E-mail');
+            $email->setRequired();
 
-        $form->addInput($email);
+            $form->addInput($email);
 
-        $subject = new LayoutInputText('subject', __('siteboss::support.subject'));
-        $subject->setRequired();
-        $subject->setDescription(__('siteboss::support.subjectDescription'));
+            $subject = new LayoutInputText('subject', __('siteboss::support.subject'));
+            $subject->setRequired();
+            $subject->setDescription(__('siteboss::support.subjectDescription'));
 
-        $form->addInput($subject);
+            $form->addInput($subject);
 
-        $description = new LayoutInputTextArea('description', __('siteboss::support.description'));
-        $description->setRequired();
-        $description->setDescription(__('siteboss::support.descriptionDescription'));
+            $description = new LayoutInputTextArea('description', __('siteboss::support.description'));
+            $description->setRequired();
+            $description->setDescription(__('siteboss::support.descriptionDescription'));
 
-        $form->addInput($description);
+            $form->addInput($description);
 
-        $form->addButton(new LayoutButton(__('siteboss::support.submit')));
+            $form->addButton(new LayoutButton(__('siteboss::support.submit')));
 
-        $widget->addForm($form);
+            $widget->addForm($form);
+        }
 
         $page->addWidget($widget);
 
