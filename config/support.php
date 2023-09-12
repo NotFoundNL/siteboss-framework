@@ -10,18 +10,17 @@ return [
     |
     | Here you may specify where support calls will be made to.
     | The calls are handled in SupportController.php
+    | Leave this null to disable the support widget.
     */
-    'endpoint' => env('SUPPORT_ENDPOINT', '/siteboss/api'),
+    'endpoint' => env('SUPPORT_ENDPOINT', null),
 
     /*
     |--------------------------------------------------------------------------
-    | Cache prefix
+    | Support API Key
     |--------------------------------------------------------------------------
     |
-    | Boolean to prefix the asset URL with a number based on the updated_at
-    | of the AssetItem.
+    | String will be sent in the Bearer header to the support endpoint.
     |
     */
-
     'api_key' => env('SUPPORT_API_KEY', ''),
 ];
