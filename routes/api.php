@@ -33,6 +33,10 @@ Route::prefix(config('siteboss.api_prefix'))->group(function () {
             ->middleware([ValidateSignature::class, 'throttle:6,1'])
             ->name('siteboss.verification.verify');
 
+        Route::get('email/verify/block/{id}/{hash}', [VerifyEmailController::class, 'block'])
+            ->middleware([ValidateSignature::class, 'throttle:6,1'])
+            ->name('siteboss.verification.block');
+
         // Unauthenticated routes
         Route::namespace('Forms')->group(function () {
             Route::post('forms/{form:id}/{langurl}', [DataController::class, 'create'])->middleware(ProtectAgainstSpam::class)->name('formbuilder.post');
