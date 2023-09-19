@@ -34,7 +34,7 @@ class ComponentModelSelect extends AbstractComponent
 
     public function getTableOverviewContent(): LayoutTableColumn
     {
-        $value = $this->properties()->selectedModel::find($this->recordId);
+        $value = $this->properties()->selectedModel::find($this->getCurrentValue()) ?? null;
 
         return new LayoutTableColumn($value->{$this->properties()->foreignDisplay}() ?? '-', $this->type);
     }
