@@ -35,8 +35,8 @@ class VerifyEmailController extends Controller
 
             return [
                 'result' => 'error',
-                'message' => 'weet je zeker dat je wilt blokekN?',
-                'buttonText' => 'blokkeer email',
+                'message' => __('siteboss::auth.verify_block_account'),
+                'buttonText' => __('siteboss::auth.block_account_button'),
                 'link' => $link,
             ];
         }
@@ -53,7 +53,7 @@ class VerifyEmailController extends Controller
             event(new Verified($user));
         }
 
-        return redirect('/siteboss')->with('verified', true);
+        return ['status' => 'ok', 'message' => __('siteboss::auth.verify_email_success')];
     }
 
     public function block(Request $request, CmsUser $user)

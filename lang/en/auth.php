@@ -22,6 +22,9 @@ return [
     'verify_email_button' => 'Verify email',
     'verify_email_resend' => 'Resend verification email',
     'verify_email_link_sent' => 'A fresh verification link has been sent to your email address.',
+    'verify_email_success' => 'Account successfully verified.',
     'verify_wrong_email' => 'Click here to block this attempt if you were not the one who tried to login.',
+    'verify_block_action' => 'Are you sure you want to block this account?',
+    'block_account_button' => 'Block account',
     'block_account_message' => 'The account has been blocked.',
 ];
