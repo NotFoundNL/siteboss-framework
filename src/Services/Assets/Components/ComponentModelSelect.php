@@ -2,8 +2,6 @@
 
 namespace NotFound\Framework\Services\Assets\Components;
 
-use Illuminate\Support\Facades\DB;
-use NotFound\Framework\Models\Lang;
 use NotFound\Layout\Elements\AbstractLayout;
 use NotFound\Layout\Elements\Table\LayoutTableColumn;
 use NotFound\Layout\Inputs\LayoutInputDropdown;
@@ -20,7 +18,7 @@ class ComponentModelSelect extends AbstractComponent
 
         foreach ($items as $item) {
             $inputDropdown->addItem(
-                $item->{$server_properties->foreignKey},
+                $item->id,
                 $item->{$server_properties->foreignDisplay}()
             );
         }
@@ -36,40 +34,14 @@ class ComponentModelSelect extends AbstractComponent
 
     public function getTableOverviewContent(): LayoutTableColumn
     {
-        $table = $this->removeDatabasePrefix($this->properties()->foreignTable);
+        $value = $this->properties()->selectedModel::find($this->recordId);
 
-        $properties = $this->properties();
-        if (isset($properties->localizeForeign) && $properties->localizeForeign == true) {
-            $value = DB::table($table)//
-                ->join($table.'_tr', $table.'_tr.entity_id', '=', $table.'.id')
-                ->where($table.'_tr.lang_id', Lang::current()->id)
-                ->where($table.'.id', $this->getCurrentValue())
-                ->value($properties->foreignDisplay);
-        } else {
-            $value = DB::table($table)->whereId($this->getCurrentValue())->value($this->properties()->foreignDisplay);
-        }
-
-        return new LayoutTableColumn($value ?? '-', $this->type);
+        return new LayoutTableColumn($value->{$this->properties()->foreignDisplay}() ?? '-', $this->type);
     }
 
     private function getNormalTableData()
     {
-        $modelNameSpace = $this->properties()->name_space ?? 'NotFound\\ELearning\\Models\\';
-
-        $model = $modelNameSpace.$this->removeDatabasePrefix($this->properties()->foreignTable);
-
-        $allModels = $model::all();
-
-        return $allModels;
-    }
-
-    /*
-     * In the properties of the tableitem the custom query is defined in the
-     * database. This custom query already has the database prefix set.LoketTableSelect
-     */
-    private function getCustomQueryData(): array
-    {
-        return DB::select(DB::raw($this->properties()->customQuery));
+        return $this->properties()->selectedModel::all();
     }
 
     /**
