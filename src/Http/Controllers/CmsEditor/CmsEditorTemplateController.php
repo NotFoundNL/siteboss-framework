@@ -112,10 +112,10 @@ class CmsEditorTemplateController extends \NotFound\Framework\Http\Controllers\C
         $form->addInput((new LayoutInputText('params', 'Url parameters'))->setValue($table->params ?? ''));
         $form->addInput((new LayoutInputText('allow_children', "Subpagina's"))->setValue($table->allow_children ?? '')); // TODO: Make this a tableselect that gets the existing cms_templates
 
-        $form->addInput((new LayoutInputCheckbox('enabled', 'Active'))->setValue($table->enabled == 1 ?? false));
-        $form->addInput((new LayoutInputCheckbox('meta', 'Add meta fields'))->setValue($table->properties->meta ?? false));
+        $form->addInput((new LayoutInputCheckbox('enabled', 'Active'))->setValue($this->forceBool($table->enabled)));
+        $form->addInput((new LayoutInputCheckbox('meta', 'Add meta fields'))->setValue($this->forceBool($table->properties->meta ?? false)));
 
-        $form->addInput((new LayoutInputCheckbox('searchable', 'Searchable via SOLR'))->setValue($table->properties->searchable ?? false));
+        $form->addInput((new LayoutInputCheckbox('searchable', 'Searchable via SOLR'))->setValue($this->forceBool($table->properties->searchable ?? false)));
 
         $form->addButton(new LayoutButton('Update template properties'));
         $widget1->addTitle((new LayoutTitle('Edit template'))->setSize(4));
@@ -159,7 +159,7 @@ class CmsEditorTemplateController extends \NotFound\Framework\Http\Controllers\C
             $row->addColumn(new LayoutTableColumn($cmsTable->name, 'text'));
             $row->addColumn(new LayoutTableColumn($cmsTable->type, 'text'));
             $row->addColumn(new LayoutTableColumn($cmsTable->internal, 'internal'));
-            $row->addColumn(new LayoutTableColumn($cmsTable->enabled, 'checkbox'));
+            //  $row->addColumn(new LayoutTableColumn($cmsTable->enabled, 'checkbox'));
             $UItable->addRow($row);
         }
         $widget2->addTable($UItable);
@@ -255,5 +255,20 @@ class CmsEditorTemplateController extends \NotFound\Framework\Http\Controllers\C
         }
 
         return response()->json(['status' => 'ok']);
+    }
+
+    private function forceBool(mixed $value): bool
+    {
+        if (is_null($value)) {
+            return false;
+        }
+        if (is_bool($value)) {
+            return $value;
+        }
+        if ($value == 1) {
+            return true;
+        }
+
+        return false;
     }
 }
