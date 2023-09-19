@@ -22,6 +22,7 @@ use NotFound\Layout\Elements\LayoutTitle;
 use NotFound\Layout\Elements\LayoutWidget;
 use NotFound\Layout\LayoutResponse;
 use NotFound\Layout\Responses\Redirect;
+use NotFound\Layout\Responses\Reload;
 use NotFound\Layout\Responses\Toast;
 
 /**
@@ -138,7 +139,7 @@ class TableEditorController extends AssetEditorController
             if ($newTableRecord) {
                 $response->addAction(new Redirect('/table/'.$table->url.'/'.$id.'/'));
             } else {
-                // TODO: Refresh page
+                $response->addAction(new Reload());
             }
         } else {
             // Redirect
