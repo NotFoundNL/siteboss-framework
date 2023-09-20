@@ -7,7 +7,6 @@ use NotFound\Framework\Http\Controllers\Controller;
 use NotFound\Framework\Models\Lang;
 use NotFound\Framework\Models\Menu;
 use NotFound\Framework\Services\Assets\AssetValues;
-use NotFound\Framework\Services\Assets\GlobalPageService;
 use NotFound\Framework\Services\Assets\PageService;
 
 class PageController extends Controller
