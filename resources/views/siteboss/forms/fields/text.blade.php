@@ -10,5 +10,10 @@
         placeholder="{{ $placeholder }}"
         {{ $required }}
     >
-    <label for="{{ $id }}" generated="true" class="error invalid-feedback" style="display: none;"></label>
+    <label
+        for="{{ $id }}"
+        generated="true"
+        class="error invalid-feedback"
+        style="display: none;"
+    ></label>
 </div>

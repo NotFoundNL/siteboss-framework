@@ -1,5 +1,3 @@
 @component('mail::message')
-
-{!! $html !!}
-
+    {!! $html !!}
 @endcomponent
