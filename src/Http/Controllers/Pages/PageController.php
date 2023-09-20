@@ -29,8 +29,6 @@ class PageController extends Controller
         }
 
         if (! app()->runningInConsole()) {
-            $gp = new GlobalPageService();
-            $globalPageValues = new AssetValues($gp->getCachedValues());
 
             $pageValues = $this->getPageValues();
             $pvObj = new AssetValues($pageValues);
@@ -38,7 +36,6 @@ class PageController extends Controller
                 View::share('title', $this->getFullTitle());
                 View::share('p', $pvObj);
                 View::share('c', $this);
-                View::share('g', $globalPageValues);
             }
             $this->values = $pvObj;
         }
