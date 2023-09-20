@@ -4,6 +4,7 @@ namespace NotFound\Framework\Services\Assets\Components;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use NotFound\Framework\Models\AssetItem;
@@ -162,7 +163,9 @@ class ComponentChildTable extends AbstractComponent
      */
     private function getChildren(): Collection
     {
-        return DB::table($this->properties()->allowedBlocks)->where($this->getForeignTable(), $this->recordId)->where('deleted_at', null)->orderBy('order')->get();
+        return Cache::remember($this->assetItem->name.$this->recordId, 3600, function () {
+            DB::table($this->properties()->allowedBlocks)->where($this->getForeignTable(), $this->recordId)->where('deleted_at', null)->orderBy('order')->get();
+        });
     }
 
     private function getForeignTable()
