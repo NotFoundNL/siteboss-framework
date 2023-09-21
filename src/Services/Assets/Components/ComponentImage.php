@@ -168,8 +168,6 @@ class ComponentImage extends AbstractComponent
     /**
      * Get the value used in the default storage mechanism.
      * This is always a string. Use JSON or your own logic for other types of values.
-     *
-     * @return string
      */
     public function getValueForStorage(): ?string
     {

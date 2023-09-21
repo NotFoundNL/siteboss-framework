@@ -1,0 +1,24 @@
+name: Fix Blade formatting
+
+on: pull_request
+
+jobs:
+  format-blade:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install NPM dependencies
+        run: npm ci
+
+      - name: Run Blade Formatter
+        run: node_modules/.bin/blade-formatter --write --sort-tailwindcss-classes --wrap-attributes=force-expand-multiline resources/**/*.blade.php
+
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "style: Blade formatting"
+        env:
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
