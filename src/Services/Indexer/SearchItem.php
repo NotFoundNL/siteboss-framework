@@ -142,8 +142,6 @@ final class SearchItem
      *
      * Get the publication date of the content
      * This can be used for sorting and prioritizing content
-     *
-     * @return string
      */
     public function publicationDate(): ?string
     {
@@ -155,8 +153,6 @@ final class SearchItem
      *
      * This is when the content was last updated
      * This is used to determine if the content needs to be re-indexed
-     *
-     * @return string
      */
     public function lastUpdated(): ?string
     {

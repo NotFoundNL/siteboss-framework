@@ -5,22 +5,27 @@
         for="{{ $id }}[]"
         generated="true"
         class="error invalid-feedback"
-        style="display: none;">
+        style="display: none;"
+    >
     </label>
 
     <div>
         @foreach ($optionList as $option)
             @php($optionString = $getByLanguage($option->option))
             <div class="form-check form-check-inline">
-                <input class="form-check-input"
+                <input
+                    class="form-check-input"
                     type="radio"
                     name="{{ $id }}[]"
                     id="radio{{ $id }}$optionString"
                     value="{{ $option->index }}"
-                    {{$required}}
+                    {{ $required }}
                 >
-                <label class="form-check-label" for="radio{{ $id }}{{$optionString}}">
-                    {{$optionString}}
+                <label
+                    class="form-check-label"
+                    for="radio{{ $id }}{{ $optionString }}"
+                >
+                    {{ $optionString }}
                 </label>
             </div>
         @endforeach
