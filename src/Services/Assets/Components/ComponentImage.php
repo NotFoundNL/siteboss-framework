@@ -3,6 +3,7 @@
 namespace NotFound\Framework\Services\Assets\Components;
 
 use Illuminate\Http\File;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Intervention\Image\ImageManager;
@@ -218,8 +219,13 @@ class ComponentImage extends AbstractComponent
         );
 
         // if app is running in debug mode, throw an error if the directories could not be created
-        if (env('APP_DEBUG') === true && ! $createDirs) {
-            exit('Could not create directories');
+        if (! $createDirs) {
+            if (env('APP_DEBUG') === true) {
+
+                exit('Could not create directory '.Storage::path('public').$this->subFolderPublic.$this->assetModel->getIdentifier().'/'.$this->assetItem->internal.'/');
+            } else {
+                Log::error('Could not create directory '.Storage::path('public').$this->subFolderPublic.$this->assetModel->getIdentifier().'/'.$this->assetItem->internal.'/');
+            }
         }
 
         return $createDirs;
