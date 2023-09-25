@@ -32,7 +32,7 @@ class PageController extends Controller
             $pageValues = $this->getPageValues();
             $pvObj = new AssetValues($pageValues);
             if ($this->currentPage) {
-                View::share('title', $this->getFullTitle());
+                View::share('pageTitle', $this->getFullTitle());
                 View::share('p', $pvObj);
                 View::share('c', $this);
             }
