@@ -217,22 +217,26 @@ class PageService extends AbstractAssetService
 
         $menu = $this->menu;
 
-        if ($slug = Menu::where('parent_id', $this->menu->parent_id)
-            ->where('url', $this->staticInputValues['__template_slug'])
-            ->orWhere('url', 'regexp', $this->staticInputValues['__template_slug'].'\-[0-9]+')
-            ->where('id', '!=', $this->menu->id)
-            ->orderBy('url', 'DESC')
-            ->first()
-        ) {
-            $highestSlug = explode('-', $slug->url);
-            $highestSlug = end($highestSlug);
+        $this->staticInputValues['__template_slug'] = preg_replace('/ /', '-', preg_replace('/[ ]{2,100}/', ' ', trim(preg_replace('/[^a-z0-9]/', ' ', strtolower($this->staticInputValues['__template_slug'])))));
 
-            if (is_numeric($highestSlug)) {
-                $this->staticInputValues['__template_slug'] .= '-'.($highestSlug + 1);
-            } else {
-                $this->staticInputValues['__template_slug'] .= '-1';
+        if ($this->menu->url != $this->staticInputValues['__template_slug']) {
+            if ($slug = Menu::where('parent_id', $this->menu->parent_id)
+                ->where('url', $this->staticInputValues['__template_slug'])
+                ->orWhere('url', 'regexp', $this->staticInputValues['__template_slug'].'\-[0-9]+')
+                ->orderBy('url', 'DESC')
+                ->first()
+            ) {
+                $highestSlug = explode('-', $slug->url);
+                $highestSlug = end($highestSlug);
+                if (is_numeric($highestSlug)) {
+                    $this->staticInputValues['__template_slug'] .= '-'.($highestSlug + 1);
+                } else {
+                    $this->staticInputValues['__template_slug'] .= '-1';
+                }
+
             }
         }
+
         $menu->url = $this->staticInputValues['__template_slug'];
         $menu->menu = (bool) $this->staticInputValues['__template_menu'];
         $menu->enabled = $this->staticInputValues['__template_active'];
