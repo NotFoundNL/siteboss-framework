@@ -14,6 +14,7 @@ use NotFound\Framework\Services\Assets\Enums\AssetType;
 use NotFound\Framework\Services\Assets\Enums\TemplateType;
 use NotFound\Framework\Services\Indexer\ContentBlockService;
 use NotFound\Layout\Inputs\LayoutInputCheckbox;
+use NotFound\Layout\Inputs\LayoutInputSlug;
 use NotFound\Layout\Inputs\LayoutInputText;
 use stdClass;
 
@@ -74,7 +75,7 @@ class PageService extends AbstractAssetService
         $title->setValue($titleModel->value ?? '');
         $collect->add($title);
 
-        $slug = new LayoutInputText('__template_slug', __('siteboss::page.slug'));
+        $slug = new LayoutInputSlug('__template_slug', __('siteboss::page.slug'));
         $slug->setRequired();
         $slug->setDescription(__('siteboss::page.slugDescription'));
         $slug->setValue($this->menu->url ?? '');
@@ -87,6 +88,8 @@ class PageService extends AbstractAssetService
         $menu = new LayoutInputCheckbox('__template_menu', __('siteboss::page.inMenu'));
         $menu->setValue((bool) $this->menu->menu ?? true);
         $collect->add($menu);
+
+        $this->staticInputValues = $collect;
 
         return $collect;
     }
@@ -151,15 +154,6 @@ class PageService extends AbstractAssetService
         $this->staticInputValues['__template_active'] = $request->{'__template_active'};
         $this->staticInputValues['__template_menu'] = $request->{'__template_menu'};
 
-        // TODO: return sensible error message
-        if (Menu::where('parent_id', $this->menu->parent_id)
-            ->where('url', $this->staticInputValues['__template_slug'])
-            ->where('id', '!=', $this->menu->id)
-            ->first()
-        ) {
-            return false;
-        }
-
         foreach ($this->getComponents() as $component) {
             /** @var AbstractComponent $component */
             $component->setNewValue($request->{$component->assetItem->internal});
@@ -222,6 +216,23 @@ class PageService extends AbstractAssetService
         $this->staticInputValues['__template_active'];
 
         $menu = $this->menu;
+
+        if ($slug = Menu::where('parent_id', $this->menu->parent_id)
+            ->where('url', $this->staticInputValues['__template_slug'])
+            ->orWhere('url', 'regexp', $this->staticInputValues['__template_slug'].'\-[0-9]+')
+            ->where('id', '!=', $this->menu->id)
+            ->orderBy('url', 'DESC')
+            ->first()
+        ) {
+            $highestSlug = explode('-', $slug->url);
+            $highestSlug = end($highestSlug);
+
+            if (is_numeric($highestSlug)) {
+                $this->staticInputValues['__template_slug'] .= '-'.($highestSlug + 1);
+            } else {
+                $this->staticInputValues['__template_slug'] .= '-1';
+            }
+        }
         $menu->url = $this->staticInputValues['__template_slug'];
         $menu->menu = (bool) $this->staticInputValues['__template_menu'];
         $menu->enabled = $this->staticInputValues['__template_active'];
