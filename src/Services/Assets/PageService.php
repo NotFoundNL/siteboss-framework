@@ -89,8 +89,6 @@ class PageService extends AbstractAssetService
         $menu->setValue((bool) $this->menu->menu ?? true);
         $collect->add($menu);
 
-        $this->staticInputValues = $collect;
-
         return $collect;
     }
 
