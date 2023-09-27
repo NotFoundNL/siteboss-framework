@@ -219,24 +219,25 @@ class PageService extends AbstractAssetService
 
         $newValue = $this->staticInputValues['__template_slug'];
 
-        if ($slug = Menu::where('id', '!=', $this->menu->id)
-            ->where('parent_id', $this->menu->parent_id)
-            ->where(function ($q) {
-                return $q
-                    ->where('url', $this->staticInputValues['__template_slug'])
-                    ->orWhere('url', 'regexp', $this->staticInputValues['__template_slug'].'\-[0-9]+');
-            })
-            ->orderBy('url', 'DESC')
-            ->first()
-        ) {
-            $highestSlug = explode('-', $slug->url);
-            $highestSlug = end($highestSlug);
-            if (is_numeric($highestSlug)) {
-                $newValue .= '-'.($highestSlug + 1);
-            } else {
-                $newValue .= '-1';
+        if (Menu::where('id', '!=', $this->menu->id)->where('parent_id', $this->menu->parent_id)->where('url', $this->staticInputValues['__template_slug'])->first()) {
+            if ($slug = Menu::where('id', '!=', $this->menu->id)
+                ->where('parent_id', $this->menu->parent_id)
+                ->where(function ($q) {
+                    return $q
+                        ->where('url', $this->staticInputValues['__template_slug'])
+                        ->orWhere('url', 'regexp', $this->staticInputValues['__template_slug'].'\-[0-9]+');
+                })
+                ->orderBy('url', 'DESC')
+                ->first()
+            ) {
+                $highestSlug = explode('-', $slug->url);
+                $highestSlug = end($highestSlug);
+                if (is_numeric($highestSlug)) {
+                    $newValue .= '-'.($highestSlug + 1);
+                } else {
+                    $newValue .= '-1';
+                }
             }
-
         }
 
         $menu->url = ($menu->url != $newValue) ? $newValue : $menu->url;
