@@ -150,6 +150,7 @@ return [
         NotFound\Framework\Providers\LogServiceProvider::class,
         NotFound\Framework\Providers\MigrationServiceProvider::class,
         NotFound\Framework\Providers\GlobalStringServiceProvider::class,
+        NotFound\Framework\Providers\PageInfoServiceProvider::class,
 
     ])->toArray(),
 
@@ -166,6 +167,7 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         'Sb' => \NotFound\Framework\Helpers\SitebossHelper::class,
+        'Info' => \NotFound\Framework\Facades\Info::class,
     ])->toArray(),
 
 ];
