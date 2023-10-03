@@ -129,7 +129,7 @@ class ComponentFile extends AbstractComponent
         } else {
             $fileId = $this->newValue['files'][0] ?? null;
             // No file was uploaded
-            if (request()->file($fileId)) {
+            if ($fileId !== null && request()->file($fileId)) {
                 // Update name
                 $result = [
                     'name' => request()->file($fileId)->getClientOriginalName(),
