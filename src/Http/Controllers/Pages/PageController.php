@@ -3,6 +3,7 @@
 namespace NotFound\Framework\Http\Controllers\Pages;
 
 use Illuminate\Support\Facades\View;
+use NotFound\Framework\Facades\Info;
 use NotFound\Framework\Http\Controllers\Controller;
 use NotFound\Framework\Models\Lang;
 use NotFound\Framework\Models\Menu;
@@ -32,7 +33,8 @@ class PageController extends Controller
             $pageValues = $this->getPageValues();
             $pvObj = new AssetValues($pageValues);
             if ($this->currentPage) {
-                View::share('title', $this->getFullTitle());
+                Info::setTitle($this->getTitle());
+                View::share('title', 'DO NOT USE');
                 View::share('p', $pvObj);
                 View::share('c', $this);
             }
