@@ -15,26 +15,16 @@ class ModelSelect extends Properties
 
     public function properties(): void
     {
-        $this->overview();
-        $this->sortable();
-        $this->required();
+        $this->allOverviewOptions();
 
         $options = $this->getModels();
 
-        $this->addDropDown('selectedModel', 'Select the model', $options);
+        $this->addText('selectedModel', 'Custom model path', true, default: 'App\\Models\\');
     }
 
     public function serverProperties(): void
     {
-        $this->addText('foreignDisplay', 'Function', true, default: 'cmsDisplay');
-    }
-
-    protected function rename(): array
-    {
-        return [
-            'table' => 'selectedModel',
-            'foreigndisplay' => 'foreignDisplay',
-        ];
+        $this->addText('methodName', 'Method', true);
     }
 
     public function checkColumnType(?\Doctrine\DBAL\Types\Type $type): string
@@ -51,14 +41,14 @@ class ModelSelect extends Properties
 
     public function getModels(): array
     {
-        $paths = [app_path('Models'), base_path('vendor/notfoundnl/e-learning/src/Models')];
+        $paths = [app_path('Models')];
         $models = collect();
         foreach ($paths as $p) {
-            $models = $models->concat(collect(File::allFiles($p))->map(function ($item) use ($p) {
+            $models = $models->concat(collect(File::allFiles($p))->map(function ($item) {
                 $path = $item->getRelativePathName();
                 $key = strtr(substr($path, 0, strrpos($path, '.')), '/', '\\');
 
-                $class = ($p == base_path('vendor/notfoundnl/e-learning/src/Models')) ? 'NotFound\\ELearning\\Models\\' : 'App\\Models\\';
+                $class = 'App\\Models\\';
                 $class .= $key;
 
                 return (object) ['value' => $class, 'label' => $key];
