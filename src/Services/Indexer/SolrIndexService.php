@@ -102,7 +102,7 @@ class SolrIndexService extends AbstractIndexService
         $removed = 0;
         $return->data['failed'] = [];
         foreach ($pendingDocs as $pending) {
-            if ($this->solrIndex->removeItem($this->siteUrl($pending->url))) {
+            if ($this->solrIndex->removeItem($pending->url)) {
                 CmsSearch::whereUrl($pending->url)->forceDelete();
                 $removed++;
             } else {
