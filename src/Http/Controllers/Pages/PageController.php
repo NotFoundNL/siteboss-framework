@@ -34,7 +34,6 @@ class PageController extends Controller
             $pvObj = new AssetValues($pageValues);
             if ($this->currentPage) {
                 Info::setTitle($this->getTitle());
-                View::share('title', 'DO NOT USE');
                 View::share('p', $pvObj);
                 View::share('c', $this);
             }
