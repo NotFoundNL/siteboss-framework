@@ -49,6 +49,7 @@ Route::prefix('page')->group(function () {
         Route::prefix('{tableItem}')->group(function () {
             Route::get('', [CmsEditorTemplateItemController::class, 'readOne']);
             Route::post('', [CmsEditorTemplateItemController::class, 'update']);
+            Route::post('enabled', [CmsEditorTemplateItemController::class, 'enabled']);
         });
     });
 });
