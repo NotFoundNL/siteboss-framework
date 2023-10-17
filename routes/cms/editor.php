@@ -28,6 +28,7 @@ Route::prefix('table')->group(function () {
         Route::prefix('{tableItem}')->group(function () {
             Route::get('', [CmsEditorTableItemController::class, 'readOne']);
             Route::post('', [CmsEditorTableItemController::class, 'update']);
+            Route::post('enabled', [CmsEditorTableItemController::class, 'enabled']);
         });
     });
 });
