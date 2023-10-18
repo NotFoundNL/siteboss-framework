@@ -38,11 +38,11 @@ class DatePicker extends Properties
         if ($type === null) {
             return 'COLUMN MISSING';
         }
-        if ($type->getName() ===  'int') {
+        if ($type->getName() === 'int') {
             return 'TYPE WARNING: '.$type->getName().' should be converted to datetime';
         }
 
-        if ($type->getName()!=='datetime') {
+        if ($type->getName() !== 'datetime') {
             return 'TYPE ERROR: '.$type->getName().' is not a valid type for a date field';
         }
 
