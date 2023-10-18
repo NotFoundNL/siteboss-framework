@@ -14,12 +14,12 @@ class ComponentModelSelect extends AbstractComponent
 
         $server_properties = $this->properties();
 
-        $items = $this->getNormalTableData();
+        $items = $this->getModels();
 
         foreach ($items as $item) {
             $inputDropdown->addItem(
                 $item->id,
-                $item->{$server_properties->foreignDisplay}()
+                $item->{$server_properties->methodName}()
             );
         }
 
@@ -36,12 +36,12 @@ class ComponentModelSelect extends AbstractComponent
     {
         $value = $this->properties()->selectedModel::find($this->getCurrentValue());
 
-        $display = ($value) ? $value->{$this->properties()->foreignDisplay}() : '-';
+        $display = ($value) ? $value->{$this->properties()->methodName}() : '-';
 
         return new LayoutTableColumn($display, $this->type);
     }
 
-    private function getNormalTableData()
+    private function getModels()
     {
         return $this->properties()->selectedModel::all();
     }
@@ -49,8 +49,6 @@ class ComponentModelSelect extends AbstractComponent
     /**
      * Get the value used in the default storage mechanism.
      * This is always a string. Use JSON or your own logic for other types of values.
-     *
-     * @return string
      */
     public function getValueForStorage(): ?string
     {
