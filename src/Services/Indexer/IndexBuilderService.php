@@ -212,6 +212,12 @@ class IndexBuilderService
     {
         app()->setLocale($lang->url);
         $subPages = $class->searchSubitems();
+
+        // We need to check if the subPages is an array of arrays
+        // If not we wrap it in an extra array
+        if (count($subPages) > 0 && ! is_array($subPages[0])) {
+            $subPages = [$subPages];
+        }
         foreach ($subPages as $subPage) {
 
             foreach ($subPage as $searchItem) {
