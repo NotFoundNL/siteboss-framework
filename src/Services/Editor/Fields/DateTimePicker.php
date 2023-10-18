@@ -28,7 +28,7 @@ class DateTimePicker extends Properties
             return 'COLUMN MISSING';
         }
         if (! in_array($type->getName(), ['datetime'])) {
-            return 'TYPE ERROR: '.$type->getName().' is not a valid type for a text field';
+            return 'TYPE ERROR: '.$type->getName().' is not a valid type for a date field';
         }
 
         return '';
