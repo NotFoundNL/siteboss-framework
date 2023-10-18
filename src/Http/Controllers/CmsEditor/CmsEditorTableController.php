@@ -177,7 +177,10 @@ class CmsEditorTableController extends \NotFound\Framework\Http\Controllers\Cont
             $row->addColumn(new LayoutTableColumn($cmsTable->enabled ? $this->checkColumn($tableName, $cmsTable) : '-', 'text'));
 
             $row->addColumn(new LayoutTableColumn($cmsTable->internal, 'text'));
-            $row->addColumn(new LayoutTableColumn($cmsTable->enabled, 'checkbox'));
+
+            $checkbox = new LayoutTableColumn($cmsTable->enabled, 'checkbox');
+            $checkbox->setToggleEndPoint('/app/editor/table/'.$table->id.'/'.$cmsTable->id.'/enabled');
+            $row->addColumn($checkbox);
             $UItable->addRow($row);
         }
         $widget2->addTable($UItable);

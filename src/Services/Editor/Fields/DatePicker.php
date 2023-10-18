@@ -18,6 +18,7 @@ class DatePicker extends Properties
         $this->localize();
         $this->required();
         $this->addCheckbox('allowEmpty', 'Allow empty', true);
+        $this->addCheckbox('datetimeFormat', 'Use datetime format', true);
         $this->addText('placeholderText', 'Placeholder text');
     }
 
@@ -37,8 +38,12 @@ class DatePicker extends Properties
         if ($type === null) {
             return 'COLUMN MISSING';
         }
-        if (! in_array($type->getName(), ['int'])) {
-            return 'TYPE ERROR: '.$type->getName().' is not a valid type for a text field';
+        if ($type->getName() === 'int') {
+            return 'TYPE WARNING: '.$type->getName().' should be converted to datetime';
+        }
+
+        if ($type->getName() !== 'datetime') {
+            return 'TYPE ERROR: '.$type->getName().' is not a valid type for a date field';
         }
 
         return '';

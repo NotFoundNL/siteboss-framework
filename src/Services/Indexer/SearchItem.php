@@ -98,7 +98,7 @@ final class SearchItem
         return $this;
     }
 
-    public function setPublicationDate(string $publicationDate): self
+    public function setPublicationDate(?string $publicationDate): self
     {
         $this->publicationDate = $publicationDate;
 
@@ -145,7 +145,7 @@ final class SearchItem
      */
     public function publicationDate(): ?string
     {
-        return $this->publicationDate;
+        return $this->publicationDate ?? $this->lastUpdated;
     }
 
     /**
@@ -156,7 +156,7 @@ final class SearchItem
      */
     public function lastUpdated(): ?string
     {
-        return $this->lastUpdated;
+        return $this->lastUpdated ?? $this->publicationDate;
     }
 
     public function customValues(): ?array
