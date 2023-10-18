@@ -159,7 +159,11 @@ class CmsEditorTemplateController extends \NotFound\Framework\Http\Controllers\C
             $row->addColumn(new LayoutTableColumn($cmsTable->name, 'text'));
             $row->addColumn(new LayoutTableColumn($cmsTable->type, 'text'));
             $row->addColumn(new LayoutTableColumn($cmsTable->internal, 'internal'));
-            //  $row->addColumn(new LayoutTableColumn($cmsTable->enabled, 'checkbox'));
+
+            $checkbox = new LayoutTableColumn($cmsTable->enabled, 'checkbox');
+            $checkbox->setToggleEndPoint('/app/editor/page/'.$table->id.'/'.$cmsTable->id.'/enabled');
+            $row->addColumn($checkbox);
+
             $UItable->addRow($row);
         }
         $widget2->addTable($UItable);

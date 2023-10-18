@@ -96,4 +96,25 @@ class CmsEditorTableItemController extends \NotFound\Framework\Http\Controllers\
 
         return $response->build();
     }
+
+    /**
+     * enabled
+     *
+     * @param  mixed  $table
+     * @param  mixed  $tableItem
+     * @return void
+     */
+    public function enabled(Table $table, TableItem $tableItem)
+    {
+        $tableItem->enabled = ! $tableItem->enabled;
+        try {
+            $tableItem->save();
+
+            $response = ['value' => $tableItem->enabled, 'message' => 'Item updated'];
+        } catch (\Exception $e) {
+            $response = ['error' => $e];
+        }
+
+        return $response;
+    }
 }
