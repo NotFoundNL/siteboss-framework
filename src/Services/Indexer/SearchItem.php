@@ -146,7 +146,12 @@ final class SearchItem
      */
     public function publicationDate(): ?string
     {
-        return $this->publicationDate ?? $this->lastUpdated;
+        $time = $this->publicationDate ?? $this->lastUpdated;
+        if ($time === null) {
+            return null;
+        }
+
+        return $time->format(DateTime::ATOM);
     }
 
     /**
@@ -157,7 +162,12 @@ final class SearchItem
      */
     public function lastUpdated(): ?string
     {
-        return $this->lastUpdated ?? $this->publicationDate;
+        $time = $this->lastUpdated ?? $this->publicationDate;
+        if ($time === null) {
+            return null;
+        }
+
+        return $time->format(DateTime::ATOM);
     }
 
     public function customValues(): ?array

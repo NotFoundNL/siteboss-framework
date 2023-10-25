@@ -2,11 +2,11 @@
 
 namespace NotFound\Framework\Services\Indexer;
 
+use DateTime;
 use NotFound\Framework\Models\CmsSite;
 use NotFound\Framework\Models\Lang;
 use NotFound\Framework\Models\Menu;
 use NotFound\Framework\Services\Assets\PageService;
-use DateTime;
 
 class IndexBuilderService
 {
@@ -167,7 +167,6 @@ class IndexBuilderService
             if (! empty($title) && ! empty($searchText)) {
 
                 $searchItem = new SearchItem($url, $title);
-                dd($menu);
                 $searchItem->setContent($searchText)->setLanguage($lang->url)->setPriority($priority)->setPublicationDate(new DateTime($menu->updated_at));
                 foreach ($customValues as $key => $value) {
                     $searchItem->setCustomValue($key, $value);
