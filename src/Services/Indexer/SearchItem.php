@@ -84,14 +84,14 @@ final class SearchItem
         return $this;
     }
 
-    public function setCustomValue(string $key, string $value): self
+    public function setCustomValue(string $key, mixed $value): self
     {
         $this->customValues[$key] = $value;
 
         return $this;
     }
 
-    public function setPriority(int $priority): self
+    public function setPriority(mixed $priority): self
     {
         $this->priority = $priority;
 
