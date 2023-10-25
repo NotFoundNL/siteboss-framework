@@ -192,7 +192,6 @@ class ComponentImage extends AbstractComponent
 
         if (count($this->newValue['files']) > 0) {
             // File was uploaded
-            dd($this->newValue);
             $result = ['uploaded' => true, 'images' => $this->getStorageJSON()];
         }
 
