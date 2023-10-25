@@ -59,6 +59,8 @@ class Menu extends LegacyModel
 {
     protected $table = 'menu';
 
+    public $timestamps = true;
+
     protected $casts = [
         'properties' => 'object',
         'enabled' => 'boolean',
