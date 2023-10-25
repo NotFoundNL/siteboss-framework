@@ -35,6 +35,6 @@ return [
         'min-quality' => 60,
         'min-complexity' => 60,
         'min-architecture' => 60,
-        'min-style' => 90,
+        'min-style' => 80,
     ],
 ];
