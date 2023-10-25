@@ -2,11 +2,13 @@
 
 namespace NotFound\Framework\Services\Assets\Components;
 
+use DateTime;
 use Illuminate\Http\File;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Intervention\Image\ImageManager;
+use NotFound\Framework\Services\Assets\Enums\AssetType;
 use NotFound\Layout\Elements\AbstractLayout;
 use NotFound\Layout\Elements\Table\LayoutTableColumn;
 use NotFound\Layout\Inputs\LayoutInputImage;
@@ -110,6 +112,13 @@ class ComponentImage extends AbstractComponent
         $value = json_decode($this->currentValue) ?? new stdClass();
 
         $values = new stdClass();
+        if ($this->assetType === AssetType::TABLE) {
+            $siteTableRow = $this->assetModel->getSiteTableRowByRecordId($this->recordId);
+            $date = new DateTime($siteTableRow->updated_at);
+            $updatedAt = $date->getTimestamp();
+        } else {
+            $updatedAt = '404';
+        }
 
         if (isset($value->uploaded) && $value->uploaded === true && isset($this->properties()->sizes[0])) {
             // Set the default url
@@ -118,8 +127,9 @@ class ComponentImage extends AbstractComponent
 
             if (config('app.asset_url') !== null) {
                 $prefix = config('app.asset_url');
-                if (config('siteboss.cache_prefix') === true && isset($this->assetItem->updated_at)) {
-                    $prefix .= '/'.$this->assetItem->updated_at->timestamp;
+                if (config('siteboss.cache_prefix') === true && isset($siteTableRow->updated_at)) {
+                    $date = new DateTime($siteTableRow->updated_at);
+                    $prefix .= '/'.$updatedAt;
                 }
             }
             $name = $this->properties()->sizes[0]->filename;
