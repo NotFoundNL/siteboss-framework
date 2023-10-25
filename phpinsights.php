@@ -7,9 +7,9 @@ return [
     'exclude' => [
     ],
     'add' => [
-        ForbiddenPrivateMethods::class => [
-            'title' => 'The usage of private methods is not idiomatic in Laravel.',
-        ],
+        // ForbiddenPrivateMethods::class => [
+        //     'title' => 'The usage of private methods is not idiomatic in Laravel.',
+        // ],
     ],
     'remove' => [
         AlphabeticallySortedUsesSniff::class,
