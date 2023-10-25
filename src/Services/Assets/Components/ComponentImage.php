@@ -83,7 +83,11 @@ class ComponentImage extends AbstractComponent
             // create new image instance
             $image = (new ImageManager(['driver' => 'imagick']))->make(new File(request()->file($fileId)));
 
-            $image->resize($width, $height);
+            if ($dimensions->cropType == 'fitWithin') {
+                $image->fit($width, $height);
+            } else {
+                $image->resize($width, $height);
+            }
 
             $image->save(
                 Storage::path('public').$this->relativePathToPublicDisk().$filename
