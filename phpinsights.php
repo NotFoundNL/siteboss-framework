@@ -8,9 +8,9 @@ return [
         //  'path/to/directory-or-file'
     ],
     'add' => [
-            Classes::class => [
-                ForbiddenFinalClasses::class,
-            ],
+        // Classes::class => [
+        //     ForbiddenFinalClasses::class,
+        // ],
     ],
     'remove' => [
         AlphabeticallySortedUsesSniff::class,
