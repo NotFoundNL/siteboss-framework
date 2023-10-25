@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Intervention\Image\ImageManager;
+use NotFound\Framework\Models\Menu;
 use NotFound\Framework\Services\Assets\Enums\AssetType;
 use NotFound\Layout\Elements\AbstractLayout;
 use NotFound\Layout\Elements\Table\LayoutTableColumn;
@@ -112,20 +113,25 @@ class ComponentImage extends AbstractComponent
         $value = json_decode($this->currentValue) ?? new stdClass();
 
         $values = new stdClass();
-        $updatedAt = '';
-        if ($this->assetType === AssetType::TABLE && $this->recordId) {
-            $siteTableRow = $this->assetModel->getSiteTableRowByRecordId($this->recordId);
-            if ($siteTableRow->updated_at) {
-                $date = new DateTime($siteTableRow->updated_at);
-                $updatedAt = $date->getTimestamp();
-            }
-        } else {
-            // TODO: fetch updated_at of page
-            $updatedAt = '404';
-        }
 
         if (isset($value->uploaded) && $value->uploaded === true && isset($this->properties()->sizes[0])) {
             // Set the default url
+            $updatedAt = '';
+
+            if ($this->assetType === AssetType::TABLE && $this->recordId) {
+                $siteTableRow = $this->assetModel->getSiteTableRowByRecordId($this->recordId);
+                if (isset($siteTableRow->updated_at)) {
+                    $date = new DateTime($siteTableRow->updated_at);
+                    $updatedAt = $date->getTimestamp();
+                }
+            } else {
+                $menu = Menu::find($this->recordId);
+                if ($menu) {
+                    $date = new DateTime($menu->updated_at);
+                    $updatedAt = $date->getTimestamp();
+                }
+
+            }
 
             $prefix = '';
 

@@ -202,6 +202,8 @@ class PageService extends AbstractAssetService
         Cache::forget($this->getCacheKey());
         Menu::removeRouteCache();
 
+        $this->menu->touch();
+
         foreach ($this->getComponents() as $component) {
             $component->afterSave();
         }
