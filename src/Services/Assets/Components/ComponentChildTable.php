@@ -167,6 +167,6 @@ class ComponentChildTable extends AbstractComponent
 
     private function getForeignTable()
     {
-        return ($this->assetType->value == 'page') ? 'page_id' : rtrim($this->assetModel->table, 's').'_id';
+        return ($this->assetType->value == 'page') ? 'page_id' : ltrim(rtrim($this->assetModel->table, 's').'_id', 'sel_');
     }
 }
