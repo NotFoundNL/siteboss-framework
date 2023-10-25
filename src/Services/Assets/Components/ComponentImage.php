@@ -115,8 +115,12 @@ class ComponentImage extends AbstractComponent
             // Set the default url
 
             $prefix = '';
-            if (config('siteboss.cache_prefix') === true && isset($this->assetItem->updated_at)) {
-                $prefix = '/'.$this->assetItem->updated_at->timestamp;
+
+            if (config('app.asset_url') !== null) {
+                $prefix = config('app.asset_url');
+                if (config('siteboss.cache_prefix') === true && isset($this->assetItem->updated_at)) {
+                    $prefix .= '/'.$this->assetItem->updated_at->timestamp;
+                }
             }
             $name = $this->properties()->sizes[0]->filename;
             $filename = $this->recordId.'_'.$name.'.jpg';
