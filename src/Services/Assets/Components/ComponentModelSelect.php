@@ -12,14 +12,12 @@ class ComponentModelSelect extends AbstractComponent
     {
         $inputDropdown = new LayoutInputDropdown($this->assetItem->internal, $this->assetItem->name);
 
-        $server_properties = $this->properties();
-
         $items = $this->getModels();
 
-        foreach ($items as $item) {
+        foreach ($items as $key => $value) {
             $inputDropdown->addItem(
-                $item->id,
-                $item->{$server_properties->methodName}()
+                $key,
+                $value,
             );
         }
 
@@ -34,16 +32,16 @@ class ComponentModelSelect extends AbstractComponent
 
     public function getTableOverviewContent(): LayoutTableColumn
     {
-        $value = $this->properties()->selectedModel::find($this->getCurrentValue());
+        $value = $this->properties()->selectedModel::{$this->properties()->methodName}($this->getCurrentValue(), true);
 
-        $display = ($value) ? $value->{$this->properties()->methodName}() : '-';
+        $display = ($value) ? $value : '-';
 
         return new LayoutTableColumn($display, $this->type);
     }
 
     private function getModels()
     {
-        return $this->properties()->selectedModel::all();
+        return $this->properties()->selectedModel::{$this->properties()->methodName}($this->getCurrentValue());
     }
 
     /**
