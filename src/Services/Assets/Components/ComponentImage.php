@@ -112,11 +112,15 @@ class ComponentImage extends AbstractComponent
         $value = json_decode($this->currentValue) ?? new stdClass();
 
         $values = new stdClass();
+        $updatedAt = '';
         if ($this->assetType === AssetType::TABLE && $this->recordId) {
             $siteTableRow = $this->assetModel->getSiteTableRowByRecordId($this->recordId);
-            $date = new DateTime($siteTableRow->updated_at);
-            $updatedAt = $date->getTimestamp();
+            if ($siteTableRow->updated_at) {
+                $date = new DateTime($siteTableRow->updated_at);
+                $updatedAt = $date->getTimestamp();
+            }
         } else {
+            // TODO: fetch updated_at of page
             $updatedAt = '404';
         }
 
@@ -129,7 +133,7 @@ class ComponentImage extends AbstractComponent
                 $prefix = config('app.asset_url');
                 if (config('siteboss.cache_prefix') === true && isset($siteTableRow->updated_at)) {
                     $date = new DateTime($siteTableRow->updated_at);
-                    $prefix .= '/'.$updatedAt;
+                    $prefix .= $updatedAt;
                 }
             }
             $name = $this->properties()->sizes[0]->filename;
