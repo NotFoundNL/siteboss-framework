@@ -192,11 +192,34 @@ class ComponentImage extends AbstractComponent
 
         if (count($this->newValue['files']) > 0) {
             // File was uploaded
-            $result = (object) ['uploaded' => true];
+            dd($this->newValue);
+            $result = ['uploaded' => true, 'images' => $this->getStorageJSON()];
         }
 
         // File was added
         return json_encode($result);
+    }
+
+    private function getStorageJSON()
+    {
+        $prefix = '';
+        if (config('siteboss.cache_prefix') === true && isset($this->assetItem->updated_at)) {
+            $prefix = '/'.$this->assetItem->updated_at->timestamp;
+        }
+
+        $values = new stdClass();
+
+        foreach ($this->properties()->sizes as $size) {
+            $name = $size->filename;
+            $filename = $this->recordId.'_'.$name.'.jpg';
+            $values->$name = (object) [
+                'url' => $prefix.'/assets/public'.$this->relativePathToPublicDisk().$filename,
+                'width' => $size->width,
+                'height' => $size->height,
+            ];
+        }
+
+        return $values;
     }
 
     /**
