@@ -1,5 +1,6 @@
 {
 	"dependencies": {
-		"blade-formatter": "^1.36.0"
+		"blade-formatter": "^1.36.0",
+		"nunomaduro/phpinsights": "^2.9.0"
 	}
 }
