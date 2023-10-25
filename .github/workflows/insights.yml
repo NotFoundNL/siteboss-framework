@@ -4,22 +4,15 @@ on:
   pull_request:
     paths:
       - "**.php"
-      - ".github/workflows/phpinsights.yml"
-
+ 
 jobs:
-  phpinsights:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0 # important!
-
-      - name: Install PHP Insights
-        run: |
-          cd server/laravel
-          cp example.env .env
-          curl -OL https://getcomposer.org/download/latest-2.x/composer.phar
-          php composer.phar global config --no-plugins allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
-          php composer.phar install --no-interaction --no-ansi --no-progress
-          php composer.phar clearcache -q
-          php artisan insights --format=github-action
+    phpinsights:
+        runs-on: ubuntu-latest
+        name: PHP Insights checks
+        steps:
+            - uses: actions/checkout@v2
+            - uses: shivammathur/setup-php@v2
+              with:
+                  php-version: 8.2
+            - run: composer install --prefer-dist --no-progress --no-suggest
+            - run: vendor/bin/phpinsights -n --ansi --format=github-action
