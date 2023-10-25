@@ -112,7 +112,7 @@ class ComponentImage extends AbstractComponent
         $value = json_decode($this->currentValue) ?? new stdClass();
 
         $values = new stdClass();
-        if ($this->assetType === AssetType::TABLE) {
+        if ($this->assetType === AssetType::TABLE && $this->recordId) {
             $siteTableRow = $this->assetModel->getSiteTableRowByRecordId($this->recordId);
             $date = new DateTime($siteTableRow->updated_at);
             $updatedAt = $date->getTimestamp();
