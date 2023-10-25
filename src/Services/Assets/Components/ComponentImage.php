@@ -130,6 +130,7 @@ class ComponentImage extends AbstractComponent
                     'url' => $prefix.'/assets/public'.$this->relativePathToPublicDisk().$filename,
                     'width' => $size->width,
                     'height' => $size->height,
+                    'cropType' => $size->cropType,
                 ];
             }
         }

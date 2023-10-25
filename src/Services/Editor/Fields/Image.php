@@ -22,12 +22,13 @@ class Image extends Properties
         $subItems->addText('filename', 'Filename', required: true);
         $subItems->addText('width', 'Width', required: true);
         $subItems->addText('height', 'Height', required: true);
-        $this->addRepeatable('sizes', 'Dimensions', $subItems);
 
         $options = [];
         $options[] = (object) ['value' => 'constrain', 'label' => 'Crop to dimensions'];
         $options[] = (object) ['value' => 'fitWithin', 'label' => 'Fit within dimensions'];
-        $this->addDropdown('cropType', 'Crop type', $options);
+        $subItems->addDropdown('cropType', 'Crop type', $options);
+
+        $this->addRepeatable('sizes', 'Dimensions', $subItems);
     }
 
     public function serverProperties(): void
