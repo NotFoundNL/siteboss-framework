@@ -33,7 +33,6 @@ class PageRouterService
                     $this->setRouteList($routes);
                     PageRedirectService::getRoutes();
                 }
-
             );
         } catch (Exception $e) {
             if (app()->runningInConsole()) {
