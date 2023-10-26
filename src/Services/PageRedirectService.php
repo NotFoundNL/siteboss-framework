@@ -30,7 +30,7 @@ class PageRedirectService
                     return Redirect::to($redirect->redirect.$pages);
                 })->where('any', '.*');
             } else {
-                Route::redirect($redirect->url, $redirect->redirect, 301);
+                Route::permanentRedirect($redirect->url, $redirect->redirect);
             }
         }
     }
