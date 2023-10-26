@@ -8,6 +8,14 @@ use NotFound\Framework\Models\CmsRedirect;
 
 class PageRedirectService
 {
+    /**
+     * getRoutes
+     *
+     * Retrieves a list of redirects from the database
+     * in order of descending length of the url.
+     *
+     * Then it creates a redirect for each one.
+     */
     public static function getRoutes(): void
     {
         $redirects = CmsRedirect::where('enabled', true)->orderByRaw('CHAR_LENGTH(`url`) DESC')->get();
