@@ -1,18 +1,14 @@
 <?php
 
-namespace NotFound\Framework\Models;
+declare(strict_types=1);
 
-use Illuminate\Database\Eloquent\SoftDeletes;
+namespace NotFound\Framework\Models;
 
 class CmsRedirect extends BaseModel
 {
-    use SoftDeletes;
-
-    protected $fillable = ['title', 'to', 'icon', 'level', 'rights', 'enabled', 'rights', 'order'];
-
     protected $casts = [
         'enabled' => 'boolean',
+        'recursive' => 'boolean',
+        'rewrite' => 'boolean',
     ];
-
-    protected $table = 'cms_redirect';
 }
