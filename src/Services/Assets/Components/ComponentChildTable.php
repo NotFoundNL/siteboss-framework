@@ -95,7 +95,7 @@ class ComponentChildTable extends AbstractComponent
     public function afterSave(): void
     {
         $parentId = $this->recordId;
-        $foreignKey = $this->getForeignTable();
+        $foreignKey = $this->getForeignKey();
 
         $assetItem = new AssetItem();
         $assetItem->type = 'text';
@@ -162,11 +162,13 @@ class ComponentChildTable extends AbstractComponent
      */
     private function getChildren(): Collection
     {
-        return DB::table($this->properties()->allowedBlocks)->where($this->getForeignTable(), $this->recordId)->where('deleted_at', null)->orderBy('order')->get();
+        return DB::table($this->properties()->allowedBlocks)->where($this->getForeignKey(), $this->recordId)->where('deleted_at', null)->orderBy('order')->get();
     }
 
-    private function getForeignTable()
+    private function getForeignKey()
     {
-        return ($this->assetType->value == 'page') ? 'page_id' : ltrim(rtrim($this->assetModel->table, 's').'_id', 'sel_');
+        $prefix = (isset($this->properties()->prefix)) ? $this->properties()->prefix.'_' : '';
+
+        return ($this->assetType->value == 'page') ? 'page_id' : ltrim(rtrim($this->assetModel->table, 's').'_id', $prefix);
     }
 }

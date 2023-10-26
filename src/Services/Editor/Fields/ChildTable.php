@@ -20,6 +20,7 @@ class ChildTable extends Properties
             $options[] = (object) ['value' => $table->table, 'label' => $table->name];
         }
         $this->addDropDown('allowedBlocks', 'Select the possible options', $options);
+        $this->addText('prefix', 'Remove prefix from foreign key');
     }
 
     public function serverProperties(): void
