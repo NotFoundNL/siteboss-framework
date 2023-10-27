@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace NotFound\Framework\Services\Assets\Components;
 
 use DateTime;
@@ -115,36 +117,16 @@ class ComponentImage extends AbstractComponent
         $values = new stdClass();
 
         if (isset($value->uploaded) && $value->uploaded === true && isset($this->properties()->sizes[0])) {
-            // Set the default url
-            $updatedAt = '';
-
-            if ($this->assetType === AssetType::TABLE && $this->recordId) {
-                $siteTableRow = $this->assetModel->getSiteTableRowByRecordId($this->recordId);
-                if (isset($siteTableRow->updated_at)) {
-                    $date = new DateTime($siteTableRow->updated_at);
-                    $updatedAt = $date->getTimestamp();
-                }
-            } else {
-                $menu = Menu::find($this->recordId);
-                if ($menu) {
-                    $date = new DateTime($menu->updated_at);
-                    $updatedAt = $date->getTimestamp();
-                }
-
-            }
 
             $prefix = '';
+            $updatedAt = $this->updatedAt();
 
             if (config('app.asset_url') !== null) {
                 $prefix = config('app.asset_url');
-                if (config('siteboss.cache_prefix') === true && isset($siteTableRow->updated_at)) {
-                    $date = new DateTime($siteTableRow->updated_at);
+                if (config('siteboss.cache_prefix') === true) {
                     $prefix .= $updatedAt;
                 }
             }
-            $name = $this->properties()->sizes[0]->filename;
-            $filename = $this->recordId.'_'.$name.'.jpg';
-            $values->url = $prefix.'/assets/public'.$this->relativePathToPublicDisk().$filename;
 
             // Set the url for each size
             foreach ($this->properties()->sizes as $size) {
@@ -156,9 +138,31 @@ class ComponentImage extends AbstractComponent
                     'height' => $size->height,
                 ];
             }
+            // Set the default url
+            $values->url = array_values($values->sizes)[0]->url;
         }
 
         return $values;
+    }
+
+    private function updatedAt(): string
+    {
+        $updatedAt = '';
+        if ($this->assetType === AssetType::TABLE && $this->recordId) {
+            $siteTableRow = $this->assetModel->getSiteTableRowByRecordId($this->recordId);
+            if (isset($siteTableRow->updated_at)) {
+                $date = new DateTime($siteTableRow->updated_at);
+                $updatedAt = $date->getTimestamp();
+            }
+        } else {
+            $menu = Menu::find($this->recordId);
+            if ($menu) {
+                $date = new DateTime($menu->updated_at);
+                $updatedAt = $date->getTimestamp();
+            }
+        }
+
+        return (string) $updatedAt;
     }
 
     private function deleteFiles()
