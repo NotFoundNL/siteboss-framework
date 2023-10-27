@@ -112,7 +112,7 @@ class ComponentImage extends AbstractComponent
      */
     public function getCurrentValue(): object
     {
-        $value = json_decode($this->currentValue) ?? new stdClass();
+        $value = json_decode($this->currentValue ?? '{}') ?? new stdClass();
 
         $values = new stdClass();
 
@@ -200,7 +200,7 @@ class ComponentImage extends AbstractComponent
      */
     public function getValueForStorage(): ?string
     {
-        $result = json_decode($this->currentValue) ?? new stdClass();
+        $result = json_decode($this->currentValue ?? '{}') ?? new stdClass();
 
         // Check for a current value
         if (isset($result->uploaded) && $result->uploaded === true) {
