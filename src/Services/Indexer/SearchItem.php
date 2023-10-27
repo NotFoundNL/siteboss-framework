@@ -2,29 +2,30 @@
 
 namespace NotFound\Framework\Services\Indexer;
 
+use DateTime;
 use NotFound\Framework\Models\Lang;
 
 final class SearchItem
 {
     private string $type = 'page';
 
-    private ?string $language = null;
+    private ?string $language;
 
-    private ?string $content = null;
+    private ?string $content;
 
-    private ?string $image = null;
+    private ?string $image;
 
     private bool $inSitemap = true;
 
-    private ?string $publicationDate = null;
+    private ?DateTime $publicationDate;
 
-    private ?string $lastUpdated = null;
+    private ?DateTime $lastUpdated;
 
     private int $priority = 1;
 
     private array $customValues = [];
 
-    private ?string $filePath = null;
+    private ?string $filePath;
 
     // Minimum required fields
 
@@ -77,28 +78,28 @@ final class SearchItem
         return $this;
     }
 
-    public function setLastUpdated(string $lastUpdated): self
+    public function setLastUpdated(?DateTime $lastUpdated): self
     {
         $this->lastUpdated = $lastUpdated;
 
         return $this;
     }
 
-    public function setCustomValue(string $key, string $value): self
+    public function setCustomValue(string $key, mixed $value): self
     {
         $this->customValues[$key] = $value;
 
         return $this;
     }
 
-    public function setPriority(int $priority): self
+    public function setPriority(mixed $priority): self
     {
         $this->priority = $priority;
 
         return $this;
     }
 
-    public function setPublicationDate(?string $publicationDate): self
+    public function setPublicationDate(?DateTime $publicationDate): self
     {
         $this->publicationDate = $publicationDate;
 
@@ -145,7 +146,12 @@ final class SearchItem
      */
     public function publicationDate(): ?string
     {
-        return $this->publicationDate ?? $this->lastUpdated;
+        $time = $this->publicationDate ?? $this->lastUpdated;
+        if ($time === null) {
+            return null;
+        }
+
+        return $time->format(DateTime::ATOM);
     }
 
     /**
@@ -156,7 +162,12 @@ final class SearchItem
      */
     public function lastUpdated(): ?string
     {
-        return $this->lastUpdated ?? $this->publicationDate;
+        $time = $this->lastUpdated ?? $this->publicationDate;
+        if ($time === null) {
+            return null;
+        }
+
+        return $time->format(DateTime::ATOM);
     }
 
     public function customValues(): ?array

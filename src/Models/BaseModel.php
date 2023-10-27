@@ -35,7 +35,7 @@ class BaseModel extends Model
 
     public function v()
     {
-        $cacheKey = 'table_'.$this->table.'_'.$this->id.'_'.Lang::current()->url;
+        $cacheKey = 'table_'.$this->table.'_'.$this->id.'_'.Lang::current()->url.($this->updated_at ?? '');
         $secondsToRemember = 7 * 24 * 60 * 60;
 
         return Cache::remember($cacheKey, $secondsToRemember, function () {

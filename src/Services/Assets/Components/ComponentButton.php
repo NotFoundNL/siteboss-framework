@@ -2,6 +2,7 @@
 
 namespace NotFound\Framework\Services\Assets\Components;
 
+use NotFound\Framework\Services\Assets\Enums\AssetType;
 use NotFound\Layout\Elements\AbstractLayout;
 use NotFound\Layout\Elements\Table\LayoutTableColumn;
 
@@ -17,16 +18,32 @@ class ComponentButton extends AbstractComponent
     public function getTableOverviewContent(): LayoutTableColumn
     {
         if (isset($this->properties()->action)) {
-            $newAction = str_replace('{id}', $this->recordId, $this->properties()->action);
+            $newAction = preg_replace_callback('/{([^}]+)}/', [$this, 'replaceValue'], $this->properties()->action);
             $payLoad = (object) ['action' => $newAction, 'name' => $this->assetItem->name];
         } else {
-            $link = str_replace('{id}', $this->recordId, $this->properties()->link);
-            $payLoad = (object) ['link' => $link, 'name' => $this->assetItem->name];
+            $newLink = preg_replace_callback('/{([^}]+)}/', [$this, 'replaceValue'], $this->properties()->link);
+            $payLoad = (object) ['link' => $newLink, 'name' => $this->assetItem->name];
         }
-
         $payLoad->external = $this->properties()->external ?? false;
 
         return new LayoutTableColumn('export', $this->type, $payLoad);
+    }
+
+    private function replaceValue($matches): string
+    {
+        $value = $matches[1];
+        // Prevent database calls for ID only
+        if ($value === 'id') {
+            return $this->recordId;
+        }
+        if ($this->assetType === AssetType::TABLE) {
+            $siteTableRow = $this->assetModel->getSiteTableRowByRecordId($this->recordId);
+            if (isset($siteTableRow->$value)) {
+                return urlencode($siteTableRow->$value);
+            }
+        }
+
+        return $value;
     }
 
     public function validate($newValue): bool

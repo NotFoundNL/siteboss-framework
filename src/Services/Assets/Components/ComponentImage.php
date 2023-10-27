@@ -2,11 +2,14 @@
 
 namespace NotFound\Framework\Services\Assets\Components;
 
+use DateTime;
 use Illuminate\Http\File;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Intervention\Image\ImageManager;
+use NotFound\Framework\Models\Menu;
+use NotFound\Framework\Services\Assets\Enums\AssetType;
 use NotFound\Layout\Elements\AbstractLayout;
 use NotFound\Layout\Elements\Table\LayoutTableColumn;
 use NotFound\Layout\Inputs\LayoutInputImage;
@@ -113,13 +116,30 @@ class ComponentImage extends AbstractComponent
 
         if (isset($value->uploaded) && $value->uploaded === true && isset($this->properties()->sizes[0])) {
             // Set the default url
+            $updatedAt = '';
+
+            if ($this->assetType === AssetType::TABLE && $this->recordId) {
+                $siteTableRow = $this->assetModel->getSiteTableRowByRecordId($this->recordId);
+                if (isset($siteTableRow->updated_at)) {
+                    $date = new DateTime($siteTableRow->updated_at);
+                    $updatedAt = $date->getTimestamp();
+                }
+            } else {
+                $menu = Menu::find($this->recordId);
+                if ($menu) {
+                    $date = new DateTime($menu->updated_at);
+                    $updatedAt = $date->getTimestamp();
+                }
+
+            }
 
             $prefix = '';
 
             if (config('app.asset_url') !== null) {
                 $prefix = config('app.asset_url');
-                if (config('siteboss.cache_prefix') === true && isset($this->assetItem->updated_at)) {
-                    $prefix .= '/'.$this->assetItem->updated_at->timestamp;
+                if (config('siteboss.cache_prefix') === true && isset($siteTableRow->updated_at)) {
+                    $date = new DateTime($siteTableRow->updated_at);
+                    $prefix .= $updatedAt;
                 }
             }
             $name = $this->properties()->sizes[0]->filename;
