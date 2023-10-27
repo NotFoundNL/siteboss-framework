@@ -151,13 +151,13 @@ class ComponentImage extends AbstractComponent
         if ($this->assetType === AssetType::TABLE && $this->recordId) {
             $siteTableRow = $this->assetModel->getSiteTableRowByRecordId($this->recordId);
             if (isset($siteTableRow->updated_at)) {
-                $date = new DateTime($siteTableRow->updated_at);
+                $date = new DateTime($siteTableRow->updated_at ?? '2020-01-01 00:00:00');
                 $updatedAt = $date->getTimestamp();
             }
         } else {
             $menu = Menu::find($this->recordId);
             if ($menu) {
-                $date = new DateTime($menu->updated_at);
+                $date = new DateTime($menu->updated_at ?? '2020-01-01 00:00:00');
                 $updatedAt = $date->getTimestamp();
             }
         }
