@@ -21,7 +21,7 @@ class PageRedirectService
         $redirects = CmsRedirect::where('enabled', true)->orderByRaw('CHAR_LENGTH(`url`) DESC')->get();
         foreach ($redirects as $redirect) {
             if ($redirect->recursive) {
-                Route::any($redirect->url.'{any}', function ($pages) use ($redirect) {
+                Route::any($redirect->url.'{any}', function (?string $pages = '') use ($redirect) {
                     $pages = trim($pages, '/');
                     if ($redirect->rewrite) {
                         $pages = '';
