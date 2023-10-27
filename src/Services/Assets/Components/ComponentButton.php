@@ -21,11 +21,9 @@ class ComponentButton extends AbstractComponent
             $newAction = preg_replace_callback('/{([^}]+)}/', [$this, 'replaceValue'], $this->properties()->action);
             $payLoad = (object) ['action' => $newAction, 'name' => $this->assetItem->name];
         } else {
-
             $newLink = preg_replace_callback('/{([^}]+)}/', [$this, 'replaceValue'], $this->properties()->link);
             $payLoad = (object) ['link' => $newLink, 'name' => $this->assetItem->name];
         }
-
         $payLoad->external = $this->properties()->external ?? false;
 
         return new LayoutTableColumn('export', $this->type, $payLoad);
