@@ -23,7 +23,7 @@ class ComponentButton extends AbstractComponent
         } else {
 
             $newLink = preg_replace_callback('/{([^}]+)}/', [$this, 'replaceValue'], $this->properties()->link);
-            $payLoad = (object) ['link' => $newLink, 'name' => $this->assetItem->name.$newLink];
+            $payLoad = (object) ['link' => $newLink, 'name' => $this->assetItem->name];
         }
 
         $payLoad->external = $this->properties()->external ?? false;
