@@ -6,9 +6,9 @@ use NotFound\Framework\Models\CmsSearch;
 
 abstract class AbstractIndexService
 {
-    public Int $languageId;
+    public int $languageId;
 
-    public Int $siteId;
+    public int $siteId;
 
     abstract public function __construct($debug = false);
 

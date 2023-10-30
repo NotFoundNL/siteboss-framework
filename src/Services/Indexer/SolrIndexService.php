@@ -8,7 +8,7 @@ use stdClass;
 
 class SolrIndexService extends AbstractIndexService
 {
-    private Bool $debug = false;
+    private bool $debug = false;
 
     public int $siteId;
 

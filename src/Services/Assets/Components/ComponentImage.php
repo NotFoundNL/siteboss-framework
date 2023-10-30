@@ -82,13 +82,26 @@ class ComponentImage extends AbstractComponent
             $width = $dimensions->width;
             $height = $dimensions->height;
 
-            // TODO: Implement crop types, currently default to constrain
             $filename = $this->recordId.'_'.$dimensions->filename.'.jpg';
 
             // create new image instance
             $image = (new ImageManager(['driver' => 'imagick']))->make(new File(request()->file($fileId)->path()));
 
-            $image->resize($width, $height);
+            if ($dimensions->height === '0') {
+                $height = intval($image->height() / $image->width() * $width);
+            }
+            if ($dimensions->width === '0') {
+                $width = intval($image->width() / $image->height() * $height);
+            }
+
+            if (isset($dimensions->cropType) && $dimensions->cropType === 'fitWithin') {
+                $image->resize($width, $height, function ($constraint) {
+                    $constraint->aspectRatio();
+                    $constraint->upsize();
+                });
+            } else {
+                $image->fit($width, $height);
+            }
 
             $image->save(
                 Storage::path('public').$this->relativePathToPublicDisk().$filename
@@ -136,6 +149,7 @@ class ComponentImage extends AbstractComponent
                     'url' => $prefix.'/assets/public'.$this->relativePathToPublicDisk().$filename,
                     'width' => $size->width,
                     'height' => $size->height,
+                    'cropType' => (isset($size->cropType)) ? $size->cropType : 'constrain',
                 ];
             }
             // Set the default url
@@ -215,11 +229,33 @@ class ComponentImage extends AbstractComponent
 
         if (count($this->newValue['files']) > 0) {
             // File was uploaded
-            $result = (object) ['uploaded' => true];
+            $result = ['uploaded' => true];
         }
 
         // File was added
         return json_encode($result);
+    }
+
+    private function getStorageJSON()
+    {
+        $prefix = '';
+        if (config('siteboss.cache_prefix') === true && isset($this->assetItem->updated_at)) {
+            $prefix = '/'.$this->assetItem->updated_at->timestamp;
+        }
+
+        $values = new stdClass();
+
+        foreach ($this->properties()->sizes as $size) {
+            $name = $size->filename;
+            $filename = $this->recordId.'_'.$name.'.jpg';
+            $values->$name = (object) [
+                'url' => $prefix.'/assets/public'.$this->relativePathToPublicDisk().$filename,
+                'width' => $size->width,
+                'height' => $size->height,
+            ];
+        }
+
+        return $values;
     }
 
     /**
