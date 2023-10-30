@@ -77,18 +77,27 @@ class ComponentImage extends AbstractComponent
             $width = $dimensions->width;
             $height = $dimensions->height;
 
-            // TODO: Implement crop types, currently default to constrain
             $filename = $this->recordId.'_'.$dimensions->filename.'.jpg';
 
             // create new image instance
-            $image = (new ImageManager(['driver' => 'imagick']))->make(new File(request()->file($fileId)));
+            $image = (new ImageManager(['driver' => 'imagick']))->make(new File(request()->file($fileId)->path()));
 
-            if ($dimensions->cropType == 'fitWithin') {
-                $image->fit($width, $height);
-            } else {
-                $image->resize($width, $height);
+            if ($dimensions->height === '0') {
+                $height = intval($image->height() / $image->width() * $width);
+            }
+            if ($dimensions->width === '0') {
+                $width = intval($image->width() / $image->height() * $height);
             }
 
+            if (isset($dimensions->cropType) && $dimensions->cropType === 'fitWithin') {
+                $image->resize($width, $height, function ($constraint) {
+                    $constraint->aspectRatio();
+                    $constraint->upsize();
+                });
+            } else {
+                $image->fit($width, $height);
+            }
+            
             $image->save(
                 Storage::path('public').$this->relativePathToPublicDisk().$filename
             );
@@ -192,7 +201,7 @@ class ComponentImage extends AbstractComponent
 
         if (count($this->newValue['files']) > 0) {
             // File was uploaded
-            $result = ['uploaded' => true, 'images' => $this->getStorageJSON()];
+            $result = ['uploaded' => true];
         }
 
         // File was added

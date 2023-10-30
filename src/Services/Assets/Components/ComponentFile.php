@@ -76,7 +76,7 @@ class ComponentFile extends AbstractComponent
             }
         }
 
-        $path = request()->file($fileId);
+        $path = request()->file($fileId)->path();
 
         return ClamAV::uploadIsClean($path);
     }

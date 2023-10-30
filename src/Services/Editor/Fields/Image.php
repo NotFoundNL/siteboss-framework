@@ -24,8 +24,8 @@ class Image extends Properties
         $subItems->addText('height', 'Height', required: true);
 
         $options = [];
-        $options[] = (object) ['value' => 'constrain', 'label' => 'Crop to dimensions'];
-        $options[] = (object) ['value' => 'fitWithin', 'label' => 'Fit within dimensions'];
+        $options[] = (object) ['value' => 'constrain', 'label' => 'Cover (crop middle of image to fit exact dimensions)'];
+        $options[] = (object) ['value' => 'fitWithin', 'label' => 'Fit (resize image proportionally to fit within dimensions)'];
         $subItems->addDropdown('cropType', 'Crop type', $options);
 
         $this->addRepeatable('sizes', 'Dimensions', $subItems);
