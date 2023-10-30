@@ -86,7 +86,7 @@ class ComponentImage extends AbstractComponent
             $filename = $this->recordId.'_'.$dimensions->filename.'.jpg';
 
             // create new image instance
-            $image = (new ImageManager(['driver' => 'imagick']))->make(new File(request()->file($fileId)));
+            $image = (new ImageManager(['driver' => 'imagick']))->make(new File(request()->file($fileId)->path()));
 
             $image->resize($width, $height);
 
