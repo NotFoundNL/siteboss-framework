@@ -97,7 +97,7 @@ class ComponentImage extends AbstractComponent
             } else {
                 $image->fit($width, $height);
             }
-            
+
             $image->save(
                 Storage::path('public').$this->relativePathToPublicDisk().$filename
             );
