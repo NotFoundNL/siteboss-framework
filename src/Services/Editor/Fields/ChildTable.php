@@ -19,7 +19,8 @@ class ChildTable extends Properties
         foreach ($tables as $table) {
             $options[] = (object) ['value' => $table->table, 'label' => $table->name];
         }
-        $this->addDropDown('allowedBlocks', 'Select the possible options', $options);
+        $this->addDropDown('allowedBlocks', 'Select child table', $options);
+        $this->addText('prefix', 'Remove prefix from foreign key');
     }
 
     public function serverProperties(): void
