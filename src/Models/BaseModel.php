@@ -46,7 +46,7 @@ class BaseModel extends Model
     {
         $updated = '';
         $secondsToRemember = 3600;
-        if ($this->updated_at !== null) {
+        if (isset($this->updated_at) && $this->updated_at !== null) {
             $secondsToRemember = 7 * 24 * 60 * 60;
             $updated = (string) $this->updated_at->getTimeStamp();
         }
