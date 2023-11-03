@@ -171,8 +171,7 @@ class ComponentImage extends AbstractComponent
         } else {
             $menu = Menu::find($this->recordId);
             if ($menu) {
-                $date = new DateTime($menu->updated_at ?? '2020-01-01 00:00:00');
-                $updatedAt = $date->getTimestamp();
+                $updatedAt = $menu->updated_at->getTimestamp();
             }
         }
 
