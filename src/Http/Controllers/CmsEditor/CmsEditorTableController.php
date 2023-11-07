@@ -92,6 +92,8 @@ class CmsEditorTableController extends \NotFound\Framework\Http\Controllers\Cont
         $action = new Redirect('/app/editor/table/'.$tableId);
         $response->addAction($action);
 
+        CmsEditorImportExportController::tableToFile(Table::find($tableId));
+
         return $response->build();
     }
 
@@ -235,6 +237,8 @@ class CmsEditorTableController extends \NotFound\Framework\Http\Controllers\Cont
         $response = new LayoutResponse();
         $response->addAction(new Toast('Table properties updated'));
 
+        CmsEditorImportExportController::tableToFile($table);
+
         return $response->build();
     }
 
@@ -263,6 +267,8 @@ class CmsEditorTableController extends \NotFound\Framework\Http\Controllers\Cont
             $response->addAction(new Redirect('/app/editor/table/'.$table->id.'/'.$newField->id));
         }
 
+        CmsEditorImportExportController::tableToFile($table);
+
         return $response->build();
     }
 
@@ -281,6 +287,8 @@ class CmsEditorTableController extends \NotFound\Framework\Http\Controllers\Cont
 
             return $response->build();
         }
+
+        CmsEditorImportExportController::tableToFile($table);
 
         return response()->json(['status' => 'ok']);
     }
