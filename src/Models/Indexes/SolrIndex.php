@@ -280,7 +280,7 @@ class SolrIndex extends BaseModel
 
     public function selectItems($query, $lang = 'nl', $filter = null, $start = null, $rows = null, $extraColumns = [], $highlightLength = 50, $sortField = null, $sortDirection = 'desc')
     {
-        if($query==="")
+        if ( trim($query)==='')
         {
             return NULL;
         }
