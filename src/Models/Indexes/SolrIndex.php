@@ -281,13 +281,12 @@ class SolrIndex extends BaseModel
     public function selectItems($query, $lang = 'nl', $filter = null, $start = null, $rows = null, $extraColumns = [], $highlightLength = 50, $sortField = null, $sortDirection = 'desc')
     {
         $curl = $this->solrHandler();
+        $queryRewritten = $query != "" ? sprintf('title_%s:%s%%20content_%s:%s', $lang, rawurlencode($query), $lang, rawurlencode($query)): $query;  
+        
         $url = sprintf(
-            '%s/select?q=title_%s:%s%%20content_%s:%s&spellcheck.q=%s&wt=%s&hl=%s&q.op=%s&hl.fl=%s&fl=%s&spellcheck=true&hl.fragsize=%d&hl.maxAnalyzedChars=%d&spellcheck.dictionary=spellcheck_%s',
+            '%s/select?q=%s&spellcheck.q=%s&wt=%s&hl=%s&q.op=%s&hl.fl=%s&fl=%s&spellcheck=true&hl.fragsize=%d&hl.maxAnalyzedChars=%d&spellcheck.dictionary=spellcheck_%s',
             $this->getSolrBaseUrl(),
-            $lang,
-            rawurlencode($query), // make sure + between search terms is preserved
-            $lang,
-            rawurlencode($query), // make sure + between search terms is preserved
+            $queryRewritten,
             rawurlencode($query), // make sure + between search terms is preserved
             $this->wt,
             $this->hl,
@@ -314,10 +313,10 @@ class SolrIndex extends BaseModel
         if ($sortField) {
             $url .= '&sort='.urlencode($sortField.' '.$sortDirection);
         }
-
         curl_setopt($curl, CURLOPT_URL, $url);
         $result = curl_exec($curl);
         $json = json_decode($result);
+
         $searchResults = new SolrItem($json, $query, false, $highlightLength);
         if (! $searchResults->isValid()) {
             $this->mailQueryError($url, $result);
@@ -325,6 +324,7 @@ class SolrIndex extends BaseModel
 
         return $searchResults;
     }
+
 
     public function suggestItems($query, $filter = null)
     {
