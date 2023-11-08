@@ -26,11 +26,11 @@ class SolrIndex extends BaseModel
 {
     private ?string $solrHost;
 
-    private ?String $solrUser;
+    private ?string $solrUser;
 
-    private ?String $solrCore;
+    private ?string $solrCore;
 
-    private ?String $solrPass;
+    private ?string $solrPass;
 
     public ?string $selectField = null;
 
@@ -50,7 +50,7 @@ class SolrIndex extends BaseModel
 
     public string $df = 'content';
 
-    public ?String $sort = null;
+    public ?string $sort = null;
 
     // suggest parameters
     public array $suggester = [];
