@@ -1,6 +1,7 @@
 <?php
 
-declare(strict_types=1);
+// TODO: enable strict_types
+// declare(strict_types=1);
 
 namespace NotFound\Framework\Services\Assets\Components;
 
@@ -170,7 +171,7 @@ class ComponentImage extends AbstractComponent
             }
         } else {
             $menu = Menu::find($this->recordId);
-            if ($menu) {
+            if ($menu && $menu->updated_at) {
                 $updatedAt = $menu->updated_at->getTimestamp();
             }
         }
