@@ -33,6 +33,7 @@ class FrameworkServiceProvider extends ServiceProvider
             __DIR__.'/../config/openid.php' => config_path('openid.php'),
             __DIR__.'/../config/clamav.php' => config_path('clamav.php'),
             __DIR__.'/../config/database.php' => config_path('database.php'),
+            __DIR__.'/../config/forwards.php' => config_path('forwards.php'),
             __DIR__.'/../config/indexer.php' => config_path('indexer.php'),
             __DIR__.'/../config/laravellocalization.php' => config_path('laravellocalization.php'),
             __DIR__.'/Providers/AuthServiceProvider.php' => app_path('Providers/AuthServiceProvider.php'),
