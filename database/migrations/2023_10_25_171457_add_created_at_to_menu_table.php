@@ -11,6 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
+        if (Schema::hasColumn('menu', 'created_at')) {
+            return;
+        }
         Schema::table('menu', function (Blueprint $table) {
             $table->timestamp('created_at')->nullable();
         });
