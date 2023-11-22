@@ -17,9 +17,9 @@ final class SearchItem
 
     private bool $inSitemap = true;
 
-    private ?DateTime $publicationDate;
+    private ?DateTime $publicationDate = null;
 
-    private ?DateTime $lastUpdated;
+    private ?DateTime $lastUpdated = null;
 
     private int $priority = 1;
 
@@ -146,12 +146,7 @@ final class SearchItem
      */
     public function publicationDate(): ?string
     {
-        $time = $this->publicationDate ?? $this->lastUpdated;
-        if ($time === null) {
-            return null;
-        }
-
-        return $time->format(DateTime::ATOM);
+        return $this->toDateString( $this->publicationDate ?? $this->lastUpdated);
     }
 
     /**
@@ -162,12 +157,7 @@ final class SearchItem
      */
     public function lastUpdated(): ?string
     {
-        $time = $this->lastUpdated ?? $this->publicationDate;
-        if ($time === null) {
-            return null;
-        }
-
-        return $time->format(DateTime::ATOM);
+        return $this->toDateString($this->lastUpdated ?? $this->publicationDate);
     }
 
     public function customValues(): ?array
@@ -188,5 +178,14 @@ final class SearchItem
     public function sitemap(): bool
     {
         return $this->inSitemap;
+    }
+    
+    private function toDateString( ?DateTime $date): ?string
+    {
+        if ($date === null) {
+            return null;
+        }
+
+        return $date->format(DateTime::ATOM);
     }
 }
