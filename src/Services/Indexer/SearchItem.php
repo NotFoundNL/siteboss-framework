@@ -146,7 +146,7 @@ final class SearchItem
      */
     public function publicationDate(): ?string
     {
-        return $this->toDateString( $this->publicationDate ?? $this->lastUpdated);
+        return $this->toDateString($this->publicationDate ?? $this->lastUpdated);
     }
 
     /**
@@ -179,8 +179,8 @@ final class SearchItem
     {
         return $this->inSitemap;
     }
-    
-    private function toDateString( ?DateTime $date): ?string
+
+    private function toDateString(?DateTime $date): ?string
     {
         if ($date === null) {
             return null;
