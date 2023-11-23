@@ -112,7 +112,18 @@ class CmsEditorTableController extends \NotFound\Framework\Http\Controllers\Cont
 
         $widget1 = new LayoutWidget($table->name ?? 'New table', 6);
 
+        $tableConfigFile = base_path('resources/siteboss/tables/'.$table->table.'.json');
         $form = new LayoutForm('/app/editor/table/'.$table->id);
+
+        if (file_exists($tableConfigFile)) {
+            $table = (object) json_decode(file_get_contents($tableConfigFile))[0];
+            $tables = $table->items;
+            usort($tables, function ($item1, $item2) {
+                return $item1->order <=> $item2->order;
+            });
+        } else {
+            $tables = $table->items()->orderBy('order', 'asc')->get();
+        }
 
         $form->addInput((new LayoutInputText('name', 'Name'))->setValue($table->name ?? '')->setRequired());
         $form->addInput((new LayoutInputText('table', 'Table'))->setValue($table->table ?? '')->setRequired());
@@ -164,7 +175,6 @@ class CmsEditorTableController extends \NotFound\Framework\Http\Controllers\Cont
         $UItable->addHeader(new LayoutTableHeader('Type', 'type'));
         $UItable->addHeader(new LayoutTableHeader('Error', 'error'));
         $UItable->addHeader(new LayoutTableHeader('Enabled', 'enabled'));
-        $tables = $table->items()->orderBy('order', 'asc')->get();
 
         foreach ($tables as $cmsTable) {
             $row = new LayoutTableRow($cmsTable->id, '/app/editor/table/'.$table->id.'/'.$cmsTable->id);
