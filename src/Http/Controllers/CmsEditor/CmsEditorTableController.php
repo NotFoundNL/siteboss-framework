@@ -124,16 +124,8 @@ class CmsEditorTableController extends \NotFound\Framework\Http\Controllers\Cont
         $tableConfigFile = base_path('resources/siteboss/tables/'.$table->table.'.json');
         $form = new LayoutForm('/app/editor/table/'.$table->id);
 
-        if (file_exists($tableConfigFile)) {
-            $table = (object) json_decode(file_get_contents($tableConfigFile))[0];
-            $tables = $table->items;
-            usort($tables, function ($item1, $item2) {
-                return $item1->order <=> $item2->order;
-            });
-        } else {
-            $tables = $table->items()->orderBy('order', 'asc')->get();
-        }
-
+        $tables = $table->items()->orderBy('order', 'asc')->get();
+      
         $form->addInput((new LayoutInputText('name', 'Name'))->setValue($table->name ?? '')->setRequired());
         $form->addInput((new LayoutInputText('table', 'Table'))->setValue($table->table ?? '')->setRequired());
 
