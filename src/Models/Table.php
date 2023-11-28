@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
 use NotFound\Framework\Services\Legacy\StatusColumn;
+use NotFound\Framework\Traits\Exportable;
 use Sb;
 
 /**
@@ -58,6 +59,7 @@ use Sb;
 class Table extends AssetModel
 {
     use SoftDeletes;
+    use Exportable;
 
     protected $table = 'cms_table';
 
@@ -200,60 +202,5 @@ class Table extends AssetModel
         return $this->attributes['allow_sort'];
     }
 
-    public function exportToFile(): bool
-    {
-        $tableItems = $this->items()->orderBy('order', 'asc')->get();
-        $items = [];
 
-        foreach ($tableItems as $tableItem) {
-            $items[] = (object) [
-                'id' => $tableItem->id,
-                'rights' => $tableItem->rights,
-                'internal' => $tableItem->internal,
-                'type' => $tableItem->type,
-                'name' => $tableItem->name,
-                'description' => $tableItem->description,
-                'properties' => $tableItem->properties,
-                'order' => $tableItem->order,
-                'enabled' => $tableItem->enabled,
-                'global' => $tableItem->global ?? 0,
-                'server_properties' => $tableItem->server_properties,
-            ];
-        }
-
-        $exportData[] = (object) [
-            'id' => $this->id,
-            'comments' => $this->comments,
-            'rights' => $this->rights,
-            'url' => $this->url,
-            'table' => $this->getSiteTableName(),
-            'name' => $this->name,
-            'allow_create' => $this->allow_create,
-            'allow_delete' => $this->alllow_delete,
-            'allow_sort' => $this->allow_sort,
-            'properties' => $this->properties,
-            'enabled' => $this->enabled,
-            'items' => $items,
-        ];
-
-        $tableConfigFile = base_path('resources/siteboss/tables/'.$this->getSiteTableName().'.json');
-        if (! file_exists($tableConfigFile)) {
-            Sb::makeDirectory(base_path(), 'resources/siteboss/tables/');
-        }
-
-        try {
-            file_put_contents($tableConfigFile, json_encode($exportData, JSON_PRETTY_PRINT));
-
-            return true;
-        } catch (Exception) {
-            throw new \Exception('Could not write '.$this->table.' JSON file');
-        }
-
-        return false;
-    }
-
-    public function importFromFile()
-    {
-
-    }
 }
