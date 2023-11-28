@@ -31,6 +31,7 @@ class PageRouterService
                     'middleware' => [LaravelLocalizationViewPath::class],
                 ], function () use ($routes) {
                     $this->setRouteList($routes);
+                    PageRedirectService::getRoutes();
                 }
             );
         } catch (Exception $e) {

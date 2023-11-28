@@ -94,6 +94,8 @@ Route::prefix(config('siteboss.api_prefix'))->group(function () {
 
                 Route::prefix('users')->group(__DIR__.'/cms/users.php');
 
+                Route::prefix('redirects')->group(__DIR__.'/cms/redirects.php');
+
                 // CMS Editor
                 Route::prefix('editor')->group(__DIR__.'/cms/editor.php');
 

@@ -2,6 +2,7 @@
 
 namespace NotFound\Framework\Services\Indexer;
 
+use DateTime;
 use NotFound\Framework\Models\CmsSite;
 use NotFound\Framework\Models\Lang;
 use NotFound\Framework\Models\Menu;
@@ -166,7 +167,7 @@ class IndexBuilderService
             if (! empty($title) && ! empty($searchText)) {
 
                 $searchItem = new SearchItem($url, $title);
-                $searchItem->setContent($searchText)->setLanguage($lang->url)->setPriority($priority)->setPublicationDate($solrDate);
+                $searchItem->setContent($searchText)->setLanguage($lang->url)->setPriority($priority)->setPublicationDate(new DateTime($menu->updated_at));
                 foreach ($customValues as $key => $value) {
                     $searchItem->setCustomValue($key, $value);
                 }
@@ -212,6 +213,12 @@ class IndexBuilderService
     {
         app()->setLocale($lang->url);
         $subPages = $class->searchSubitems();
+
+        // We need to check if the subPages is an array of arrays
+        // If not we wrap it in an extra array
+        if (count($subPages) > 0 && ! is_array($subPages[0])) {
+            $subPages = [$subPages];
+        }
         foreach ($subPages as $subPage) {
 
             foreach ($subPage as $searchItem) {

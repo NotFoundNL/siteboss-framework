@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace NotFound\Framework\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -33,10 +35,22 @@ class BaseModel extends Model
      */
     protected $visible = [''];
 
-    public function v()
+    /**
+     * Fetch the cached values for this model
+     * based on the CMS settings.
+     *
+     * As this is causes heavy use of resources we'll cache
+     * the result for a week.
+     */
+    public function v(): AssetValues
     {
-        $cacheKey = 'table_'.$this->table.'_'.$this->id.'_'.Lang::current()->url;
-        $secondsToRemember = 7 * 24 * 60 * 60;
+        $updated = '';
+        $secondsToRemember = 3600;
+        if (isset($this->updated_at) && $this->updated_at !== null) {
+            $secondsToRemember = 7 * 24 * 60 * 60;
+            $updated = (string) $this->updated_at->getTimeStamp();
+        }
+        $cacheKey = 'table_'.$this->table.'_'.$this->id.'_'.Lang::current()->url.$updated;
 
         return Cache::remember($cacheKey, $secondsToRemember, function () {
             $tableService = new TableService(Table::whereTable($this->table)->first(), Lang::current(), $this->id);

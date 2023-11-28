@@ -11,4 +11,5 @@ return [
     'description' => 'Beschrijf het probleem of stel je vraag.',
     'descriptionDescription' => 'Vergeet niet te vermelden op welke pagina het probleem optreedt, bij voorkeur kopieer je de hele URL.',
     'done' => 'Je aanvraag is ingediend. We nemen zo snel mogelijk contact met je op.',
+    'no_endpoint' => 'Neem voor ondersteuning contact op met je leverancier.',
 ];

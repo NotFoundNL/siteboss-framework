@@ -2,29 +2,30 @@
 
 namespace NotFound\Framework\Services\Indexer;
 
+use DateTime;
 use NotFound\Framework\Models\Lang;
 
 final class SearchItem
 {
     private string $type = 'page';
 
-    private ?string $language = null;
+    private ?string $language;
 
-    private ?string $content = null;
+    private ?string $content;
 
-    private ?string $image = null;
+    private ?string $image;
 
     private bool $inSitemap = true;
 
-    private ?string $publicationDate = null;
+    private ?DateTime $publicationDate = null;
 
-    private ?string $lastUpdated = null;
+    private ?DateTime $lastUpdated = null;
 
     private int $priority = 1;
 
     private array $customValues = [];
 
-    private ?string $filePath = null;
+    private ?string $filePath;
 
     // Minimum required fields
 
@@ -77,28 +78,28 @@ final class SearchItem
         return $this;
     }
 
-    public function setLastUpdated(string $lastUpdated): self
+    public function setLastUpdated(?DateTime $lastUpdated): self
     {
         $this->lastUpdated = $lastUpdated;
 
         return $this;
     }
 
-    public function setCustomValue(string $key, string $value): self
+    public function setCustomValue(string $key, mixed $value): self
     {
         $this->customValues[$key] = $value;
 
         return $this;
     }
 
-    public function setPriority(int $priority): self
+    public function setPriority(mixed $priority): self
     {
         $this->priority = $priority;
 
         return $this;
     }
 
-    public function setPublicationDate(string $publicationDate): self
+    public function setPublicationDate(?DateTime $publicationDate): self
     {
         $this->publicationDate = $publicationDate;
 
@@ -142,12 +143,10 @@ final class SearchItem
      *
      * Get the publication date of the content
      * This can be used for sorting and prioritizing content
-     *
-     * @return string
      */
     public function publicationDate(): ?string
     {
-        return $this->publicationDate;
+        return $this->toDateString($this->publicationDate ?? $this->lastUpdated);
     }
 
     /**
@@ -155,12 +154,10 @@ final class SearchItem
      *
      * This is when the content was last updated
      * This is used to determine if the content needs to be re-indexed
-     *
-     * @return string
      */
     public function lastUpdated(): ?string
     {
-        return $this->lastUpdated;
+        return $this->toDateString($this->lastUpdated ?? $this->publicationDate);
     }
 
     public function customValues(): ?array
@@ -181,5 +178,14 @@ final class SearchItem
     public function sitemap(): bool
     {
         return $this->inSitemap;
+    }
+
+    private function toDateString(?DateTime $date): ?string
+    {
+        if ($date === null) {
+            return null;
+        }
+
+        return $date->format(DateTime::ATOM);
     }
 }

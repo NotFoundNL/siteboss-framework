@@ -1,11 +1,18 @@
 <?php
 
+// TODO: enable strict_types
+// declare(strict_types=1);
+
 namespace NotFound\Framework\Services\Assets\Components;
 
+use DateTime;
 use Illuminate\Http\File;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Intervention\Image\ImageManager;
+use NotFound\Framework\Models\Menu;
+use NotFound\Framework\Services\Assets\Enums\AssetType;
 use NotFound\Layout\Elements\AbstractLayout;
 use NotFound\Layout\Elements\Table\LayoutTableColumn;
 use NotFound\Layout\Inputs\LayoutInputImage;
@@ -76,13 +83,26 @@ class ComponentImage extends AbstractComponent
             $width = $dimensions->width;
             $height = $dimensions->height;
 
-            // TODO: Implement crop types, currently default to constrain
             $filename = $this->recordId.'_'.$dimensions->filename.'.jpg';
 
             // create new image instance
-            $image = (new ImageManager(['driver' => 'imagick']))->make(new File(request()->file($fileId)));
+            $image = (new ImageManager(['driver' => 'imagick']))->make(new File(request()->file($fileId)->path()));
 
-            $image->resize($width, $height);
+            if ($dimensions->height === '0') {
+                $height = intval($image->height() / $image->width() * $width);
+            }
+            if ($dimensions->width === '0') {
+                $width = intval($image->width() / $image->height() * $height);
+            }
+
+            if (isset($dimensions->cropType) && $dimensions->cropType === 'fitWithin') {
+                $image->resize($width, $height, function ($constraint) {
+                    $constraint->aspectRatio();
+                    $constraint->upsize();
+                });
+            } else {
+                $image->fit($width, $height);
+            }
 
             $image->save(
                 Storage::path('public').$this->relativePathToPublicDisk().$filename
@@ -106,20 +126,21 @@ class ComponentImage extends AbstractComponent
      */
     public function getCurrentValue(): object
     {
-        $value = json_decode($this->currentValue) ?? new stdClass();
+        $value = json_decode($this->currentValue ?? '{}') ?? new stdClass();
 
         $values = new stdClass();
 
         if (isset($value->uploaded) && $value->uploaded === true && isset($this->properties()->sizes[0])) {
-            // Set the default url
 
             $prefix = '';
-            if (config('siteboss.cache_prefix') === true && isset($this->assetItem->updated_at)) {
-                $prefix = '/'.$this->assetItem->updated_at->timestamp;
+            $updatedAt = $this->updatedAt();
+
+            if (config('app.asset_url') !== null) {
+                $prefix = config('app.asset_url');
+                if (config('siteboss.cache_prefix') === true) {
+                    $prefix .= $updatedAt;
+                }
             }
-            $name = $this->properties()->sizes[0]->filename;
-            $filename = $this->recordId.'_'.$name.'.jpg';
-            $values->url = $prefix.'/assets/public'.$this->relativePathToPublicDisk().$filename;
 
             // Set the url for each size
             foreach ($this->properties()->sizes as $size) {
@@ -129,11 +150,33 @@ class ComponentImage extends AbstractComponent
                     'url' => $prefix.'/assets/public'.$this->relativePathToPublicDisk().$filename,
                     'width' => $size->width,
                     'height' => $size->height,
+                    'cropType' => (isset($size->cropType)) ? $size->cropType : 'constrain',
                 ];
             }
+            // Set the default url
+            $values->url = array_values($values->sizes)[0]->url;
         }
 
         return $values;
+    }
+
+    private function updatedAt(): string
+    {
+        $updatedAt = '';
+        if ($this->assetType === AssetType::TABLE && $this->recordId) {
+            $siteTableRow = $this->assetModel->getSiteTableRowByRecordId($this->recordId);
+            if (isset($siteTableRow->updated_at)) {
+                $date = new DateTime($siteTableRow->updated_at ?? '2020-01-01 00:00:00');
+                $updatedAt = $date->getTimestamp();
+            }
+        } else {
+            $menu = Menu::find($this->recordId);
+            if ($menu && $menu->updated_at) {
+                $updatedAt = $menu->updated_at->getTimestamp();
+            }
+        }
+
+        return (string) $updatedAt;
     }
 
     private function deleteFiles()
@@ -168,12 +211,10 @@ class ComponentImage extends AbstractComponent
     /**
      * Get the value used in the default storage mechanism.
      * This is always a string. Use JSON or your own logic for other types of values.
-     *
-     * @return string
      */
     public function getValueForStorage(): ?string
     {
-        $result = json_decode($this->currentValue) ?? new stdClass();
+        $result = json_decode($this->currentValue ?? '{}') ?? new stdClass();
 
         // Check for a current value
         if (isset($result->uploaded) && $result->uploaded === true) {
@@ -188,11 +229,33 @@ class ComponentImage extends AbstractComponent
 
         if (count($this->newValue['files']) > 0) {
             // File was uploaded
-            $result = (object) ['uploaded' => true];
+            $result = ['uploaded' => true];
         }
 
         // File was added
         return json_encode($result);
+    }
+
+    private function getStorageJSON()
+    {
+        $prefix = '';
+        if (config('siteboss.cache_prefix') === true && isset($this->assetItem->updated_at)) {
+            $prefix = '/'.$this->assetItem->updated_at->timestamp;
+        }
+
+        $values = new stdClass();
+
+        foreach ($this->properties()->sizes as $size) {
+            $name = $size->filename;
+            $filename = $this->recordId.'_'.$name.'.jpg';
+            $values->$name = (object) [
+                'url' => $prefix.'/assets/public'.$this->relativePathToPublicDisk().$filename,
+                'width' => $size->width,
+                'height' => $size->height,
+            ];
+        }
+
+        return $values;
     }
 
     /**
@@ -220,8 +283,13 @@ class ComponentImage extends AbstractComponent
         );
 
         // if app is running in debug mode, throw an error if the directories could not be created
-        if (env('APP_DEBUG') === true && ! $createDirs) {
-            exit('Could not create directories');
+        if (! $createDirs) {
+            if (env('APP_DEBUG') === true) {
+
+                exit('Could not create directory '.Storage::path('public').$this->subFolderPublic.$this->assetModel->getIdentifier().'/'.$this->assetItem->internal.'/');
+            } else {
+                Log::error('Could not create directory '.Storage::path('public').$this->subFolderPublic.$this->assetModel->getIdentifier().'/'.$this->assetItem->internal.'/');
+            }
         }
 
         return $createDirs;

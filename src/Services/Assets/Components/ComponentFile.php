@@ -76,6 +76,7 @@ class ComponentFile extends AbstractComponent
             }
         }
 
+        // TODO: maybe add ->path() to cast to string
         $path = request()->file($fileId);
 
         return ClamAV::uploadIsClean($path);
@@ -116,8 +117,6 @@ class ComponentFile extends AbstractComponent
     /**
      * Get the value used in the default storage mechanism.
      * This is always a string. Use JSON or your own logic for other types of values.
-     *
-     * @return string
      */
     public function getValueForStorage(): ?string
     {
@@ -131,7 +130,7 @@ class ComponentFile extends AbstractComponent
         } else {
             $fileId = $this->newValue['files'][0] ?? null;
             // No file was uploaded
-            if (request()->file($fileId)) {
+            if ($fileId !== null && request()->file($fileId)) {
                 // Update name
                 $result = [
                     'name' => request()->file($fileId)->getClientOriginalName(),

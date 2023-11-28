@@ -99,6 +99,7 @@ class ComponentContentBlocks extends AbstractComponent
             foreach ($fieldComponents as $fieldComponent) {
                 $tableValues->{$fieldComponent->assetItem->internal} = $fieldComponent->getDisplayValue();
             }
+            $tableValues->id = $contentBlock->target_record_id;
             $contentBlocksWithValues[] = (object) [
                 'type' => $fieldComponent->assetItem->table->url,
                 'values' => $tableValues,

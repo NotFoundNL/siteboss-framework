@@ -26,11 +26,11 @@ class SolrIndex extends BaseModel
 {
     private ?string $solrHost;
 
-    private ?String $solrUser;
+    private ?string $solrUser;
 
-    private ?String $solrCore;
+    private ?string $solrCore;
 
-    private ?String $solrPass;
+    private ?string $solrPass;
 
     public ?string $selectField = null;
 
@@ -50,7 +50,7 @@ class SolrIndex extends BaseModel
 
     public string $df = 'content';
 
-    public ?String $sort = null;
+    public ?string $sort = null;
 
     // suggest parameters
     public array $suggester = [];
@@ -280,6 +280,9 @@ class SolrIndex extends BaseModel
 
     public function selectItems($query, $lang = 'nl', $filter = null, $start = null, $rows = null, $extraColumns = [], $highlightLength = 50, $sortField = null, $sortDirection = 'desc')
     {
+        if (trim($query) === '') {
+            return null;
+        }
         $curl = $this->solrHandler();
         $url = sprintf(
             '%s/select?q=title_%s:%s%%20content_%s:%s&spellcheck.q=%s&wt=%s&hl=%s&q.op=%s&hl.fl=%s&fl=%s&spellcheck=true&hl.fragsize=%d&hl.maxAnalyzedChars=%d&spellcheck.dictionary=spellcheck_%s',
