@@ -13,7 +13,7 @@ use NotFound\Framework\Http\Controllers\CmsEditor\CmsEditorTemplateItemControlle
 Route::get('', [CmsEditorController::class, 'index']);
 
 // table
-Route::post('table-export', [CmsEditorImportExportController::class, 'exportAll']);
+Route::post('table-export', [CmsEditorImportExportController::class, 'exportAllTables']);
 Route::prefix('table')->group(function () {
     Route::get('', [CmsEditorTableController::class, 'index']);
     Route::post('', [CmsEditorTableController::class, 'create']);

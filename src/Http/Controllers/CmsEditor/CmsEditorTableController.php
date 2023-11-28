@@ -123,7 +123,6 @@ class CmsEditorTableController extends \NotFound\Framework\Http\Controllers\Cont
 
         $widget1 = new LayoutWidget($table->name ?? 'New table', 6);
 
-        $tableConfigFile = base_path('resources/siteboss/tables/'.$table->table.'.json');
         $form = new LayoutForm('/app/editor/table/'.$table->id);
 
         $tables = $table->items()->orderBy('order', 'asc')->get();

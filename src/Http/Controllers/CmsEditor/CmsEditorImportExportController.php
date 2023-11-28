@@ -17,30 +17,8 @@ use NotFound\Layout\Responses\Toast;
 
 class CmsEditorImportExportController extends Controller
 {
-    public function getImport($table_id, $type)
-    {
-        $importWidget = new LayoutWidget('Import', 1);
-        $importForm = new LayoutForm('/app/editor/'.$type.'/'.$table_id.'/import');
-        $importForm->addInput(new LayoutInputTextArea('import'));
-        $importForm->addButton(new LayoutButton('Import'));
-        $importWidget->addForm($importForm);
 
-        return $importWidget;
-    }
-
-    public function getExport($tables)
-    {
-        $exportData = CmsEditorImportExportController::getTableItemExport($tables);
-
-        $exportWidget = new LayoutWidget('Export', 1);
-        $exportForm = new LayoutForm('');
-        $exportForm->addText(new LayoutText(json_encode($exportData)));
-        $exportWidget->addForm($exportForm);
-
-        return $exportWidget;
-    }
-
-    public function exportAll()
+    public function exportAllTables()
     {
         $response = new LayoutResponse();
         $tables = Table::all();
@@ -53,29 +31,6 @@ class CmsEditorImportExportController extends Controller
         $response->addAction(new Toast($tables->count().' tables exported successfully'));
 
         return $response->build();
-    }
-
-    public function getTableItemExport($tables)
-    {
-        $exportData = [];
-
-        foreach ($tables as $tableItem) {
-            $exportData[] = (object) [
-                'id' => $tableItem->id,
-                'rights' => $tableItem->rights,
-                'internal' => $tableItem->internal,
-                'type' => $tableItem->type,
-                'name' => $tableItem->name,
-                'description' => $tableItem->description,
-                'properties' => $tableItem->properties,
-                'order' => $tableItem->order,
-                'enabled' => $tableItem->enabled,
-                'global' => $tableItem->global ?? 0,
-                'server_properties' => $tableItem->server_properties,
-            ];
-        }
-
-        return $exportData;
     }
 
     public function importTemplate(FormDataRequest $request, Template $table)
