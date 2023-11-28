@@ -94,7 +94,7 @@ class CmsEditorTableItemController extends \NotFound\Framework\Http\Controllers\
         $response->addAction(new Toast('Field properties updated'));
         $response->addAction(new Redirect('/app/editor/table/'.$table->id.'/'));
 
-        CmsEditorImportExportController::tableToFile($table);
+        $table->exportToFile();
 
         return $response->build();
     }
@@ -117,7 +117,7 @@ class CmsEditorTableItemController extends \NotFound\Framework\Http\Controllers\
             $response = ['error' => $e];
         }
 
-        CmsEditorImportExportController::tableToFile($table);
+        $table->exportToFile();
 
         return $response;
     }
