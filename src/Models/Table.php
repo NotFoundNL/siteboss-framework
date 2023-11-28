@@ -201,6 +201,4 @@ class Table extends AssetModel
     {
         return $this->attributes['allow_sort'];
     }
-
-
 }
