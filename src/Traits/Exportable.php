@@ -2,6 +2,9 @@
 
 namespace NotFound\Framework\Traits;
 
+use Exception;
+use Sb;
+
 trait Exportable
 {
     public function exportToObject(): object

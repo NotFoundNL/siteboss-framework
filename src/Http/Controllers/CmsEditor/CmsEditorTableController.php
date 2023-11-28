@@ -12,6 +12,7 @@ use NotFound\Layout\Elements\LayoutBreadcrumb;
 use NotFound\Layout\Elements\LayoutButton;
 use NotFound\Layout\Elements\LayoutForm;
 use NotFound\Layout\Elements\LayoutPage;
+use NotFound\Layout\Elements\LayoutText;
 use NotFound\Layout\Elements\LayoutTitle;
 use NotFound\Layout\Elements\LayoutWidget;
 use NotFound\Layout\Elements\Table\LayoutTable;
@@ -21,6 +22,7 @@ use NotFound\Layout\Elements\Table\LayoutTableRow;
 use NotFound\Layout\Inputs\LayoutInputCheckbox;
 use NotFound\Layout\Inputs\LayoutInputDropdown;
 use NotFound\Layout\Inputs\LayoutInputText;
+use NotFound\Layout\Inputs\LayoutInputTextArea;
 use NotFound\Layout\LayoutResponse;
 use NotFound\Layout\Responses\Redirect;
 use NotFound\Layout\Responses\Toast;
@@ -125,7 +127,7 @@ class CmsEditorTableController extends \NotFound\Framework\Http\Controllers\Cont
         $form = new LayoutForm('/app/editor/table/'.$table->id);
 
         $tables = $table->items()->orderBy('order', 'asc')->get();
-      
+
         $form->addInput((new LayoutInputText('name', 'Name'))->setValue($table->name ?? '')->setRequired());
         $form->addInput((new LayoutInputText('table', 'Table'))->setValue($table->table ?? '')->setRequired());
 
@@ -200,9 +202,24 @@ class CmsEditorTableController extends \NotFound\Framework\Http\Controllers\Cont
 
         $page->addWidget($widget2);
 
-        // $page->addWidget(CmsEditorImportExportController::getExport($tables));
+        $type = 'table';
 
-        //   $page->addWidget(CmsEditorImportExportController::getImport($table->id, 'table'));
+        $importWidget = new LayoutWidget('Import', 1);
+        $importForm = new LayoutForm('/app/editor/'.$type.'/'.$table->id.'/import');
+        $importForm->addInput(new LayoutInputTextArea('import'));
+        $importForm->addButton(new LayoutButton('Import'));
+        $importWidget->addForm($importForm);
+
+        $page->addWidget($importWidget);
+
+        $exportData = $table->exportToObject();
+
+        $exportWidget = new LayoutWidget('Export', 1);
+        $exportForm = new LayoutForm('');
+        $exportForm->addText(new LayoutText(json_encode($exportData)));
+        $exportWidget->addForm($exportForm);
+
+        $page->addWidget($exportWidget);
 
         $response->addUIElement($page);
 
