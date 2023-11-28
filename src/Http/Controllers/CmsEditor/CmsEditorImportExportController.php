@@ -2,6 +2,7 @@
 
 namespace NotFound\Framework\Http\Controllers\CmsEditor;
 
+use NotFound\Framework\Http\Controllers\Controller;
 use NotFound\Framework\Http\Requests\FormDataRequest;
 use NotFound\Framework\Models\AssetModel;
 use NotFound\Framework\Models\Table;
@@ -15,9 +16,9 @@ use NotFound\Layout\LayoutResponse;
 use NotFound\Layout\Responses\Toast;
 use Sb;
 
-class CmsEditorImportExportController extends \NotFound\Framework\Http\Controllers\Controller
+class CmsEditorImportExportController extends Controller
 {
-    public static function getImport($table_id, $type)
+    public function getImport($table_id, $type)
     {
         $importWidget = new LayoutWidget('Import', 1);
         $importForm = new LayoutForm('/app/editor/'.$type.'/'.$table_id.'/import');
@@ -28,7 +29,7 @@ class CmsEditorImportExportController extends \NotFound\Framework\Http\Controlle
         return $importWidget;
     }
 
-    public static function getExport($tables)
+    public function getExport($tables)
     {
         $exportData = CmsEditorImportExportController::getTableItemExport($tables);
 
@@ -40,7 +41,22 @@ class CmsEditorImportExportController extends \NotFound\Framework\Http\Controlle
         return $exportWidget;
     }
 
-    public static function getTableItemExport($tables)
+    public function exportAll()
+    {
+        $response = new LayoutResponse();
+        $tables = Table::all();
+
+        foreach ($tables as $table) {
+            // TODO: catch exceptions
+            $table->exportToFile();
+        }
+
+        $response->addAction(new Toast($tables->count().' tables exported successfully'));
+
+        return $response->build();
+    }
+
+    public function getTableItemExport($tables)
     {
         $exportData = [];
 
@@ -63,7 +79,7 @@ class CmsEditorImportExportController extends \NotFound\Framework\Http\Controlle
         return $exportData;
     }
 
-    public static function tableToFile($table)
+    private function tableToFile(Table $table)
     {
         $tableItems = $table->items()->orderBy('order', 'asc')->get();
         $exportData[] = (object) [
@@ -137,7 +153,7 @@ class CmsEditorImportExportController extends \NotFound\Framework\Http\Controlle
             }
             $response->addAction(new Toast('Succesvol geimporteerd (Refresh om de wijzigingen te zien)'));
         } catch (\Exception $e) {
-            $response->addAction(new Toast('Fout bij uploaden. '.$e->getMessage(), 'error'));
+            $response->addAction(new Toast('Error importing. '.$e->getMessage(), 'error'));
         }
 
         return $response->build();

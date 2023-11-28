@@ -66,6 +66,17 @@ class CmsEditorTableController extends \NotFound\Framework\Http\Controllers\Cont
         $form->addButton(new LayoutButton('Add new table'));
         $widget2->addForm($form);
 
+
+        $widget2->addTitle(new  LayoutTitle('Export'));
+
+
+        $form = new LayoutForm('/app/editor/table-export/');
+
+        $form->addInput((new LayoutInputCheckbox('name', 'I know this will overwrite the table files from my database'))->setRequired());
+ 
+        $form->addButton(new LayoutButton('Export all tables to files'));
+        $widget2->addForm($form);
+
         $page->addWidget($widget2);
 
         $response->addUIElement($page);
@@ -199,9 +210,9 @@ class CmsEditorTableController extends \NotFound\Framework\Http\Controllers\Cont
 
         $page->addWidget($widget2);
 
-        $page->addWidget(CmsEditorImportExportController::getExport($tables));
+       // $page->addWidget(CmsEditorImportExportController::getExport($tables));
 
-        $page->addWidget(CmsEditorImportExportController::getImport($table->id, 'table'));
+     //   $page->addWidget(CmsEditorImportExportController::getImport($table->id, 'table'));
 
         $response->addUIElement($page);
 
@@ -247,7 +258,7 @@ class CmsEditorTableController extends \NotFound\Framework\Http\Controllers\Cont
         $response = new LayoutResponse();
         $response->addAction(new Toast('Table properties updated'));
 
-        CmsEditorImportExportController::tableToFile($table);
+        $table->exportToFile();
 
         return $response->build();
     }
@@ -277,7 +288,7 @@ class CmsEditorTableController extends \NotFound\Framework\Http\Controllers\Cont
             $response->addAction(new Redirect('/app/editor/table/'.$table->id.'/'.$newField->id));
         }
 
-        CmsEditorImportExportController::tableToFile($table);
+        $table->exportToFile();
 
         return $response->build();
     }
@@ -298,8 +309,8 @@ class CmsEditorTableController extends \NotFound\Framework\Http\Controllers\Cont
             return $response->build();
         }
 
-        CmsEditorImportExportController::tableToFile($table);
-
+        $table->exportToFile();
+        
         return response()->json(['status' => 'ok']);
     }
 
