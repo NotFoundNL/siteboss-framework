@@ -1,10 +1,9 @@
 <?php
 
-
 namespace NotFound\Framework\Traits;
 
-trait Exportable {
-
+trait Exportable
+{
     public function exportToObject(): object
     {
         $tableItems = $this->items()->orderBy('order', 'asc')->get();
@@ -26,7 +25,7 @@ trait Exportable {
             ];
         }
 
-        return  (object) [
+        return (object) [
             'id' => $this->id,
             'comments' => $this->comments,
             'rights' => $this->rights,
@@ -41,7 +40,6 @@ trait Exportable {
             'items' => $items,
         ];
     }
-
 
     public function exportToFile(): bool
     {

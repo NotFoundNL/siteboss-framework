@@ -2,14 +2,12 @@
 
 namespace NotFound\Framework\Models;
 
-use Exception;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
 use NotFound\Framework\Services\Legacy\StatusColumn;
 use NotFound\Framework\Traits\Exportable;
-use Sb;
 
 /**
  * NotFound\Framework\Models\Table
@@ -58,8 +56,8 @@ use Sb;
  */
 class Table extends AssetModel
 {
-    use SoftDeletes;
     use Exportable;
+    use SoftDeletes;
 
     protected $table = 'cms_table';
 
