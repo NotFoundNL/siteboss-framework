@@ -22,7 +22,9 @@ class CmsEditorImportExportController extends Controller
             $table->exportToFile();
         }
 
-        $response->addAction(new Toast($tables->count().' tables exported successfully'));
+        $response->addAction(
+            new Toast($tables->count().' tables exported successfully')
+        );
 
         return $response->build();
     }

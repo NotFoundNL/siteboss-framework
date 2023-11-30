@@ -29,6 +29,10 @@ trait Exportable
         }
 
         return (object) [
+            'siteboss_asset' => (object) [
+                'version' => '1.1.0',
+                'type' => 'table',
+            ],
             'id' => $this->id,
             'comments' => $this->comments,
             'rights' => $this->rights,
