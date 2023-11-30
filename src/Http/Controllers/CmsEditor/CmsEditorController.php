@@ -18,6 +18,10 @@ class CmsEditorController extends \NotFound\Framework\Http\Controllers\Controlle
         $table = new LayoutTable(delete: false, edit: true, create: false);
         $table->addHeader(new LayoutTableHeader('Main menu', 'table'));
 
+        $row = new LayoutTableRow(1, '/app/editor/import/');
+        $row->addColumn(new LayoutTableColumn('Apply CMS changes from filesystem'));
+        $table->addRow($row);
+
         $row = new LayoutTableRow(1, '/app/editor/table/');
         $row->addColumn(new LayoutTableColumn('Tables'));
         $table->addRow($row);

@@ -12,8 +12,11 @@ use NotFound\Framework\Http\Controllers\CmsEditor\CmsEditorTemplateItemControlle
 
 Route::get('', [CmsEditorController::class, 'index']);
 
-// table
+// import/export
 Route::post('table-export', [CmsEditorImportExportController::class, 'exportAllTables']);
+Route::get('import', [CmsEditorImportExportController::class, 'import']);
+
+// table
 Route::prefix('table')->group(function () {
     Route::get('', [CmsEditorTableController::class, 'index']);
     Route::post('', [CmsEditorTableController::class, 'create']);
@@ -21,7 +24,6 @@ Route::prefix('table')->group(function () {
     Route::prefix('{table}')->group(function () {
         Route::get('', [CmsEditorTableController::class, 'readOne']);
         Route::post('', [CmsEditorTableController::class, 'update']);
-        Route::post('import', [CmsEditorImportExportController::class, 'importTable']);
 
         Route::put('move', [CmsEditorTableController::class, 'updatePosition']);
         Route::post('add-field', [CmsEditorTableController::class, 'addField']);
