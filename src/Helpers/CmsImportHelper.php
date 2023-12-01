@@ -7,6 +7,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use NotFound\Framework\Models\CmsConfig;
 use NotFound\Framework\Models\Table;
+use NotFound\Framework\Models\TableItem;
 
 class CmsImportHelper
 {
@@ -47,29 +48,54 @@ class CmsImportHelper
         }
         $this->debug('== Read '.count($fileSources).' files from '.$path);
 
-        // $tables = Table::all();
+        $order = 1;
+        foreach ($fileSources as $tableName => $fileSource) {
+            if ($this->dryRun) {
+                $this->debug('CREATE TABLE '.$tableName);
+            } else {
 
-        // foreach ($tables as $table) {
-        //     $tableName = $table->table;
-        //     if (in_array($tableName, $filenames)) {
-        //         $tableSettings = $table->exportToObject();
-        //         if ($tableSettings == $fileSources[$tableName]) {
-        //             $this->debug('Unchanged table '.$table->table);
-        //         } else {
+                $table = new Table();
+                $table->name = $fileSource->name;
+                $table->url = $fileSource->url;
+                $table->rights = $fileSource->rights;
 
-        //             $this->debug('Updated table '.$table->table);
+                $table->comments = $fileSource->comments;
+                $table->allow_create = $fileSource->allow_create;
+                $table->allow_delete = $fileSource->allow_delete;
+                $table->allow_sort = $fileSource->allow_sort;
+                $table->properties = $fileSource->properties;
+                $table->order = $order++;
+                $table->enabled = $fileSource->enabled;
+                $table->table = $tableName;
+                $table->save();
 
-        //             //    print_r($tableSettings);1
-        //             //  print_r($fileSources[$tableName]);
+                $tableId = $table->id;
+            }
+            $itemOrder = 1;
+            foreach ($fileSource->items as $item) {
+                if ($this->dryRun) {
+                    $this->debug(' [x] '.$item->name);
 
-        //         }
-        //     } else {
-        //         $this->debug('New table '.$table->table);
-        //     }
-        // }
-        // Schema::dropIfExists('cms_table_backup');
+                    continue;
+                }
+                $tableItem = new TableItem();
+                // $tableItem->id = $item->id;
+                $tableItem->table_id = $tableId;
+                $tableItem->name = $item->name;
+                $tableItem->type = $item->type;
+                $tableItem->internal = $item->internal;
+                $tableItem->description = $item->description;
+                $tableItem->properties = $item->properties;
+                $tableItem->server_properties = $item->server_properties;
+                $tableItem->order = $itemOrder++;
+                $tableItem->enabled = $item->enabled;
+                $tableItem->rights = $item->rights;
 
-        // Schema::rename($currentTableName, $newTableName);
+                $tableItem->save();
+
+            }
+
+        }
 
         return (object) [];
     }
@@ -99,8 +125,9 @@ class CmsImportHelper
             return;
         }
         $this->debug('Creating import tables');
-        Schema::dropIfExists('cms_import_table');
-        Schema::create('cms_import_table', function (Blueprint $table) {
+        Schema::dropIfExists('cms_table_backup');
+        Schema::rename('cms_table', 'cms_table_backup');
+        Schema::create('cms_table', function (Blueprint $table) {
             $table->id();
             $table->string('name', 128)->nullable();
             $table->string('table', 128)->nullable();
@@ -113,6 +140,24 @@ class CmsImportHelper
             $table->json('properties')->nullable();
             $table->integer('order')->nullable();
             $table->tinyInteger('enabled')->default(1);
+            $table->softDeletes();
+            $table->timestamps();
+        });
+
+        Schema::dropIfExists('cms_tableitem_backup');
+        Schema::rename('cms_tableitem', 'cms_tableitem_backup');
+        Schema::create('cms_tableitem', function (Blueprint $table) {
+            $table->id();
+            $table->string('rights', 128)->default('');
+            $table->foreignIdFor(Table::class, 'table_id')->nullable();
+            $table->string('type', 64)->nullable();
+            $table->string('internal', 64)->nullable();
+            $table->string('name', 128)->nullable();
+            $table->text('description')->nullable();
+            $table->json('properties')->nullable();
+            $table->json('server_properties')->nullable();
+            $table->integer('order')->nullable(); //TODO: FIX
+            $table->tinyInteger('enabled')->nullable()->default(1);
             $table->softDeletes();
             $table->timestamps();
         });
