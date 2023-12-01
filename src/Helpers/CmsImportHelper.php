@@ -27,6 +27,18 @@ class CmsImportHelper
         $this->debug('DONE');
     }
 
+    public function hasChanges(Table $table): bool
+    {
+        $path = resource_path('siteboss/tables/'.$table->table.'.json');
+        if (! File::exists($path)) {
+            return false;
+        }
+        $data = $table->exportToObject();
+        $fileData = json_decode(file_get_contents($path));
+
+        return $data != $fileData;
+    }
+
     private function importTables(string $tableName): object
     {
         $path = resource_path('siteboss/tables');
