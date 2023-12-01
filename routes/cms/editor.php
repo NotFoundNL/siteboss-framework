@@ -14,7 +14,6 @@ Route::get('', [CmsEditorController::class, 'index']);
 
 // import/export
 Route::post('table-export', [CmsEditorImportExportController::class, 'exportAllTables']);
-Route::get('import', [CmsEditorImportExportController::class, 'import']);
 
 // table
 Route::prefix('table')->group(function () {

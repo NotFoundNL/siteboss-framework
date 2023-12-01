@@ -5,7 +5,6 @@ namespace NotFound\Framework\Helpers;
 use File;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use NotFound\Framework\Models\CmsConfig;
 use NotFound\Framework\Models\Table;
 use NotFound\Framework\Models\TableItem;
 
@@ -98,16 +97,6 @@ class CmsImportHelper
         }
 
         return (object) [];
-    }
-
-    private function getConfigForDatabaseTable(string $tableName): ?object
-    {
-        $config = CmsConfig::where('table', $tableName)->first();
-        if (! $config) {
-            return null;
-        }
-
-        return $config->exportToString();
     }
 
     private function debug($text, $force = false)
