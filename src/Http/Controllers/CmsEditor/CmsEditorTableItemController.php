@@ -58,8 +58,6 @@ class CmsEditorTableItemController extends \NotFound\Framework\Http\Controllers\
 
         $widgetPage->widget->addForm($form);
 
-        $widgetPage->widget->addWidget(CmsEditorImportExportController::getExport([$tableItem]));
-
         return $widgetPage->response();
     }
 

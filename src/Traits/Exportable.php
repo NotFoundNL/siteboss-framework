@@ -20,10 +20,10 @@ trait Exportable
                 'type' => $tableItem->type,
                 'name' => $tableItem->name,
                 'description' => $tableItem->description,
-                'properties' => $tableItem->properties?? (object)[],
+                'properties' => $tableItem->properties ?? (object) [],
                 'enabled' => $tableItem->enabled === 1 ?? false,
-                'global' => $tableItem->global  === 1 ?? false,
-                'server_properties' => $tableItem->server_properties ?? (object)[],
+                'global' => $tableItem->global === 1 ?? false,
+                'server_properties' => $tableItem->server_properties ?? (object) [],
             ];
         }
 
