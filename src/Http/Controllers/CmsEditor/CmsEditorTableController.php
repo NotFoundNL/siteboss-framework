@@ -201,25 +201,6 @@ class CmsEditorTableController extends \NotFound\Framework\Http\Controllers\Cont
 
         $page->addWidget($widget2);
 
-        $type = 'table';
-
-        $importWidget = new LayoutWidget('Import', 1);
-        $importForm = new LayoutForm('/app/editor/'.$type.'/'.$table->id.'/import');
-        $importForm->addInput(new LayoutInputTextArea('import'));
-        $importForm->addButton(new LayoutButton('Import'));
-        $importWidget->addForm($importForm);
-
-        $page->addWidget($importWidget);
-
-        $exportData = $table->exportToObject();
-
-        $exportWidget = new LayoutWidget('Export', 1);
-        $exportForm = new LayoutForm('');
-        $exportForm->addText(new LayoutText(json_encode($exportData)));
-        $exportWidget->addForm($exportForm);
-
-        $page->addWidget($exportWidget);
-
         $response->addUIElement($page);
 
         return $response->build();
