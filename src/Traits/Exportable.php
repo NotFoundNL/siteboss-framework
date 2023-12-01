@@ -20,11 +20,10 @@ trait Exportable
                 'type' => $tableItem->type,
                 'name' => $tableItem->name,
                 'description' => $tableItem->description,
-                'properties' => $tableItem->properties,
-                'order' => $tableItem->order,
-                'enabled' => $tableItem->enabled,
-                'global' => $tableItem->global ?? 0,
-                'server_properties' => $tableItem->server_properties,
+                'properties' => $tableItem->properties?? (object)[],
+                'enabled' => $tableItem->enabled === 1 ?? false,
+                'global' => $tableItem->global  === 1 ?? false,
+                'server_properties' => $tableItem->server_properties ?? (object)[],
             ];
         }
 
@@ -43,7 +42,7 @@ trait Exportable
             'allow_delete' => $this->allow_delete,
             'allow_sort' => $this->allow_sort,
             'properties' => $this->properties,
-            'enabled' => $this->enabled,
+            'enabled' => $this->enabled === 1 ?? false,
             'items' => $items,
         ];
     }
