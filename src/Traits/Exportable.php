@@ -36,7 +36,6 @@ trait Exportable
             'comments' => $this->comments,
             'rights' => $this->rights,
             'url' => $this->url,
-            'table' => $this->getSiteTableName(),
             'name' => $this->name,
             'allow_create' => $this->allow_create,
             'allow_delete' => $this->allow_delete,
