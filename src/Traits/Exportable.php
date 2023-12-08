@@ -14,7 +14,6 @@ trait Exportable
 
         foreach ($tableItems as $tableItem) {
             $items[] = (object) [
-                'id' => $tableItem->id,
                 'rights' => $tableItem->rights,
                 'internal' => $tableItem->internal,
                 'type' => $tableItem->type,
@@ -32,7 +31,6 @@ trait Exportable
                 'version' => '1.1.0',
                 'type' => 'table',
             ],
-            'id' => $this->id,
             'comments' => $this->comments,
             'rights' => $this->rights,
             'url' => $this->url,
