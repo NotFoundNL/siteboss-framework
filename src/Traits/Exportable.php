@@ -13,35 +13,47 @@ trait Exportable
         $items = [];
 
         foreach ($tableItems as $tableItem) {
-            $items[] = (object) [
-                'rights' => $tableItem->rights,
-                'internal' => $tableItem->internal,
-                'type' => $tableItem->type,
-                'name' => $tableItem->name,
-                'description' => $tableItem->description,
-                'properties' => $tableItem->properties ?? (object) [],
-                'enabled' => $tableItem->enabled === 1 ?? false,
-                'global' => $tableItem->global === 1 ?? false,
-                'server_properties' => $tableItem->server_properties ?? (object) [],
-            ];
+
+            $item = (object) [];
+            if (config('siteboss.export_retain_ids')) {
+                $item->id = $tableItem->id;
+            }
+
+            $item->rights = $tableItem->rights;
+            $item->internal = $tableItem->internal;
+            $item->type = $tableItem->type;
+            $item->name = $tableItem->name;
+            $item->description = $tableItem->description;
+            $item->properties = $tableItem->properties ?? (object) [];
+            $item->enabled = $tableItem->enabled === 1 ?? false;
+            $item->global = $tableItem->global === 1 ?? false;
+            $item->server_properties =
+                $tableItem->server_properties ?? (object) [];
+
+            $items[] = $item;
         }
 
-        return (object) [
-            'siteboss_asset' => (object) [
-                'version' => '1.1.0',
-                'type' => 'table',
-            ],
-            'comments' => $this->comments,
-            'rights' => $this->rights,
-            'url' => $this->url,
-            'name' => $this->name,
-            'allow_create' => $this->allow_create,
-            'allow_delete' => $this->allow_delete,
-            'allow_sort' => $this->allow_sort,
-            'properties' => $this->properties,
-            'enabled' => $this->enabled === 1 ?? false,
-            'items' => $items,
+        $exportItem = (object) [];
+
+        if (config('siteboss.export_retain_ids')) {
+            $exportItem->id = $this->id;
+        }
+        $exportItem->siteboss_asset = (object) [
+            'version' => '1.1.0',
+            'type' => 'table',
         ];
+        $exportItem->comments = $this->comments;
+        $exportItem->rights = $this->rights;
+        $exportItem->url = $this->url;
+        $exportItem->name = $this->name;
+        $exportItem->allow_create = $this->allow_create;
+        $exportItem->allow_delete = $this->allow_delete;
+        $exportItem->allow_sort = $this->allow_sort;
+        $exportItem->properties = $this->properties;
+        $exportItem->enabled = $this->enabled === 1 ?? false;
+        $exportItem->items = $items;
+
+        return $exportItem;
     }
 
     public function exportToFile(): bool
