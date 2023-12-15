@@ -150,7 +150,7 @@ class FieldsProperties
                         //     $checkboxField->setValue(true);
                         // } else {
                         $checkboxField->setValue(false);
-                    // }
+                        // }
                     } else {
                         $checkboxField->setValue($value ?? false);
                     }
