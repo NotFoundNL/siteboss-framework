@@ -25,7 +25,7 @@ class FieldsProperties
 
     public function availableFields()
     {
-        $fields = ['Text', 'Checkbox', 'ChildTable', 'DropDown', 'Tags', 'Description', 'TableSelect', 'Header', 'DatePicker', 'TimePicker', 'DateTimePicker', 'Image', 'File', 'ContentBlocks', 'Button', 'Slug', 'Number'];
+        $fields = ['Text', 'Checkbox', 'ChildTable', 'DropDown', 'Tags', 'Description', 'TableSelect', 'Header', 'DatePicker', 'TimePicker', 'DateTimePicker', 'Image', 'File', 'ContentBlocks', 'Button', 'Slug', 'Number', 'ModelSelect'];
         sort($fields);
 
         return $fields;
