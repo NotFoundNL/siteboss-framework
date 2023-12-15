@@ -66,6 +66,9 @@ class CmsImportHelper
             } else {
 
                 $table = new Table();
+                if (isset($fileSource->id)) {
+                    $table->id = $fileSource->id;
+                }
                 $table->name = $fileSource->name;
                 $table->url = $fileSource->url;
                 $table->rights = $fileSource->rights;
@@ -90,7 +93,9 @@ class CmsImportHelper
                     continue;
                 }
                 $tableItem = new TableItem();
-                // $tableItem->id = $item->id;
+                if (isset($item->id)) {
+                    $tableItem->id = $item->id;
+                }
                 $tableItem->table_id = $tableId;
                 $tableItem->name = $item->name;
                 $tableItem->type = $item->type;
