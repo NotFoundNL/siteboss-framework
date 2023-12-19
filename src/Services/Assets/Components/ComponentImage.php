@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Imagick\Driver;
 use NotFound\Framework\Models\Menu;
 use NotFound\Framework\Services\Assets\Enums\AssetType;
 use NotFound\Layout\Elements\AbstractLayout;
@@ -86,7 +87,11 @@ class ComponentImage extends AbstractComponent
             $filename = $this->recordId.'_'.$dimensions->filename.'.jpg';
 
             // create new image instance
-            $image = (new ImageManager(['driver' => 'imagick']))->make(new File(request()->file($fileId)->path()));
+            $image = (new ImageManager(
+                
+                new Driver()
+
+            ))->read(new File(request()->file($fileId)->path()));
 
             if ($dimensions->height === '0') {
                 $height = intval($image->height() / $image->width() * $width);
@@ -101,13 +106,13 @@ class ComponentImage extends AbstractComponent
                     $constraint->upsize();
                 });
             } else {
-                $image->fit($width, $height);
+                $image->cover($width, $height);
             }
 
-            $image->save(
+            $image->toJpeg()->save(
                 Storage::path('public').$this->relativePathToPublicDisk().$filename
             );
-            $image->save(
+            $image->toWebp()->save(
                 Storage::path('public').$this->relativePathToPublicDisk().$filename.'.webp'
             );
         }

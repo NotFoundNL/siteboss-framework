@@ -5,6 +5,7 @@ namespace NotFound\Framework\Services\Assets\Components;
 use Illuminate\Http\File;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Imagick\Driver;
 use NotFound\Framework\Models\EditorSetting;
 use NotFound\Framework\Models\FileUpload;
 use NotFound\Framework\Services\Assets\Enums\AssetType;
@@ -95,12 +96,14 @@ class ComponentText extends AbstractComponent
         $width = 1200;
 
         // create new image instance
-        $image = (new ImageManager(['driver' => 'imagick']))->make(new File(request()->file('file')));
-        $image->resize($width, null, function ($constraint) {
-            $constraint->aspectRatio();
-        });
+        $image = (new ImageManager(
+                
+            new Driver()
 
-        $image->save(
+        ))->read(new File(request()->file('file')));
+        $image->scaleDown($width, null);
+
+        $image->toJpeg()->save(
             Storage::path('public').$folder.$filename
         );
 
