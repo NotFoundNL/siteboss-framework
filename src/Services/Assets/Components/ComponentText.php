@@ -4,8 +4,8 @@ namespace NotFound\Framework\Services\Assets\Components;
 
 use Illuminate\Http\File;
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Imagick\Driver;
+use Intervention\Image\ImageManager;
 use NotFound\Framework\Models\EditorSetting;
 use NotFound\Framework\Models\FileUpload;
 use NotFound\Framework\Services\Assets\Enums\AssetType;
@@ -97,7 +97,7 @@ class ComponentText extends AbstractComponent
 
         // create new image instance
         $image = (new ImageManager(
-                
+
             new Driver()
 
         ))->read(new File(request()->file('file')));
