@@ -97,9 +97,7 @@ class ComponentText extends AbstractComponent
 
         // create new image instance
         $image = (new ImageManager(
-
             new Driver()
-
         ))->read(new File(request()->file('file')));
         $image->scaleDown($width, null);
 

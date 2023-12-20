@@ -88,9 +88,7 @@ class ComponentImage extends AbstractComponent
 
             // create new image instance
             $image = (new ImageManager(
-
                 new Driver()
-
             ))->read(new File(request()->file($fileId)->path()));
 
             if ($dimensions->height === '0') {
@@ -101,12 +99,9 @@ class ComponentImage extends AbstractComponent
             }
 
             if (isset($dimensions->cropType) && $dimensions->cropType === 'fitWithin') {
-                $image->resize($width, $height, function ($constraint) {
-                    $constraint->aspectRatio();
-                    $constraint->upsize();
-                });
+                $image->scaleDown($width, $height);
             } else {
-                $image->cover($width, $height);
+                $image->coverDown($width, $height);
             }
 
             $image->toJpeg()->save(
