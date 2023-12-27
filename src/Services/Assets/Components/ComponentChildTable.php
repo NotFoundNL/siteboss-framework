@@ -92,6 +92,12 @@ class ComponentChildTable extends AbstractComponent
 
     }
 
+    protected function customProperties(): object
+    {
+        // We try to emulate being a content block to AutoLayout
+        return (object) ['allowedBlocks' => $this->properties()->childTable];
+    }
+
     public function afterSave(): void
     {
         $parentId = $this->recordId;
