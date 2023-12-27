@@ -67,22 +67,24 @@ class ComponentChildTable extends AbstractComponent
         return true;
     }
 
-    public function getDisplayValue()
+    public function getDisplayValue(): array
     {
-        // BUG: This should use a simple query to get the children,
-        //      not some extensive logic per row
-        $contentBlock = $this->getChildren()[0];
+        // BUG: This should use less extensive logic
+
+        $contentBlocks = $this->getChildren();
 
         $table = Table::whereTable($this->properties()->childTable)->first();
         $contentBlocksWithValues = [];
-        /** @var CmsContentBlocks $contentBlock */
-        $ts = new TableService($table, $this->assetService->getLang(), $contentBlock->id);
-        $fieldComponents = $ts->getComponents();
+        foreach ($contentBlocks as $contentBlock) {
+            /** @var CmsContentBlocks $contentBlock */
+            $ts = new TableService($table, $this->assetService->getLang(), $contentBlock->id);
+            $fieldComponents = $ts->getComponents();
 
-        $tableValues = new \stdClass();
-        foreach ($fieldComponents as $fieldComponent) {
-            $tableValues->{$fieldComponent->assetItem->internal} = $fieldComponent->getDisplayValue();
+            $tableValues = new \stdClass();
+            foreach ($fieldComponents as $fieldComponent) {
+                $tableValues->{$fieldComponent->assetItem->internal} = $fieldComponent->getDisplayValue();
 
+            }
             $contentBlocksWithValues[] = $tableValues;
         }
 
