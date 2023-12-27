@@ -44,7 +44,7 @@ class ComponentChildTable extends AbstractComponent
 
     public function setValueFromStorage(mixed $value): bool
     {
-        $table = Table::whereTable($this->properties()->allowedBlocks)->first();
+        $table = Table::whereTable($this->properties()->childTable)->first();
 
         $contentBlocksWithValues = new Collection();
 
@@ -67,29 +67,27 @@ class ComponentChildTable extends AbstractComponent
         return true;
     }
 
-    public function getDisplayValue(): array
+    public function getDisplayValue()
     {
-        $contentBlocks = $this->getChildren();
+        // BUG: This should use a simple query to get the children,
+        //      not some extensive logic per row
+        $contentBlock = $this->getChildren()[0];
 
-        $table = Table::whereTable($this->properties()->allowedBlocks)->first();
-
+        $table = Table::whereTable($this->properties()->childTable)->first();
         $contentBlocksWithValues = [];
-        foreach ($contentBlocks as $contentBlock) {
-            /** @var CmsContentBlocks $contentBlock */
-            $ts = new TableService($table, $this->assetService->getLang(), $contentBlock->id);
-            $fieldComponents = $ts->getComponents();
+        /** @var CmsContentBlocks $contentBlock */
+        $ts = new TableService($table, $this->assetService->getLang(), $contentBlock->id);
+        $fieldComponents = $ts->getComponents();
 
-            $tableValues = new \stdClass();
-            foreach ($fieldComponents as $fieldComponent) {
-                $tableValues->{$fieldComponent->assetItem->internal} = $fieldComponent->getDisplayValue();
-            }
-            $contentBlocksWithValues[] = (object) [
-                'type' => $fieldComponent->assetItem->table->url,
-                'values' => $tableValues,
-            ];
+        $tableValues = new \stdClass();
+        foreach ($fieldComponents as $fieldComponent) {
+            $tableValues->{$fieldComponent->assetItem->internal} = $fieldComponent->getDisplayValue();
+
+            $contentBlocksWithValues[] = $tableValues;
         }
 
         return $contentBlocksWithValues;
+
     }
 
     public function afterSave(): void
@@ -162,7 +160,7 @@ class ComponentChildTable extends AbstractComponent
      */
     private function getChildren(): Collection
     {
-        return DB::table($this->properties()->allowedBlocks)->where($this->getForeignKey(), $this->recordId)->where('deleted_at', null)->orderBy('order')->get();
+        return DB::table($this->properties()->childTable)->where($this->getForeignKey(), $this->recordId)->where('deleted_at', null)->orderBy('order')->get();
     }
 
     private function getForeignKey()
