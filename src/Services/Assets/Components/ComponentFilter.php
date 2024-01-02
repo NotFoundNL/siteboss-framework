@@ -7,8 +7,6 @@ use NotFound\Layout\Inputs\LayoutInputHidden;
 
 class ComponentFilter extends AbstractComponent
 {
-    protected bool $useDefaultStorageMechanism = false;
-
     public function getAutoLayoutClass(): ?AbstractLayout
     {
         return new LayoutInputHidden($this->assetItem->internal, $this->assetItem->name);

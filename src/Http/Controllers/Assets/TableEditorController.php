@@ -37,9 +37,16 @@ class TableEditorController extends AssetEditorController
 
         $tableService = new TableService($table, $lang, $recordId === 0 ? null : $recordId);
 
+        $filterParams = '';
+        if (request()->query('filter')) {
+            foreach (request()->query('filter') as $key => $value) {
+                $filterParams .= '&filter['.$key.']='.$value;
+            }
+        }
+
         $params = sprintf('?page=%d&sort=%s&asc=%s', $request->page ?? 1, $request->sort ?? '', $request->asc ?? '');
 
-        $formUrl = sprintf('/table/%s/%s/%s/%s', $table->url, $recordId ?? 0, urlencode($langUrl), $params);
+        $formUrl = sprintf('/table/%s/%s/%s/%s', $table->url, $recordId ?? 0, urlencode($langUrl), $params . $filterParams);
 
         $form = new LayoutForm($formUrl);
 
@@ -56,7 +63,7 @@ class TableEditorController extends AssetEditorController
 
         $breadcrumb = new LayoutBreadcrumb();
         $breadcrumb->addHome();
-        $breadcrumb->addItem($table->name, '/table/'.$table->url.'/?'.$params);
+        $breadcrumb->addItem($table->name, '/table/'.$table->url.'/?'.$params.$filterParams);
         $upsertingText = $recordId === 0 ? __('siteboss::ui.new') : __('siteboss::ui.edit');
         $breadcrumb->addItem($upsertingText); //TODO: Add better title
         $page->addBreadCrumb($breadcrumb);
@@ -131,13 +138,25 @@ class TableEditorController extends AssetEditorController
         $response = new LayoutResponse();
         $response->addAction(new Toast(__('siteboss::response.table.ok')));
 
+        $filterParams = '';
+        if (request()->query('filter')) {
+            foreach (request()->query('filter') as $key => $value) {
+                $filterParams .= '&filter['.$key.']='.$value;
+            }
+        }
+
         if (
             isset($request->siteboss_formOptions['send']) &&
             $request->siteboss_formOptions['send'] === 'stay_on_page'
         ) {
+
             // Stay on page
             if ($newTableRecord) {
-                $response->addAction(new Redirect('/table/'.$table->url.'/'.$id.'/'));
+                $url = '/table/'.$table->url.'/'.$id;
+                if ($filterParams != '') {
+                    $url .= '?'.ltrim($filterParams,'&');
+                }
+                $response->addAction(new Redirect($url));
             } else {
                 $response->addAction(new Reload());
             }
@@ -145,7 +164,7 @@ class TableEditorController extends AssetEditorController
             // Redirect
 
             $params = sprintf('?page=%d&sort=%s&asc=%s', $request->page ?? 1, $request->sort ?? '', $request->asc ?? '');
-
+            $params .= $filterParams;
             $response->addAction(new Redirect('/table/'.$table->url.'/?'.$params));
         }
 

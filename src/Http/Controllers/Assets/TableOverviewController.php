@@ -44,8 +44,15 @@ class TableOverviewController extends Controller
         $layoutTable = new LayoutTable(create: $table->allow_create, delete: $table->allow_delete, sort: $table->allow_sort);
         $layoutTable->setTotalItems($siteTableRowsPaginator->total());
 
+        $filterParams = '';         
+        if (request()->query('filter')) {
+            foreach (request()->query('filter') as $key => $value) {
+                $filterParams .= '&filter['.$key.']='.$value;
+            }
+        }
+
         foreach ($siteTableRowsPaginator as $row) {
-            $link = sprintf('/table/%s/%d/?page=%d&sort=%s&asc=%s', $table->url, $row->id, $request->page ?? 1, $request->sort ?? '', $request->asc ?? '');
+            $link = sprintf('/table/%s/%d/?page=%d&sort=%s&asc=%s', $table->url, $row->id, $request->page ?? 1, $request->sort ?? '', $request->asc ?? '').$filterParams;
             $layoutRow = new LayoutTableRow($row->id, link: $link);
 
             foreach ($components as $component) {
@@ -78,12 +85,20 @@ class TableOverviewController extends Controller
         $page->addBreadCrumb($breadcrumb);
 
         $bar = new LayoutBar();
+        $bottomBar = new LayoutBar();
+        $bottomBar->noBackground();
 
         if ($table->allow_create) {
             $addNew = new LayoutBarButton('Nieuw');
             $addNew->setIcon('plus');
-            $addNew->setSpecialAction('addNew');
+            $url = '/table/'.$table->url.'/0';
+            if($filterParams != '')
+            {
+                $url .= '?' . ltrim($filterParams,'&');
+            }
+            $addNew->setLink($url);
             $bar->addBarButton($addNew);
+            $bottomBar->addBarButton($addNew);
         }
 
         $pager = new LayoutPager(totalItems: $siteTableRowsPaginator->total(), itemsPerPage: request()->query('pitems') ?? $table->properties->itemsPerPage ?? 25);
@@ -95,16 +110,6 @@ class TableOverviewController extends Controller
         $widget->noPadding();
         $widget->addBar($bar);
         $widget->addTable($layoutTable);
-
-        $bottomBar = new LayoutBar();
-        $bottomBar->noBackground();
-
-        if ($table->allow_create) {
-            $addNew = new LayoutBarButton('Nieuw');
-            $addNew->setIcon('plus');
-            $addNew->setSpecialAction('addNew');
-            $bottomBar->addBarButton($addNew);
-        }
         $widget->addBar($bottomBar);
 
         if ($siteTableRowsPaginator->total() == 0) {
