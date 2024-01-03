@@ -1,12 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
 use NotFound\Framework\Helpers\CmsImportHelper;
 use NotFound\Framework\Services\Indexer\IndexBuilderService;
 
 Artisan::command('siteboss:index-site {--debug : Whether debug messages should be displayed} {--clean : Truncate search table}', function ($debug, $clean) {
-
     $indexer = new IndexBuilderService($debug, $clean);
     $indexer->run();
 
@@ -14,7 +15,6 @@ Artisan::command('siteboss:index-site {--debug : Whether debug messages should b
 })->purpose('Index site for local search');
 
 Artisan::command('siteboss:cms-import {--debug : Whether debug messages should be displayed} {--dry : Dry Run}', function ($debug, $dry) {
-
     $indexer = new CmsImportHelper($debug, $dry);
     $indexer->import();
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 return [
     'unauth' => 'Gebruiker onbevoegd',
     'tokenexp' => 'Token verlopen',
