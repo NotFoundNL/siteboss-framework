@@ -24,6 +24,8 @@ use NotFound\Layout\LayoutResponse;
 use NotFound\Layout\Responses\Redirect;
 use NotFound\Layout\Responses\Reload;
 use NotFound\Layout\Responses\Toast;
+use NotFound\Framework\Services\Assets\Components\ComponentFilter;
+use NotFound\Framework\Models\Editor\DefaultEditor;
 
 /**
  * Controller for viewing / updating a table
@@ -37,16 +39,13 @@ class TableEditorController extends AssetEditorController
 
         $tableService = new TableService($table, $lang, $recordId === 0 ? null : $recordId);
 
-        $filterParams = '';
-        if (request()->query('filter')) {
-            foreach (request()->query('filter') as $key => $value) {
-                $filterParams .= '&filter['.$key.']='.$value;
-            }
-        }
+        $editorClass = substr_replace($table->model, '\\Editor', strrpos($table->model,'\\'),0).'Editor';
+
+        $editor = (class_exists($editorClass)) ? new $editorClass(request()->query('filter'), $tableService) : new DefaultEditor(request()->query('filter'), $tableService);
 
         $params = sprintf('?page=%d&sort=%s&asc=%s', $request->page ?? 1, $request->sort ?? '', $request->asc ?? '');
 
-        $formUrl = sprintf('/table/%s/%s/%s/%s', $table->url, $recordId ?? 0, urlencode($langUrl), $params . $filterParams);
+        $formUrl = sprintf('/table/%s/%s/%s/%s', $table->url, $recordId ?? 0, urlencode($langUrl), $params . $editor->filterToParams());
 
         $form = new LayoutForm($formUrl);
 
@@ -60,13 +59,9 @@ class TableEditorController extends AssetEditorController
 
         $page = new LayoutPage(__('siteboss::ui.page'));
         $page->addTitle(new LayoutTitle($table->name));
+        $page->addBreadCrumb($editor->getBreadCrumbs(true));
 
-        $breadcrumb = new LayoutBreadcrumb();
-        $breadcrumb->addHome();
-        $breadcrumb->addItem($table->name, '/table/'.$table->url.'/?'.$params.$filterParams);
         $upsertingText = $recordId === 0 ? __('siteboss::ui.new') : __('siteboss::ui.edit');
-        $breadcrumb->addItem($upsertingText); //TODO: Add better title
-        $page->addBreadCrumb($breadcrumb);
 
         $saveButton = new LayoutButton(__('siteboss::ui.save'));
 
@@ -142,6 +137,12 @@ class TableEditorController extends AssetEditorController
         if (request()->query('filter')) {
             foreach (request()->query('filter') as $key => $value) {
                 $filterParams .= '&filter['.$key.']='.$value;
+            }
+        }else if ($table->items()->where('type', 'Filter')->first())
+        {
+            foreach ($table->items()->where('type', 'Filter')->get() as $filter)
+            {
+                $filterParams.='&filter['.$filter->internal.']='.$filter->getCurrentValue();
             }
         }
 
