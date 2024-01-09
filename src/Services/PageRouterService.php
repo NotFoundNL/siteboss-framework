@@ -4,6 +4,7 @@ namespace NotFound\Framework\Services;
 
 use Exception;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 use Mcamara\LaravelLocalization\Middleware\LaravelLocalizationViewPath;
@@ -50,7 +51,7 @@ class PageRouterService
             if (isset($route->children) && isset($route->children[0])) {
                 $this->setPageAsRoute($route->children[0], true);
             } else {
-                dd('No child route set for site');
+                Log::error('No child route set for site');
             }
 
             foreach ($route->children as $page) {
