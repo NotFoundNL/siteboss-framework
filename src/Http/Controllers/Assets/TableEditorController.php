@@ -8,13 +8,14 @@ use Illuminate\Support\Facades\Log;
 use NotFound\Framework\Events\AfterSaveEvent;
 use NotFound\Framework\Events\BeforeSaveEvent;
 use NotFound\Framework\Http\Requests\FormDataRequest;
+use NotFound\Framework\Models\Editor\AbstractEditor;
+use NotFound\Framework\Models\Editor\DefaultEditor;
 use NotFound\Framework\Models\Lang;
 use NotFound\Framework\Models\Table;
 use NotFound\Framework\Services\Assets\Components\ComponentEditorLink;
 use NotFound\Framework\Services\Assets\TableService;
 use NotFound\Layout\Elements\LayoutBar;
 use NotFound\Layout\Elements\LayoutBarButton;
-use NotFound\Layout\Elements\LayoutBreadcrumb;
 use NotFound\Layout\Elements\LayoutButton;
 use NotFound\Layout\Elements\LayoutForm;
 use NotFound\Layout\Elements\LayoutPage;
@@ -24,8 +25,6 @@ use NotFound\Layout\LayoutResponse;
 use NotFound\Layout\Responses\Redirect;
 use NotFound\Layout\Responses\Reload;
 use NotFound\Layout\Responses\Toast;
-use NotFound\Framework\Services\Assets\Components\ComponentFilter;
-use NotFound\Framework\Models\Editor\DefaultEditor;
 
 /**
  * Controller for viewing / updating a table
@@ -39,13 +38,11 @@ class TableEditorController extends AssetEditorController
 
         $tableService = new TableService($table, $lang, $recordId === 0 ? null : $recordId);
 
-        $editorClass = substr_replace($table->model, '\\Editor', strrpos($table->model,'\\'),0).'Editor';
-
-        $editor = (class_exists($editorClass)) ? new $editorClass(request()->query('filter'), $tableService) : new DefaultEditor(request()->query('filter'), $tableService);
+        $editor = $this->customEditor($table, $tableService);
 
         $params = sprintf('?page=%d&sort=%s&asc=%s', $request->page ?? 1, $request->sort ?? '', $request->asc ?? '');
 
-        $formUrl = sprintf('/table/%s/%s/%s/%s', $table->url, $recordId ?? 0, urlencode($langUrl), $params . $editor->filterToParams());
+        $formUrl = sprintf('/table/%s/%s/%s/%s', $table->url, $recordId ?? 0, urlencode($langUrl), $params.$editor->filterToParams());
 
         $form = new LayoutForm($formUrl);
 
@@ -138,11 +135,9 @@ class TableEditorController extends AssetEditorController
             foreach (request()->query('filter') as $key => $value) {
                 $filterParams .= '&filter['.$key.']='.$value;
             }
-        }else if ($table->items()->where('type', 'Filter')->first())
-        {
-            foreach ($table->items()->where('type', 'Filter')->get() as $filter)
-            {
-                $filterParams.='&filter['.$filter->internal.']='.$filter->getCurrentValue();
+        } elseif ($table->items()->where('type', 'Filter')->first()) {
+            foreach ($table->items()->where('type', 'Filter')->get() as $filter) {
+                $filterParams .= '&filter['.$filter->internal.']='.$filter->getCurrentValue();
             }
         }
 
@@ -155,7 +150,7 @@ class TableEditorController extends AssetEditorController
             if ($newTableRecord) {
                 $url = '/table/'.$table->url.'/'.$id;
                 if ($filterParams != '') {
-                    $url .= '?'.ltrim($filterParams,'&');
+                    $url .= '?'.ltrim($filterParams, '&');
                 }
                 $response->addAction(new Redirect($url));
             } else {
@@ -182,5 +177,20 @@ class TableEditorController extends AssetEditorController
         }
 
         abort(404, __('siteboss::response.table.delete'));
+    }
+
+    private function customEditor(Table $table, TableService $tableService): AbstractEditor
+    {
+        // This only works for models
+        if ($table->model !== null) {
+
+            $editorClass = substr_replace($table->model, '\\Editor', strrpos($table->model, '\\'), 0).'Editor';
+
+            if (class_exists($editorClass)) {
+                return new $editorClass(request()->query('filter'), $tableService);
+            }
+        }
+
+        return new DefaultEditor(request()->query('filter'), $tableService);
     }
 }

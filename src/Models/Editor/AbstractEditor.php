@@ -5,44 +5,83 @@ namespace NotFound\Framework\Models\Editor;
 use NotFound\Framework\Services\Assets\TableService;
 use NotFound\Layout\Elements\LayoutBreadcrumb;
 
-
 abstract class AbstractEditor
 {
-    private ?array $filters;
-    protected TableService $ts;
-
-    public function __construct($filters, $ts)
+    public function __construct(protected ?array $filters, protected TableService $ts)
     {
-        $this->filters = $filters;
-        $this->ts = $ts;
+
     }
 
-    public function getBreadCrumbs(bool $edit = false): LayoutBreadCrumb
+    /**
+     * preOverview
+     *
+     * Runs before the overview is rendered
+     */
+    public function preOverview(): void
+    {
+
+    }
+
+    public function postOverview(): void
+    {
+
+    }
+
+    public function preEdit(): void
+    {
+
+    }
+
+    public function postEdit(): void
+    {
+
+    }
+
+    public function preCreate(): void
+    {
+
+    }
+
+    public function postCreate(): void
+    {
+
+    }
+
+    public function getBreadCrumbs(): LayoutBreadCrumb
     {
         $table = $this->ts->getAssetModel();
         $breadcrumb = new LayoutBreadcrumb();
         $breadcrumb->addHome();
+        $breadcrumb->addItem('tables', '/tables');
         $breadcrumb->addItem($table->name, '/table/'.$table->url.'/?'.$this->filterToParams());
-        if($edit)
-        {
-            $breadcrumb->addItem('edit');
-        }
+        $breadcrumb->addItem('edit');
+
         return $breadcrumb;
     }
 
-    public function getFilters(): array
+    public function editBreadCrumbs(bool $edit = false): LayoutBreadCrumb
+    {
+        $breadcrumb = $this->overviewBreadCrumbs();
+        $breadcrumb->addItem('Bewerk cursus');
+
+        return $breadcrumb;
+    }
+
+    public function filters(): array
     {
         return $this->filters;
     }
 
     public function filterToParams(): string
     {
-        if(!$this->filters) return '';
-        $filterParams='';
-        foreach ($this->filters as $key=>$value)
-        {
-            $filterParams.='&filter['.$key.']='.$value;
+        if (! $this->filters) {
+            return '';
         }
+        $filterParams = '';
+        foreach ($this->filters as $key => $value) {
+            $filterParams .= '&filter['.$key.']='.$value;
+        }
+
         return $filterParams;
     }
 }
