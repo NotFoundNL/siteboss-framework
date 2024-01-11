@@ -135,10 +135,6 @@ class TableEditorController extends AssetEditorController
             foreach (request()->query('filter') as $key => $value) {
                 $filterParams .= '&filter['.$key.']='.$value;
             }
-        } elseif ($table->items()->where('type', 'Filter')->first()) {
-            foreach ($table->items()->where('type', 'Filter')->get() as $filter) {
-                $filterParams .= '&filter['.$filter->internal.']='.$filter->getCurrentValue();
-            }
         }
 
         if (
