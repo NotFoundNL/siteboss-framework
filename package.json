@@ -1,5 +1,18 @@
 {
-	"dependencies": {
-		"blade-formatter": "^1.36.0"
-	}
+  "private": true,
+  "dependencies": {
+    "blade-formatter": "^1.36.0"
+  },
+  "scripts": {
+    "release": "release-it"
+  },
+  "release-it": {
+    "github": {
+      "release": true
+    }
+  },
+  "devDependencies": {
+    "release-it": "^17.0.1"
+  },
+  "version": "0.14.0"
 }
