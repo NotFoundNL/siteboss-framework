@@ -44,7 +44,7 @@ class ComponentChildTable extends AbstractComponent
 
     public function setValueFromStorage(mixed $value): bool
     {
-        $table = Table::whereTable($this->properties()->allowedBlocks)->first();
+        $table = Table::whereTable($this->properties()->childTable)->first();
 
         $contentBlocksWithValues = new Collection();
 
@@ -69,10 +69,11 @@ class ComponentChildTable extends AbstractComponent
 
     public function getDisplayValue(): array
     {
+        // BUG: This should use less extensive logic
+
         $contentBlocks = $this->getChildren();
 
-        $table = Table::whereTable($this->properties()->allowedBlocks)->first();
-
+        $table = Table::whereTable($this->properties()->childTable)->first();
         $contentBlocksWithValues = [];
         foreach ($contentBlocks as $contentBlock) {
             /** @var CmsContentBlocks $contentBlock */
@@ -82,14 +83,19 @@ class ComponentChildTable extends AbstractComponent
             $tableValues = new \stdClass();
             foreach ($fieldComponents as $fieldComponent) {
                 $tableValues->{$fieldComponent->assetItem->internal} = $fieldComponent->getDisplayValue();
+
             }
-            $contentBlocksWithValues[] = (object) [
-                'type' => $fieldComponent->assetItem->table->url,
-                'values' => $tableValues,
-            ];
+            $contentBlocksWithValues[] = $tableValues;
         }
 
         return $contentBlocksWithValues;
+
+    }
+
+    protected function customProperties(): object
+    {
+        // We try to emulate being a content block to AutoLayout
+        return (object) ['allowedBlocks' => $this->properties()->childTable];
     }
 
     public function afterSave(): void
@@ -162,7 +168,7 @@ class ComponentChildTable extends AbstractComponent
      */
     private function getChildren(): Collection
     {
-        return DB::table($this->properties()->allowedBlocks)->where($this->getForeignKey(), $this->recordId)->where('deleted_at', null)->orderBy('order')->get();
+        return DB::table($this->properties()->childTable)->where($this->getForeignKey(), $this->recordId)->where('deleted_at', null)->orderBy('order')->get();
     }
 
     private function getForeignKey()

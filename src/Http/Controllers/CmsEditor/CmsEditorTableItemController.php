@@ -58,8 +58,6 @@ class CmsEditorTableItemController extends \NotFound\Framework\Http\Controllers\
 
         $widgetPage->widget->addForm($form);
 
-        $widgetPage->widget->addWidget(CmsEditorImportExportController::getExport([$tableItem]));
-
         return $widgetPage->response();
     }
 
@@ -94,6 +92,8 @@ class CmsEditorTableItemController extends \NotFound\Framework\Http\Controllers\
         $response->addAction(new Toast('Field properties updated'));
         $response->addAction(new Redirect('/app/editor/table/'.$table->id.'/'));
 
+        $table->exportToFile();
+
         return $response->build();
     }
 
@@ -114,6 +114,8 @@ class CmsEditorTableItemController extends \NotFound\Framework\Http\Controllers\
         } catch (\Exception $e) {
             $response = ['error' => $e];
         }
+
+        $table->exportToFile();
 
         return $response;
     }

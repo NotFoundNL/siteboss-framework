@@ -188,6 +188,6 @@ class TableService extends AbstractAssetService
 
     protected function getCacheKey(): string
     {
-        return 'table_'.$this->table->id.'_'.$this->recordId.'_'.$this->lang->url;
+        return 'table_'.$this->table->slug.'_'.$this->recordId.'_'.$this->lang->url;
     }
 }
