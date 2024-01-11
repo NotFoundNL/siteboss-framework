@@ -1,5 +1,5 @@
 {
-  "dependencies": {
-    "blade-formatter": "^1.36.0"
-  }
+	"dependencies": {
+		"blade-formatter": "^1.36.0"
+	}
 }
