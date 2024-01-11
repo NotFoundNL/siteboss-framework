@@ -23,9 +23,8 @@ class CreateCmsUserTable extends Migration
             $table->json('properties')->nullable();
             $table->integer('enabled')->nullable();
             $table->set('status', ['DRAFT', 'PUBLISHED', 'DELETED'])->default('DRAFT');
-            $table->string('sub')->default('')->unique();
-            /* $table->rememberToken(); */
-            /* $table->timestamps(); */
+            $table->string('sub')->nullable()->unique();
+            $table->timestamps();
         });
     }
 
