@@ -23,6 +23,7 @@ use NotFound\Layout\Elements\Table\LayoutTable;
 use NotFound\Layout\Elements\Table\LayoutTableRow;
 use NotFound\Layout\LayoutResponse;
 use NotFound\Layout\Responses\Toast;
+use NotFound\Framework\Models\Editor\DefaultEditor;
 
 class TableOverviewController extends Controller
 {
@@ -43,6 +44,10 @@ class TableOverviewController extends Controller
 
         $layoutTable = new LayoutTable(create: $table->allow_create, delete: $table->allow_delete, sort: $table->allow_sort);
         $layoutTable->setTotalItems($siteTableRowsPaginator->total());
+
+        $editorClass = substr_replace($table->model, '\\Editor', strrpos($table->model,'\\'),0).'Editor';
+
+        $editor = (class_exists($editorClass)) ? new $editorClass(request()->query('filter'), $tableService) : new DefaultEditor(request()->query('filter'), $tableService);
 
         $filterParams = '';         
         if (request()->query('filter')) {
@@ -79,10 +84,7 @@ class TableOverviewController extends Controller
         $page = new LayoutPage($table->name);
         $page->addTitle(new LayoutTitle($table->name));
 
-        $breadcrumb = new LayoutBreadcrumb();
-        $breadcrumb->addHome();
-        $breadcrumb->addItem($table->name);
-        $page->addBreadCrumb($breadcrumb);
+        $page->addBreadCrumb($editor->getBreadCrumbs());
 
         $bar = new LayoutBar();
         $bottomBar = new LayoutBar();

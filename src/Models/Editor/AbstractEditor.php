@@ -47,14 +47,16 @@ abstract class AbstractEditor
 
     }
 
-    public function getBreadCrumbs(): LayoutBreadCrumb
+    public function getBreadCrumbs(bool $edit = false): LayoutBreadCrumb
     {
         $table = $this->ts->getAssetModel();
         $breadcrumb = new LayoutBreadcrumb();
         $breadcrumb->addHome();
-        $breadcrumb->addItem('tables', '/tables');
-        $breadcrumb->addItem($table->name, '/table/'.$table->url.'/?'.$this->filterToParams());
-        $breadcrumb->addItem('edit');
+        $breadcrumb->addItem($table->name, ($edit) ? '/table/'.$table->url.'/?'.$this->filterToParams() : null);
+        if($edit)
+        {
+            $breadcrumb->addItem('edit');
+        }
 
         return $breadcrumb;
     }
@@ -69,7 +71,7 @@ abstract class AbstractEditor
 
     public function filters(): array
     {
-        return $this->filters;
+        return $this->filters ?? [];
     }
 
     public function filterToParams(): string
