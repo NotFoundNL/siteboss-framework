@@ -7,6 +7,10 @@ use NotFound\Framework\Models\Lang;
 use NotFound\Layout\Elements\LayoutBar;
 use NotFound\Layout\Elements\LayoutBarButton;
 use NotFound\Layout\Elements\LayoutWidget;
+use NotFound\Framework\Models\Table;
+use NotFound\Framework\Services\Assets\TableService;
+use NotFound\Framework\Models\Editor\AbstractEditor;
+use NotFound\Framework\Models\Editor\DefaultEditor;
 
 abstract class AssetEditorController extends Controller
 {
@@ -38,5 +42,20 @@ abstract class AssetEditorController extends Controller
         }
 
         $widget->addBar($bar);
+    }
+
+    protected function customEditor(Table $table, TableService $tableService): AbstractEditor
+    {
+        // This only works for models
+        if ($table->model !== null) {
+
+            $editorClass = substr_replace($table->model, '\\Editor', strrpos($table->model, '\\'), 0).'Editor';
+
+            if (class_exists($editorClass)) {
+                return new $editorClass(request()->query('filter'), $tableService);
+            }
+        }
+
+        return new DefaultEditor(request()->query('filter'), $tableService);
     }
 }

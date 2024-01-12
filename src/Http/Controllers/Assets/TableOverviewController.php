@@ -25,7 +25,7 @@ use NotFound\Layout\LayoutResponse;
 use NotFound\Layout\Responses\Toast;
 use NotFound\Framework\Models\Editor\DefaultEditor;
 
-class TableOverviewController extends Controller
+class TableOverviewController extends AssetEditorController
 {
     /**
      * This endpoint returns information about input type that is created data over tg_cms_table and tg_cms_tableitem
@@ -45,19 +45,10 @@ class TableOverviewController extends Controller
         $layoutTable = new LayoutTable(create: $table->allow_create, delete: $table->allow_delete, sort: $table->allow_sort);
         $layoutTable->setTotalItems($siteTableRowsPaginator->total());
 
-        $editorClass = substr_replace($table->model, '\\Editor', strrpos($table->model,'\\'),0).'Editor';
-
-        $editor = (class_exists($editorClass)) ? new $editorClass(request()->query('filter'), $tableService) : new DefaultEditor(request()->query('filter'), $tableService);
-
-        $filterParams = '';         
-        if (request()->query('filter')) {
-            foreach (request()->query('filter') as $key => $value) {
-                $filterParams .= '&filter['.$key.']='.$value;
-            }
-        }
+        $editor = $this->customEditor($table,$tableService);
 
         foreach ($siteTableRowsPaginator as $row) {
-            $link = sprintf('/table/%s/%d/?page=%d&sort=%s&asc=%s', $table->url, $row->id, $request->page ?? 1, $request->sort ?? '', $request->asc ?? '').$filterParams;
+            $link = sprintf('/table/%s/%d/?page=%d&sort=%s&asc=%s', $table->url, $row->id, $request->page ?? 1, $request->sort ?? '', $request->asc ?? '').$editor->filterToParams();
             $layoutRow = new LayoutTableRow($row->id, link: $link);
 
             foreach ($components as $component) {
@@ -94,9 +85,9 @@ class TableOverviewController extends Controller
             $addNew = new LayoutBarButton('Nieuw');
             $addNew->setIcon('plus');
             $url = '/table/'.$table->url.'/0';
-            if($filterParams != '')
+            if($params = $editor->filterToParams());
             {
-                $url .= '?' . ltrim($filterParams,'&');
+                $url .= '?' . ltrim($params,'&');
             }
             $addNew->setLink($url);
             $bar->addBarButton($addNew);

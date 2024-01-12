@@ -109,6 +109,8 @@ class TableEditorController extends AssetEditorController
 
         $tableService = new TableService($table, $lang, $recordId);
 
+        $editor = $this->customEditor($table, $tableService);
+
         if (! $tableService->validate($request)) {
             // TODO: better error
             abort(422, 'Error validating');
@@ -130,13 +132,6 @@ class TableEditorController extends AssetEditorController
         $response = new LayoutResponse();
         $response->addAction(new Toast(__('siteboss::response.table.ok')));
 
-        $filterParams = '';
-        if (request()->query('filter')) {
-            foreach (request()->query('filter') as $key => $value) {
-                $filterParams .= '&filter['.$key.']='.$value;
-            }
-        }
-
         if (
             isset($request->siteboss_formOptions['send']) &&
             $request->siteboss_formOptions['send'] === 'stay_on_page'
@@ -145,8 +140,9 @@ class TableEditorController extends AssetEditorController
             // Stay on page
             if ($newTableRecord) {
                 $url = '/table/'.$table->url.'/'.$id;
-                if ($filterParams != '') {
-                    $url .= '?'.ltrim($filterParams, '&');
+                if($params = $editor->filterToParams())
+                {
+                    $url.='?'.ltrim($params,'&');
                 }
                 $response->addAction(new Redirect($url));
             } else {
@@ -156,7 +152,7 @@ class TableEditorController extends AssetEditorController
             // Redirect
 
             $params = sprintf('?page=%d&sort=%s&asc=%s', $request->page ?? 1, $request->sort ?? '', $request->asc ?? '');
-            $params .= $filterParams;
+            $params .= $editor->filterToParams();
             $response->addAction(new Redirect('/table/'.$table->url.'/?'.$params));
         }
 
@@ -173,20 +169,5 @@ class TableEditorController extends AssetEditorController
         }
 
         abort(404, __('siteboss::response.table.delete'));
-    }
-
-    private function customEditor(Table $table, TableService $tableService): AbstractEditor
-    {
-        // This only works for models
-        if ($table->model !== null) {
-
-            $editorClass = substr_replace($table->model, '\\Editor', strrpos($table->model, '\\'), 0).'Editor';
-
-            if (class_exists($editorClass)) {
-                return new $editorClass(request()->query('filter'), $tableService);
-            }
-        }
-
-        return new DefaultEditor(request()->query('filter'), $tableService);
     }
 }
