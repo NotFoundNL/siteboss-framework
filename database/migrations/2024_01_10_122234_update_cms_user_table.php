@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('cms_user', function (Blueprint $table) {
-            $table->string('sub')->nullable()->unique()->change();
+            $table->string('sub')->nullable()->default(null)->change();
             $table->timestamps();
         });
     }
