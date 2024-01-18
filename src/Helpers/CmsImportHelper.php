@@ -70,6 +70,7 @@ class CmsImportHelper
                     $table->id = $fileSource->id;
                 }
                 $table->name = $fileSource->name;
+                $table->model = $fileSource->model;
                 $table->url = $fileSource->url;
                 $table->rights = $fileSource->rights;
 
@@ -137,6 +138,7 @@ class CmsImportHelper
             $table->id();
             $table->string('name', 128)->nullable();
             $table->string('table', 128)->nullable();
+            $table->string('model', 128)->nullable();
             $table->string('url', 128)->nullable();
             $table->string('rights', 128)->nullable();
             $table->text('comments')->nullable();
