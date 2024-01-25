@@ -20,7 +20,16 @@ class ComponentFilter extends AbstractComponent
 
     public function beforeSave()
     {
+        if($this->getCurrentValue())
+        {
+            $this->setNewValue($this->getCurrentValue());
+            return;
+        }
+        
         //TODO get data from somewhere else
-        $this->setNewValue(request()->query('filter')[$this->assetItem->internal]);
+        if(isset(request()->query('filter')[$this->assetItem->internal]))
+        {
+            $this->setNewValue(request()->query('filter')[$this->assetItem->internal]);
+        }
     }
 }
