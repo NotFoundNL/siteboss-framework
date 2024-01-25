@@ -81,8 +81,7 @@ class TableQueryService
     {
         if (request()->query('filter')) {
             foreach (request()->query('filter') as $key => $value) {
-                if($this->table->items()->where('type', 'Filter')->where('internal', $key)->first())
-                {
+                if ($this->table->items()->where('type', 'Filter')->where('internal', $key)->first()) {
                     $query->where($key, '=', $value);
                 }
             }

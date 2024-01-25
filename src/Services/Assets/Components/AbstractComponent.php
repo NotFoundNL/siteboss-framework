@@ -321,7 +321,7 @@ abstract class AbstractComponent
      * Converts [][] to the DB prefix set in the config
      * Also accepts tablename without [][]
      *
-     * @param $tableName for example: '[][]user' or 'user'
+     * @param  $tableName  for example: '[][]user' or 'user'
      * @return string 'cc_user'
      */
     protected function removeDatabasePrefix(string $tableName)

@@ -15,8 +15,8 @@ class SitebossHelper
      *
      * Returns a value from the cms_config table.
      *
-     * @param  mixed  $code The internal code for the config value.
-     * @param  mixed  $failOnMissing Whether to throw an exception if the config value is missing.
+     * @param  mixed  $code  The internal code for the config value.
+     * @param  mixed  $failOnMissing  Whether to throw an exception if the config value is missing.
      * @return string|object|null The value of the config.
      */
     public static function config(string $code, bool $failOnMissing = true): string|object|null

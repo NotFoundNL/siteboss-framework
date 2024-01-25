@@ -79,7 +79,7 @@ class Field extends BaseModel
      * Get all the fields from the $oldFormId and clone them in the new form.
      * This includes cloning a combination with a new id and such.
      *
-     * @param  Form  $newForm The form that this fields needs to be a child of
+     * @param  Form  $newForm  The form that this fields needs to be a child of
      * @param mixed oldFormId
      */
     public function cloneToNewForm(Form $newForm, Form $oldForm)
@@ -130,9 +130,9 @@ class Field extends BaseModel
      *
      * also able to set combinationId
      *
-     * @param  mixed  $combinationId set if you only want to get from 1 combination
+     * @param  mixed  $combinationId  set if you only want to get from 1 combination
      */
-    public function getWithChildren(int $formId, int $combinationId = null)
+    public function getWithChildren(int $formId, ?int $combinationId = null)
     {
         // TODO: combine with GetChildrenOfCombination()
         $fieldQuery = $this

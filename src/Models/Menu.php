@@ -131,7 +131,7 @@ class Menu extends LegacyModel
         return $paramsUrl;
     }
 
-    public function getTitle(Lang $lang = null): ?string
+    public function getTitle(?Lang $lang = null): ?string
     {
         if (! $lang) {
             $lang = Lang::current();

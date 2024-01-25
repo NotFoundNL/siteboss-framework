@@ -53,8 +53,7 @@ abstract class AbstractEditor
         $breadcrumb = new LayoutBreadcrumb();
         $breadcrumb->addHome();
         $breadcrumb->addItem($table->name, ($edit) ? '/table/'.$table->url.'/?'.$this->filterToParams() : null);
-        if($edit)
-        {
+        if ($edit) {
             $breadcrumb->addItem('edit');
         }
 
