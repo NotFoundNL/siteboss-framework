@@ -15,7 +15,12 @@ class CmsEditorController extends \NotFound\Framework\Http\Controllers\Controlle
         $widgetPage = new LayoutWidgetHelper(pageTitle: 'CMS Editor', widgetTitle: 'CMS Editor');
         $widgetPage->widget->noPadding();
 
-        $table = new LayoutTable(delete: false, edit: true, create: false);
+        $table = new LayoutTable(
+            delete: false,
+            edit: true,
+            create: false,
+            sort: false
+        );
         $table->addHeader(new LayoutTableHeader('Main menu', 'table'));
 
         $row = new LayoutTableRow(1, '/app/editor/table/');
