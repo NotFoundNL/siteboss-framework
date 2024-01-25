@@ -17,4 +17,10 @@ class ComponentFilter extends AbstractComponent
         // TODO: Implement validate() method.
         return true;
     }
+
+    public function beforeSave()
+    {
+        //TODO get data from somewhere else
+        $this->setNewValue(request()->query('filter')[$this->assetItem->internal]);
+    }
 }
