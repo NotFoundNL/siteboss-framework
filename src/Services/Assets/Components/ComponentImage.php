@@ -121,7 +121,7 @@ class ComponentImage extends AbstractComponent
     /**
      * returns the url for the first image, or an empty object if no image is available.
      *
-     * @return  '{storage_path}/app/public/images/{asset-table}/{item-name}/'
+     * @return '{storage_path}/app/public/images/{asset-table}/{item-name}/'
      * @return void
      */
     public function getCurrentValue(): object

@@ -90,7 +90,7 @@ class Table extends AssetModel
      */
     public function getSiteTableName(): string
     {
-        return $this->attributes['table'];
+        return $this->attributes['table'] ?? with(new $this->attributes['model'])->getTable();
     }
 
     /**
