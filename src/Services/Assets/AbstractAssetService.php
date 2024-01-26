@@ -26,20 +26,19 @@ abstract class AbstractAssetService
 
     abstract protected function getCacheKey(): string;
 
-    public function setRequestParameters(array|null $requestParameters): void
+    public function setRequestParameters(?array $requestParameters): void
     {
         $this->requestParameters = $requestParameters;
     }
 
     public function getRequestParameters($key = null): string|array|null
     {
-        if(!isset($this->requestParameters)) {
+        if (! isset($this->requestParameters)) {
             return null;
         }
 
-        if(isset($key))
-        {
-            return (key_exists($key, $this->requestParameters)) ? $this->requestParameters[$key] : [];
+        if (isset($key)) {
+            return (array_key_exists($key, $this->requestParameters)) ? $this->requestParameters[$key] : [];
         }
 
         return $this->requestParameters;

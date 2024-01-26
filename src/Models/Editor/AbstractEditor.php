@@ -53,6 +53,7 @@ abstract class AbstractEditor
         $breadcrumb = new LayoutBreadcrumb();
         $breadcrumb->addHome();
         $breadcrumb->addItem($table->name);
+
         return $breadcrumb;
     }
 
@@ -62,6 +63,7 @@ abstract class AbstractEditor
         $breadcrumb = $this->getBreadCrumbs();
         end($breadcrumb->properties->items)->link = '/table/'.$table->url.'/?'.$this->filterToParams();
         $breadcrumb->addItem('edit');
+
         return $breadcrumb;
     }
 
