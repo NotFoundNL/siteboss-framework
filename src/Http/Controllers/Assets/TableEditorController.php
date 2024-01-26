@@ -56,7 +56,7 @@ class TableEditorController extends AssetEditorController
 
         $page = new LayoutPage(__('siteboss::ui.page'));
         $page->addTitle(new LayoutTitle($table->name));
-        $page->addBreadCrumb($editor->getBreadCrumbs(true));
+        $page->addBreadCrumb($editor->getBreadCrumbsEdit());
 
         $upsertingText = $recordId === 0 ? __('siteboss::ui.new') : __('siteboss::ui.edit');
 

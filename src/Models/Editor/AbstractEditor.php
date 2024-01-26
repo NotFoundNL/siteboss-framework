@@ -47,24 +47,21 @@ abstract class AbstractEditor
 
     }
 
-    public function getBreadCrumbs(bool $edit = false): LayoutBreadCrumb
+    public function getBreadCrumbs(): LayoutBreadCrumb
     {
         $table = $this->ts->getAssetModel();
         $breadcrumb = new LayoutBreadcrumb();
         $breadcrumb->addHome();
-        $breadcrumb->addItem($table->name, ($edit) ? '/table/'.$table->url.'/?'.$this->filterToParams() : null);
-        if ($edit) {
-            $breadcrumb->addItem('edit');
-        }
-
+        $breadcrumb->addItem($table->name);
         return $breadcrumb;
     }
 
-    public function editBreadCrumbs(bool $edit = false): LayoutBreadCrumb
+    public function getBreadCrumbsEdit(): LayoutBreadCrumb
     {
-        $breadcrumb = $this->overviewBreadCrumbs();
-        $breadcrumb->addItem('Bewerk cursus');
-
+        $table = $this->ts->getAssetModel();
+        $breadcrumb = $this->getBreadCrumbs();
+        end($breadcrumb->properties->items)->link = '/table/'.$table->url.'/?'.$this->filterToParams();
+        $breadcrumb->addItem('edit');
         return $breadcrumb;
     }
 
