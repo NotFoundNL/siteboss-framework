@@ -40,7 +40,7 @@ class GlobalPageService extends AbstractAssetService
     /**
      * Loops through all the table items and return them with the appropriate Input Class
      */
-    public function getFieldComponents(int $recordId = null): Collection
+    public function getFieldComponents(?int $recordId = null): Collection
     {
         $templateItems = TemplateItem::where('enabled', 1)
             ->where('global', 1)

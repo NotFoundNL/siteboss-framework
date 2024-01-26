@@ -15,7 +15,7 @@ class AfterSaveEvent
     /**
      * Create a new event instance.
      *
-     * @param $model is an model of Table or Strings that they extends from BaseModel
+     * @param    $model  is an model of Table or Strings that they extends from BaseModel
      * @return void
      */
     public function __construct(BaseModel $model)

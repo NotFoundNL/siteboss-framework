@@ -17,7 +17,7 @@ abstract class Properties
     /**
      * __construct
      *
-     *  @param  mixed  $properties Properties object from database
+     * @param  mixed  $properties  Properties object from database
      *
      * This method will fill the properties arrays with the properties of the field
      * it will alto store the current values in the values object
