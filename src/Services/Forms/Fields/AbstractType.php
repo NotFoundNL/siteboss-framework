@@ -25,7 +25,7 @@ abstract class AbstractType
     /**
      * An protected function so that the value can't be set from anywhere.
      *
-     * @param  $value  The value that needs to be set
+     * @param    $value  The value that needs to be set
      */
     protected function setValue($value): void
     {
