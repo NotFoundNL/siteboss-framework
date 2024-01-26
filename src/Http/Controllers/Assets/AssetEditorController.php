@@ -52,10 +52,10 @@ abstract class AssetEditorController extends Controller
             $editorClass = substr_replace($table->model, '\\Editor', strrpos($table->model, '\\'), 0).'Editor';
 
             if (class_exists($editorClass)) {
-                return new $editorClass(request()->query('filter'), $tableService);
+                return new $editorClass($tableService);
             }
         }
 
-        return new DefaultEditor(request()->query('filter'), $tableService);
+        return new DefaultEditor($tableService);
     }
 }

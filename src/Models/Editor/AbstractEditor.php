@@ -7,7 +7,7 @@ use NotFound\Layout\Elements\LayoutBreadcrumb;
 
 abstract class AbstractEditor
 {
-    public function __construct(protected ?array $filters, protected TableService $ts)
+    public function __construct(protected TableService $ts)
     {
 
     }
@@ -67,16 +67,16 @@ abstract class AbstractEditor
 
     public function filters(): array
     {
-        return $this->filters ?? [];
+        return $this->ts->getRequestParameters('filter') ?? [];
     }
 
     public function filterToParams(): string
     {
-        if (! $this->filters) {
+        if (empty($this->filters())) {
             return '';
         }
         $filterParams = '';
-        foreach ($this->filters as $key => $value) {
+        foreach ($this->filters() as $key => $value) {
             $filterParams .= '&filter['.$key.']='.$value;
         }
 

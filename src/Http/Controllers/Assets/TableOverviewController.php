@@ -42,6 +42,8 @@ class TableOverviewController extends AssetEditorController
         $layoutTable = new LayoutTable(create: $table->allow_create, delete: $table->allow_delete, sort: $table->allow_sort);
         $layoutTable->setTotalItems($siteTableRowsPaginator->total());
 
+        $tableService->setRequestParameters($request->query());
+
         $editor = $this->customEditor($table, $tableService);
 
         foreach ($siteTableRowsPaginator as $row) {
