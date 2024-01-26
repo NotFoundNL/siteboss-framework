@@ -37,7 +37,12 @@ abstract class AbstractAssetService
             return null;
         }
 
-        return (isset($key)) ? $this->requestParameters[$key] : $this->requestParameters;
+        if(isset($key))
+        {
+            return (key_exists($key, $this->requestParameters)) ? $this->requestParameters[$key] : [];
+        }
+
+        return $this->requestParameters;
     }
 
     public function getAssetModel(): ?AssetModel
