@@ -36,6 +36,8 @@ class TableEditorController extends AssetEditorController
 
         $tableService = new TableService($table, $lang, $recordId === 0 ? null : $recordId);
 
+        $tableService->setRequestParameters($request->query());
+
         $editor = $this->customEditor($table, $tableService);
 
         $params = sprintf('?page=%d&sort=%s&asc=%s', $request->page ?? 1, $request->sort ?? '', $request->asc ?? '');
@@ -106,6 +108,8 @@ class TableEditorController extends AssetEditorController
         }
 
         $tableService = new TableService($table, $lang, $recordId);
+
+        $tableService->setRequestParameters($request->query());
 
         $editor = $this->customEditor($table, $tableService);
 

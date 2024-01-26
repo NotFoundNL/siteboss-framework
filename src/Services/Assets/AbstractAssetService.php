@@ -13,6 +13,8 @@ abstract class AbstractAssetService
 {
     protected AssetModel $assetModel;
 
+    protected array $requestParameters;
+
     protected Lang $lang;
 
     /**
@@ -23,6 +25,20 @@ abstract class AbstractAssetService
     abstract public function getComponents(): Collection;
 
     abstract protected function getCacheKey(): string;
+
+    public function setRequestParameters(array|null $requestParameters): void
+    {
+        $this->requestParameters = $requestParameters;
+    }
+
+    public function getRequestParameters($key = null): string|array|null
+    {
+        if(!isset($this->requestParameters)) {
+            return null;
+        }
+
+        return (isset($key)) ? $this->requestParameters[$key] : $this->requestParameters;
+    }
 
     public function getAssetModel(): ?AssetModel
     {
