@@ -13,7 +13,7 @@ class ContentBlockController
     /**
      * Get contentBlock template items.
      *
-     * @param $csvTables cms_tables->table in csv format
+     * @param    $csvTables  cms_tables->table in csv format
      */
     public function get(string $csvTables)
     {

@@ -25,7 +25,7 @@ abstract class AbstractType
     /**
      * An protected function so that the value can't be set from anywhere.
      *
-     * @param $value The value that needs to be set
+     * @param    $value  The value that needs to be set
      */
     protected function setValue($value): void
     {
@@ -123,8 +123,8 @@ abstract class AbstractType
      *
      * NOTE: If you make more columns, be sure to also override 'createHeadersForDataViewer'.
      *
-     * @param  array  $tableRow     array that will fill the table for CSV export etc
-     * @param  string  $outputFilter every output is different, filter it
+     * @param  array  $tableRow  array that will fill the table for CSV export etc
+     * @param  string  $outputFilter  every output is different, filter it
      */
     public function fillTableForDataViewer(&$tableRow, $outputFilter)
     {

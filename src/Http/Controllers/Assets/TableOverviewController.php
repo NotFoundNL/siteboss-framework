@@ -4,7 +4,6 @@ namespace NotFound\Framework\Http\Controllers\Assets;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use NotFound\Framework\Http\Controllers\Controller;
 use NotFound\Framework\Models\Lang;
 use NotFound\Framework\Models\Table;
 use NotFound\Framework\Services\Assets\Components\AbstractComponent;
@@ -12,7 +11,6 @@ use NotFound\Framework\Services\Assets\TableQueryService;
 use NotFound\Framework\Services\Assets\TableService;
 use NotFound\Layout\Elements\LayoutBar;
 use NotFound\Layout\Elements\LayoutBarButton;
-use NotFound\Layout\Elements\LayoutBreadcrumb;
 use NotFound\Layout\Elements\LayoutPage;
 use NotFound\Layout\Elements\LayoutPager;
 use NotFound\Layout\Elements\LayoutSearchBox;
@@ -24,14 +22,14 @@ use NotFound\Layout\Elements\Table\LayoutTableRow;
 use NotFound\Layout\LayoutResponse;
 use NotFound\Layout\Responses\Toast;
 
-class TableOverviewController extends Controller
+class TableOverviewController extends AssetEditorController
 {
     /**
      * This endpoint returns information about input type that is created data over tg_cms_table and tg_cms_tableitem
      * Input types are used on front-end especially Cms form builder
      *
-     * @param  string  $customer This is an value of tg_cms_table->url column.
-     * @return  array   ['headers' => [{'name' => 'name3','properties' => 'sourcename']], 'rows' => [
+     * @param  string  $customer  This is an value of tg_cms_table->url column.
+     * @return array ['headers' => [{'name' => 'name3','properties' => 'sourcename']], 'rows' => [
      */
     public function index(Request $request, Table $table)
     {
@@ -44,8 +42,12 @@ class TableOverviewController extends Controller
         $layoutTable = new LayoutTable(create: $table->allow_create, delete: $table->allow_delete, sort: $table->allow_sort);
         $layoutTable->setTotalItems($siteTableRowsPaginator->total());
 
+        $tableService->setRequestParameters($request->query());
+
+        $editor = $this->customEditor($table, $tableService);
+
         foreach ($siteTableRowsPaginator as $row) {
-            $link = sprintf('/table/%s/%d/?page=%d&sort=%s&asc=%s', $table->url, $row->id, $request->page ?? 1, $request->sort ?? '', $request->asc ?? '');
+            $link = sprintf('/table/%s/%d/?page=%d&sort=%s&asc=%s', $table->url, $row->id, $request->page ?? 1, $request->sort ?? '', $request->asc ?? '').$editor->filterToParams();
             $layoutRow = new LayoutTableRow($row->id, link: $link);
 
             foreach ($components as $component) {
@@ -72,18 +74,23 @@ class TableOverviewController extends Controller
         $page = new LayoutPage($table->name);
         $page->addTitle(new LayoutTitle($table->name));
 
-        $breadcrumb = new LayoutBreadcrumb();
-        $breadcrumb->addHome();
-        $breadcrumb->addItem($table->name);
-        $page->addBreadCrumb($breadcrumb);
+        $page->addBreadCrumb($editor->getBreadCrumbs());
 
         $bar = new LayoutBar();
+        $bottomBar = new LayoutBar();
+        $bottomBar->noBackground();
 
         if ($table->allow_create) {
             $addNew = new LayoutBarButton('Nieuw');
             $addNew->setIcon('plus');
-            $addNew->setSpecialAction('addNew');
+            $url = '/table/'.$table->url.'/0';
+            if ($params = $editor->filterToParams());
+
+            $url .= '?'.ltrim($params, '&');
+
+            $addNew->setLink($url);
             $bar->addBarButton($addNew);
+            $bottomBar->addBarButton($addNew);
         }
 
         $pager = new LayoutPager(totalItems: $siteTableRowsPaginator->total(), itemsPerPage: request()->query('pitems') ?? $table->properties->itemsPerPage ?? 25);
@@ -95,16 +102,6 @@ class TableOverviewController extends Controller
         $widget->noPadding();
         $widget->addBar($bar);
         $widget->addTable($layoutTable);
-
-        $bottomBar = new LayoutBar();
-        $bottomBar->noBackground();
-
-        if ($table->allow_create) {
-            $addNew = new LayoutBarButton('Nieuw');
-            $addNew->setIcon('plus');
-            $addNew->setSpecialAction('addNew');
-            $bottomBar->addBarButton($addNew);
-        }
         $widget->addBar($bottomBar);
 
         if ($siteTableRowsPaginator->total() == 0) {
@@ -146,7 +143,7 @@ class TableOverviewController extends Controller
      * @param  int  $recordId
      * @param  int  $newPosition
      * @param  int  $oldPosition
-     * @return  jsonResponse
+     * @return jsonResponse
      */
     public function updatePosition(Request $request, Table $table)
     {

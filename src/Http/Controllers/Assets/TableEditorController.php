@@ -14,7 +14,6 @@ use NotFound\Framework\Services\Assets\Components\ComponentEditorLink;
 use NotFound\Framework\Services\Assets\TableService;
 use NotFound\Layout\Elements\LayoutBar;
 use NotFound\Layout\Elements\LayoutBarButton;
-use NotFound\Layout\Elements\LayoutBreadcrumb;
 use NotFound\Layout\Elements\LayoutButton;
 use NotFound\Layout\Elements\LayoutForm;
 use NotFound\Layout\Elements\LayoutPage;
@@ -37,9 +36,13 @@ class TableEditorController extends AssetEditorController
 
         $tableService = new TableService($table, $lang, $recordId === 0 ? null : $recordId);
 
+        $tableService->setRequestParameters($request->query());
+
+        $editor = $this->customEditor($table, $tableService);
+
         $params = sprintf('?page=%d&sort=%s&asc=%s', $request->page ?? 1, $request->sort ?? '', $request->asc ?? '');
 
-        $formUrl = sprintf('/table/%s/%s/%s/%s', $table->url, $recordId ?? 0, urlencode($langUrl), $params);
+        $formUrl = sprintf('/table/%s/%s/%s/%s', $table->url, $recordId ?? 0, urlencode($langUrl), $params.$editor->filterToParams());
 
         $form = new LayoutForm($formUrl);
 
@@ -53,13 +56,9 @@ class TableEditorController extends AssetEditorController
 
         $page = new LayoutPage(__('siteboss::ui.page'));
         $page->addTitle(new LayoutTitle($table->name));
+        $page->addBreadCrumb($editor->getBreadCrumbsEdit());
 
-        $breadcrumb = new LayoutBreadcrumb();
-        $breadcrumb->addHome();
-        $breadcrumb->addItem($table->name, '/table/'.$table->url.'/?'.$params);
         $upsertingText = $recordId === 0 ? __('siteboss::ui.new') : __('siteboss::ui.edit');
-        $breadcrumb->addItem($upsertingText); //TODO: Add better title
-        $page->addBreadCrumb($breadcrumb);
 
         $saveButton = new LayoutButton(__('siteboss::ui.save'));
 
@@ -110,6 +109,10 @@ class TableEditorController extends AssetEditorController
 
         $tableService = new TableService($table, $lang, $recordId);
 
+        $tableService->setRequestParameters($request->query());
+
+        $editor = $this->customEditor($table, $tableService);
+
         if (! $tableService->validate($request)) {
             // TODO: better error
             abort(422, 'Error validating');
@@ -135,9 +138,14 @@ class TableEditorController extends AssetEditorController
             isset($request->siteboss_formOptions['send']) &&
             $request->siteboss_formOptions['send'] === 'stay_on_page'
         ) {
+
             // Stay on page
             if ($newTableRecord) {
-                $response->addAction(new Redirect('/table/'.$table->url.'/'.$id.'/'));
+                $url = '/table/'.$table->url.'/'.$id;
+                if ($params = $editor->filterToParams()) {
+                    $url .= '?'.ltrim($params, '&');
+                }
+                $response->addAction(new Redirect($url));
             } else {
                 $response->addAction(new Reload());
             }
@@ -145,7 +153,7 @@ class TableEditorController extends AssetEditorController
             // Redirect
 
             $params = sprintf('?page=%d&sort=%s&asc=%s', $request->page ?? 1, $request->sort ?? '', $request->asc ?? '');
-
+            $params .= $editor->filterToParams();
             $response->addAction(new Redirect('/table/'.$table->url.'/?'.$params));
         }
 
