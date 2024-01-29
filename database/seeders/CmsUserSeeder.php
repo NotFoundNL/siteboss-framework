@@ -17,6 +17,7 @@ class CmsUserSeeder extends Seeder
         DB::table('cms_user')->insertOrIgnore([
             'name' => 'Beheerder Notfound',
             'email' => env('SB_ADMIN_EMAIL', ''),
+            'email_verified_at' => now(),
             'enabled' => 1,
         ]);
 

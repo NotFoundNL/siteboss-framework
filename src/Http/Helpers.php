@@ -47,8 +47,8 @@ if (! function_exists('db_table_items_change_order')) {
 
 if (! function_exists('make_directories')) {
     /**
-     * @param  mixed  $root The root folder for the path, we'll not go higher than this.
-     * @param  mixed  $dir The path from the root folder
+     * @param  mixed  $root  The root folder for the path, we'll not go higher than this.
+     * @param  mixed  $dir  The path from the root folder
      * @return bool true if the directory was created or already existed.
      */
     function make_directories($root, $dir): bool

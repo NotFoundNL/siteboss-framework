@@ -39,9 +39,10 @@ trait Exportable
             $exportItem->id = $this->id;
         }
         $exportItem->siteboss_asset = (object) [
-            'version' => '1.1.0',
+            'version' => '1.2.0',
             'type' => 'table',
         ];
+        $exportItem->model = $this->model;
         $exportItem->comments = $this->comments;
         $exportItem->rights = $this->rights;
         $exportItem->url = $this->url;

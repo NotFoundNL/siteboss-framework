@@ -15,6 +15,7 @@ Artisan::command('siteboss:index-site {--debug : Whether debug messages should b
 })->purpose('Index site for local search');
 
 Artisan::command('siteboss:cms-import {--debug : Whether debug messages should be displayed} {--dry : Dry Run}', function ($debug, $dry) {
+
     $indexer = new CmsImportHelper($debug, $dry);
     $indexer->import();
 

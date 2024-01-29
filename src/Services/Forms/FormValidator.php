@@ -26,8 +26,8 @@ class FormValidator
     private ?\StdClass $hasValueObject = null;
 
     /**
-     * @param  string  $databaseForm The form from the backend
-     * TODO: This isn't used. Use laravel locale instead
+     * @param  string  $databaseForm  The form from the backend
+     *                                TODO: This isn't used. Use laravel locale instead
      * @param  mixed  $langurl
      */
     public function __construct(

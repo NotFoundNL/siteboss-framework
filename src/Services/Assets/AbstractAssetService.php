@@ -13,6 +13,8 @@ abstract class AbstractAssetService
 {
     protected AssetModel $assetModel;
 
+    protected array $requestParameters;
+
     protected Lang $lang;
 
     /**
@@ -23,6 +25,24 @@ abstract class AbstractAssetService
     abstract public function getComponents(): Collection;
 
     abstract protected function getCacheKey(): string;
+
+    public function setRequestParameters(?array $requestParameters): void
+    {
+        $this->requestParameters = $requestParameters;
+    }
+
+    public function getRequestParameters($key = null): string|array|null
+    {
+        if (! isset($this->requestParameters)) {
+            return null;
+        }
+
+        if (isset($key)) {
+            return (array_key_exists($key, $this->requestParameters)) ? $this->requestParameters[$key] : [];
+        }
+
+        return $this->requestParameters;
+    }
 
     public function getAssetModel(): ?AssetModel
     {
@@ -37,7 +57,7 @@ abstract class AbstractAssetService
     /**
      * Loops through all the table items and return them with the appropriate Input Class
      */
-    public function getFieldComponents(int $recordId = null): Collection
+    public function getFieldComponents(?int $recordId = null): Collection
     {
         $items = $this->assetModel->items()->where('enabled', 1)->orderBy('order')->get();
 

@@ -102,7 +102,8 @@ class CmsEditorTableController extends \NotFound\Framework\Http\Controllers\Cont
         $action = new Redirect('/app/editor/table/'.$tableId);
         $response->addAction($action);
 
-        $table->exportToFile();
+        $tableModel = Table::find($tableId);
+        $tableModel->exportToFile();
 
         return $response->build();
     }
