@@ -69,7 +69,7 @@ class SitebossHelper
         } catch (\Exception $e) {
             Log::error('Caught exception: '.$e->getMessage());
 
-            return false;
+            return null;
         }
     }
 
