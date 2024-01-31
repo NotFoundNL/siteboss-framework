@@ -42,6 +42,7 @@ class SitebossHelper
 
     public static function mail(string $to_name, string $to_email, string $subject, $html, $data = false): ?int
     {
+        trigger_error('Method '.__METHOD__.' is deprecated', E_USER_DEPRECATED);
         $sendgrid_api_key = self::config('sendgrid_api_key', true);
         $sendgrid_sender_email = self::config('sendgrid_sender_email', true);
         $sendgrid_sender_name = self::config('sendgrid_sender_name', true);
@@ -110,5 +111,14 @@ class SitebossHelper
         }
 
         return true;
+    }
+
+    public static function formatDate($date): string
+    {
+        if (is_null($date)) {
+            return '-';
+        }
+
+        return date('d-m-Y H:i:s', strtotime($date));
     }
 }
