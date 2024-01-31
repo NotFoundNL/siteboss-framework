@@ -40,7 +40,7 @@ class SitebossHelper
         return self::$config[$code]['value'];
     }
 
-    public static function mail(string $to_name, string $to_email, string $subject, $html, $data = false)
+    public static function mail(string $to_name, string $to_email, string $subject, $html, $data = false): ?int
     {
         $sendgrid_api_key = self::config('sendgrid_api_key', true);
         $sendgrid_sender_email = self::config('sendgrid_sender_email', true);
@@ -60,14 +60,6 @@ class SitebossHelper
             }
         }
 
-        // if ($data != false) {
-        //     // HTML is a Twig template with data
-        //     if(!site::$page->twig)
-        //     {
-        //         site::$page->getTwig();
-        //     }
-        //     $html = site::$page->twig->render($html, $data);
-        // }
         $email->addContent('text/html', $html);
         $sendgrid = new \SendGrid($sendgrid_api_key);
         try {
@@ -75,7 +67,9 @@ class SitebossHelper
 
             return $response->statusCode();
         } catch (\Exception $e) {
-            echo 'Caught exception: '.$e->getMessage()."\n";
+            Log::error('Caught exception: '.$e->getMessage());
+
+            return null;
         }
     }
 
