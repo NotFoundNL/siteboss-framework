@@ -14,41 +14,6 @@ abstract class AbstractEditor
 
     }
 
-    /**
-     * preOverview
-     *
-     * Runs before the overview is rendered
-     */
-    public function preOverview(): void
-    {
-
-    }
-
-    public function postOverview(): void
-    {
-
-    }
-
-    public function preEdit(): void
-    {
-
-    }
-
-    public function postEdit(): void
-    {
-
-    }
-
-    public function preCreate(): void
-    {
-
-    }
-
-    public function postCreate(): void
-    {
-
-    }
-
     public function getBar(): LayoutBar
     {
         $bar = new LayoutBar();
