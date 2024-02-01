@@ -77,11 +77,11 @@ abstract class AbstractEditor
         $table = $this->ts->getAssetModel();
         $addNew->setIcon('plus');
         $url = '/table/'.$table->url.'/0';
-        if ($params = $this->filterToParams())
-        {
+        if ($params = $this->filterToParams()) {
             $url .= '?'.ltrim($params, '&');
         }
         $addNew->setLink($url);
+
         return $addNew;
     }
 
@@ -91,6 +91,7 @@ abstract class AbstractEditor
         $breadcrumb = new LayoutBreadcrumb();
         $breadcrumb->addHome();
         $breadcrumb->addItem($table->name);
+
         return $breadcrumb;
     }
 
@@ -100,6 +101,7 @@ abstract class AbstractEditor
         $breadcrumb = $this->getBreadCrumbs();
         end($breadcrumb->properties->items)->link = '/table/'.$table->url.'/?'.$this->filterToParams();
         $breadcrumb->addItem('edit');
+
         return $breadcrumb;
     }
 
