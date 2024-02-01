@@ -3,6 +3,8 @@
 namespace NotFound\Framework\Models\Editor;
 
 use NotFound\Framework\Services\Assets\TableService;
+use NotFound\Layout\Elements\LayoutBar;
+use NotFound\Layout\Elements\LayoutBarButton;
 use NotFound\Layout\Elements\LayoutBreadcrumb;
 
 abstract class AbstractEditor
@@ -47,13 +49,48 @@ abstract class AbstractEditor
 
     }
 
+    public function getBar(): LayoutBar
+    {
+        $bar = new LayoutBar();
+
+        $table = $this->ts->getAssetModel();
+
+        if ($table->allow_create) {
+            $addNew = $this->getNewButton();
+            $bar->addBarButton($addNew);
+        }
+
+        return $bar;
+    }
+
+    public function getBottomBar(): LayoutBar
+    {
+        $bottomBar = $this->getBar();
+        $bottomBar->noBackground();
+
+        return $bottomBar;
+    }
+
+    public function getNewButton(): LayoutBarButton
+    {
+        $addNew = new LayoutBarButton('Nieuw');
+        $table = $this->ts->getAssetModel();
+        $addNew->setIcon('plus');
+        $url = '/table/'.$table->url.'/0';
+        if ($params = $this->filterToParams())
+        {
+            $url .= '?'.ltrim($params, '&');
+        }
+        $addNew->setLink($url);
+        return $addNew;
+    }
+
     public function getBreadCrumbs(): LayoutBreadCrumb
     {
         $table = $this->ts->getAssetModel();
         $breadcrumb = new LayoutBreadcrumb();
         $breadcrumb->addHome();
         $breadcrumb->addItem($table->name);
-
         return $breadcrumb;
     }
 
@@ -63,7 +100,6 @@ abstract class AbstractEditor
         $breadcrumb = $this->getBreadCrumbs();
         end($breadcrumb->properties->items)->link = '/table/'.$table->url.'/?'.$this->filterToParams();
         $breadcrumb->addItem('edit');
-
         return $breadcrumb;
     }
 

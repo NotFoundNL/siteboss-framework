@@ -76,22 +76,8 @@ class TableOverviewController extends AssetEditorController
 
         $page->addBreadCrumb($editor->getBreadCrumbs());
 
-        $bar = new LayoutBar();
-        $bottomBar = new LayoutBar();
-        $bottomBar->noBackground();
-
-        if ($table->allow_create) {
-            $addNew = new LayoutBarButton('Nieuw');
-            $addNew->setIcon('plus');
-            $url = '/table/'.$table->url.'/0';
-            if ($params = $editor->filterToParams());
-
-            $url .= '?'.ltrim($params, '&');
-
-            $addNew->setLink($url);
-            $bar->addBarButton($addNew);
-            $bottomBar->addBarButton($addNew);
-        }
+        $bar = $editor->getBar();
+        $bottomBar = $editor->getBottomBar();
 
         $pager = new LayoutPager(totalItems: $siteTableRowsPaginator->total(), itemsPerPage: request()->query('pitems') ?? $table->properties->itemsPerPage ?? 25);
         $bar->addPager($pager);
