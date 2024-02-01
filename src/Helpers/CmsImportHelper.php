@@ -70,7 +70,7 @@ class CmsImportHelper
                     $table->id = $fileSource->id;
                 }
                 $table->name = $fileSource->name;
-                $table->model = $fileSource->model;
+                $table->model = $fileSource->model ?? null;
                 $table->url = $fileSource->url;
                 $table->rights = $fileSource->rights;
 
