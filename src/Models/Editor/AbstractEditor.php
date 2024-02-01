@@ -3,6 +3,8 @@
 namespace NotFound\Framework\Models\Editor;
 
 use NotFound\Framework\Services\Assets\TableService;
+use NotFound\Layout\Elements\LayoutBar;
+use NotFound\Layout\Elements\LayoutBarButton;
 use NotFound\Layout\Elements\LayoutBreadcrumb;
 
 abstract class AbstractEditor
@@ -12,39 +14,40 @@ abstract class AbstractEditor
 
     }
 
-    /**
-     * preOverview
-     *
-     * Runs before the overview is rendered
-     */
-    public function preOverview(): void
+    public function getBar(): LayoutBar
     {
+        $bar = new LayoutBar();
 
+        $table = $this->ts->getAssetModel();
+
+        if ($table->allow_create) {
+            $addNew = $this->getNewButton();
+            $bar->addBarButton($addNew);
+        }
+
+        return $bar;
     }
 
-    public function postOverview(): void
+    public function getBottomBar(): LayoutBar
     {
+        $bottomBar = $this->getBar();
+        $bottomBar->noBackground();
 
+        return $bottomBar;
     }
 
-    public function preEdit(): void
+    public function getNewButton(): LayoutBarButton
     {
+        $addNew = new LayoutBarButton('Nieuw');
+        $table = $this->ts->getAssetModel();
+        $addNew->setIcon('plus');
+        $url = '/table/'.$table->url.'/0';
+        if ($params = $this->filterToParams()) {
+            $url .= '?'.ltrim($params, '&');
+        }
+        $addNew->setLink($url);
 
-    }
-
-    public function postEdit(): void
-    {
-
-    }
-
-    public function preCreate(): void
-    {
-
-    }
-
-    public function postCreate(): void
-    {
-
+        return $addNew;
     }
 
     public function getBreadCrumbs(): LayoutBreadCrumb
