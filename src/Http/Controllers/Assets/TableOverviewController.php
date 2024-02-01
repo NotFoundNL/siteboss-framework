@@ -4,7 +4,6 @@ namespace NotFound\Framework\Http\Controllers\Assets;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use NotFound\Framework\Http\Controllers\Controller;
 use NotFound\Framework\Models\Lang;
 use NotFound\Framework\Models\Table;
 use NotFound\Framework\Services\Assets\Components\AbstractComponent;
@@ -12,7 +11,6 @@ use NotFound\Framework\Services\Assets\TableQueryService;
 use NotFound\Framework\Services\Assets\TableService;
 use NotFound\Layout\Elements\LayoutBar;
 use NotFound\Layout\Elements\LayoutBarButton;
-use NotFound\Layout\Elements\LayoutBreadcrumb;
 use NotFound\Layout\Elements\LayoutPage;
 use NotFound\Layout\Elements\LayoutPager;
 use NotFound\Layout\Elements\LayoutSearchBox;
@@ -23,7 +21,6 @@ use NotFound\Layout\Elements\Table\LayoutTable;
 use NotFound\Layout\Elements\Table\LayoutTableRow;
 use NotFound\Layout\LayoutResponse;
 use NotFound\Layout\Responses\Toast;
-use NotFound\Framework\Models\Editor\DefaultEditor;
 
 class TableOverviewController extends AssetEditorController
 {
@@ -45,7 +42,7 @@ class TableOverviewController extends AssetEditorController
         $layoutTable = new LayoutTable(create: $table->allow_create, delete: $table->allow_delete, sort: $table->allow_sort);
         $layoutTable->setTotalItems($siteTableRowsPaginator->total());
 
-        $editor = $this->customEditor($table,$tableService);
+        $editor = $this->customEditor($table, $tableService);
 
         foreach ($siteTableRowsPaginator as $row) {
             $link = sprintf('/table/%s/%d/?page=%d&sort=%s&asc=%s', $table->url, $row->id, $request->page ?? 1, $request->sort ?? '', $request->asc ?? '').$editor->filterToParams();
@@ -85,10 +82,10 @@ class TableOverviewController extends AssetEditorController
             $addNew = new LayoutBarButton('Nieuw');
             $addNew->setIcon('plus');
             $url = '/table/'.$table->url.'/0';
-            if($params = $editor->filterToParams());
-            {
-                $url .= '?' . ltrim($params,'&');
-            }
+            if ($params = $editor->filterToParams());
+
+                $url .= '?'.ltrim($params, '&');
+
             $addNew->setLink($url);
             $bar->addBarButton($addNew);
             $bottomBar->addBarButton($addNew);

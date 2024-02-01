@@ -8,8 +8,6 @@ use Illuminate\Support\Facades\Log;
 use NotFound\Framework\Events\AfterSaveEvent;
 use NotFound\Framework\Events\BeforeSaveEvent;
 use NotFound\Framework\Http\Requests\FormDataRequest;
-use NotFound\Framework\Models\Editor\AbstractEditor;
-use NotFound\Framework\Models\Editor\DefaultEditor;
 use NotFound\Framework\Models\Lang;
 use NotFound\Framework\Models\Table;
 use NotFound\Framework\Services\Assets\Components\ComponentEditorLink;
@@ -140,9 +138,8 @@ class TableEditorController extends AssetEditorController
             // Stay on page
             if ($newTableRecord) {
                 $url = '/table/'.$table->url.'/'.$id;
-                if($params = $editor->filterToParams())
-                {
-                    $url.='?'.ltrim($params,'&');
+                if ($params = $editor->filterToParams()) {
+                    $url .= '?'.ltrim($params, '&');
                 }
                 $response->addAction(new Redirect($url));
             } else {

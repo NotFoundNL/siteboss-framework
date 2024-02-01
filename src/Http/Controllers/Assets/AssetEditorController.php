@@ -3,14 +3,14 @@
 namespace NotFound\Framework\Http\Controllers\Assets;
 
 use NotFound\Framework\Http\Controllers\Controller;
+use NotFound\Framework\Models\Editor\AbstractEditor;
+use NotFound\Framework\Models\Editor\DefaultEditor;
 use NotFound\Framework\Models\Lang;
+use NotFound\Framework\Models\Table;
+use NotFound\Framework\Services\Assets\TableService;
 use NotFound\Layout\Elements\LayoutBar;
 use NotFound\Layout\Elements\LayoutBarButton;
 use NotFound\Layout\Elements\LayoutWidget;
-use NotFound\Framework\Models\Table;
-use NotFound\Framework\Services\Assets\TableService;
-use NotFound\Framework\Models\Editor\AbstractEditor;
-use NotFound\Framework\Models\Editor\DefaultEditor;
 
 abstract class AssetEditorController extends Controller
 {

@@ -130,8 +130,7 @@ class TableService extends AbstractAssetService
 
             if (! $this->assetModel->isLocalized() || ! $component->isLocalized()) {
                 //TODO: move to componentfilter
-                if($component->getFieldType() == 'Filter' && request()->query('filter'))
-                {
+                if ($component->getFieldType() == 'Filter' && request()->query('filter')) {
                     $record[$component->assetItem->internal] = request()->query('filter')[$component->assetItem->internal];
                 } else {
                     $record[$component->assetItem->internal] = $component->getValueForStorage();
