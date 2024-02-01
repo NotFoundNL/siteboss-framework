@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Support\Facades\Route;
 use NotFound\Framework\Http\Controllers\CmsEditor\CmsEditorController;
 use NotFound\Framework\Http\Controllers\CmsEditor\CmsEditorImportExportController;
@@ -16,18 +18,18 @@ Route::get('', [CmsEditorController::class, 'index']);
 Route::post('table-export', [CmsEditorImportExportController::class, 'exportAllTables']);
 
 // table
-Route::prefix('table')->group(function () {
+Route::prefix('table')->group(function (): void {
     Route::get('', [CmsEditorTableController::class, 'index']);
     Route::post('', [CmsEditorTableController::class, 'create']);
 
-    Route::prefix('{table}')->group(function () {
+    Route::prefix('{table}')->group(function (): void {
         Route::get('', [CmsEditorTableController::class, 'readOne']);
         Route::post('', [CmsEditorTableController::class, 'update']);
 
         Route::put('move', [CmsEditorTableController::class, 'updatePosition']);
         Route::post('add-field', [CmsEditorTableController::class, 'addField']);
 
-        Route::prefix('{tableItem}')->group(function () {
+        Route::prefix('{tableItem}')->group(function (): void {
             Route::get('', [CmsEditorTableItemController::class, 'readOne']);
             Route::post('', [CmsEditorTableItemController::class, 'update']);
             Route::post('enabled', [CmsEditorTableItemController::class, 'enabled']);
@@ -36,11 +38,11 @@ Route::prefix('table')->group(function () {
 });
 
 // pages
-Route::prefix('page')->group(function () {
+Route::prefix('page')->group(function (): void {
     Route::get('', [CmsEditorTemplateController::class, 'index']);
     Route::post('', [CmsEditorTemplateController::class, 'create']);
 
-    Route::prefix('{table}')->group(function () {
+    Route::prefix('{table}')->group(function (): void {
         Route::get('', [CmsEditorTemplateController::class, 'readOne']);
         Route::post('', [CmsEditorTemplateController::class, 'update']);
         Route::post('import', [CmsEditorImportExportController::class, 'importTemplate']);
@@ -48,7 +50,7 @@ Route::prefix('page')->group(function () {
         Route::put('move', [CmsEditorTemplateController::class, 'updatePosition']);
         Route::post('add-field', [CmsEditorTemplateController::class, 'addField']);
 
-        Route::prefix('{tableItem}')->group(function () {
+        Route::prefix('{tableItem}')->group(function (): void {
             Route::get('', [CmsEditorTemplateItemController::class, 'readOne']);
             Route::post('', [CmsEditorTemplateItemController::class, 'update']);
             Route::post('enabled', [CmsEditorTemplateItemController::class, 'enabled']);
@@ -56,26 +58,26 @@ Route::prefix('page')->group(function () {
     });
 });
 
-Route::prefix('menu')->group(function () {
+Route::prefix('menu')->group(function (): void {
     Route::get('', [CmsEditorMenuController::class, 'index']);
     Route::post('', [CmsEditorMenuController::class, 'addItem']);
 
     Route::put('move', [CmsEditorMenuController::class, 'updatePosition']);
 
-    Route::prefix('{menuItem}')->group(function () {
+    Route::prefix('{menuItem}')->group(function (): void {
         Route::get('', [CmsEditorMenuController::class, 'readOne']);
         Route::post('', [CmsEditorMenuController::class, 'update']);
         Route::delete('', [CmsEditorMenuController::class, 'deleteRecord']);
     });
 });
 
-Route::prefix('lang')->group(function () {
+Route::prefix('lang')->group(function (): void {
     Route::get('', [CmsEditorLangController::class, 'index']);
     Route::post('', [CmsEditorLangController::class, 'create']);
 
     Route::put('move', [CmsEditorLangController::class, 'updatePosition']);
 
-    Route::prefix('{lang:id}')->group(function () {
+    Route::prefix('{lang:id}')->group(function (): void {
         Route::get('', [CmsEditorLangController::class, 'readOne']);
         Route::post('', [CmsEditorLangController::class, 'update']);
         Route::delete('', [CmsEditorLangController::class, 'deleteRecord']);

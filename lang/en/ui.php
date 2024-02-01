@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 return [
     'save' => 'Save',
     'save_no_redirect' => 'Save and stay on this page',
