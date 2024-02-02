@@ -13,7 +13,6 @@ abstract class AbstractEditor
 {
     public function __construct(protected TableService $ts)
     {
-
     }
 
     abstract public function getTopBar(LayoutPager $pager): LayoutBar;
