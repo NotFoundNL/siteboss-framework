@@ -68,10 +68,15 @@ trait Exchangeable
             $exportItem->allow_create = $this->allow_create;
             $exportItem->allow_delete = $this->allow_delete;
             $exportItem->allow_sort = $this->allow_sort;
+        } else {
+            $exportItem->allow_children = $this->allow_children;
+            $exportItem->filename = $this->filename;
+            $exportItem->params = $this->params;
+            $exportItem->desc = $this->desc;
         }
 
         $exportItem->properties = $this->properties;
-        $exportItem->enabled = $this->enabled === 1 ?? false;
+        $exportItem->enabled = $this->enabled;
         $exportItem->items = $items;
 
         return $exportItem;
@@ -80,6 +85,7 @@ trait Exchangeable
     public function exportToFile(): bool
     {
         $exportData = $this->exportToObject();
+        // exchangeService is set in exportToObject
         $path = 'resources/siteboss/'.$this->exchangeService->exportTypeNamePlural().'/';
         $tableConfigFile = base_path($path.$this->getSiteTableName().'.json');
         if (! file_exists($tableConfigFile)) {
@@ -95,11 +101,5 @@ trait Exchangeable
         }
 
         return false;
-    }
-
-    public function importFormFile(): bool
-    {
-        // TODO: Implement importFormFile() method.
-        return true;
     }
 }

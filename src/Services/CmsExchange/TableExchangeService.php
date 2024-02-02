@@ -14,13 +14,8 @@ class TableExchangeService extends AbstractExchangeService
 
     public function runImport(): void
     {
-        $this->debug('Starting CMS Import');
-        if ($this->dryRun) {
-            $this->debug('Dry Run: true', force: true);
-        }
-
-        $this->importTables('cms_users');
-        $this->debug('DONE');
+        $this->debug('Starting CMS Table Import');
+        $this->importTables();
     }
 
     public function hasChanges(Table $table): bool
@@ -35,7 +30,7 @@ class TableExchangeService extends AbstractExchangeService
         return $data != $fileData;
     }
 
-    private function importTables(string $tableName): object
+    private function importTables(): object
     {
         $path = resource_path('siteboss/tables');
         if (! File::exists($path)) {
