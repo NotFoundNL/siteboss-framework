@@ -20,12 +20,12 @@ abstract class AbstractEditor
 
     abstract public function getBottomBar(): LayoutBar;
 
-   abstract public function getBreadCrumbs(): LayoutBreadCrumb;
+    abstract public function getBreadCrumbs(): LayoutBreadCrumb;
 
-   abstract public function getBreadCrumbsEdit(): LayoutBreadCrumb;
+    abstract public function getBreadCrumbsEdit(): LayoutBreadCrumb;
 
-       public function filters(): array
-       {
+    public function filters(): array
+    {
         return $this->ts->getRequestParameters('filter') ?? [];
     }
 
