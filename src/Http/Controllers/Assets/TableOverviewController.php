@@ -75,13 +75,10 @@ class TableOverviewController extends AssetEditorController
 
         $page->addBreadCrumb($editor->getBreadCrumbs());
 
-        $bar = $editor->getBar();
-        $bottomBar = $editor->getBottomBar();
-
         $pager = new LayoutPager(totalItems: $siteTableRowsPaginator->total(), itemsPerPage: request()->query('pitems') ?? $table->properties->itemsPerPage ?? 25);
-        $bar->addPager($pager);
 
-        $bar->addSearchBox(new LayoutSearchBox(''));
+        $bar = $editor->getBar($pager);
+        $bottomBar = $editor->getBottomBar();
 
         $widget = new LayoutWidget(__('siteboss::ui.overview'));
         $widget->noPadding();

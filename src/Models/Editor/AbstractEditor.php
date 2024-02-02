@@ -6,6 +6,8 @@ use NotFound\Framework\Services\Assets\TableService;
 use NotFound\Layout\Elements\LayoutBar;
 use NotFound\Layout\Elements\LayoutBarButton;
 use NotFound\Layout\Elements\LayoutBreadcrumb;
+use NotFound\Layout\Elements\LayoutPager;
+use NotFound\Layout\Elements\LayoutSearchBox;
 
 abstract class AbstractEditor
 {
@@ -14,30 +16,38 @@ abstract class AbstractEditor
 
     }
 
-    public function getBar(): LayoutBar
+    public function getBar(LayoutPager $pager): LayoutBar
     {
         $bar = new LayoutBar();
 
-        $table = $this->ts->getAssetModel();
+        $bar = $this->addNewButton($bar);
 
-        if ($table->allow_create) {
-            $addNew = $this->getNewButton();
-            $bar->addBarButton($addNew);
-        }
+        $bar = $this->addPager($bar, $pager);
+
+        $bar = $this->addSearchBox($bar);
 
         return $bar;
     }
 
     public function getBottomBar(): LayoutBar
     {
-        $bottomBar = $this->getBar();
-        $bottomBar->noBackground();
+        $bar = new LayoutBar();
 
-        return $bottomBar;
+        $bar = $this->addNewButton($bar);
+
+        $bar->noBackground();
+
+        return $bar;
     }
 
-    public function getNewButton(): LayoutBarButton
+    protected function addNewButton(LayoutBar $bar): LayoutBar
     {
+        $table = $this->ts->getAssetModel();
+
+        if (!$table->allow_create) {
+            return $bar;
+        }
+
         $addNew = new LayoutBarButton('Nieuw');
         $table = $this->ts->getAssetModel();
         $addNew->setIcon('plus');
@@ -47,7 +57,17 @@ abstract class AbstractEditor
         }
         $addNew->setLink($url);
 
-        return $addNew;
+        return $bar->addBarButton($addNew);
+    }
+
+    protected function addPager(LayoutBar $bar, LayoutPager $pager)
+    {
+        return $bar->addPager($pager);
+    }    
+
+    protected function addSearchBox(LayoutBar $bar)
+    {
+        return $bar->addSearchBox(new LayoutSearchBox(''));
     }
 
     public function getBreadCrumbs(): LayoutBreadCrumb
