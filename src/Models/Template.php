@@ -4,6 +4,7 @@ namespace NotFound\Framework\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use NotFound\Framework\Traits\Exchangeable;
 
 /**
  * NotFound\Framework\Models\Template
@@ -50,7 +51,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class Template extends AssetModel
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
+    use SoftDeletes;
+    use Exchangeable;
 
     protected $table = 'cms_template';
 
@@ -78,5 +81,10 @@ class Template extends AssetModel
     public function getIdentifier()
     {
         return strtolower($this->attributes['filename']);
+    }
+
+    private function getSiteTableName()
+    {
+        return strtolower($this->filename);
     }
 }

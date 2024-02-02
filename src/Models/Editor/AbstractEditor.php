@@ -11,7 +11,6 @@ abstract class AbstractEditor
 {
     public function __construct(protected TableService $ts)
     {
-
     }
 
     public function getBar(): LayoutBar
