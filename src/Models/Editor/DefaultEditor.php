@@ -17,22 +17,17 @@ class DefaultEditor extends AbstractEditor
 
     public function getTopBar(LayoutPager $pager): LayoutBar
     {
-        $bar = new LayoutBar();
+        $bar = $this->addNewButton(new LayoutBar);
 
-        $bar = $this->addNewButton($bar);
-
-        $bar = $this->addPager($bar, $pager);
-
-        $bar = $this->addSearchBox($bar);
+        $bar->addPager($pager);
+        $bar->addSearchBox(new LayoutSearchBox(''));
 
         return $bar;
     }
 
     public function getBottomBar(): LayoutBar
     {
-        $bar = new LayoutBar();
-
-        $bar = $this->addNewButton($bar);
+        $bar = $this->addNewButton(new LayoutBar);
 
         $bar->noBackground();
 
@@ -59,16 +54,6 @@ class DefaultEditor extends AbstractEditor
         return $bar->addBarButton($addNew);
     }
 
-    protected function addPager(LayoutBar $bar, LayoutPager $pager)
-    {
-        return $bar->addPager($pager);
-    }
-
-    protected function addSearchBox(LayoutBar $bar)
-    {
-        return $bar->addSearchBox(new LayoutSearchBox(''));
-    }
-
     public function getBreadCrumbs(): LayoutBreadCrumb
     {
         $table = $this->ts->getAssetModel();
@@ -87,23 +72,5 @@ class DefaultEditor extends AbstractEditor
         $breadcrumb->addItem('edit');
 
         return $breadcrumb;
-    }
-
-    public function filters(): array
-    {
-        return $this->ts->getRequestParameters('filter') ?? [];
-    }
-
-    public function filterToParams(): string
-    {
-        if (empty($this->filters())) {
-            return '';
-        }
-        $filterParams = '';
-        foreach ($this->filters() as $key => $value) {
-            $filterParams .= '&filter['.$key.']='.$value;
-        }
-
-        return $filterParams;
     }
 }
