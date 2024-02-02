@@ -139,8 +139,8 @@ class TemplateExchangeService extends AbstractExchangeService
             $table->text('description')->nullable();
             $table->json('properties')->nullable();
             $table->json('server_properties')->nullable();
-            $table->boolean('global')->default(0); 
-            $table->integer('order')->nullable(); 
+            $table->boolean('global')->default(0);
+            $table->integer('order')->nullable();
             $table->tinyInteger('enabled')->nullable()->default(1);
             $table->softDeletes();
             $table->timestamps();

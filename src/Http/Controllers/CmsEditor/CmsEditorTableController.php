@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use NotFound\Framework\Http\Requests\FormDataRequest;
 use NotFound\Framework\Models\Table;
+use NotFound\Framework\Services\CmsExchange\TableExchangeService;
 use NotFound\Framework\Services\Editor\FieldsProperties;
 use NotFound\Layout\Elements\LayoutBreadcrumb;
 use NotFound\Layout\Elements\LayoutButton;
@@ -120,8 +121,8 @@ class CmsEditorTableController extends \NotFound\Framework\Http\Controllers\Cont
         $breadcrumbs->addItem($table->name ?? 'New table');
         $page->addBreadCrumb($breadcrumbs);
 
-        $importHelper = new CmsImportHelper();
-        $hasChanges = $importHelper->hasChanges($table);
+        $tableExchangeService = new TableExchangeService();
+        $hasChanges = $tableExchangeService->hasChanges($table);
 
         $widget1 = new LayoutWidget($table->name ?? 'New table', $hasChanges ? 12 : 6);
 
