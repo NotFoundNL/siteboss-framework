@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
 use NotFound\Framework\Services\Legacy\StatusColumn;
-use NotFound\Framework\Traits\Exportable;
+use NotFound\Framework\Traits\Exchangeable;
 
 /**
  * NotFound\Framework\Models\Table
@@ -56,7 +56,7 @@ use NotFound\Framework\Traits\Exportable;
  */
 class Table extends AssetModel
 {
-    use Exportable;
+    use Exchangeable;
     use SoftDeletes;
 
     protected $table = 'cms_table';

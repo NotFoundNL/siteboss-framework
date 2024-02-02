@@ -1,6 +1,6 @@
 <?php
 
-namespace NotFound\Framework\Helpers;
+namespace NotFound\Framework\Services\CmsExchange;
 
 use File;
 use Illuminate\Database\Schema\Blueprint;
@@ -8,23 +8,14 @@ use Illuminate\Support\Facades\Schema;
 use NotFound\Framework\Models\Table;
 use NotFound\Framework\Models\TableItem;
 
-class CmsImportHelper
+class TableExchangeService extends AbstractExchangeService
 {
-    public function __construct(
-        private bool $debug = false,
-        private bool $dryRun = false
-    ) {
-    }
+    protected string $exportTypeName = 'table';
 
-    public function import(): void
+    public function runImport(): void
     {
-        $this->debug('Starting CMS Import');
-        if ($this->dryRun) {
-            $this->debug('Dry Run: true', force: true);
-        }
-
-        $this->importTables('cms_users');
-        $this->debug('DONE');
+        $this->debug('Starting CMS Table Import');
+        $this->importTables();
     }
 
     public function hasChanges(Table $table): bool
@@ -39,7 +30,7 @@ class CmsImportHelper
         return $data != $fileData;
     }
 
-    private function importTables(string $tableName): object
+    private function importTables(): object
     {
         $path = resource_path('siteboss/tables');
         if (! File::exists($path)) {
@@ -117,13 +108,6 @@ class CmsImportHelper
         return (object) [];
     }
 
-    private function debug($text, $force = false)
-    {
-        if ($this->debug || $force) {
-            printf("\n - %s", $text);
-        }
-    }
-
     private function createImportTables(): void
     {
         if ($this->dryRun) {
@@ -170,5 +154,15 @@ class CmsImportHelper
             $table->timestamps();
         });
 
+    }
+
+    public function exportTypeName(): string
+    {
+        return 'table';
+    }
+
+    public function exportRetainIds(): bool
+    {
+        return config('siteboss.export_retain_ids') ?? false;
     }
 }
