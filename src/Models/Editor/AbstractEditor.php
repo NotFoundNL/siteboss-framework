@@ -16,35 +16,37 @@ abstract class AbstractEditor
 
     }
 
-    public function getBar(LayoutPager $pager): LayoutBar
-    {
-        $bar = new LayoutBar();
+    abstract public function getTopBar(LayoutPager $pager): LayoutBar;
 
-        $bar = $this->addNewButton($bar);
+    abstract public function getBottomBar(): LayoutBar;
 
-        $bar = $this->addPager($bar, $pager);
+   abstract public function getBreadCrumbs(): LayoutBreadCrumb;
 
-        $bar = $this->addSearchBox($bar);
+   abstract public function getBreadCrumbsEdit(): LayoutBreadCrumb;
 
-        return $bar;
+       public function filters(): array
+       {
+        return $this->ts->getRequestParameters('filter') ?? [];
     }
 
-    public function getBottomBar(): LayoutBar
+    public function filterToParams(): string
     {
-        $bar = new LayoutBar();
+        if (empty($this->filters())) {
+            return '';
+        }
+        $filterParams = '';
+        foreach ($this->filters() as $key => $value) {
+            $filterParams .= '&filter['.$key.']='.$value;
+        }
 
-        $bar = $this->addNewButton($bar);
-
-        $bar->noBackground();
-
-        return $bar;
+        return $filterParams;
     }
 
     protected function addNewButton(LayoutBar $bar): LayoutBar
     {
         $table = $this->ts->getAssetModel();
 
-        if (!$table->allow_create) {
+        if (! $table->allow_create) {
             return $bar;
         }
 
@@ -60,51 +62,13 @@ abstract class AbstractEditor
         return $bar->addBarButton($addNew);
     }
 
-    protected function addPager(LayoutBar $bar, LayoutPager $pager)
+    protected function addPager(LayoutBar $bar, LayoutPager $pager): LayoutBar
     {
         return $bar->addPager($pager);
-    }    
+    }
 
-    protected function addSearchBox(LayoutBar $bar)
+    protected function addSearchBox(LayoutBar $bar): LayoutBar
     {
         return $bar->addSearchBox(new LayoutSearchBox(''));
-    }
-
-    public function getBreadCrumbs(): LayoutBreadCrumb
-    {
-        $table = $this->ts->getAssetModel();
-        $breadcrumb = new LayoutBreadcrumb();
-        $breadcrumb->addHome();
-        $breadcrumb->addItem($table->name);
-
-        return $breadcrumb;
-    }
-
-    public function getBreadCrumbsEdit(): LayoutBreadCrumb
-    {
-        $table = $this->ts->getAssetModel();
-        $breadcrumb = $this->getBreadCrumbs();
-        end($breadcrumb->properties->items)->link = '/table/'.$table->url.'/?'.$this->filterToParams();
-        $breadcrumb->addItem('edit');
-
-        return $breadcrumb;
-    }
-
-    public function filters(): array
-    {
-        return $this->ts->getRequestParameters('filter') ?? [];
-    }
-
-    public function filterToParams(): string
-    {
-        if (empty($this->filters())) {
-            return '';
-        }
-        $filterParams = '';
-        foreach ($this->filters() as $key => $value) {
-            $filterParams .= '&filter['.$key.']='.$value;
-        }
-
-        return $filterParams;
     }
 }

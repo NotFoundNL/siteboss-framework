@@ -12,7 +12,6 @@ use NotFound\Framework\Services\Assets\TableService;
 use NotFound\Layout\Elements\LayoutBar;
 use NotFound\Layout\Elements\LayoutPage;
 use NotFound\Layout\Elements\LayoutPager;
-use NotFound\Layout\Elements\LayoutSearchBox;
 use NotFound\Layout\Elements\LayoutText;
 use NotFound\Layout\Elements\LayoutTitle;
 use NotFound\Layout\Elements\LayoutWidget;
@@ -77,7 +76,7 @@ class TableOverviewController extends AssetEditorController
 
         $pager = new LayoutPager(totalItems: $siteTableRowsPaginator->total(), itemsPerPage: request()->query('pitems') ?? $table->properties->itemsPerPage ?? 25);
 
-        $bar = $editor->getBar($pager);
+        $bar = $editor->getTopBar($pager);
         $bottomBar = $editor->getBottomBar();
 
         $widget = new LayoutWidget(__('siteboss::ui.overview'));
