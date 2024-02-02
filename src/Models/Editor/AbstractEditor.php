@@ -6,6 +6,8 @@ use NotFound\Framework\Services\Assets\TableService;
 use NotFound\Layout\Elements\LayoutBar;
 use NotFound\Layout\Elements\LayoutBarButton;
 use NotFound\Layout\Elements\LayoutBreadcrumb;
+use NotFound\Layout\Elements\LayoutPager;
+use NotFound\Layout\Elements\LayoutSearchBox;
 
 abstract class AbstractEditor
 {
@@ -13,61 +15,13 @@ abstract class AbstractEditor
     {
     }
 
-    public function getBar(): LayoutBar
-    {
-        $bar = new LayoutBar();
+    abstract public function getTopBar(LayoutPager $pager): LayoutBar;
 
-        $table = $this->ts->getAssetModel();
+    abstract public function getBottomBar(): LayoutBar;
 
-        if ($table->allow_create) {
-            $addNew = $this->getNewButton();
-            $bar->addBarButton($addNew);
-        }
+    abstract public function getBreadCrumbs(): LayoutBreadCrumb;
 
-        return $bar;
-    }
-
-    public function getBottomBar(): LayoutBar
-    {
-        $bottomBar = $this->getBar();
-        $bottomBar->noBackground();
-
-        return $bottomBar;
-    }
-
-    public function getNewButton(): LayoutBarButton
-    {
-        $addNew = new LayoutBarButton('Nieuw');
-        $table = $this->ts->getAssetModel();
-        $addNew->setIcon('plus');
-        $url = '/table/'.$table->url.'/0';
-        if ($params = $this->filterToParams()) {
-            $url .= '?'.ltrim($params, '&');
-        }
-        $addNew->setLink($url);
-
-        return $addNew;
-    }
-
-    public function getBreadCrumbs(): LayoutBreadCrumb
-    {
-        $table = $this->ts->getAssetModel();
-        $breadcrumb = new LayoutBreadcrumb();
-        $breadcrumb->addHome();
-        $breadcrumb->addItem($table->name);
-
-        return $breadcrumb;
-    }
-
-    public function getBreadCrumbsEdit(): LayoutBreadCrumb
-    {
-        $table = $this->ts->getAssetModel();
-        $breadcrumb = $this->getBreadCrumbs();
-        end($breadcrumb->properties->items)->link = '/table/'.$table->url.'/?'.$this->filterToParams();
-        $breadcrumb->addItem('edit');
-
-        return $breadcrumb;
-    }
+    abstract public function getBreadCrumbsEdit(): LayoutBreadCrumb;
 
     public function filters(): array
     {
@@ -85,5 +39,35 @@ abstract class AbstractEditor
         }
 
         return $filterParams;
+    }
+
+    protected function addNewButton(LayoutBar $bar): LayoutBar
+    {
+        $table = $this->ts->getAssetModel();
+
+        if (! $table->allow_create) {
+            return $bar;
+        }
+
+        $addNew = new LayoutBarButton('Nieuw');
+        $table = $this->ts->getAssetModel();
+        $addNew->setIcon('plus');
+        $url = '/table/'.$table->url.'/0';
+        if ($params = $this->filterToParams()) {
+            $url .= '?'.ltrim($params, '&');
+        }
+        $addNew->setLink($url);
+
+        return $bar->addBarButton($addNew);
+    }
+
+    protected function addPager(LayoutBar $bar, LayoutPager $pager): LayoutBar
+    {
+        return $bar->addPager($pager);
+    }
+
+    protected function addSearchBox(LayoutBar $bar): LayoutBar
+    {
+        return $bar->addSearchBox(new LayoutSearchBox(''));
     }
 }
