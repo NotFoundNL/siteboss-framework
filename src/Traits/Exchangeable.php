@@ -14,7 +14,7 @@ trait Exchangeable
     public function exportToObject(): object
     {
         $class = explode('\\', get_class($this));
-        $classType =  strtolower(end($class));
+        $classType = strtolower(end($class));
 
         if ($classType === 'table') {
             $this->exchangeService = new TableExchangeService($this);
@@ -102,5 +102,4 @@ trait Exchangeable
         // TODO: Implement importFormFile() method.
         return true;
     }
-
 }

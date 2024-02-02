@@ -10,7 +10,6 @@ use NotFound\Framework\Models\TableItem;
 
 class TableExchangeService extends AbstractExchangeService
 {
-
     protected string $exportTypeName = 'table';
 
     public function runImport(): void
@@ -162,7 +161,7 @@ class TableExchangeService extends AbstractExchangeService
 
     }
 
-    public function exportTypeName() : string 
+    public function exportTypeName(): string
     {
         return 'table';
     }

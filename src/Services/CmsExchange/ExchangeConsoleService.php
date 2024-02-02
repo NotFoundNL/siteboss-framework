@@ -2,19 +2,14 @@
 
 namespace NotFound\Framework\Services\CmsExchange;
 
-use File;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
-use NotFound\Framework\Models\Table;
-use NotFound\Framework\Models\TableItem;
-
-class ExchangeConsoleService 
+class ExchangeConsoleService
 {
     public function __construct(
         private bool $debug = false,
         private bool $dryRun = false
     ) {
     }
+
     public function import(): void
     {
         $this->debug('Starting CMS Import');

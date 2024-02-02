@@ -4,8 +4,9 @@ namespace NotFound\Framework\Services\CmsExchange;
 
 abstract class AbstractExchangeService
 {
-    protected bool $debug ;
-    protected bool $dryRun ;
+    protected bool $debug;
+
+    protected bool $dryRun;
 
     protected string $exportTypeName;
 
@@ -13,17 +14,18 @@ abstract class AbstractExchangeService
 
     abstract public function exportRetainIds(): bool;
 
-    abstract public function exportTypeName() : string;
+    abstract public function exportTypeName(): string;
 
-    public function exportTypeNamePlural() : string
+    public function exportTypeNamePlural(): string
     {
         return $this->exportTypeName().'s';
     }
 
-    public function import(bool $debug = false, bool $dryRun = false): void {
+    public function import(bool $debug = false, bool $dryRun = false): void
+    {
         $this->debug = $debug;
         $this->dryRun = $dryRun;
-        $this->runImport(); 
+        $this->runImport();
      }
 
     protected function debug($text, $force = false)
@@ -32,5 +34,4 @@ abstract class AbstractExchangeService
             printf("\n - %s", $text);
         }
     }
-
 }

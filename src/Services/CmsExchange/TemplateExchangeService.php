@@ -1,6 +1,5 @@
 <?php
 
-
 namespace NotFound\Framework\Services\CmsExchange;
 
 use File;
@@ -12,7 +11,7 @@ use NotFound\Framework\Models\TableItem;
 class TemplateExchangeService extends AbstractExchangeService
 {
     protected string $exportTypeName = 'template';
-    
+
    public function runImport(): void
    {
         $this->debug('Starting CMS Import');
@@ -161,7 +160,8 @@ class TemplateExchangeService extends AbstractExchangeService
         });
 
     }
-    public function exportTypeName() : string 
+
+    public function exportTypeName(): string
     {
         return 'template';
     }

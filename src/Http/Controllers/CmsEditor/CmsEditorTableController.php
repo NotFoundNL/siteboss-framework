@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use NotFound\Framework\Http\Requests\FormDataRequest;
 use NotFound\Framework\Models\Table;
-use NotFound\Framework\Services\CmsExchangeService;
 use NotFound\Framework\Services\Editor\FieldsProperties;
 use NotFound\Layout\Elements\LayoutBreadcrumb;
 use NotFound\Layout\Elements\LayoutButton;
