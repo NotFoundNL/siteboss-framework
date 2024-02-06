@@ -24,7 +24,7 @@ class ComponentStaticValue extends AbstractComponent
         return true;
     }
 
-    public function setStaticValue($value)
+    public function setStaticValue($value): void
     {
         $this->staticValue = $value;
     }

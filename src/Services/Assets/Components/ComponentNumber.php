@@ -9,9 +9,7 @@ class ComponentNumber extends AbstractComponent
 {
     public function getAutoLayoutClass(): ?AbstractLayout
     {
-        $inputText = new LayoutInputNumber($this->assetItem->internal, $this->assetItem->name);
-
-        return $inputText;
+        return new LayoutInputNumber($this->assetItem->internal, $this->assetItem->name);
     }
 
     public function validate($newValue): bool

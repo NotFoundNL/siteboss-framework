@@ -144,7 +144,7 @@ class MenuController extends Controller
     {
         $menuItems = Menu::whereParentId($currentMenu->id)
             ->with(['template'])
-            ->leftJoin('strings', function ($join) use ($lang) {
+            ->leftJoin('strings', function ($join) use ($lang): void {
                 $join->on('strings.string_id', '=', 'menu.id');
                 $join->where('strings.lang_id', '=', $lang->id);
                 $join->where('strings.table', '=', 'menu');
@@ -191,7 +191,7 @@ class MenuController extends Controller
 
     private function getFormWidget(Menu $currentMenu): ?LayoutWidget
     {
-        if (! isset($currentMenu->template?->allow_children) || $currentMenu->template?->allow_children == '') {
+        if (! isset($currentMenu->template?->allow_children) || $currentMenu->template?->allow_children === '') {
             return null;
         }
 
@@ -227,7 +227,7 @@ class MenuController extends Controller
         $collection = new Collection();
         while ($menu !== null) {
             $collection->add($menu);
-            if ($menu->parent_id == null || $menu->parent_id == 0) {
+            if ($menu->parent_id === null || $menu->parent_id === 0) {
                 $menu = null;
             } else {
                 $menu = Menu::whereId($menu->parent_id)->first();

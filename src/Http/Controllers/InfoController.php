@@ -118,11 +118,9 @@ class InfoController extends Controller
                 if (isset($menuitem->submenu) && count($menuitem->submenu) > 0) {
                     $submenu = $this->filterRights($menuitem->submenu);
                     if (count($submenu) > 0) {
-
                         $menuitem->submenu = $submenu;
                         $menu[] = $menuitem;
                     }
-
                 } else {
                     // No submenu, so we'll add it directly to the menu.
                     $menu[] = $menuitem;
@@ -151,8 +149,7 @@ class InfoController extends Controller
         $orderedMenu = [];
 
         foreach ($menus as $menuitem) {
-
-            if ($menuitem->to == null) {
+            if ($menuitem->to === null) {
                 if (str_starts_with($menuitem->target, 'table-') || str_starts_with($menuitem->target, '#table-')) {
                     $this->convertToToTable($menuitem);
                 } elseif (str_starts_with($menuitem->target, 'menu.php') || str_starts_with($menuitem->target, '#menu.php')) {
@@ -207,7 +204,7 @@ class InfoController extends Controller
     }
     /* TODO: Remove or move these conversion methods */
 
-    private function convertToToTable($menuitem)
+    private function convertToToTable($menuitem): void
     {
         $newStr = str_replace('#', '', $menuitem->target);
         $newStr = str_replace('-', '/', $newStr);
@@ -216,7 +213,7 @@ class InfoController extends Controller
         $menuitem->save();
     }
 
-    private function convertToToMenu($menuitem)
+    private function convertToToMenu($menuitem): void
     {
         $newStr = str_replace('#', '', $menuitem->target);
         $newStr = str_replace('menu.php', 'menu', $newStr);

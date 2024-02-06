@@ -78,14 +78,13 @@ class AboutController extends Controller
     {
         if ($this->convertPHPSizeToBytes(ini_get('post_max_size')) < self::convertPHPSizeToBytes(ini_get('upload_max_filesize'))) {
             return ini_get('post_max_size');
-        } else {
-            return ini_get('upload_max_filesize');
         }
+
+        return ini_get('upload_max_filesize');
     }
 
     private function convertPHPSizeToBytes($sSize)
     {
-        //
         $sSuffix = strtoupper(substr($sSize, -1));
         if (! in_array($sSuffix, ['P', 'T', 'G', 'M', 'K'])) {
             return (int) $sSize;
