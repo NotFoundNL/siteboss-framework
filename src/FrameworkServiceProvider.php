@@ -39,13 +39,12 @@ class FrameworkServiceProvider extends ServiceProvider
         ], 'siteboss-framework');
 
         VerifyEmail::toMailUsing(function (object $notifiable, string $url) {
-
             // todo: get value from users current lang;
             App::setLocale(Lang::current()->url);
 
             $blockUrl = $url.'&block=1';
 
-            return (new MailMessage)
+            return (new MailMessage())
                 ->subject(__('siteboss::auth.verify_email_button').' '.config('app.name'))
                 ->view('siteboss::emails.verify-email', ['url' => $url, 'blockUrl' => $blockUrl]);
         });

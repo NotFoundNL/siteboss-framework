@@ -27,14 +27,14 @@ use Spatie\Honeypot\ProtectAgainstSpam;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::prefix(config('siteboss.api_prefix'))->group(function () {
-    Route::prefix('api')->group(function () {
+Route::prefix(config('siteboss.api_prefix'))->group(function (): void {
+    Route::prefix('api')->group(function (): void {
         Route::get('email/verify/{id}/{hash}', [VerifyEmailController::class, '__invoke'])
             ->middleware([ValidateSignature::class, 'throttle:6,1'])
             ->name('siteboss.verification.verify');
 
         // Unauthenticated routes
-        Route::namespace('Forms')->group(function () {
+        Route::namespace('Forms')->group(function (): void {
             Route::post('forms/{form:id}/{langurl}', [DataController::class, 'create'])->middleware(ProtectAgainstSpam::class)->name('formbuilder.post');
             Route::get('fields/{id}', [FieldController::class, 'readOneJson']);
             // RIGHTS!!!!!
@@ -52,9 +52,9 @@ Route::prefix(config('siteboss.api_prefix'))->group(function () {
     Route::get('settings', [InfoController::class, 'settings']);
 
     // Authenticated routes
-    Route::group(['middleware' => ['auth:openid', 'api', EnsureEmailIsVerified::class]], function () {
+    Route::group(['middleware' => ['auth:openid', 'api', EnsureEmailIsVerified::class]], function (): void {
         // Language for messages (not the language used for storing data)
-        Route::group(['prefix' => '/{locale}', 'middleware' => 'set-forget-locale'], function () {
+        Route::group(['prefix' => '/{locale}', 'middleware' => 'set-forget-locale'], function (): void {
             Route::get('info', [InfoController::class, 'index']);
 
             // TODO: remove this route?
@@ -66,7 +66,7 @@ Route::prefix(config('siteboss.api_prefix'))->group(function () {
             // Form builder
             Route::middleware('role:forms')->group(__DIR__.'/cms/forms.php');
 
-            Route::prefix('app')->group(function () {
+            Route::prefix('app')->group(function (): void {
                 if (file_exists(base_path().'/routes/siteboss.php')) {
                     Route::prefix('site')->group(
                         base_path().'/routes/siteboss.php'
@@ -99,7 +99,7 @@ Route::prefix(config('siteboss.api_prefix'))->group(function () {
                 Route::get('about', [AboutController::class, 'index']);
 
                 // Support page for SiteBoss CMS
-                Route::prefix('support')->group(function () {
+                Route::prefix('support')->group(function (): void {
                     Route::get('', [SupportController::class, 'index']);
                     Route::post('', [SupportController::class, 'update']);
                 });

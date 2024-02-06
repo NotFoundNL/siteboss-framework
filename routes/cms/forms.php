@@ -7,22 +7,22 @@ use NotFound\Framework\Http\Controllers\Forms\DownloadController;
 use NotFound\Framework\Http\Controllers\Forms\FieldController;
 use NotFound\Framework\Http\Controllers\Forms\FormController;
 
-Route::namespace('Forms')->group(function () {
+Route::namespace('Forms')->group(function (): void {
     // /forms
-    Route::prefix('forms')->group(function () {
+    Route::prefix('forms')->group(function (): void {
         Route::post('', [FormController::class, 'create']);
 
         Route::get('combinations', [FormController::class, 'readAllCombinations']);
         Route::get('archive', [FormController::class, 'readAllArchive']);
 
         // /forms/categories
-        Route::prefix('categories')->group(function () {
+        Route::prefix('categories')->group(function (): void {
             Route::get('', [CategoryController::class, 'readAllBasedOnRights']);
             Route::get('{category:slug}', [FormController::class, 'readAllBasedOnCategory']);
         });
 
         // /forms/{id}
-        Route::prefix('{form:id}')->group(function () {
+        Route::prefix('{form:id}')->group(function (): void {
             Route::delete('', [FormController::class, 'delete']);
             Route::put('', [FormController::class, 'update']);
             Route::post('clone', [FormController::class, 'clone']);
@@ -31,13 +31,13 @@ Route::namespace('Forms')->group(function () {
             Route::get('csv', [DownloadController::class, 'downloadReport']);
 
             // /forms/{id}/settings
-            Route::prefix('settings')->group(function () {
+            Route::prefix('settings')->group(function (): void {
                 Route::get('', [FormController::class, 'getText']);
                 Route::put('', [FormController::class, 'updateText']);
             });
 
             // /forms/{id}/fields
-            Route::prefix('fields')->group(function () {
+            Route::prefix('fields')->group(function (): void {
                 Route::get('', [FieldController::class, 'readOne']);
                 Route::patch('', [FieldController::class, 'update']);
 
@@ -46,13 +46,13 @@ Route::namespace('Forms')->group(function () {
             });
 
             // /forms/{id}/data
-            Route::prefix('data')->group(function () {
+            Route::prefix('data')->group(function (): void {
                 Route::get('', [DataController::class, 'readOne']);
                 Route::get('all', [DataController::class, 'readOneAll']);
                 Route::get('filled', [DataController::class, 'readOneFilled']);
 
                 // /forms/{id}/data/{id}
-                Route::prefix('{recordId}')->group(function () {
+                Route::prefix('{recordId}')->group(function (): void {
                     Route::delete('', [DataController::class, 'deleteRow']);
                     Route::patch('', [DataController::class, 'updateField']);
                 });

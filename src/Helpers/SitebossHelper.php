@@ -96,14 +96,14 @@ class SitebossHelper
         if (is_dir($root.$dir)) {
             // All set
             return true;
-        } else {
-            // Directory does not exist, so lets check the parent directory
-            $parentDir = dirname($dir);
-            if (! is_dir($root.$parentDir)) {
-                // Parent directory does not exist, so lets create it
-                make_directories($root, $parentDir);
-            }
         }
+        // Directory does not exist, so lets check the parent directory
+        $parentDir = dirname($dir);
+        if (! is_dir($root.$parentDir)) {
+            // Parent directory does not exist, so lets create it
+            make_directories($root, $parentDir);
+        }
+
         if (! mkdir($root.$dir)) {
             Log::error('[makeDirIfNotExist] Permission denied: '.$dir);
 

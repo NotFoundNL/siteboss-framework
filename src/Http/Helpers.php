@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\DB;
 
 if (! function_exists('db_table_items_change_order')) {
-    function db_table_items_change_order(string $tableName, int $recordId, int $replacedRecordId, string $whereSql = '')
+    function db_table_items_change_order(string $tableName, int $recordId, int $replacedRecordId, string $whereSql = ''): void
     {
         trigger_error('Method '.__METHOD__.' is deprecated', E_USER_DEPRECATED);
         $movedRecord = DB::table($tableName)->where('id', $recordId)->first();
@@ -47,15 +47,14 @@ if (! function_exists('db_table_items_change_order')) {
 
 if (! function_exists('make_directories')) {
     /**
-     * @param  mixed  $root  The root folder for the path, we'll not go higher than this.
-     * @param  mixed  $dir  The path from the root folder
+     * @param  string  $root  The root folder for the path, we'll not go higher than this.
+     * @param  string  $dir  The path from the root folder
      * @return bool true if the directory was created or already existed.
      */
-    function make_directories($root, $dir): bool
+    function make_directories(string $root, string $dir): bool
     {
         trigger_error('Method '.__METHOD__.' is deprecated', E_USER_DEPRECATED);
 
         return \Sb::makeDirectory($root, $dir);
-
     }
 }

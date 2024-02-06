@@ -10,7 +10,7 @@ Route::post('new', [PageEditorController::class, 'create']);
 Route::post('create/{menu}', [MenuController::class, 'create']);
 
 // /app/page/{id}/editor/
-Route::prefix('{menu}/editor/{langSlug}')->group(function () {
+Route::prefix('{menu}/editor/{langSlug}')->group(function (): void {
     Route::get('', [PageEditorController::class, 'index']);
     Route::post('', [PageEditorController::class, 'update']);
     Route::get('{fieldInternal}', [PageItemEditorController::class, 'ajaxGet']);
