@@ -22,6 +22,7 @@ class CmsEditorImportExportController extends Controller
                 $response->addAction(
                     new Toast('Error exporting table '.$table->name.': '.$e->getMessage())
                 );
+
                 return $response->build();
             }
         }
@@ -44,6 +45,7 @@ class CmsEditorImportExportController extends Controller
                 $response->addAction(
                     new Toast('Error exporting template '.$template->name.': '.$e->getMessage())
                 );
+
                 return $response->build();
             }
         }
