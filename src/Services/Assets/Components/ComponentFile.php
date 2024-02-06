@@ -92,7 +92,7 @@ class ComponentFile extends AbstractComponent
     /**
      * returns the value saved to the database.
      *
-     * @return  '{storage_path}/app/public/images/{asset-table}/{item-name}/'
+     * @return '{storage_path}/app/public/images/{asset-table}/{item-name}/'
      * @return void
      */
     public function getCurrentValue(): object

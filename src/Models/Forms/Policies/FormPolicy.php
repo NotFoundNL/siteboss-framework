@@ -1,6 +1,6 @@
 <?php
 
-namespace NotFound\Framework\Policies\Forms;
+namespace NotFound\Framework\Models\Forms\Policies;
 
 use NotFound\Framework\Models\CmsUser;
 use NotFound\Framework\Models\Forms\Form;

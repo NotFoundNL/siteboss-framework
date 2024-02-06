@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
 use NotFound\Framework\Services\Legacy\StatusColumn;
+use NotFound\Framework\Traits\Exchangeable;
 
 /**
  * NotFound\Framework\Models\Table
@@ -55,6 +56,7 @@ use NotFound\Framework\Services\Legacy\StatusColumn;
  */
 class Table extends AssetModel
 {
+    use Exchangeable;
     use SoftDeletes;
 
     protected $table = 'cms_table';
@@ -88,7 +90,7 @@ class Table extends AssetModel
      */
     public function getSiteTableName(): string
     {
-        return $this->attributes['table'];
+        return $this->attributes['table'] ?? with(new $this->attributes['model'])->getTable();
     }
 
     /**

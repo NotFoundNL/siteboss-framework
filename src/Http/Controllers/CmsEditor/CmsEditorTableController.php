@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use NotFound\Framework\Http\Requests\FormDataRequest;
 use NotFound\Framework\Models\Table;
+use NotFound\Framework\Services\CmsExchange\TableExchangeService;
 use NotFound\Framework\Services\Editor\FieldsProperties;
 use NotFound\Layout\Elements\LayoutBreadcrumb;
 use NotFound\Layout\Elements\LayoutButton;
@@ -66,6 +67,15 @@ class CmsEditorTableController extends \NotFound\Framework\Http\Controllers\Cont
         $form->addButton(new LayoutButton('Add new table'));
         $widget2->addForm($form);
 
+        $widget2->addTitle(new LayoutTitle('Export'));
+
+        $form = new LayoutForm('/app/editor/table-export/');
+
+        $form->addInput((new LayoutInputCheckbox('name', 'I know this will overwrite the table files from my database'))->setRequired());
+
+        $form->addButton(new LayoutButton('Export all tables to files'));
+        $widget2->addForm($form);
+
         $page->addWidget($widget2);
 
         $response->addUIElement($page);
@@ -92,6 +102,9 @@ class CmsEditorTableController extends \NotFound\Framework\Http\Controllers\Cont
         $action = new Redirect('/app/editor/table/'.$tableId);
         $response->addAction($action);
 
+        $tableModel = Table::find($tableId);
+        $tableModel->exportToFile();
+
         return $response->build();
     }
 
@@ -108,88 +121,96 @@ class CmsEditorTableController extends \NotFound\Framework\Http\Controllers\Cont
         $breadcrumbs->addItem($table->name ?? 'New table');
         $page->addBreadCrumb($breadcrumbs);
 
-        $widget1 = new LayoutWidget($table->name ?? 'New table', 6);
+        $tableExchangeService = new TableExchangeService();
+        $hasChanges = $tableExchangeService->hasChanges($table);
 
-        $form = new LayoutForm('/app/editor/table/'.$table->id);
+        $widget1 = new LayoutWidget($table->name ?? 'New table', $hasChanges ? 12 : 6);
 
-        $form->addInput((new LayoutInputText('name', 'Name'))->setValue($table->name ?? '')->setRequired());
-        $form->addInput((new LayoutInputText('table', 'Table'))->setValue($table->table ?? '')->setRequired());
+        if (! $hasChanges) {
+            $form = new LayoutForm('/app/editor/table/'.$table->id);
 
-        $form->addInput((new LayoutInputText('url', 'Slug'))->setValue($table->url ?? '')->setRequired());
+            $tables = $table->items()->orderBy('order', 'asc')->get();
 
-        $form->addInput((new LayoutInputText('itemsPerPage', 'Rows per page'))->setValue($table->properties->itemsPerPage ?? '25')->setRequired());
+            $form->addInput((new LayoutInputText('name', 'Name'))->setValue($table->name ?? '')->setRequired());
+            $form->addInput((new LayoutInputText('table', 'Table'))->setValue($table->table ?? '')->setRequired());
 
-        $form->addInput((new LayoutInputCheckbox('enabled', 'Active'))->setValue($table->enabled == 1 ?? false));
-        $form->addInput((new LayoutInputCheckbox('allow_create', 'Allow create'))->setValue($table->allow_create == 1 ?? false));
-        $form->addInput((new LayoutInputCheckbox('allow_delete', 'Allow delete'))->setValue($table->allow_delete == 1 ?? false));
-        $form->addInput((new LayoutInputCheckbox('allow_sort', 'Allow sorting'))->setValue($table->allow_sort == 1 ?? false));
-        $form->addInput((new LayoutInputCheckbox('disable_sticky_submit', 'Disable sticky submit button'))->setValue($table->properties->disable_sticky_submit ?? false));
-        $form->addInput((new LayoutInputCheckbox('stay_on_page', 'Allow stay on page'))->setValue($table->properties->stay_on_page ?? false));
-        $form->addInput((new LayoutInputCheckbox('localize', 'Localize this table'))->setValue($table->properties->localize ?? false));
+            $form->addInput((new LayoutInputText('url', 'Slug'))->setValue($table->url ?? '')->setRequired());
 
-        $form->addButton(new LayoutButton('Update table properties'));
-        $widget1->addTitle((new LayoutTitle('Edit table'))->setSize(4));
-        $widget1->addForm($form);
+            $form->addInput((new LayoutInputText('itemsPerPage', 'Rows per page'))->setValue($table->properties->itemsPerPage ?? '25')->setRequired());
 
-        $newFieldForm = new LayoutForm('/app/editor/table/'.$table->id.'/add-field');
+            $form->addInput((new LayoutInputCheckbox('enabled', 'Active'))->setValue($table->enabled == 1 ?? false));
+            $form->addInput((new LayoutInputCheckbox('allow_create', 'Allow create'))->setValue($table->allow_create == 1 ?? false));
+            $form->addInput((new LayoutInputCheckbox('allow_delete', 'Allow delete'))->setValue($table->allow_delete == 1 ?? false));
+            $form->addInput((new LayoutInputCheckbox('allow_sort', 'Allow sorting'))->setValue($table->allow_sort == 1 ?? false));
+            $form->addInput((new LayoutInputCheckbox('disable_sticky_submit', 'Disable sticky submit button'))->setValue($table->properties->disable_sticky_submit ?? false));
+            $form->addInput((new LayoutInputCheckbox('stay_on_page', 'Allow stay on page'))->setValue($table->properties->stay_on_page ?? false));
+            $form->addInput((new LayoutInputCheckbox('localize', 'Localize this table'))->setValue($table->properties->localize ?? false));
 
-        $newFieldDropDown = new LayoutInputDropdown('new_field', 'New field');
-        $newFieldDropDown->setRequired();
+            $form->addButton(new LayoutButton('Update table properties'));
+            $widget1->addTitle((new LayoutTitle('Edit table'))->setSize(4));
 
-        $fields = (new FieldsProperties())->availableFields();
-        foreach ($fields as $field) {
-            $newFieldDropDown->addItem($field);
+            $widget1->addForm($form);
+
+            $newFieldForm = new LayoutForm('/app/editor/table/'.$table->id.'/add-field');
+
+            $newFieldDropDown = new LayoutInputDropdown('new_field', 'New field');
+            $newFieldDropDown->setRequired();
+
+            $fields = (new FieldsProperties())->availableFields();
+            foreach ($fields as $field) {
+                $newFieldDropDown->addItem($field);
+            }
+
+            $newFieldForm->addInput($newFieldDropDown);
+
+            $newFieldForm->addInput((new LayoutInputText('name', 'Display name'))->setRequired());
+            $newFieldForm->addInput((new LayoutInputText('internal', 'Internal'))->setRequired());
+            $newFieldForm->addButton(new LayoutButton('Add field'));
+
+            $widget1->addTitle((new LayoutTitle('Add new field'))->setSize(4));
+
+            $widget1->addForm($newFieldForm);
+        } else {
+            $widget1->addTitle((new LayoutTitle('Table has changes on filesystem, unable to edit here'))->setSize(4));
+
         }
-
-        $newFieldForm->addInput($newFieldDropDown);
-
-        $newFieldForm->addInput((new LayoutInputText('name', 'Display name'))->setRequired());
-        $newFieldForm->addInput((new LayoutInputText('internal', 'Internal'))->setRequired());
-        $newFieldForm->addButton(new LayoutButton('Add field'));
-
-        $widget1->addTitle((new LayoutTitle('Add new field'))->setSize(4));
-
-        $widget1->addForm($newFieldForm);
 
         $page->addWidget($widget1);
 
         $widget2 = new LayoutWidget('Table items', 6);
         $widget2->noPadding();
 
-        $UItable = new LayoutTable(delete: false, edit: true, create: false);
+        if (! $hasChanges) {
 
-        $UItable->addHeader(new LayoutTableHeader('Element', 'table'));
-        $UItable->addHeader(new LayoutTableHeader('Type', 'type'));
-        $UItable->addHeader(new LayoutTableHeader('Error', 'error'));
-        $UItable->addHeader(new LayoutTableHeader('Enabled', 'enabled'));
-        $tables = $table->items()->orderBy('order', 'asc')->get();
+            $UItable = new LayoutTable(delete: false, edit: true, create: false);
 
-        foreach ($tables as $cmsTable) {
-            $row = new LayoutTableRow($cmsTable->id, '/app/editor/table/'.$table->id.'/'.$cmsTable->id);
-            $row->addColumn(new LayoutTableColumn($cmsTable->name, 'text'));
-            $row->addColumn(new LayoutTableColumn($cmsTable->type, 'text'));
+            $UItable->addHeader(new LayoutTableHeader('Element', 'table'));
+            $UItable->addHeader(new LayoutTableHeader('Type', 'type'));
+            $UItable->addHeader(new LayoutTableHeader('Error', 'error'));
+            $UItable->addHeader(new LayoutTableHeader('Enabled', 'enabled'));
 
-            if (isset($cmsTable->properties->localize) && $cmsTable->properties->localize == 1) {
-                $tableName = $table->table.'_tr';
-            } else {
-                $tableName = $table->table;
+            foreach ($tables as $cmsTable) {
+                $row = new LayoutTableRow($cmsTable->id, '/app/editor/table/'.$table->id.'/'.$cmsTable->id);
+                $row->addColumn(new LayoutTableColumn($cmsTable->name, 'text'));
+                $row->addColumn(new LayoutTableColumn($cmsTable->type, 'text'));
+
+                if (isset($cmsTable->properties->localize) && $cmsTable->properties->localize == 1) {
+                    $tableName = $table->table.'_tr';
+                } else {
+                    $tableName = $table->table;
+                }
+                $row->addColumn(new LayoutTableColumn($cmsTable->enabled ? $this->checkColumn($tableName, $cmsTable) : '-', 'text'));
+
+                $row->addColumn(new LayoutTableColumn($cmsTable->internal, 'text'));
+
+                $checkbox = new LayoutTableColumn($cmsTable->enabled, 'checkbox');
+                $checkbox->setToggleEndPoint('/app/editor/table/'.$table->id.'/'.$cmsTable->id.'/enabled');
+                $row->addColumn($checkbox);
+                $UItable->addRow($row);
             }
-            $row->addColumn(new LayoutTableColumn($cmsTable->enabled ? $this->checkColumn($tableName, $cmsTable) : '-', 'text'));
-
-            $row->addColumn(new LayoutTableColumn($cmsTable->internal, 'text'));
-
-            $checkbox = new LayoutTableColumn($cmsTable->enabled, 'checkbox');
-            $checkbox->setToggleEndPoint('/app/editor/table/'.$table->id.'/'.$cmsTable->id.'/enabled');
-            $row->addColumn($checkbox);
-            $UItable->addRow($row);
+            $widget2->addTable($UItable);
+            $page->addWidget($widget2);
         }
-        $widget2->addTable($UItable);
-
-        $page->addWidget($widget2);
-
-        $page->addWidget(CmsEditorImportExportController::getExport($tables));
-
-        $page->addWidget(CmsEditorImportExportController::getImport($table->id, 'table'));
 
         $response->addUIElement($page);
 
@@ -235,6 +256,8 @@ class CmsEditorTableController extends \NotFound\Framework\Http\Controllers\Cont
         $response = new LayoutResponse();
         $response->addAction(new Toast('Table properties updated'));
 
+        $table->exportToFile();
+
         return $response->build();
     }
 
@@ -263,6 +286,8 @@ class CmsEditorTableController extends \NotFound\Framework\Http\Controllers\Cont
             $response->addAction(new Redirect('/app/editor/table/'.$table->id.'/'.$newField->id));
         }
 
+        $table->exportToFile();
+
         return $response->build();
     }
 
@@ -281,6 +306,8 @@ class CmsEditorTableController extends \NotFound\Framework\Http\Controllers\Cont
 
             return $response->build();
         }
+
+        $table->exportToFile();
 
         return response()->json(['status' => 'ok']);
     }

@@ -93,8 +93,9 @@ class OpenIDUserProvider implements UserProvider
                 }
                 $model->sub = $identifier;
                 $model->save();
-
-                $model->sendEmailVerificationNotification();
+                if ($model->email_verified_at === null) {
+                    $model->sendEmailVerificationNotification();
+                }
 
                 return $model;
             }

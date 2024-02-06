@@ -10,6 +10,7 @@ use Illuminate\Http\File;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Intervention\Image\Drivers\Imagick\Driver;
 use Intervention\Image\ImageManager;
 use NotFound\Framework\Models\Menu;
 use NotFound\Framework\Services\Assets\Enums\AssetType;
@@ -86,7 +87,9 @@ class ComponentImage extends AbstractComponent
             $filename = $this->recordId.'_'.$dimensions->filename.'.jpg';
 
             // create new image instance
-            $image = (new ImageManager(['driver' => 'imagick']))->make(new File(request()->file($fileId)->path()));
+            $image = (new ImageManager(
+                new Driver()
+            ))->read(new File(request()->file($fileId)->path()));
 
             if ($dimensions->height === '0') {
                 $height = intval($image->height() / $image->width() * $width);
@@ -96,18 +99,15 @@ class ComponentImage extends AbstractComponent
             }
 
             if (isset($dimensions->cropType) && $dimensions->cropType === 'fitWithin') {
-                $image->resize($width, $height, function ($constraint) {
-                    $constraint->aspectRatio();
-                    $constraint->upsize();
-                });
+                $image->scaleDown($width, $height);
             } else {
-                $image->fit($width, $height);
+                $image->coverDown($width, $height);
             }
 
-            $image->save(
+            $image->toJpeg()->save(
                 Storage::path('public').$this->relativePathToPublicDisk().$filename
             );
-            $image->save(
+            $image->toWebp()->save(
                 Storage::path('public').$this->relativePathToPublicDisk().$filename.'.webp'
             );
         }
@@ -121,7 +121,7 @@ class ComponentImage extends AbstractComponent
     /**
      * returns the url for the first image, or an empty object if no image is available.
      *
-     * @return  '{storage_path}/app/public/images/{asset-table}/{item-name}/'
+     * @return '{storage_path}/app/public/images/{asset-table}/{item-name}/'
      * @return void
      */
     public function getCurrentValue(): object

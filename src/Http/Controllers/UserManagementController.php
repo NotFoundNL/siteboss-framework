@@ -184,6 +184,7 @@ class UserManagementController extends Controller
         $response = new LayoutResponse();
         if ($user->save()) {
             $response->addAction(new Toast(__('siteboss::response.user.updated')));
+            $response->addAction(new Redirect('/app/users/'));
         } else {
             $response->addAction(new Toast(__('siteboss::response.user.error')));
         }
