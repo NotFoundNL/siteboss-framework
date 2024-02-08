@@ -99,7 +99,7 @@ class CmsEditorTemplateItemController extends \NotFound\Framework\Http\Controlle
 
         // Write changes to file
         $table->exportToFile();
-        
+
         $response = new LayoutResponse();
         $response->addAction(new Toast('Field properties updated'));
         $response->addAction(new Redirect('/app/editor/page/'.$table->id.'/'));

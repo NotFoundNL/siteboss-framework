@@ -51,9 +51,9 @@ use NotFound\Framework\Traits\Exchangeable;
  */
 class Template extends AssetModel
 {
+    use Exchangeable;
     use HasFactory;
     use SoftDeletes;
-    use Exchangeable;
 
     protected $table = 'cms_template';
 
