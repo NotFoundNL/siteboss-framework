@@ -26,7 +26,7 @@ abstract class AbstractExchangeService
         $this->debug = $debug;
         $this->dryRun = $dryRun;
         $this->runImport();
-     }
+    }
 
     protected function debug($text, $force = false)
     {
