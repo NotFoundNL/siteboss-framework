@@ -185,7 +185,7 @@ final class SearchItem
         if ($date === null) {
             return null;
         }
-
-        return $date->format(DateTime::ATOM);
+        $date->setTimezone(new \DateTimeZone('UTC'));
+        return $date->format('Y-m-d\TH:i:s.u\Z');
     }
 }
