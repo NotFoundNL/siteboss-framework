@@ -33,12 +33,13 @@ class VerifyEmailController extends Controller
                     'hash' => $request->route('hash'),
                 ]);
 
-            return [
+            return view('siteboss::pages.block-account',[
                 'result' => 'error',
-                'message' => __('siteboss::auth.verify_block_account'),
-                'buttonText' => __('siteboss::auth.block_account_button'),
+                'title' => __('siteboss::auth.verify_block_account_title'),
+                'message' => __('siteboss::auth.verify_block_account_message'),
+                'buttonText' => __('siteboss::auth.verify_block_account_button'),
                 'link' => $link,
-            ];
+            ]);
         }
 
         if (! $user) {
@@ -72,7 +73,7 @@ class VerifyEmailController extends Controller
         $user->email_verified_at = null;
         $user->save();
 
-        Mail::to(env('SB_ADMIN_EMAIL'))->send(new AccountBlocked($user));
+        Mail::to(config('siteboss.admin_email'))->send(new AccountBlocked($user));
 
         return ['status' => 'ok', 'message' => __('siteboss::auth.block_account_message')];
     }
