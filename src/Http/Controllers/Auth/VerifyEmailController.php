@@ -34,7 +34,7 @@ class VerifyEmailController extends Controller
                     'hash' => $request->route('hash'),
                 ]);
 
-            return view('siteboss::pages.block-account', [
+            return view('siteboss::pages.message-button', [
                 'result' => 'error',
                 'title' => __('siteboss::auth.verify_block_account_title'),
                 'message' => __('siteboss::auth.verify_block_account_message'),
@@ -55,7 +55,12 @@ class VerifyEmailController extends Controller
             event(new Verified($user));
         }
 
-        return ['status' => 'ok', 'message' => __('siteboss::auth.verify_email_success')];
+        return view('siteboss::pages.message',
+        [
+            'title' => __('siteboss::auth.verify_email_success'),
+            'message' => __('siteboss::auth.verify_email_success')
+            ]
+    );
     }
 
     public function block(Request $request)
@@ -76,7 +81,7 @@ class VerifyEmailController extends Controller
 
         Mail::to(config('siteboss.admin_email'))->send(new AccountBlocked($user));
 
-        return view('siteboss::pages.block-success',
+        return view('siteboss::pages.message',
             [
                 'title' => __('siteboss::auth.block_account_title'),
                 'message' => __('siteboss::auth.block_account_message'),
