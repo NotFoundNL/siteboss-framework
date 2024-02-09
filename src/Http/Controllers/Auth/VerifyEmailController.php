@@ -29,6 +29,7 @@ class VerifyEmailController extends Controller
                 'siteboss.verification.block',
                 Carbon::now()->addMinutes(Config::get('auth.verification.expire', 60)),
                 [
+                    'locale' => app()->getLocale(),
                     'id' => $request->route('id'),
                     'hash' => $request->route('hash'),
                 ]);
