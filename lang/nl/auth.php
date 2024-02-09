@@ -24,10 +24,10 @@ return [
     'verify_email_success' => 'Account successvol geverifieerd.',
 
     'verify_wrong_email' => 'Heb je zelf niet geprobeerd in te loggen? Klik dan hier om deze poging te blokkeren.',
-    
+
     'verify_block_account_title' => 'Account blokkeren?',
     'verify_block_account_message' => 'Wil je voor de zekerheid jouw account blokkeren? Je kunt dan niet meer inloggen op SiteBoss. Een administrator kan jouw account weer deblokkeren.',
     'verify_block_account_button' => 'Blokkeer account',
-
-    'block_account_message' => 'Account succesvol geblokkeerd.',
+    'block_account_title' => 'Account geblokkeerd',
+    'block_account_message' => 'Vraag een beheerder om je account te herstellen.',
 ];

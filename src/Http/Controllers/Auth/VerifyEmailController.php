@@ -33,7 +33,7 @@ class VerifyEmailController extends Controller
                     'hash' => $request->route('hash'),
                 ]);
 
-            return view('siteboss::pages.block-account',[
+            return view('siteboss::pages.block-account', [
                 'result' => 'error',
                 'title' => __('siteboss::auth.verify_block_account_title'),
                 'message' => __('siteboss::auth.verify_block_account_message'),
@@ -75,6 +75,10 @@ class VerifyEmailController extends Controller
 
         Mail::to(config('siteboss.admin_email'))->send(new AccountBlocked($user));
 
-        return ['status' => 'ok', 'message' => __('siteboss::auth.block_account_message')];
+        return view('siteboss::pages.block-success',
+            [
+                'title' => __('siteboss::auth.block_account_title'),
+                'message' => __('siteboss::auth.block_account_message'),
+            ]);
     }
 }
