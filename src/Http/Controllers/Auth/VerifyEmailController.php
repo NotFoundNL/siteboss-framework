@@ -56,9 +56,13 @@ class VerifyEmailController extends Controller
         return ['status' => 'ok', 'message' => __('siteboss::auth.verify_email_success')];
     }
 
-    public function block(Request $request, CmsUser $user)
+    public function block(Request $request)
     {
-        dd($request->route('hash'), $user->getEmailForVerification());
+        $user = CmsUser::find($request->route('id'));
+
+        if (! $user) {
+            throw new AuthorizationException;
+        }
 
         if (! hash_equals((string) $request->route('hash'), sha1($user->getEmailForVerification()))) {
             throw new AuthorizationException;
