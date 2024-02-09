@@ -186,6 +186,7 @@ final class SearchItem
             return null;
         }
         $date->setTimezone(new \DateTimeZone('UTC'));
+
         return $date->format('Y-m-d\TH:i:s.u\Z');
     }
 }
