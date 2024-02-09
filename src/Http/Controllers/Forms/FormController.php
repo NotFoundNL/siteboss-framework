@@ -57,8 +57,8 @@ class FormController extends Controller
 
         $result = (object) [];
         $result->fields = $fieldsController->listFields($form->id);
-        $result->success_text = $form->success_text ?? new \stdClass;
-        $result->confirmation_mail = $form->confirmation_mail ?? new \stdClass;
+        $result->success_text = $form->success_text ?? new \stdClass();
+        $result->confirmation_mail = $form->confirmation_mail ?? new \stdClass();
 
         return ['form' => $result];
     }
@@ -76,7 +76,7 @@ class FormController extends Controller
         $form->name = $request->name;
         $form->type = $request->type;
 
-        if ($request->type == 'form') {
+        if ($request->type === 'form') {
             $category = Category::whereSlug($request->category)->first();
             $form->category_id = $category->id;
 
@@ -88,7 +88,7 @@ class FormController extends Controller
             return $form->save();
         } catch (\Illuminate\Database\QueryException $e) {
             $errorCode = $e->errorInfo[1];
-            if ($errorCode == 1062) {
+            if ($errorCode === 1062) {
                 return response()->json([
                     'message' => 'Form with the same name already exists',
                 ], 409);

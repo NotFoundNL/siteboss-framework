@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 return [
     'save' => 'Opslaan',
     'save_no_redirect' => 'Opslaan en op deze pagina blijven',

@@ -91,7 +91,7 @@ class TemplateItem extends AssetItem
 
     public function string()
     {
-        return $this->hasOne(Strings::class, 'name', 'internal')->ofMany([], function (Builder $query) {
+        return $this->hasOne(Strings::class, 'name', 'internal')->ofMany([], function (Builder $query): void {
             $query->where('lang_id', Lang::current()->id);
             $query->orWhere('lang_id', 0);
         });

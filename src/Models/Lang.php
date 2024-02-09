@@ -32,13 +32,13 @@ use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
  */
 class Lang extends Model
 {
-    protected $table = 'lang';
-
     public static $default = null;
 
     public static $current = null;
 
     public $timestamps = false;
+
+    protected $table = 'lang';
 
     protected $fillable = [
         'id',

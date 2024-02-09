@@ -51,26 +51,25 @@ class DownloadController extends Controller
 
         $field = $data->data->{$fieldId};
         foreach ($field->value as $file) {
-            if (! isset($file->uuid) || $file->uuid != $UUID) {
+            if (! isset($file->uuid) || $file->uuid !== $UUID) {
                 continue;
             }
 
             if (Storage::disk('formbuilder')->exists($file->loc)) {
                 return Storage::disk('formbuilder')->download($file->loc, $file->filename);
-            } else {
-                abort(403, 'File not found on server');
             }
+            abort(403, 'File not found on server');
         }
 
         abort(403, 'e2');
     }
 
-    public function downloadReportFilled($id)
+    public function downloadReportFilled($id): void
     {
         $this->downloadReport($id, 'filled');
     }
 
-    public function downloadReportAll($id)
+    public function downloadReportAll($id): void
     {
         $this->downloadReport($id, 'all');
     }
@@ -88,7 +87,7 @@ class DownloadController extends Controller
         $dataHandler = new \NotFound\Framework\Services\Forms\UserDataTransformer($id, $type);
         $list = $dataHandler->getDataCsv();
 
-        $callback = function () use ($list) {
+        $callback = function () use ($list): void {
             $FH = fopen('php://output', 'w');
             foreach ($list as $row) {
                 fputcsv($FH, $row);

@@ -27,7 +27,7 @@ class ContentBlockController
             }
         }
 
-        $newTables = $tables->map(function ($table) {
+        return $tables->map(function ($table) {
             $inputs = (new TableService($table, lang::default()))->getFieldComponents();
 
             $newInputs = [];
@@ -41,7 +41,5 @@ class ContentBlockController
 
             return $table;
         });
-
-        return $newTables;
     }
 }

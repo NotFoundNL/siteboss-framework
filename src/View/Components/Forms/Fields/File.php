@@ -15,7 +15,7 @@ class File extends AbstractFieldComponent
 
     public function multiple(): string
     {
-        if ($this->property('multiple') != null) {
+        if ($this->property('multiple') !== null) {
             return 'multiple';
         }
 

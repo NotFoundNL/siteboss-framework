@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 return [
     'title' => 'Gebruikersvoorkeuren',
     'subtitle' => 'Wijzig hier je voorkeuren',

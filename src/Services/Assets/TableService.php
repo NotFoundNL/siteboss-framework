@@ -116,6 +116,11 @@ class TableService extends AbstractAssetService
         return $id;
     }
 
+    protected function getCacheKey(): string
+    {
+        return 'table_'.$this->table->slug.'_'.$this->recordId.'_'.$this->lang->url;
+    }
+
     private function upsertNonLocalizedModel(bool $new): int
     {
         $record = [];
@@ -184,10 +189,5 @@ class TableService extends AbstractAssetService
 
             return $component;
         });
-    }
-
-    protected function getCacheKey(): string
-    {
-        return 'table_'.$this->table->slug.'_'.$this->recordId.'_'.$this->lang->url;
     }
 }

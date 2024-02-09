@@ -57,9 +57,9 @@ use NotFound\Framework\Services\Legacy\StatusColumn;
  */
 class Menu extends LegacyModel
 {
-    protected $table = 'menu';
-
     public $timestamps = true;
+
+    protected $table = 'menu';
 
     protected $casts = [
         'properties' => 'object',
@@ -145,9 +145,9 @@ class Menu extends LegacyModel
 
         if (isset($title)) {
             return $title->value;
-        } else {
-            return null;
         }
+
+        return null;
     }
 
     public function strings(int $langId)
@@ -157,9 +157,8 @@ class Menu extends LegacyModel
             ->whereTable(TemplateType::TEMPLATE);
     }
 
-    public static function removeRouteCache()
+    public static function removeRouteCache(): void
     {
-        // TODO: less brute force
         Cache::clear();
     }
 
