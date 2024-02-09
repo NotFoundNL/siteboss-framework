@@ -56,11 +56,11 @@ class VerifyEmailController extends Controller
         }
 
         return view('siteboss::pages.message',
-        [
-            'title' => __('siteboss::auth.verify_email_success'),
-            'message' => __('siteboss::auth.verify_email_success')
+            [
+                'title' => __('siteboss::auth.verify_email_success'),
+                'message' => __('siteboss::auth.verify_email_success'),
             ]
-    );
+        );
     }
 
     public function block(Request $request)
