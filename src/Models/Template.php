@@ -57,6 +57,12 @@ class Template extends AssetModel
 
     protected $table = 'cms_template';
 
+    protected $casts = [
+        'properties' => 'object',
+        'enabled' => 'boolean',
+        'global' => 'boolean',
+    ];
+
     protected $visible = [
         'id',
         'properties',
