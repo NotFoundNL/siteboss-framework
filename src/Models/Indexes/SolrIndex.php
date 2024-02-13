@@ -84,7 +84,7 @@ class SolrIndex extends BaseModel
 
             $json = json_decode($result);
 
-            if (! $json || ! isset($json->responseHeader) || $json->responseHeader->status !== 0) {
+            if (!$json || !isset($json->responseHeader) || $json->responseHeader->status !== 0) {
                 $this->mailQueryError($url, $result);
 
                 return false;
@@ -101,7 +101,7 @@ class SolrIndex extends BaseModel
     {
         $handler = curl_init();
         curl_setopt($handler, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($handler, CURLOPT_USERPWD, $this->solrUser.':'.$this->solrPass);
+        curl_setopt($handler, CURLOPT_USERPWD, $this->solrUser . ':' . $this->solrPass);
 
         curl_setopt($handler, CURLOPT_POST, true);
 
@@ -138,7 +138,7 @@ class SolrIndex extends BaseModel
             sprintf('title_%s', $indexItem->language()) => $indexItem->title(),
             sprintf('content_%s', $indexItem->language()) => html_entity_decode(trim(preg_replace('/\s+/', ' ', preg_replace('#<[^>]+>#', ' ', $indexItem->content())))),
             'type' => $indexItem->type(),
-            'url' => $indexItem->url(),
+            'url' => $this->siteUrl($indexItem->url(), $siteId),
             'priority' => $indexItem->priority(),
             'site' => $siteId,
             'language' => $indexItem->language(),
@@ -160,7 +160,7 @@ class SolrIndex extends BaseModel
         $result = curl_exec($curl);
 
         if (curl_errno($curl) === 6) {
-            exit('[ERROR] Could not resolve solr host: '.$this->getSolrBaseUrl());
+            exit('[ERROR] Could not resolve solr host: ' . $this->getSolrBaseUrl());
         }
         $json = json_decode($result);
         if ($json && isset($json->responseHeader) && $json->responseHeader->status == 0) {
@@ -172,7 +172,7 @@ class SolrIndex extends BaseModel
 
     public function removeItem($url)
     {
-        if (! is_null($url)) {
+        if (!is_null($url)) {
             $curl = $this->solrHandler();
 
             $payload = ['delete' => $url];
@@ -209,7 +209,7 @@ class SolrIndex extends BaseModel
             $endpoint = sprintf(
                 '%s/update/extract?literal.url=%s&literal.title_%s=%s&literal.type=%s&literal.site=%s&literal.language=%d&literal.solr_date=%s&uprefix=ignored_&fmap.content=content_%s&commit=true',
                 $this->getSolrBaseUrl(),
-                urlencode($indexItem->url()),
+                urlencode($this->siteUrl($indexItem->url(), $siteId)),
                 $indexItem->language(),
                 urlencode($indexItem->title()),
                 $indexItem->type(),
@@ -302,27 +302,27 @@ class SolrIndex extends BaseModel
             $lang
         );
         if ($filter) {
-            $url .= '&fq='.$filter;
+            $url .= '&fq=' . $filter;
         }
         if ($start && is_int($start)) {
-            $url .= '&start='.$start;
+            $url .= '&start=' . $start;
         }
 
         if ($rows && is_int($rows)) {
-            $url .= '&rows='.$rows;
+            $url .= '&rows=' . $rows;
         }
         if (count($extraColumns) > 0) {
         }
 
         if ($sortField) {
-            $url .= '&sort='.urlencode($sortField.' '.$sortDirection);
+            $url .= '&sort=' . urlencode($sortField . ' ' . $sortDirection);
         }
 
         curl_setopt($curl, CURLOPT_URL, $url);
         $result = curl_exec($curl);
         $json = json_decode($result);
         $searchResults = new SolrItem($json, $query, false, $highlightLength);
-        if (! $searchResults->isValid()) {
+        if (!$searchResults->isValid()) {
             $this->mailQueryError($url, $result);
         }
 
@@ -342,7 +342,7 @@ class SolrIndex extends BaseModel
         $result = curl_exec($curl);
         $json = json_decode($result);
         $suggestions = new SolrItem($json, $query);
-        if (! $suggestions->isValid()) {
+        if (!$suggestions->isValid()) {
             $this->buildSuggester();
             $result = curl_exec($curl);
             $json = json_decode($result);
@@ -439,5 +439,10 @@ class SolrIndex extends BaseModel
         }
 
         return false;
+    }
+
+    public function siteUrl($url, $siteId): String
+    {
+        return sprintf("{{%d}}%s", $siteId, $url);
     }
 }
