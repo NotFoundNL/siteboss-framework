@@ -68,11 +68,13 @@ class Template extends AssetModel
         'properties',
         'name',
         'filename',
+        'controller',
     ];
 
     protected $fillable = [
         'name',
         'filename',
+        'controller',
         'enabled',
         'params',
         'allow_children',
@@ -86,11 +88,11 @@ class Template extends AssetModel
 
     public function getIdentifier()
     {
-        return strtolower($this->attributes['filename']);
+        return strtolower($this->attributes['controller'] ?? $this->attributes['filename']);
     }
 
     private function getSiteTableName()
     {
-        return strtolower($this->filename);
+        return strtolower($this->controller ?? $this->filename);
     }
 }

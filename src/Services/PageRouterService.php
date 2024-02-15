@@ -97,7 +97,7 @@ class PageRouterService
             return false;
         }
 
-        $pageClassName = sprintf('App\\Http\\Controllers\\Page\\%sController', ucfirst($page->template->filename));
+        $pageClassName = sprintf('App\\Http\\Controllers\\Page\\%sController', ucfirst($page->template->controller ?? $page->template->filename));
 
         if (class_exists($pageClassName)) {
             return $pageClassName;
