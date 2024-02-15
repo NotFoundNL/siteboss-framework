@@ -146,8 +146,8 @@ class IndexBuilderService
             // continue with customValues
             $customValues = [];
 
-            $class = $menu->template->filename ?? '';
-            $className = 'App\Http\Controllers\Page\\'.$class.'Controller';
+            $className = 'App\Http\Controllers\Page\\'.$this->controllerName($menu).'Controller';
+
             $c = null;
             $priority = 1;
             $solrDate = '';
@@ -198,8 +198,7 @@ class IndexBuilderService
 
     private function updateSubPages($menu, $lang)
     {
-        $class = $menu->template->filename ?? '';
-        $className = 'App\Http\Controllers\Page\\'.$class.'Controller';
+        $className = 'App\Http\Controllers\Page\\'.$this->controllerName($menu).'Controller';
         $c = null;
         // update subPage if necessary
 
@@ -207,6 +206,18 @@ class IndexBuilderService
             $c = new $className();
             $this->updateSubitems($c, $lang);
         }
+    }
+
+    private function controllerName($menu): string
+    {
+        $class = str_replace('/', '\\', $menu->template->getIdentifier() ?? '');
+        $classes = explode('\\', $class);
+        foreach ($classes as &$c) {
+
+            $c = ucfirst($c);
+        }
+
+        return implode('\\', $classes);
     }
 
     private function updateSubitems($class, $lang)
