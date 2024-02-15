@@ -138,7 +138,7 @@ class SolrIndex extends BaseModel
             sprintf('title_%s', $indexItem->language()) => $indexItem->title(),
             sprintf('content_%s', $indexItem->language()) => html_entity_decode(trim(preg_replace('/\s+/', ' ', preg_replace('#<[^>]+>#', ' ', $indexItem->content())))),
             'type' => $indexItem->type(),
-            'url' => $indexItem->url(),
+            'url' => $this->siteUrl($indexItem->url(), $siteId),
             'priority' => $indexItem->priority(),
             'site' => $siteId,
             'language' => $indexItem->language(),
@@ -209,7 +209,7 @@ class SolrIndex extends BaseModel
             $endpoint = sprintf(
                 '%s/update/extract?literal.url=%s&literal.title_%s=%s&literal.type=%s&literal.site=%s&literal.language=%d&literal.solr_date=%s&uprefix=ignored_&fmap.content=content_%s&commit=true',
                 $this->getSolrBaseUrl(),
-                urlencode($indexItem->url()),
+                urlencode($this->siteUrl($indexItem->url(), $siteId)),
                 $indexItem->language(),
                 urlencode($indexItem->title()),
                 $indexItem->type(),
@@ -439,5 +439,10 @@ class SolrIndex extends BaseModel
         }
 
         return false;
+    }
+
+    public function siteUrl($url, $siteId): string
+    {
+        return sprintf('{{%d}}%s', $siteId, $url);
     }
 }
