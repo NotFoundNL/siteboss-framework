@@ -59,7 +59,7 @@ class SolrIndexService extends AbstractIndexService
 
         $cmsSearchItem = CmsSearch::firstOrNew(['url' => $this->solrIndex->siteUrl($searchItem->url(), $this->siteId)]);
         $cmsSearchItem->setValues($searchItem, $cmsSearchItemStatus);
-        $cmsSearchItem->url =  $this->solrIndex->siteUrl($searchItem->url(), $this->siteId);
+        $cmsSearchItem->url = $this->solrIndex->siteUrl($searchItem->url(), $this->siteId);
         $cmsSearchItem->save();
         if ($cmsSearchItemStatus == 'FAILED') {
             $cmsSearchItem->updated_at = null;
