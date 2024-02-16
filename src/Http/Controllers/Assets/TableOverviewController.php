@@ -77,7 +77,7 @@ class TableOverviewController extends AssetEditorController
         $pager = new LayoutPager(totalItems: $siteTableRowsPaginator->total(), itemsPerPage: request()->query('pitems') ?? $table->properties->itemsPerPage ?? 25);
 
         $bar = $editor->getTopBar($pager);
-        $bottomBar = $editor->getBottomBar();
+        $bottomBar = $editor->getBottomBar($pager);
 
         $widget = new LayoutWidget(__('siteboss::ui.overview'));
         $widget->noPadding();

@@ -25,7 +25,7 @@ class DefaultEditor extends AbstractEditor
         return $bar;
     }
 
-    public function getBottomBar(): LayoutBar
+    public function getBottomBar(LayoutPager $pager): LayoutBar
     {
         $bar = $this->addNewButton(new LayoutBar);
 
