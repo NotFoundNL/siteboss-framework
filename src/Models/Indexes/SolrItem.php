@@ -92,8 +92,13 @@ class SolrItem extends BaseModel
                 $resultArray['summary'] = '';
                 if (isset($this->highlights->{$result->url}->{$this->header->params->{'hl.fl'}}[0])) {
                     $summary = Str::words(preg_replace("/^\p{P}\s+/", '', $this->highlights->{$result->url}->{$this->header->params->{'hl.fl'}}[0]), $this->highlightLength, ' ...');
-                    $summary = Str::limit($summary, 500);
-                    $resultArray['summary'] = $summary;
+                    $truncated = Str::limit($summary.' ', 500); // truncate excessively long strings resulting from parsing full pdf texts
+                    $position = strrpos($truncated, ' ');
+                    $truncated = substr($summary, 0, $position); // cut off last word if its is incomplete (i.e. not followed by a space)
+                    if (substr($truncated, -4) != ' ...') { // put ellipsis back if it was cut off
+                        $truncated .= ' ...';
+                    }
+                    $resultArray['summary'] = $truncated;
                 }
                 $resultList[] = (object) $resultArray;
             }
