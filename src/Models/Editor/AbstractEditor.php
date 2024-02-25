@@ -17,7 +17,7 @@ abstract class AbstractEditor
 
     abstract public function getTopBar(LayoutPager $pager): LayoutBar;
 
-    abstract public function getBottomBar(): LayoutBar;
+    abstract public function getBottomBar(LayoutPager $pager): LayoutBar;
 
     abstract public function getBreadCrumbs(): LayoutBreadCrumb;
 
