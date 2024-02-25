@@ -74,6 +74,7 @@ class TableItem extends AssetItem
 
     protected $casts = [
         'properties' => 'object', 'server_properties' => 'object',
+        'enabled' => 'boolean',
     ];
 
     public function table()
