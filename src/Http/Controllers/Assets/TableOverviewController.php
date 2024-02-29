@@ -37,7 +37,11 @@ class TableOverviewController extends AssetEditorController
         $tableQueryService = new TableQueryService($table, $components);
         $siteTableRowsPaginator = $tableQueryService->getSiteTableRows();
 
-        $layoutTable = new LayoutTable(create: $table->allow_create, delete: $table->allow_delete, sort: $table->allow_sort);
+        $layoutTable = new LayoutTable(
+            create: $table->allow_create, 
+            delete: $table->allow_delete, 
+            sort: ($request->sort ? false : $table->allow_sort )
+        );
         $layoutTable->setTotalItems($siteTableRowsPaginator->total());
 
         $tableService->setRequestParameters($request->query());
