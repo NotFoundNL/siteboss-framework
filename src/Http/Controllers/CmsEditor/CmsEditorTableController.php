@@ -284,6 +284,7 @@ class CmsEditorTableController extends \NotFound\Framework\Http\Controllers\Cont
                 'order' => $max,
                 'name' => $request->name,
                 'type' => $request->new_field,
+                'enabled' => true,
                 'internal' => $request->internal,
             ]);
             $response->addAction(new Redirect('/app/editor/table/'.$table->id.'/'.$newField->id));
