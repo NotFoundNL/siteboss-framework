@@ -44,7 +44,7 @@ class CmsEditorTableItemController extends \NotFound\Framework\Http\Controllers\
         $form->addInput($internalInput);
 
         $internalInput = new LayoutInputCheckbox('enabled', 'Enabled');
-        $internalInput->setValue($tableItem->enabled );
+        $internalInput->setValue($tableItem->enabled);
         $form->addInput($internalInput);
 
         $type = ucfirst($tableItem->type);
