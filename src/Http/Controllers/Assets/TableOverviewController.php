@@ -49,7 +49,7 @@ class TableOverviewController extends AssetEditorController
         $editor = $this->customEditor($table, $tableService);
 
         foreach ($siteTableRowsPaginator as $row) {
-            $link = sprintf('/table/%s/%d/?page=%d&sort=%s&asc=%s', $table->url, $row->id, $request->page ?? 1, $request->sort ?? '', $request->asc ?? '').$editor->filterToParams();
+            $link = sprintf('/table/%s/%d/?page=%d&sort=%s&asc=&%s', $table->url, $row->id, $request->page ?? 1, $request->sort ?? '', $request->asc ?? '').$editor->filterParameters();
             $layoutRow = new LayoutTableRow($row->id, link: $link);
 
             foreach ($components as $component) {
