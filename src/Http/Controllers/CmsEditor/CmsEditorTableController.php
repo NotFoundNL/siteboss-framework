@@ -51,7 +51,7 @@ class CmsEditorTableController extends \NotFound\Framework\Http\Controllers\Cont
 
         foreach ($tables as $cmsTable) {
             $row = new LayoutTableRow($cmsTable->id, '/app/editor/table/'.$cmsTable->id);
-            $row->addColumn(new LayoutTableColumn($cmsTable->name, 'name'));
+            $row->addColumn(new LayoutTableColumn($cmsTable->name ?? '-', 'name'));
             $row->addColumn(new LayoutTableColumn($cmsTable->table, 'table'));
             $row->addColumn(new LayoutTableColumn($cmsTable->model ?? '-', 'table'));
             $table->addRow($row);
