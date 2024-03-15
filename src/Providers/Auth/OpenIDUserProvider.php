@@ -4,7 +4,6 @@ namespace NotFound\Framework\Providers\Auth;
 
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\UserProvider;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Nette\NotImplementedException;
 use NotFound\Framework\Models\CmsUser;
@@ -150,7 +149,7 @@ class OpenIDUserProvider implements UserProvider
     {
         throw new NotImplementedException();
     }
-    
+
     /**
      * Validate a user against the given credentials.
      *
