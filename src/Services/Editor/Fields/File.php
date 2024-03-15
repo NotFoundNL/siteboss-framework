@@ -14,6 +14,7 @@ class File extends Properties
     public function properties(): void
     {
         $this->overview();
+        $this->required();
         $this->addText('downloadUrl', 'Download URL (Use [id])', false);
     }
 

@@ -13,6 +13,7 @@ return [
     |
     */
 
+    // deepcode ignore HardcodedPassword: Translation
     'password' => 'Je wachtwoord moet minimaal zes tekens lang zijn en de wachtwoorden moeten overeenkomen.',
     'reset' => 'Je wachtwoord is aangepast.',
     'sent' => 'We hebben een e-mail verstuurd met instructies om een nieuw wachtwoord in te stellen.',

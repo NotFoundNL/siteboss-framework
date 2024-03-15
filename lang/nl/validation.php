@@ -32,6 +32,7 @@ return [
     ],
     'boolean' => ':Attribute kan enkel waar of niet waar zijn.',
     'confirmed' => ':Attribute bevestiging komt niet overeen.',
+    // deepcode ignore HardcodedPassword: Translation
     'current_password' => 'Het wachtwoord is ongeldig.',
     'date' => ':Attribute is geen geldige datum.',
     'date_equals' => ':Attribute moet een datum zijn gelijk aan :date.',
@@ -172,6 +173,7 @@ return [
     */
 
     'attributes' => [
+        // deepcode ignore HardcodedPassword: Translation
         'new_password' => 'nieuw wachtwoord',
     ],
 ];
