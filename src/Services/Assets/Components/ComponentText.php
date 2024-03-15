@@ -59,7 +59,7 @@ class ComponentText extends AbstractComponent
      */
     protected function customProperties(): object
     {
-        // BUG: TODO: editModal should just be a property, 
+        // BUG: TODO: editModal should just be a property,
         //            not a server property
         $customProperties = [];
         if (isset($this->properties()->type) && $this->properties()->type == 'richtext') {
@@ -75,7 +75,7 @@ class ComponentText extends AbstractComponent
         }
         if (
             $this->assetItem->properties->type == 'richtext' &&
-         isset( $this->assetItem->server_properties->editModal) && 
+         isset($this->assetItem->server_properties->editModal) &&
          $this->assetItem->server_properties->editModal === true
          ) {
             $customProperties['editModal'] = true;
