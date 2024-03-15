@@ -38,11 +38,6 @@ class RemoteTokenDecoder extends AbstractTokenDecoder
 
     public function getDecodedToken(): \stdClass
     {
-        return $this->getRemoteAuthenticatedToken();
-    }
-
-    private function getRemoteAuthenticatedToken(): \stdClass
-    {
         if ($this->decodedToken === null) {
             $userEndpoint = $this->openIdConfiguration['userinfo_endpoint'];
             if (! $userEndpoint) {
