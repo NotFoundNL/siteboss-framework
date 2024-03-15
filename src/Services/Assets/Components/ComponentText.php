@@ -59,7 +59,7 @@ class ComponentText extends AbstractComponent
      */
     protected function customProperties(): object
     {
-        // BUG: TODO: editModel should just be a property, 
+        // BUG: TODO: editModal should just be a property, 
         //            not a server property
         $customProperties = [];
         if (isset($this->properties()->type) && $this->properties()->type == 'richtext') {
