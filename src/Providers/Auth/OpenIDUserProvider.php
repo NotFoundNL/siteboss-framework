@@ -149,4 +149,14 @@ class OpenIDUserProvider implements UserProvider
     {
         throw new NotImplementedException();
     }
+
+    /**
+     * Validate a user against the given credentials.
+     *
+     * @return void
+     */
+    public function rehashPasswordIfRequired(Authenticatable $user, array $credentials, bool $force = false)
+    {
+        throw new NotImplementedException();
+    }
 }
