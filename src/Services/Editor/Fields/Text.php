@@ -34,7 +34,9 @@ class Text extends Properties
             $options[] = (object) ['value' => $table->name, 'label' => $table->name];
         }
         $this->addDropDown('editorSettings', 'Editor settings (for rich text editor)', $options);
-
+        // BUG: TODO: editModel should just be a property, 
+        //            not a server property
+        $this->addCheckbox('editModal', 'Edit texts in popup (required for ContentBlock/Childtable)');
         $this->addTitle('Validation');
 
         $this->addDropDown('regExTemplate', 'Built in validations', [
