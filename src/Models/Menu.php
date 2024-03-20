@@ -59,6 +59,8 @@ class Menu extends LegacyModel
 {
     protected $table = 'menu';
 
+    public $timestamps = true;
+
     protected $casts = [
         'properties' => 'object',
         'enabled' => 'boolean',
@@ -129,7 +131,7 @@ class Menu extends LegacyModel
         return $paramsUrl;
     }
 
-    public function getTitle(Lang $lang = null): ?string
+    public function getTitle(?Lang $lang = null): ?string
     {
         if (! $lang) {
             $lang = Lang::current();

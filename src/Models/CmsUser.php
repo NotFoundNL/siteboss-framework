@@ -108,8 +108,8 @@ class CmsUser extends User implements MustVerifyEmail
      * Example: "!admin || user" or "form-data && admin" or "admin"
      * check the database which groups exist
      *
-     * @param  string  $expression The expression to check
-     * @param  bool  $default if the rights are not set, returns this
+     * @param  string  $expression  The expression to check
+     * @param  bool  $default  if the rights are not set, returns this
      * @return bool user is authorized for the expression
      */
     public function checkRights($expression, $default = true): bool
@@ -169,7 +169,7 @@ class CmsUser extends User implements MustVerifyEmail
      *
      * Checks if the user has explicitly (not inherited) been given the role.
      *
-     * @param  string  $role The role to check
+     * @param  string  $role  The role to check
      * @return array of roles
      */
     public function explicityHasRole($role)
@@ -204,7 +204,7 @@ class CmsUser extends User implements MustVerifyEmail
     /**
      * Checks the database against the roles assigned to the user
      *
-     * @param  string  $role role to check
+     * @param  string  $role  role to check
      */
     public function hasLocalRole(string $role): bool
     {

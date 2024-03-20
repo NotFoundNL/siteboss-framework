@@ -108,6 +108,7 @@ class Property extends BaseModel
                     $slider = new LayoutInputSlider($option->internal, $option->label);
                     $slider->setMin(1);
                     $slider->setMax(12);
+                    $slider->setDefaultValue(12);
                     $autoLayoutOptions[] = $slider->build();
                     break;
                 case 'list':

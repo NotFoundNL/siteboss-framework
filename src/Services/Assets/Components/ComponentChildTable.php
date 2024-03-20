@@ -45,7 +45,7 @@ class ComponentChildTable extends AbstractComponent
 
     public function setValueFromStorage(mixed $value): bool
     {
-        $table = Table::whereTable($this->properties()->allowedBlocks)->first();
+        $table = Table::whereTable($this->properties()->childTable)->first();
 
         $contentBlocksWithValues = new Collection();
 
@@ -70,10 +70,11 @@ class ComponentChildTable extends AbstractComponent
 
     public function getDisplayValue(): array
     {
+        // BUG: This should use less extensive logic
+
         $contentBlocks = $this->getChildren();
 
-        $table = Table::whereTable($this->properties()->allowedBlocks)->first();
-
+        $table = Table::whereTable($this->properties()->childTable)->first();
         $contentBlocksWithValues = [];
         foreach ($contentBlocks as $contentBlock) {
             /** @var CmsContentBlocks $contentBlock */
@@ -83,20 +84,25 @@ class ComponentChildTable extends AbstractComponent
             $tableValues = new \stdClass();
             foreach ($fieldComponents as $fieldComponent) {
                 $tableValues->{$fieldComponent->assetItem->internal} = $fieldComponent->getDisplayValue();
+
             }
-            $contentBlocksWithValues[] = (object) [
-                'type' => $fieldComponent->assetItem->table->url,
-                'values' => $tableValues,
-            ];
+            $contentBlocksWithValues[] = $tableValues;
         }
 
         return $contentBlocksWithValues;
+
+    }
+
+    protected function customProperties(): object
+    {
+        // We try to emulate being a content block to AutoLayout
+        return (object) ['allowedBlocks' => $this->properties()->childTable];
     }
 
     public function afterSave(): void
     {
         $parentId = $this->recordId;
-        $foreignKey = $this->getForeignTable();
+        $foreignKey = $this->getForeignKey();
 
         $assetItem = new AssetItem();
         $assetItem->type = 'text';
@@ -164,12 +170,14 @@ class ComponentChildTable extends AbstractComponent
     private function getChildren(): Collection
     {
         return Cache::remember($this->assetItem->name.$this->recordId, 3600, function () {
-            DB::table($this->properties()->allowedBlocks)->where($this->getForeignTable(), $this->recordId)->where('deleted_at', null)->orderBy('order')->get();
+            DB::table($this->properties()->childTable)->where($this->getForeignKey(), $this->recordId)->where('deleted_at', null)->orderBy('order')->get();
         });
     }
 
-    private function getForeignTable()
+    private function getForeignKey()
     {
-        return ($this->assetType->value == 'page') ? 'page_id' : rtrim($this->assetModel->table, 's').'_id';
+        $prefix = (isset($this->properties()->prefix)) ? $this->properties()->prefix.'_' : '';
+
+        return ($this->assetType->value == 'page') ? 'page_id' : ltrim(rtrim($this->assetModel->table, 's').'_id', $prefix);
     }
 }

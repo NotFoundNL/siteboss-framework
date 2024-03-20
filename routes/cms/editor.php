@@ -12,6 +12,9 @@ use NotFound\Framework\Http\Controllers\CmsEditor\CmsEditorTemplateItemControlle
 
 Route::get('', [CmsEditorController::class, 'index']);
 
+// import/export
+Route::post('table-export', [CmsEditorImportExportController::class, 'exportAllTables']);
+Route::post('template-export', [CmsEditorImportExportController::class, 'exportAllTemplates']);
 // table
 Route::prefix('table')->group(function () {
     Route::get('', [CmsEditorTableController::class, 'index']);
@@ -20,7 +23,6 @@ Route::prefix('table')->group(function () {
     Route::prefix('{table}')->group(function () {
         Route::get('', [CmsEditorTableController::class, 'readOne']);
         Route::post('', [CmsEditorTableController::class, 'update']);
-        Route::post('import', [CmsEditorImportExportController::class, 'importTable']);
 
         Route::put('move', [CmsEditorTableController::class, 'updatePosition']);
         Route::post('add-field', [CmsEditorTableController::class, 'addField']);
@@ -28,6 +30,7 @@ Route::prefix('table')->group(function () {
         Route::prefix('{tableItem}')->group(function () {
             Route::get('', [CmsEditorTableItemController::class, 'readOne']);
             Route::post('', [CmsEditorTableItemController::class, 'update']);
+            Route::post('enabled', [CmsEditorTableItemController::class, 'enabled']);
         });
     });
 });
@@ -48,6 +51,7 @@ Route::prefix('page')->group(function () {
         Route::prefix('{tableItem}')->group(function () {
             Route::get('', [CmsEditorTemplateItemController::class, 'readOne']);
             Route::post('', [CmsEditorTemplateItemController::class, 'update']);
+            Route::post('enabled', [CmsEditorTemplateItemController::class, 'enabled']);
         });
     });
 });

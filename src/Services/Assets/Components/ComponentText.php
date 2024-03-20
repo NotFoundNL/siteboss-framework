@@ -4,6 +4,7 @@ namespace NotFound\Framework\Services\Assets\Components;
 
 use Illuminate\Http\File;
 use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Drivers\Imagick\Driver;
 use Intervention\Image\ImageManager;
 use NotFound\Framework\Models\EditorSetting;
 use NotFound\Framework\Models\FileUpload;
@@ -58,6 +59,9 @@ class ComponentText extends AbstractComponent
      */
     protected function customProperties(): object
     {
+        // BUG: TODO: editModal should just be a property,
+        //            not a server property
+        $customProperties = [];
         if (isset($this->properties()->type) && $this->properties()->type == 'richtext') {
             if (isset($this->properties()->editorSettings) && trim($this->properties()->editorSettings) !== '') {
                 $setting = EditorSetting::where('name', $this->properties()->editorSettings)->first();
@@ -66,11 +70,18 @@ class ComponentText extends AbstractComponent
             }
 
             if (isset($setting->settings)) {
-                return (object) ['editorSettings' => json_decode($setting->settings)];
+                $customProperties['editorSettings'] = json_decode($setting->settings);
             }
         }
+        if (
+            $this->assetItem->properties->type == 'richtext' &&
+         isset($this->assetItem->server_properties->editModal) &&
+         $this->assetItem->server_properties->editModal === true
+         ) {
+            $customProperties['editModal'] = true;
+        }
 
-        return (object) [];
+        return (object) $customProperties;
     }
 
     public function asyncPostRequest()
@@ -95,12 +106,12 @@ class ComponentText extends AbstractComponent
         $width = 1200;
 
         // create new image instance
-        $image = (new ImageManager(['driver' => 'imagick']))->make(new File(request()->file('file')));
-        $image->resize($width, null, function ($constraint) {
-            $constraint->aspectRatio();
-        });
+        $image = (new ImageManager(
+            new Driver()
+        ))->read(new File(request()->file('file')));
+        $image->scaleDown($width, null);
 
-        $image->save(
+        $image->toJpeg()->save(
             Storage::path('public').$folder.$filename
         );
 

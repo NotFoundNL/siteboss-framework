@@ -17,12 +17,10 @@ class TypeDropdown extends AbstractType
 
             // For legacy support we also check for the id,
             // This will be removed in the future
-            if (isset($option->index)) {
-                if ($option->index != $this->getValue()) {
-                    continue;
-                } elseif ($option->id != $this->getValue()) {
-                    continue;
-                }
+            if (isset($option->index) && $option->index != $this->getValue()) {
+                continue;
+            } elseif (isset($option->id) && $option->id != $this->getValue()) {
+                continue;
             }
             if (isset($option->option->$langurl)) {
                 $returnString[] = $option->option->$langurl;

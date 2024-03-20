@@ -25,6 +25,8 @@ class TableQueryService
     {
         $siteTableRowsQuery = StatusColumn::wherePublished(DB::table($this->table->getSiteTableName()), $this->table->getSiteTableName());
 
+        $siteTableRowsQuery = $this->setFilter($siteTableRowsQuery);
+
         $siteTableRowsQuery = $this->setOrdering($siteTableRowsQuery);
 
         $siteTableRowsQuery = $this->setSearch($siteTableRowsQuery);
@@ -70,6 +72,19 @@ class TableQueryService
                     }
                 }
             });
+        }
+
+        return $query;
+    }
+
+    private function setFilter(Builder $query)
+    {
+        if (request()->query('filter')) {
+            foreach (request()->query('filter') as $key => $value) {
+                if ($this->table->items()->where('type', 'Filter')->where('internal', $key)->first()) {
+                    $query->where($key, '=', $value);
+                }
+            }
         }
 
         return $query;

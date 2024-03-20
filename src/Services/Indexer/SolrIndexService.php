@@ -8,7 +8,7 @@ use stdClass;
 
 class SolrIndexService extends AbstractIndexService
 {
-    private Bool $debug = false;
+    private bool $debug = false;
 
     public int $siteId;
 
@@ -57,9 +57,9 @@ class SolrIndexService extends AbstractIndexService
             }
         }
 
-        $cmsSearchItem = CmsSearch::firstOrNew(['url' => $searchItem->url()]);
+        $cmsSearchItem = CmsSearch::firstOrNew(['url' => $this->solrIndex->siteUrl($searchItem->url(), $this->siteId)]);
         $cmsSearchItem->setValues($searchItem, $cmsSearchItemStatus);
-
+        $cmsSearchItem->url = $this->solrIndex->siteUrl($searchItem->url(), $this->siteId);
         $cmsSearchItem->save();
         if ($cmsSearchItemStatus == 'FAILED') {
             $cmsSearchItem->updated_at = null;
@@ -102,7 +102,7 @@ class SolrIndexService extends AbstractIndexService
         $removed = 0;
         $return->data['failed'] = [];
         foreach ($pendingDocs as $pending) {
-            if ($this->solrIndex->removeItem($this->siteUrl($pending->url))) {
+            if ($this->solrIndex->removeItem($pending->url)) {
                 CmsSearch::whereUrl($pending->url)->forceDelete();
                 $removed++;
             } else {

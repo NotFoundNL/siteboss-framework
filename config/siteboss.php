@@ -38,4 +38,26 @@ return [
 
     'frontend_api_prefix' => env('SB_FRONTEND_API_PREFIX', 'api'),
 
+    /*
+    |--------------------------------------------------------------------------
+    | CMS importer
+    |--------------------------------------------------------------------------
+    |
+    | Do you want to retain the database id's for tables and table items.
+    |
+    */
+
+    'export_retain_ids' => env('SB_EXPORT_RETAIN_IDS', false),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Admin email
+    |--------------------------------------------------------------------------
+    |
+    | Email address to send admin notifications to.
+    |
+    */
+
+    'admin_email' => env('SB_ADMIN_EMAIL', null),
+
 ];

@@ -1,15 +1,25 @@
 <div class="form-group {{ $colClasses }}">
-  <label for="select">{{ $label }}</label>
-    <select class="form-control"  name="{{ $id }}"
+    <label for="select">{{ $label }}</label>
+    <select
+        class="form-control"
+        name="{{ $id }}"
         {{ $required() }}
     >
 
-    <option value="" selected>Kies..</option>
+        <option
+            value=""
+            selected
+        >Kies..</option>
 
-    @foreach ($optionList as $option)
-        @php($optionString = $getByLanguage($option))
-        <option value="{{ $option->index }}">{{ $optionString }}</option>
-    @endforeach
-  </select>
-  <label for="{{ $id }}" generated="true" class="error invalid-feedback" style="display: none;"></label>
+        @foreach ($optionList as $option)
+            @php($optionString = $getByLanguage($option))
+            <option value="{{ $option->index }}">{{ $optionString }}</option>
+        @endforeach
+    </select>
+    <label
+        for="{{ $id }}"
+        generated="true"
+        class="error invalid-feedback"
+        style="display: none;"
+    ></label>
 </div>

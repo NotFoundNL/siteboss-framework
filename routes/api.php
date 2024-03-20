@@ -28,10 +28,20 @@ use Spatie\Honeypot\ProtectAgainstSpam;
 |
 */
 Route::prefix(config('siteboss.api_prefix'))->group(function () {
-    Route::prefix('api')->group(function () {
+
+    // Routes account management
+    Route::group(['prefix' => '/{locale}', 'middleware' => [ValidateSignature::class, 'throttle:6,1', 'set-forget-locale']], function () {
+
+        // Verify email address
         Route::get('email/verify/{id}/{hash}', [VerifyEmailController::class, '__invoke'])
-            ->middleware([ValidateSignature::class, 'throttle:6,1'])
             ->name('siteboss.verification.verify');
+
+        // Routes for blocking your own account
+        Route::get('email/verify/block/{id}/{hash}', [VerifyEmailController::class, 'block'])
+            ->name('siteboss.verification.block');
+    });
+
+    Route::prefix('api')->group(function () {
 
         // Unauthenticated routes
         Route::namespace('Forms')->group(function () {
@@ -89,6 +99,8 @@ Route::prefix(config('siteboss.api_prefix'))->group(function () {
                 Route::post('preferences', [UserPreferencesController::class, 'update']);
 
                 Route::prefix('users')->group(__DIR__.'/cms/users.php');
+
+                Route::prefix('redirects')->group(__DIR__.'/cms/redirects.php');
 
                 // CMS Editor
                 Route::prefix('editor')->group(__DIR__.'/cms/editor.php');

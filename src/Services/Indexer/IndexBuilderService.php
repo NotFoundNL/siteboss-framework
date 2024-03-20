@@ -2,6 +2,7 @@
 
 namespace NotFound\Framework\Services\Indexer;
 
+use DateTime;
 use NotFound\Framework\Models\CmsSite;
 use NotFound\Framework\Models\Lang;
 use NotFound\Framework\Models\Menu;
@@ -145,8 +146,8 @@ class IndexBuilderService
             // continue with customValues
             $customValues = [];
 
-            $class = $menu->template->filename ?? '';
-            $className = 'App\Http\Controllers\Page\\'.$class.'Controller';
+            $className = 'App\Http\Controllers\Page\\'.$this->controllerName($menu).'Controller';
+
             $c = null;
             $priority = 1;
             $solrDate = '';
@@ -166,7 +167,7 @@ class IndexBuilderService
             if (! empty($title) && ! empty($searchText)) {
 
                 $searchItem = new SearchItem($url, $title);
-                $searchItem->setContent($searchText)->setLanguage($lang->url)->setPriority($priority)->setPublicationDate($solrDate);
+                $searchItem->setContent($searchText)->setLanguage($lang->url)->setPriority($priority)->setPublicationDate(new DateTime($menu->updated_at));
                 foreach ($customValues as $key => $value) {
                     $searchItem->setCustomValue($key, $value);
                 }
@@ -197,8 +198,7 @@ class IndexBuilderService
 
     private function updateSubPages($menu, $lang)
     {
-        $class = $menu->template->filename ?? '';
-        $className = 'App\Http\Controllers\Page\\'.$class.'Controller';
+        $className = 'App\Http\Controllers\Page\\'.$this->controllerName($menu).'Controller';
         $c = null;
         // update subPage if necessary
 
@@ -208,10 +208,28 @@ class IndexBuilderService
         }
     }
 
+    private function controllerName($menu): string
+    {
+        $class = str_replace('/', '\\', $menu->template->getIdentifier() ?? '');
+        $classes = explode('\\', $class);
+        foreach ($classes as &$c) {
+
+            $c = ucfirst($c);
+        }
+
+        return implode('\\', $classes);
+    }
+
     private function updateSubitems($class, $lang)
     {
         app()->setLocale($lang->url);
         $subPages = $class->searchSubitems();
+
+        // We need to check if the subPages is an array of arrays
+        // If not we wrap it in an extra array
+        if (count($subPages) > 0 && ! is_array($subPages[0])) {
+            $subPages = [$subPages];
+        }
         foreach ($subPages as $subPage) {
 
             foreach ($subPage as $searchItem) {

@@ -3,11 +3,11 @@
 namespace NotFound\Framework\Http\Controllers\Pages;
 
 use Illuminate\Support\Facades\View;
+use NotFound\Framework\Facades\Info;
 use NotFound\Framework\Http\Controllers\Controller;
 use NotFound\Framework\Models\Lang;
 use NotFound\Framework\Models\Menu;
 use NotFound\Framework\Services\Assets\AssetValues;
-use NotFound\Framework\Services\Assets\GlobalPageService;
 use NotFound\Framework\Services\Assets\PageService;
 
 class PageController extends Controller
@@ -29,16 +29,13 @@ class PageController extends Controller
         }
 
         if (! app()->runningInConsole()) {
-            $gp = new GlobalPageService();
-            $globalPageValues = new AssetValues($gp->getCachedValues());
 
             $pageValues = $this->getPageValues();
             $pvObj = new AssetValues($pageValues);
             if ($this->currentPage) {
-                View::share('title', $this->getFullTitle());
+                Info::setTitle($this->getTitle());
                 View::share('p', $pvObj);
                 View::share('c', $this);
-                View::share('g', $globalPageValues);
             }
             $this->values = $pvObj;
         }

@@ -44,7 +44,7 @@ class CmsEditorTableItemController extends \NotFound\Framework\Http\Controllers\
         $form->addInput($internalInput);
 
         $internalInput = new LayoutInputCheckbox('enabled', 'Enabled');
-        $internalInput->setValue($tableItem->enabled === 1 ? true : false);
+        $internalInput->setValue($tableItem->enabled);
         $form->addInput($internalInput);
 
         $type = ucfirst($tableItem->type);
@@ -57,8 +57,6 @@ class CmsEditorTableItemController extends \NotFound\Framework\Http\Controllers\
         $form->addButton(new LayoutButton('Save field properties'));
 
         $widgetPage->widget->addForm($form);
-
-        $widgetPage->widget->addWidget(CmsEditorImportExportController::getExport([$tableItem]));
 
         return $widgetPage->response();
     }
@@ -94,6 +92,31 @@ class CmsEditorTableItemController extends \NotFound\Framework\Http\Controllers\
         $response->addAction(new Toast('Field properties updated'));
         $response->addAction(new Redirect('/app/editor/table/'.$table->id.'/'));
 
+        $table->exportToFile();
+
         return $response->build();
+    }
+
+    /**
+     * enabled
+     *
+     * @param  mixed  $table
+     * @param  mixed  $tableItem
+     * @return void
+     */
+    public function enabled(Table $table, TableItem $tableItem)
+    {
+        $tableItem->enabled = ! $tableItem->enabled;
+        try {
+            $tableItem->save();
+
+            $response = ['value' => $tableItem->enabled, 'message' => 'Item updated'];
+        } catch (\Exception $e) {
+            $response = ['error' => $e];
+        }
+
+        $table->exportToFile();
+
+        return $response;
     }
 }

@@ -69,6 +69,12 @@ class ComponentDatePicker extends AbstractComponent
 
     public function setValueFromStorage(string $value): bool
     {
+        if (isset($this->properties()->datetimeFormat)) {
+            $this->currentValue = $value;
+
+            return true;
+        }
+
         $timeValue = intval($value);
         if ($timeValue == 0) {
             $this->currentValue = '';
@@ -82,11 +88,13 @@ class ComponentDatePicker extends AbstractComponent
     /**
      * Get the value used in the default storage mechanism.
      * This is always a string. Use JSON or your own logic for other types of values.
-     *
-     * @return string
      */
     public function getValueForStorage(): ?string
     {
+        if (isset($this->properties()->datetimeFormat)) {
+            return $this->newValue;
+        }
+
         if ($this->newValue == null) {
             return '0';
         }

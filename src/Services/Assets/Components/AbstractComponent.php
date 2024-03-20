@@ -248,8 +248,6 @@ abstract class AbstractComponent
     /**
      * Get the value used in the default storage mechanism.
      * This is always a string. Use JSON or your own logic for other types of values.
-     *
-     * @return string
      */
     public function getValueForStorage(): ?string
     {
@@ -323,7 +321,7 @@ abstract class AbstractComponent
      * Converts [][] to the DB prefix set in the config
      * Also accepts tablename without [][]
      *
-     * @param $tableName for example: '[][]user' or 'user'
+     * @param    $tableName  for example: '[][]user' or 'user'
      * @return string 'cc_user'
      */
     protected function removeDatabasePrefix(string $tableName)

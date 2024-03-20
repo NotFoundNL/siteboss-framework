@@ -63,6 +63,13 @@ class CmsEditorTemplateController extends \NotFound\Framework\Http\Controllers\C
         $form->addButton(new LayoutButton('Add new template'));
         $widget2->addForm($form);
 
+        $form = new LayoutForm('/app/editor/template-export/');
+
+        $form->addInput((new LayoutInputCheckbox('name', 'I know this will overwrite the template files from my database'))->setRequired());
+
+        $form->addButton(new LayoutButton('Export all templates to files'));
+        $widget2->addForm($form);
+
         $page->addWidget($widget2);
 
         $response->addUIElement($page);
@@ -159,15 +166,16 @@ class CmsEditorTemplateController extends \NotFound\Framework\Http\Controllers\C
             $row->addColumn(new LayoutTableColumn($cmsTable->name, 'text'));
             $row->addColumn(new LayoutTableColumn($cmsTable->type, 'text'));
             $row->addColumn(new LayoutTableColumn($cmsTable->internal, 'internal'));
-            //  $row->addColumn(new LayoutTableColumn($cmsTable->enabled, 'checkbox'));
+
+            $checkbox = new LayoutTableColumn($cmsTable->enabled, 'checkbox');
+            $checkbox->setToggleEndPoint('/app/editor/page/'.$table->id.'/'.$cmsTable->id.'/enabled');
+            $row->addColumn($checkbox);
+
             $UItable->addRow($row);
         }
         $widget2->addTable($UItable);
 
         $page->addWidget($widget2);
-
-        $page->addWidget(CmsEditorImportExportController::getExport($tables));
-        $page->addWidget(CmsEditorImportExportController::getImport($table->id, 'page'));
 
         $response->addUIElement($page);
 

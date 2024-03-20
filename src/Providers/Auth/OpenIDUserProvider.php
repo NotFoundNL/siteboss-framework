@@ -93,8 +93,9 @@ class OpenIDUserProvider implements UserProvider
                 }
                 $model->sub = $identifier;
                 $model->save();
-
-                $model->sendEmailVerificationNotification();
+                if ($model->email_verified_at === null) {
+                    $model->sendEmailVerificationNotification();
+                }
 
                 return $model;
             }
@@ -145,6 +146,16 @@ class OpenIDUserProvider implements UserProvider
      * @return bool
      */
     public function validateCredentials(Authenticatable $user, array $credentials)
+    {
+        throw new NotImplementedException();
+    }
+
+    /**
+     * Validate a user against the given credentials.
+     *
+     * @return void
+     */
+    public function rehashPasswordIfRequired(Authenticatable $user, array $credentials, bool $force = false)
     {
         throw new NotImplementedException();
     }

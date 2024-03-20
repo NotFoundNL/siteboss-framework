@@ -15,7 +15,7 @@ class BeforeSaveEvent
     /**
      * Create a new event instance.
      *
-     * @param $model is an model of Table or Strings that they implements IAsset
+     * @param    $model  is an model of Table or Strings that they implements IAsset
      * @return void
      */
     public function __construct(BaseModel $model)
