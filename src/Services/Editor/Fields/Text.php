@@ -24,6 +24,7 @@ class Text extends Properties
             (object) ['value' => 'richtext', 'label' => 'Rich Text'],
         ]);
         $this->addNumber('maxlength', 'Maximum length');
+        $this->addCheckbox('editModal', 'Edit texts in popup (required for ContentBlock/Childtable)');
     }
 
     public function serverProperties(): void
@@ -36,7 +37,6 @@ class Text extends Properties
         $this->addDropDown('editorSettings', 'Editor settings (for rich text editor)', $options);
         // BUG: TODO: editModal should just be a property,
         //            not a server property
-        $this->addCheckbox('editModal', 'Edit texts in popup (required for ContentBlock/Childtable)');
         $this->addTitle('Validation');
 
         $this->addDropDown('regExTemplate', 'Built in validations', [
