@@ -30,7 +30,7 @@ class DropDown extends Properties
     {
     }
 
-    public function checkColumnType(?Type $type): string
+    public function checkColumnType(?string $type): string
     {
         if ($type === null) {
             return 'COLUMN MISSING';
