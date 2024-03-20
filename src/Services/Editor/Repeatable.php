@@ -2,8 +2,6 @@
 
 namespace NotFound\Framework\Services\Editor;
 
-use Doctrine\DBAL\Types\Type;
-
 class Repeatable extends Properties
 {
     public function description(): string
