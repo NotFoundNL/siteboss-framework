@@ -72,13 +72,6 @@ class ComponentText extends AbstractComponent
             if (isset($setting->settings)) {
                 $customProperties['editorSettings'] = json_decode($setting->settings);
             }
-
-            if (
-                isset($this->assetItem->server_properties->editModal) &&
-                $this->assetItem->server_properties->editModal === true
-                ) {
-                   $customProperties['editModal'] = true;
-               }
         }
 
         return (object) $customProperties;
