@@ -54,13 +54,13 @@ class Text extends Properties
         return ['texttype' => 'type'];
     }
 
-    public function checkColumnType(?\Doctrine\DBAL\Types\Type $type): string
+    public function checkColumnType(?string $type): string
     {
         if ($type === null) {
             return 'COLUMN MISSING';
         }
-        if (! in_array($type->getName(), ['string', 'text'])) {
-            return 'TYPE ERROR: '.$type->getName().' is not a valid type for a text field';
+        if (! in_array($type, ['varchar', 'text'])) {
+            return 'TYPE ERROR: '.$type.' is not a valid type for a text field';
         }
 
         return '';
