@@ -92,6 +92,7 @@ class TemplateExchangeService extends AbstractExchangeService
                 $tableItem->order = $itemOrder++;
                 $tableItem->enabled = $item->enabled;
                 $tableItem->rights = $item->rights;
+                $tableItem->global = $item->global;
 
                 $tableItem->save();
 
