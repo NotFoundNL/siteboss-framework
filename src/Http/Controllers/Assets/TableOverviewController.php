@@ -37,7 +37,11 @@ class TableOverviewController extends AssetEditorController
         $tableQueryService = new TableQueryService($table, $components);
         $siteTableRowsPaginator = $tableQueryService->getSiteTableRows();
 
-        $layoutTable = new LayoutTable(create: $table->allow_create, delete: $table->allow_delete, sort: $table->allow_sort);
+        $layoutTable = new LayoutTable(
+            create: $table->allow_create,
+            delete: $table->allow_delete,
+            sort: ($request->sort ? false : $table->allow_sort)
+        );
         $layoutTable->setTotalItems($siteTableRowsPaginator->total());
 
         $tableService->setRequestParameters($request->query());
@@ -45,7 +49,7 @@ class TableOverviewController extends AssetEditorController
         $editor = $this->customEditor($table, $tableService);
 
         foreach ($siteTableRowsPaginator as $row) {
-            $link = sprintf('/table/%s/%d/?page=%d&sort=%s&asc=%s', $table->url, $row->id, $request->page ?? 1, $request->sort ?? '', $request->asc ?? '').$editor->filterToParams();
+            $link = sprintf('/table/%s/%d/?page=%d&sort=%s&asc=&%s', $table->url, $row->id, $request->page ?? 1, $request->sort ?? '', $request->asc ?? '').$editor->filterParameters();
             $layoutRow = new LayoutTableRow($row->id, link: $link);
 
             foreach ($components as $component) {
@@ -77,7 +81,7 @@ class TableOverviewController extends AssetEditorController
         $pager = new LayoutPager(totalItems: $siteTableRowsPaginator->total(), itemsPerPage: request()->query('pitems') ?? $table->properties->itemsPerPage ?? 25);
 
         $bar = $editor->getTopBar($pager);
-        $bottomBar = $editor->getBottomBar();
+        $bottomBar = $editor->getBottomBar($pager);
 
         $widget = new LayoutWidget(__('siteboss::ui.overview'));
         $widget->noPadding();

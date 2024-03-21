@@ -18,10 +18,10 @@
     "require": {
         "spatie/laravel-package-tools": "^1.14.0",
         "spatie/laravel-honeypot": "^4.3.2",
-        "illuminate/contracts": "^10.0",
-        "notfoundnl/siteboss-layout": "^1.6",
+        "illuminate/contracts": "^10.0|^11.0",
+        "notfoundnl/siteboss-layout": "^1.6.1",
         "notfoundnl/siteboss-static": "^1.13",
-        "mcamara/laravel-localization": "^1.8",
+        "mcamara/laravel-localization": "^2.0",
         "xenolope/quahog": "^3.0",
         "firebase/php-jwt": "^6.3",
         "intervention/image": "^3.0",

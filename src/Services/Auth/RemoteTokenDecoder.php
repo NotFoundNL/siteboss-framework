@@ -7,11 +7,11 @@ use NotFound\Framework\Exceptions\OpenID\OpenIDException;
 
 class RemoteTokenDecoder extends AbstractTokenDecoder
 {
-    private \stdClass $decodedToken;
+    private ?object  $decodedToken = null;
 
     protected function decodeToken(): void
     {
-        $this->decodedToken = $this->getDecodedToken();
+        $this->getDecodedToken();
     }
 
     protected function verifyToken(): void
@@ -38,21 +38,19 @@ class RemoteTokenDecoder extends AbstractTokenDecoder
 
     public function getDecodedToken(): \stdClass
     {
-        return $this->getRemoteAuthenticatedToken();
-    }
+        if ($this->decodedToken === null) {
+            $userEndpoint = $this->openIdConfiguration['userinfo_endpoint'];
+            if (! $userEndpoint) {
+                throw OpenIDException::noUserInfoEndpoint();
+            }
 
-    private function getRemoteAuthenticatedToken(): \stdClass
-    {
-        $userEndpoint = $this->openIdConfiguration['userinfo_endpoint'];
-        if (! $userEndpoint) {
-            throw OpenIDException::noUserInfoEndpoint();
+            $response = Http::withToken($this->token)->get($userEndpoint);
+            if (! $response->ok()) {
+                throw new \Exception('Token is invalid.');
+            }
+            $this->decodedToken = (object) $response->json();
         }
 
-        $response = Http::withToken($this->token)->get($userEndpoint);
-        if (! $response->ok()) {
-            throw new \Exception('Token is invalid.');
-        }
-
-        return (object) $response->json();
+        return $this->decodedToken;
     }
 }
