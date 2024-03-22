@@ -40,13 +40,13 @@ class TableSelect extends Properties
         ];
     }
 
-    public function checkColumnType(?\Doctrine\DBAL\Types\Type $type): string
+    public function checkColumnType(?string $type): string
     {
         if ($type === null) {
             return 'COLUMN MISSING';
         }
-        if (! in_array($type->getName(), ['string', 'integer'])) {
-            return 'TYPE ERROR: '.$type->getName().' is not a valid type for a table select field';
+        if (! in_array($type, ['int', 'tinyint', 'varchar'])) {
+            return 'TYPE ERROR: '.$type.' is not a valid type for a table select field';
         }
 
         return '';
