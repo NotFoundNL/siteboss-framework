@@ -3,7 +3,6 @@
 namespace NotFound\Framework\Http\Controllers\CmsEditor;
 
 use Illuminate\Http\Request as HttpRequest;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use NotFound\Framework\Http\Requests\FormDataRequest;
 use NotFound\Framework\Models\Table;
@@ -323,7 +322,9 @@ class CmsEditorTableController extends \NotFound\Framework\Http\Controllers\Cont
         $fieldClass = new $className(new stdClass());
 
         if (Schema::hasColumn($table, $field->internal)) {
-            return $fieldClass->checkColumnType(DB::getDoctrineColumn($this->setDatabasePrefix($table), $field->internal)->getType());
+            return $fieldClass->checkColumnType(
+                Schema::getColumnType($table, $field->internal)
+            );
         } else {
             return $fieldClass->checkColumnType(null);
         }

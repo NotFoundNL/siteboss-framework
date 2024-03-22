@@ -73,13 +73,6 @@ class ComponentText extends AbstractComponent
                 $customProperties['editorSettings'] = json_decode($setting->settings);
             }
         }
-        if (
-            $this->assetItem->properties->type == 'richtext' &&
-         isset($this->assetItem->server_properties->editModal) &&
-         $this->assetItem->server_properties->editModal === true
-         ) {
-            $customProperties['editModal'] = true;
-        }
 
         return (object) $customProperties;
     }
