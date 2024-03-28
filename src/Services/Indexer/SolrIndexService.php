@@ -12,6 +12,8 @@ class SolrIndexService extends AbstractIndexService
 
     public int $siteId;
 
+    public ?string $domain;
+
     public $solrIndex;
 
     public function __construct($debug = false)
@@ -26,7 +28,7 @@ class SolrIndexService extends AbstractIndexService
         $cmsSearchItemStatus = '';
 
         if ($searchItem->type() === 'file') {
-            $result = $this->solrIndex->upsertFile($searchItem, $this->siteId);
+            $result = $this->solrIndex->upsertFile($searchItem, $this->siteId, $this->domain);
 
             $return = $this->returnvalue();
             if ($result == 'success') {
@@ -37,7 +39,7 @@ class SolrIndexService extends AbstractIndexService
                 $return->message = "failed: file not found \n";
             } else {
                 $cmsSearchItemStatus = 'NOT_INDEXABLE';
-                $result = $this->solrIndex->upsertItem($searchItem, $this->siteId);
+                $result = $this->solrIndex->upsertItem($searchItem, $this->siteId, $this->domain);
                 if ($result) {
                     $cmsSearchItemStatus = 'UPDATED';
                 } else {
@@ -46,7 +48,7 @@ class SolrIndexService extends AbstractIndexService
                 }
             }
         } else {
-            $result = $this->solrIndex->upsertItem($searchItem, $this->siteId);
+            $result = $this->solrIndex->upsertItem($searchItem, $this->siteId, $this->domain);
 
             if ($result) {
                 $cmsSearchItemStatus = 'UPDATED';
@@ -57,9 +59,9 @@ class SolrIndexService extends AbstractIndexService
             }
         }
 
-        $cmsSearchItem = CmsSearch::firstOrNew(['url' => $this->solrIndex->siteUrl($searchItem->url(), $this->siteId)]);
+        $cmsSearchItem = CmsSearch::firstOrNew(['url' => $this->solrIndex->siteUrl($searchItem->url(), $this->domain)]);
         $cmsSearchItem->setValues($searchItem, $cmsSearchItemStatus);
-        $cmsSearchItem->url = $this->solrIndex->siteUrl($searchItem->url(), $this->siteId);
+        $cmsSearchItem->url = $this->solrIndex->siteUrl($searchItem->url(), $this->domain);
         $cmsSearchItem->save();
         if ($cmsSearchItemStatus == 'FAILED') {
             $cmsSearchItem->updated_at = null;
