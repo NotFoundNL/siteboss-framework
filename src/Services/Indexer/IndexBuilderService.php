@@ -69,6 +69,8 @@ class IndexBuilderService
 
                 $siteId = $site->id;
                 $this->searchServer->siteId = $siteId;
+                $this->searchServer->domain = $site->domain ?? null;
+
                 $this->searchServer->languageId = 1;
 
                 // insert all pages, starting from the root

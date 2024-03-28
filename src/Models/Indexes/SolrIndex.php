@@ -131,14 +131,14 @@ class SolrIndex extends BaseModel
         return false;
     }
 
-    public function upsertItem(SearchItem $indexItem, int $siteId = 1): bool
+    public function upsertItem(SearchItem $indexItem, int $siteId = 1, ?string $domain = null): bool
     {
         $curl = $this->solrHandler();
         $doc = [
             sprintf('title_%s', $indexItem->language()) => $indexItem->title(),
             sprintf('content_%s', $indexItem->language()) => html_entity_decode(trim(preg_replace('/\s+/', ' ', preg_replace('#<[^>]+>#', ' ', $indexItem->content())))),
             'type' => $indexItem->type(),
-            'url' => $this->siteUrl($indexItem->url(), $siteId),
+            'url' => $this->siteUrl($indexItem->url(), $domain),
             'priority' => $indexItem->priority(),
             'site' => $siteId,
             'language' => $indexItem->language(),
@@ -197,7 +197,7 @@ class SolrIndex extends BaseModel
         return false;
     }
 
-    public function upsertFile(SearchItem $indexItem, int $siteId = 1): string
+    public function upsertFile(SearchItem $indexItem, int $siteId = 1, ?string $domain = null): string
     {
 
         // find out of document exists
@@ -209,7 +209,7 @@ class SolrIndex extends BaseModel
             $endpoint = sprintf(
                 '%s/update/extract?literal.url=%s&literal.title_%s=%s&literal.type=%s&literal.site=%s&literal.language=%d&literal.solr_date=%s&uprefix=ignored_&fmap.content=content_%s&commit=true',
                 $this->getSolrBaseUrl(),
-                urlencode($this->siteUrl($indexItem->url(), $siteId)),
+                urlencode($this->siteUrl($indexItem->url(), $domain)),
                 $indexItem->language(),
                 urlencode($indexItem->title()),
                 $indexItem->type(),
@@ -441,8 +441,12 @@ class SolrIndex extends BaseModel
         return false;
     }
 
-    public function siteUrl($url, $siteId): string
+    public function siteUrl($url, ?string $domain): string
     {
-        return sprintf('{{%d}}%s', $siteId, $url);
+        if ($domain) {
+            return sprintf('%s/%s', rtrim($domain, '/'), ltrim($url, '/'));
+        }
+
+        return $url;
     }
 }

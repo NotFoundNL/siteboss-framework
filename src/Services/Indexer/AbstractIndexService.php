@@ -10,6 +10,8 @@ abstract class AbstractIndexService
 
     public int $siteId;
 
+    public ?string $domain;
+
     abstract public function __construct($debug = false);
 
     abstract public function startUpdate(): bool;
@@ -29,7 +31,7 @@ abstract class AbstractIndexService
 
     public function urlNeedsUpdate(string $url, $updated): bool
     {
-        $searchItem = CmsSearch::whereUrl($url)->first();
+        $searchItem = CmsSearch::whereUrl($this->siteUrl($url))->first();
         if ($searchItem && ($searchItem->updated_at !== null && $searchItem->updated_at->timestamp > $updated)) {
             CmsSearch::whereUrl($url)->update(['search_status' => 'SKIPPED']);
 
@@ -41,6 +43,10 @@ abstract class AbstractIndexService
 
     protected function siteUrl($url): string
     {
-        return sprintf('{{%d}}%s', $this->siteId, $url);
+        if ($this->domain) {
+            return sprintf('%s/%s', rtrim($this->domain, '/'), ltrim($url, '/'));
+        }
+
+        return $url;
     }
 }
