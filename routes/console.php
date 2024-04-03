@@ -5,15 +5,15 @@ use Illuminate\Support\Facades\Artisan;
 use NotFound\Framework\Services\CmsExchange\ExchangeConsoleService;
 use NotFound\Framework\Services\Indexer\IndexBuilderService;
 
-Artisan::command('siteboss:index-site {--debug : Whether debug messages should be displayed} {--clear : Truncate search table} {--clean : Truncate search table (deprecated)}', function ($debug, $clean) {
+Artisan::command('siteboss:index-site {--debug : Display debug messages} {--fresh : Empty local search table}', function ($debug, $fresh) {
 
-    $indexer = new IndexBuilderService($debug, $clean);
+    $indexer = new IndexBuilderService($debug, $fresh);
     $indexer->run();
 
     return Command::SUCCESS;
 })->purpose('Index site for local search');
 
-Artisan::command('siteboss:cms-import {--debug : Whether debug messages should be displayed} {--dry : Dry Run}', function ($debug, $dry) {
+Artisan::command('siteboss:cms-import {--debug : Display debug messages} {--dry : Dry Run}', function ($debug, $dry) {
 
     $indexer = new ExchangeConsoleService($debug, $dry);
     $indexer->import();
