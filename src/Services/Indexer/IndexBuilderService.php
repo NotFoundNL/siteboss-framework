@@ -12,7 +12,7 @@ class IndexBuilderService
 {
     private bool $debug;
 
-    private bool $clean;
+    private bool $fresh;
 
     private $locales;
 
@@ -22,11 +22,11 @@ class IndexBuilderService
 
     private AbstractIndexService $searchServer;
 
-    public function __construct($debug = false, $clean = false)
+    public function __construct($debug = false, $fresh = false)
     {
         $serverType = config('indexer.engine');
         $this->debug = $debug;
-        $this->clean = $clean;
+        $this->fresh = $fresh;
         $this->locales = Lang::all();
 
         $this->domain = rtrim(env('APP_URL', ''), '/');
@@ -46,7 +46,7 @@ class IndexBuilderService
 
             return;
         }
-        if ($this->clean) {
+        if ($this->fresh) {
             $this->searchServer->clean();
         }
         $sites = CmsSite::whereIndex(1)->get();
@@ -69,6 +69,8 @@ class IndexBuilderService
 
                 $siteId = $site->id;
                 $this->searchServer->siteId = $siteId;
+                $this->searchServer->domain = $site->domain ?? null;
+
                 $this->searchServer->languageId = 1;
 
                 // insert all pages, starting from the root
