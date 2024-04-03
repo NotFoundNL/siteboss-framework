@@ -258,7 +258,7 @@ class SolrIndex extends BaseModel
             }
         } else {
             $this->mailFileError($indexItem->title(), $indexItem->url(), 'file bestaat niet');
-
+            printf("\nFile not found: %s", $file);
             return 'fileNotFound';
         }
     }
