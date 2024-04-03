@@ -202,7 +202,8 @@ class SolrIndex extends BaseModel
 
         // find out of document exists
         $result = 0;
-        $file = Storage::disk('private')->path($indexItem->file());
+        // TODO: check if path is within allowed path
+        $file = $indexItem->file();
 
         if (file_exists($file)) {
             $curl = $this->solrHandler();
