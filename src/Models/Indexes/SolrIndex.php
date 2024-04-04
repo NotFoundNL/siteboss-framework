@@ -3,7 +3,6 @@
 namespace NotFound\Framework\Models\Indexes;
 
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Storage;
 use NotFound\Framework\Mail\Indexer\FileIndexError;
 use NotFound\Framework\Mail\Indexer\QueryError;
 use NotFound\Framework\Models\BaseModel;
@@ -202,7 +201,8 @@ class SolrIndex extends BaseModel
 
         // find out of document exists
         $result = 0;
-        $file = Storage::disk('private')->path($indexItem->file());
+        // TODO: check if path is within allowed path
+        $file = $indexItem->file();
 
         if (file_exists($file)) {
             $curl = $this->solrHandler();
@@ -257,6 +257,7 @@ class SolrIndex extends BaseModel
             }
         } else {
             $this->mailFileError($indexItem->title(), $indexItem->url(), 'file bestaat niet');
+            printf("\nFile not found: %s", $file);
 
             return 'fileNotFound';
         }
