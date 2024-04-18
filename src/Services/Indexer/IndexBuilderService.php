@@ -103,10 +103,7 @@ class IndexBuilderService
 
             $menu = Menu::whereId($page->id)->firstOrFail();
 
-            if (! isset($page->template->properties->searchable) || $page->template->properties->searchable == 0) {
-                $this->writeDebug("   skipping, template not searchable\n");
-
-            } elseif (isset($page->properties->excludeFromSearch) && $page->properties->excludeFromSearch == true) {
+            if (isset($page->properties->excludeFromSearch) && $page->properties->excludeFromSearch == true) {
                 $this->writeDebug("  skipping, page not searchable\n");
 
             } else {
