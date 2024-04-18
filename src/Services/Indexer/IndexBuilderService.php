@@ -101,23 +101,20 @@ class IndexBuilderService
                 continue;
             }
 
+            $menu = Menu::whereId($page->id)->firstOrFail();
+
             if (! isset($page->template->properties->searchable) || $page->template->properties->searchable == 0) {
                 $this->writeDebug("   skipping, template not searchable\n");
 
-                continue;
-            }
-            if (isset($page->properties->excludeFromSearch) && $page->properties->excludeFromSearch == true) {
+            } elseif (isset($page->properties->excludeFromSearch) && $page->properties->excludeFromSearch == true) {
                 $this->writeDebug("  skipping, page not searchable\n");
 
-                continue;
+            } else {
+
+                foreach ($this->locales as $lang) {
+                    $this->updatePage($menu, $lang);
+                }
             }
-
-            $menu = Menu::whereId($page->id)->firstOrFail();
-
-            foreach ($this->locales as $lang) {
-                $this->updatePage($menu, $lang);
-            }
-
             // index subitems for page
             foreach ($this->locales as $lang) {
                 $this->updateSubPages($menu, $lang);
