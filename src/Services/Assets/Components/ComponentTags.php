@@ -5,6 +5,7 @@ namespace NotFound\Framework\Services\Assets\Components;
 use Illuminate\Support\Facades\DB;
 use NotFound\Framework\Services\Legacy\StatusColumn;
 use NotFound\Layout\Elements\AbstractLayout;
+use NotFound\Layout\Elements\Table\LayoutTableColumn;
 use NotFound\Layout\Inputs\LayoutInputTags;
 
 class ComponentTags extends AbstractComponent
@@ -70,6 +71,19 @@ class ComponentTags extends AbstractComponent
             ->join($linkTable, $foreignTable.'.'.$p->foreignTagId, '=', $linkTable.'.'.$p->linkTagId)
             ->where($p->linkItemId, $this->recordId)
             ->get([$foreignTable.'.'.$p->foreignTagId.' AS id', $foreignTable.'.'.$p->foreignDisplayColumn.' AS label'])->toArray();
+    }
+
+    /**
+     * Gets the content for the table overview, this is usually a string.
+     */
+    public function getTableOverviewContent(): LayoutTableColumn
+    {
+        // convert to array with only the value of the label
+        $values = collect($this->getCurrentValue())->map(function ($item) {
+            return $item->label;
+        });
+
+        return new LayoutTableColumn(implode(', ', $values->toArray()));
     }
 
     /**
