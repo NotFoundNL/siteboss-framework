@@ -106,7 +106,7 @@ class IndexBuilderService
 
                 continue;
             }
-            if (isset($page->properties->exludeFromSearch) && $page->properties->exludeFromSearch == true) {
+            if (isset($page->properties->excludeFromSearch) && $page->properties->excludeFromSearch == true) {
                 $this->writeDebug("  skipping, page not searchable\n");
 
                 continue;
