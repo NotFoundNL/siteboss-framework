@@ -16,10 +16,16 @@ class CmsEditorImportExportController extends Controller
         $tables = Table::all();
 
         foreach ($tables as $table) {
-            // TODO: catch exceptions
-            $table->exportToFile();
-        }
+            try {
+                $table->exportToFile();
+            } catch (\Exception $e) {
+                $response->addAction(
+                    new Toast('Error exporting table '.$table->name.': '.$e->getMessage())
+                );
 
+                return $response->build();
+            }
+        }
         $response->addAction(
             new Toast($tables->count().' tables exported successfully')
         );
@@ -33,10 +39,16 @@ class CmsEditorImportExportController extends Controller
         $templates = Template::all();
 
         foreach ($templates as $template) {
-            // TODO: catch exceptions
-            $template->exportToFile();
-        }
+            try {
+                $template->exportToFile();
+            } catch (\Exception $e) {
+                $response->addAction(
+                    new Toast('Error exporting template '.$template->name.': '.$e->getMessage())
+                );
 
+                return $response->build();
+            }
+        }
         $response->addAction(
             new Toast($templates->count().' templates exported successfully')
         );

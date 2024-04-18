@@ -46,8 +46,8 @@ class InfoController extends Controller
         $settings->background = (object) [
             'url' => env('APP_LOGIN_IMAGE_URL', '/siteboss/images/back.jpg'),
             'credits' => (object) [
-                'name' => env('APP_LOGIN_IMAGE_SOURCE_NAME', 'Dr. Matthias Ripp'),
-                'url' => env('APP_LOGIN_IMAGE_SOURCE_URL', 'https://www.flickr.com/photos/56218409@N03/14605956625'),
+                'name' => env('APP_LOGIN_IMAGE_SOURCE_NAME', 'zeitfaenger.at'),
+                'url' => env('APP_LOGIN_IMAGE_SOURCE_URL', 'https://flickr.com/photos/kwarz/'),
                 'license' => env('APP_LOGIN_IMAGE_SOURCE_LICENSE', 'CC BY 2.0'),
             ],
         ];

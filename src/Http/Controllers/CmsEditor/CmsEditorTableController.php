@@ -3,7 +3,6 @@
 namespace NotFound\Framework\Http\Controllers\CmsEditor;
 
 use Illuminate\Http\Request as HttpRequest;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use NotFound\Framework\Http\Requests\FormDataRequest;
 use NotFound\Framework\Models\Table;
@@ -44,13 +43,16 @@ class CmsEditorTableController extends \NotFound\Framework\Http\Controllers\Cont
         $widget1 = new LayoutWidget('Tables', 6);
 
         $table = new LayoutTable(delete: false, edit: true, create: false, sort: false);
+        $table->addHeader(new LayoutTableHeader('Display name', 'name'));
         $table->addHeader(new LayoutTableHeader('Table', 'table'));
-
-        $tables = Table::orderBy('name')->get();
+        $table->addHeader(new LayoutTableHeader('Model', 'model'));
+        $tables = Table::orderBy('table')->get();
 
         foreach ($tables as $cmsTable) {
             $row = new LayoutTableRow($cmsTable->id, '/app/editor/table/'.$cmsTable->id);
-            $row->addColumn(new LayoutTableColumn($cmsTable->name, 'table'));
+            $row->addColumn(new LayoutTableColumn($cmsTable->name ?? '-', 'name'));
+            $row->addColumn(new LayoutTableColumn($cmsTable->table, 'table'));
+            $row->addColumn(new LayoutTableColumn($cmsTable->model ?? '-', 'table'));
             $table->addRow($row);
         }
         $widget1->addTable($table);
@@ -281,6 +283,7 @@ class CmsEditorTableController extends \NotFound\Framework\Http\Controllers\Cont
                 'order' => $max,
                 'name' => $request->name,
                 'type' => $request->new_field,
+                'enabled' => true,
                 'internal' => $request->internal,
             ]);
             $response->addAction(new Redirect('/app/editor/table/'.$table->id.'/'.$newField->id));
@@ -319,7 +322,9 @@ class CmsEditorTableController extends \NotFound\Framework\Http\Controllers\Cont
         $fieldClass = new $className(new stdClass());
 
         if (Schema::hasColumn($table, $field->internal)) {
-            return $fieldClass->checkColumnType(DB::getDoctrineColumn($this->setDatabasePrefix($table), $field->internal)->getType());
+            return $fieldClass->checkColumnType(
+                Schema::getColumnType($table, $field->internal)
+            );
         } else {
             return $fieldClass->checkColumnType(null);
         }

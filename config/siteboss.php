@@ -49,4 +49,15 @@ return [
 
     'export_retain_ids' => env('SB_EXPORT_RETAIN_IDS', false),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Admin email
+    |--------------------------------------------------------------------------
+    |
+    | Email address to send admin notifications to.
+    |
+    */
+
+    'admin_email' => env('SB_ADMIN_EMAIL', null),
+
 ];

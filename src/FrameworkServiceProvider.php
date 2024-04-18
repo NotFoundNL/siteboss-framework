@@ -35,6 +35,7 @@ class FrameworkServiceProvider extends ServiceProvider
             __DIR__.'/../config/database.php' => config_path('database.php'),
             __DIR__.'/../config/indexer.php' => config_path('indexer.php'),
             __DIR__.'/../config/laravellocalization.php' => config_path('laravellocalization.php'),
+            __DIR__.'/../resources/css/siteboss.css' => public_path('assets/static/siteboss.css'),
             __DIR__.'/Providers/AuthServiceProvider.php' => app_path('Providers/AuthServiceProvider.php'),
         ], 'siteboss-framework');
 

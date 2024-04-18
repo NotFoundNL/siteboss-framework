@@ -59,6 +59,9 @@ class ComponentText extends AbstractComponent
      */
     protected function customProperties(): object
     {
+        // BUG: TODO: editModal should just be a property,
+        //            not a server property
+        $customProperties = [];
         if (isset($this->properties()->type) && $this->properties()->type == 'richtext') {
             if (isset($this->properties()->editorSettings) && trim($this->properties()->editorSettings) !== '') {
                 $setting = EditorSetting::where('name', $this->properties()->editorSettings)->first();
@@ -67,11 +70,11 @@ class ComponentText extends AbstractComponent
             }
 
             if (isset($setting->settings)) {
-                return (object) ['editorSettings' => json_decode($setting->settings)];
+                $customProperties['editorSettings'] = json_decode($setting->settings);
             }
         }
 
-        return (object) [];
+        return (object) $customProperties;
     }
 
     public function asyncPostRequest()

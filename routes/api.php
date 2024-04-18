@@ -27,11 +27,22 @@ use Spatie\Honeypot\ProtectAgainstSpam;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::prefix(config('siteboss.api_prefix'))->group(function (): void {
-    Route::prefix('api')->group(function (): void {
+
+Route::prefix(config('siteboss.api_prefix'))->group(function () {
+
+    // Routes account management
+    Route::group(['prefix' => '/{locale}', 'middleware' => [ValidateSignature::class, 'throttle:6,1', 'set-forget-locale']], function () {
+
+        // Verify email address
         Route::get('email/verify/{id}/{hash}', [VerifyEmailController::class, '__invoke'])
-            ->middleware([ValidateSignature::class, 'throttle:6,1'])
             ->name('siteboss.verification.verify');
+
+        // Routes for blocking your own account
+        Route::get('email/verify/block/{id}/{hash}', [VerifyEmailController::class, 'block'])
+            ->name('siteboss.verification.block');
+    });
+
+    Route::prefix('api')->group(function () {
 
         // Unauthenticated routes
         Route::namespace('Forms')->group(function (): void {

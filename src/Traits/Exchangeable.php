@@ -41,8 +41,10 @@ trait Exchangeable
             $item->name = $assetItem->name;
             $item->description = $assetItem->description;
             $item->properties = $assetItem->properties ?? (object) [];
-            $item->enabled = $assetItem->enabled === 1 ?? false;
-            $item->global = $assetItem->global === 1 ?? false;
+            $item->enabled = $assetItem->enabled ?? false;
+            if ($classType === 'template') {
+                $item->global = $assetItem->global ?? false;
+            }
             $item->server_properties =
                 $assetItem->server_properties ?? (object) [];
 
