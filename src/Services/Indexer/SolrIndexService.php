@@ -22,6 +22,14 @@ class SolrIndexService extends AbstractIndexService
         $this->solrIndex = new SolrIndex();
     }
 
+    public function retainItem( string $url ): void {
+        $cmsSearchItem = CmsSearch::whereUrl($this->domain.$url)->first();
+        if ($cmsSearchItem) {
+            $cmsSearchItem->search_status = 'UPDATED';
+            $cmsSearchItem->save();
+        }
+    }
+
     public function upsertItem(SearchItem $searchItem): object
     {
         $return = $this->returnvalue();
@@ -62,12 +70,11 @@ class SolrIndexService extends AbstractIndexService
         $cmsSearchItem = CmsSearch::firstOrNew(['url' => $this->solrIndex->siteUrl($searchItem->url(), $this->domain)]);
         $cmsSearchItem->setValues($searchItem, $cmsSearchItemStatus);
         $cmsSearchItem->url = $this->solrIndex->siteUrl($searchItem->url(), $this->domain);
-        $cmsSearchItem->save();
-        if ($cmsSearchItemStatus == 'FAILED') {
-            $cmsSearchItem->updated_at = null;
-            $cmsSearchItem->save();
-        }
 
+         if ($cmsSearchItemStatus == 'FAILED') {
+            $cmsSearchItem->updated_at = null;
+        }
+        $cmsSearchItem->save();
         return $return;
     }
 
@@ -84,8 +91,13 @@ class SolrIndexService extends AbstractIndexService
 
     public function finishUpdate(): object
     {
+        if ($this->debug) {
+            printf("\n ** Removing all pending items\n");
+        }
         $return = $this->removeAllPending();
-
+        if ($this->debug) {
+            printf("\n ** Rebuilding suggester\n");
+        }
         $build = $this->solrIndex->buildSuggester();
 
         if ($build->error) {

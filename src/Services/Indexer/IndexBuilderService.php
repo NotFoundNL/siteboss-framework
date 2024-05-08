@@ -20,6 +20,8 @@ class IndexBuilderService
 
     private $sitemapFile;
 
+    private $padding = 140;
+
     private AbstractIndexService $searchServer;
 
     public function __construct($debug = false, $fresh = false)
@@ -64,7 +66,7 @@ class IndexBuilderService
                     $this->sitemapFile = fopen($sitemapFileName, 'w') or exit('Could not open sitemap file for writing');
                 } else {
                     $this->sitemapFile = false;
-                    $this->writeDebug("   skipping sitemap\n");
+                    $this->writeDebug(" ⏭️ Skipping sitemap\n");
                 }
 
                 $siteId = $site->id;
@@ -74,7 +76,7 @@ class IndexBuilderService
                 $this->searchServer->languageId = 1;
 
                 // insert all pages, starting from the root
-                $this->writeDebug("   INDEXING PAGES\n   ==============\n");
+                $this->writeDebug("┃ INDEXING PAGES\n   ==============\n");
                 $this->indexChildPages($site->root);
 
                 if ($this->sitemapFile) {
@@ -93,18 +95,22 @@ class IndexBuilderService
     {
         $childPages = Menu::whereParent_id($parentId)->whereEnabled(1)->get();
         foreach ($childPages as $page) {
-            $this->writeDebug(sprintf("    * Page \e[1m%s\e[0m (id: %d)", $page->url, $page->id));
+            $this->writeDebug("┃\n");
+            $this->writeDebug(sprintf("%s (id: %d)", $page->url, $page->id), true,"┣━┓  📂 Page ");
 
             if (! isset($page->template->id)) {
-                $this->writeDebug("   skipping, no template found\n");
+                $this->writeDebug(": ❌ Fail, skipping, no template found\n");
 
                 continue;
             }
 
             $menu = Menu::whereId($page->id)->firstOrFail();
 
-            if (isset($page->properties->excludeFromSearch) && $page->properties->excludeFromSearch == true) {
-                $this->writeDebug("  skipping, page not searchable\n");
+            if (! isset($page->template->properties->searchable) || $page->template->properties->searchable == 0) {
+                $this->writeDebug(": ⏭️ Skipping, template excluded from search\n");
+
+            } elseif (isset($page->properties->excludeFromSearch) && $page->properties->excludeFromSearch == true) {
+                $this->writeDebug(": ⏭️  Skipping, page excluded from search\n");
 
             } else {
 
@@ -155,9 +161,6 @@ class IndexBuilderService
                 if (method_exists($className, 'searchPriority')) {
                     $priority = $c->searchPriority();
                 }
-                if (method_exists($className, 'solrDate')) {
-                    $solrDate = $c->solrDate($menu->id);
-                }
             }
             $searchText = rtrim($searchText, ', ');
             if (! empty($title) && ! empty($searchText)) {
@@ -170,15 +173,16 @@ class IndexBuilderService
                 $result = $this->searchServer->upsertItem($searchItem);
 
                 if ($result->errorCode == 0) {
-                    $this->writeDebug(" success\n");
+                    $this->writeDebug(": ✅ Success\n");
                 } else {
-                    $this->writeDebug(" FAILED\n");
+                    $this->writeDebug(": ❌ FAILED\n");
                 }
             } else {
-                $this->writeDebug(" empty page or title\n");
+                $this->writeDebug(": ❌ Empty page or title\n");
             }
         } else {
-            $this->writeDebug(": Does not need updating\n");
+            $this->writeDebug(": ✅ Page does not need updating\n");
+            $this->searchServer->retainItem($url);
         }
 
         if ($this->sitemapFile) {
@@ -232,7 +236,7 @@ class IndexBuilderService
                 $success = false;
                 if ((new \ReflectionClass($searchItem))->getShortName() == 'SearchItem') {
                     $url = $searchItem->url();
-                    $this->writeDebug($url);
+                    $this->writeDebug($url, true, "┃ ┣━ 📄 " );
 
                     if ($this->searchServer->urlNeedsUpdate($url, strtotime($searchItem->lastUpdated()))) {
 
@@ -248,12 +252,13 @@ class IndexBuilderService
                         }
 
                         if ($success->errorCode == 0) {
-                            $this->writeDebug(" success\n");
+                            $this->writeDebug(": ✅ Success\n");
                         } else {
                             $this->writeDebug($success->message);
                         }
                     } else {
-                        $this->writeDebug(": Does not need updating\n");
+                        $this->writeDebug(": ✅ Item does not need updating\n");
+                        $success = $this->searchServer->retainItem($url);
                     }
                 } else {
                     dd('Please use the SearchItem class');
@@ -272,10 +277,15 @@ class IndexBuilderService
         }
     }
 
-    private function writeDebug($text)
+    private function writeDebug($text, $padding = false, $prefix = '')
     {
         if ($this->debug) {
-            printf($text);
+
+            if ( $padding ) {
+                $text = substr($text, 0, $this->padding - strlen( $prefix));
+                $text = str_pad($text, $this->padding- strlen( $prefix), ' ');
+            }
+            printf("\e[1m".$prefix."\e[0m".$text);
         }
     }
 
