@@ -71,7 +71,7 @@ class SolrIndexService extends AbstractIndexService
         $cmsSearchItem->setValues($searchItem, $cmsSearchItemStatus);
         $cmsSearchItem->url = $this->solrIndex->siteUrl($searchItem->url(), $this->domain);
 
-         if ($cmsSearchItemStatus == 'FAILED') {
+         if ( in_array( $cmsSearchItemStatus , ['NOT_FOUND', 'FAILED'])) {
             $cmsSearchItem->updated_at = null;
         }
         $cmsSearchItem->save();
