@@ -96,7 +96,7 @@ class IndexBuilderService
         $childPages = Menu::whereParent_id($parentId)->whereEnabled(1)->get();
         foreach ($childPages as $page) {
             $this->writeDebug("┃\n");
-            $this->writeDebug(sprintf("%s (id: %d)", $page->url, $page->id), true,"┣━┓  📂 Page ");
+            $this->writeDebug(sprintf('%s (id: %d)', $page->url, $page->id), true, '┣━┓  📂 Page ');
 
             if (! isset($page->template->id)) {
                 $this->writeDebug(": ❌ Fail, skipping, no template found\n");
@@ -236,7 +236,7 @@ class IndexBuilderService
                 $success = false;
                 if ((new \ReflectionClass($searchItem))->getShortName() == 'SearchItem') {
                     $url = $searchItem->url();
-                    $this->writeDebug($url, true, "┃ ┣━ 📄 " );
+                    $this->writeDebug($url, true, '┃ ┣━ 📄 ');
 
                     if ($this->searchServer->urlNeedsUpdate($url, strtotime($searchItem->lastUpdated()))) {
 
@@ -281,9 +281,9 @@ class IndexBuilderService
     {
         if ($this->debug) {
 
-            if ( $padding ) {
-                $text = substr($text, 0, $this->padding - strlen( $prefix));
-                $text = str_pad($text, $this->padding- strlen( $prefix), ' ');
+            if ($padding) {
+                $text = substr($text, 0, $this->padding - strlen($prefix));
+                $text = str_pad($text, $this->padding - strlen($prefix), ' ');
             }
             printf("\e[1m".$prefix."\e[0m".$text);
         }

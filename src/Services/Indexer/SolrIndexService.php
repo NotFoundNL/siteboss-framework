@@ -22,7 +22,8 @@ class SolrIndexService extends AbstractIndexService
         $this->solrIndex = new SolrIndex();
     }
 
-    public function retainItem( string $url ): void {
+    public function retainItem(string $url): void
+    {
         $cmsSearchItem = CmsSearch::whereUrl($this->domain.$url)->first();
         if ($cmsSearchItem) {
             $cmsSearchItem->search_status = 'UPDATED';
@@ -71,10 +72,11 @@ class SolrIndexService extends AbstractIndexService
         $cmsSearchItem->setValues($searchItem, $cmsSearchItemStatus);
         $cmsSearchItem->url = $this->solrIndex->siteUrl($searchItem->url(), $this->domain);
 
-         if ( in_array( $cmsSearchItemStatus , ['NOT_FOUND', 'FAILED'])) {
+         if (in_array($cmsSearchItemStatus, ['NOT_FOUND', 'FAILED'])) {
             $cmsSearchItem->updated_at = null;
         }
         $cmsSearchItem->save();
+
         return $return;
     }
 
