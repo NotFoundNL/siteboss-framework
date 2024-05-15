@@ -20,6 +20,8 @@ abstract class AbstractIndexService
 
     abstract public function upsertItem(SearchItem $searchItem): object;
 
+    abstract public function retainItem(string $url): void;
+
     abstract public function checkConnection(): bool;
 
     public function clean(): bool
