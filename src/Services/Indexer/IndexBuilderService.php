@@ -152,7 +152,7 @@ class IndexBuilderService
 
             $c = null;
             $priority = 1;
-            $solrDate = '';
+
             if (class_exists($className)) {
                 $c = new $className();
                 if (method_exists($className, 'customSearchValues')) {
