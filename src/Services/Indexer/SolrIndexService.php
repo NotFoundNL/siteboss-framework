@@ -8,23 +8,20 @@ use stdClass;
 
 class SolrIndexService extends AbstractIndexService
 {
-    private bool $debug = false;
-
     public int $siteId;
 
     public ?string $domain;
 
     public $solrIndex;
 
-    public function __construct($debug = false)
+    public function __construct(private bool $debug = false, private bool $fresh = false)
     {
-        $this->debug = $debug;
         $this->solrIndex = new SolrIndex();
     }
 
     public function retainItem(string $url): void
     {
-        $cmsSearchItem = CmsSearch::whereUrl($this->domain.$url)->first();
+        $cmsSearchItem = CmsSearch::whereUrl($this->domain . $url)->first();
         if ($cmsSearchItem) {
             $cmsSearchItem->search_status = 'UPDATED';
             $cmsSearchItem->save();
@@ -72,7 +69,7 @@ class SolrIndexService extends AbstractIndexService
         $cmsSearchItem->setValues($searchItem, $cmsSearchItemStatus);
         $cmsSearchItem->url = $this->solrIndex->siteUrl($searchItem->url(), $this->domain);
 
-         if (in_array($cmsSearchItemStatus, ['NOT_FOUND', 'FAILED'])) {
+        if (in_array($cmsSearchItemStatus, ['NOT_FOUND', 'FAILED'])) {
             $cmsSearchItem->updated_at = null;
         }
         $cmsSearchItem->save();
@@ -85,7 +82,9 @@ class SolrIndexService extends AbstractIndexService
         if ($this->debug) {
             printf("\n ** Starting SOLR update");
         }
-        $emptyResult = $this->solrIndex->emptyCore();
+        if ($this->fresh) {
+            $emptyResult = $this->solrIndex->emptyCore();
+        }
         CmsSearch::setAllPending();
 
         return $emptyResult;

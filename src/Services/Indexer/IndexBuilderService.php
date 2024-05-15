@@ -10,10 +10,6 @@ use NotFound\Framework\Services\Assets\PageService;
 
 class IndexBuilderService
 {
-    private bool $debug;
-
-    private bool $fresh;
-
     private $locales;
 
     private $domain;
@@ -24,7 +20,7 @@ class IndexBuilderService
 
     private AbstractIndexService $searchServer;
 
-    public function __construct($debug = false, $fresh = false)
+    public function __construct(private bool $debug = false, private bool $fresh = false)
     {
         $serverType = config('indexer.engine');
         $this->debug = $debug;
@@ -34,16 +30,16 @@ class IndexBuilderService
         $this->domain = rtrim(env('APP_URL', ''), '/');
         switch ($serverType) {
             case 'solr':
-                $this->searchServer = new SolrIndexService($this->debug);
+                $this->searchServer = new SolrIndexService($this->debug, $this->fresh);
                 break;
             default:
                 exit('Unknown search index type');
         }
     }
 
-    public function run()
+    public function run(): void
     {
-        if (! $this->searchServer->checkConnection()) {
+        if (!$this->searchServer->checkConnection()) {
             $this->writeDebug("\n\n Error connecting to search server! \n\n");
 
             return;
@@ -55,7 +51,7 @@ class IndexBuilderService
 
         if (count($sites) > 0) {
             $startResult = $this->searchServer->startUpdate();
-            if (! $startResult) {
+            if (!$startResult) {
                 $this->writeDebug("\n\n Error when emptying core! \n\n");
             }
 
@@ -82,13 +78,14 @@ class IndexBuilderService
                 if ($this->sitemapFile) {
                     fclose($this->sitemapFile);
                 }
-                $finish = $this->searchServer->finishUpdate();
-
-                $this->writeDebug($finish->message);
             }
         } else {
             $this->writeDebug("No sites to index\n");
+            return;
         }
+        $finish = $this->searchServer->finishUpdate();
+
+        $this->writeDebug($finish->message);
     }
 
     private function indexChildPages($parentId)
@@ -98,7 +95,7 @@ class IndexBuilderService
             $this->writeDebug("┃\n");
             $this->writeDebug(sprintf('%s (id: %d)', $page->url, $page->id), true, '┣━┓  📂 Page ');
 
-            if (! isset($page->template->id)) {
+            if (!isset($page->template->id)) {
                 $this->writeDebug(": ❌ Fail, skipping, no template found\n");
 
                 continue;
@@ -106,12 +103,10 @@ class IndexBuilderService
 
             $menu = Menu::whereId($page->id)->firstOrFail();
 
-            if (! isset($page->template->properties->searchable) || $page->template->properties->searchable == 0) {
+            if (!isset($page->template->properties->searchable) || $page->template->properties->searchable == 0) {
                 $this->writeDebug(": ⏭️ Skipping, template excluded from search\n");
-
             } elseif (isset($page->properties->excludeFromSearch) && $page->properties->excludeFromSearch == true) {
                 $this->writeDebug(": ⏭️  Skipping, page excluded from search\n");
-
             } else {
 
                 foreach ($this->locales as $lang) {
@@ -148,7 +143,7 @@ class IndexBuilderService
             // continue with customValues
             $customValues = [];
 
-            $className = 'App\Http\Controllers\Page\\'.$this->controllerName($menu).'Controller';
+            $className = 'App\Http\Controllers\Page\\' . $this->controllerName($menu) . 'Controller';
 
             $c = null;
             $priority = 1;
@@ -163,10 +158,13 @@ class IndexBuilderService
                 }
             }
             $searchText = rtrim($searchText, ', ');
-            if (! empty($title) && ! empty($searchText)) {
+            if (!empty($title) && !empty($searchText)) {
 
                 $searchItem = new SearchItem($url, $title);
-                $searchItem->setContent($searchText)->setLanguage($lang->url)->setPriority($priority)->setPublicationDate(new DateTime($menu->updated_at));
+                $searchItem->setContent($searchText)
+                    ->setLanguage($lang->url)
+                    ->setPriority($priority)
+                    ->setPublicationDate(new DateTime($menu->updated_at));
                 foreach ($customValues as $key => $value) {
                     $searchItem->setCustomValue($key, $value);
                 }
@@ -198,7 +196,7 @@ class IndexBuilderService
 
     private function updateSubPages($menu, $lang)
     {
-        $className = 'App\Http\Controllers\Page\\'.$this->controllerName($menu).'Controller';
+        $className = 'App\Http\Controllers\Page\\' . $this->controllerName($menu) . 'Controller';
         $c = null;
         // update subPage if necessary
 
@@ -227,7 +225,7 @@ class IndexBuilderService
 
         // We need to check if the subPages is an array of arrays
         // If not we wrap it in an extra array
-        if (count($subPages) > 0 && ! is_array($subPages[0])) {
+        if (count($subPages) > 0 && !is_array($subPages[0])) {
             $subPages = [$subPages];
         }
         foreach ($subPages as $subPage) {
@@ -270,8 +268,8 @@ class IndexBuilderService
     private function createFolderIfNotExists($fullFilePath)
     {
         $path_parts = pathinfo($fullFilePath);
-        if (! file_exists($path_parts['dirname'])) {
-            if (! mkdir($path_parts['dirname'])) {
+        if (!file_exists($path_parts['dirname'])) {
+            if (!mkdir($path_parts['dirname'])) {
                 printf("\n\n### Error creating sitemap folder");
             }
         }
@@ -285,7 +283,7 @@ class IndexBuilderService
                 $text = substr($text, 0, $this->padding - strlen($prefix));
                 $text = str_pad($text, $this->padding - strlen($prefix), ' ');
             }
-            printf("\e[1m".$prefix."\e[0m".$text);
+            printf("\e[1m" . $prefix . "\e[0m" . $text);
         }
     }
 

@@ -71,27 +71,21 @@ class SolrIndex extends BaseModel
 
     public function emptyCore()
     {
-        $searchItems = CmsSearch::all();
-        if (count($searchItems) == 0) {
-            $curl = $this->solrHandler();
-            $url = sprintf('%s/update/?wt=%s&commit=true*', $this->getSolrBaseUrl(), $this->wt);
-            curl_setopt($curl, CURLOPT_URL, $url);
-            $payload = ['delete' => ['query' => '*:*']];
+        $curl = $this->solrHandler();
+        $url = sprintf('%s/update/?wt=%s&commit=true*', $this->getSolrBaseUrl(), $this->wt);
+        curl_setopt($curl, CURLOPT_URL, $url);
+        $payload = ['delete' => ['query' => '*:*']];
 
-            curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($payload));
-            $result = curl_exec($curl);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($payload));
+        $result = curl_exec($curl);
 
-            $json = json_decode($result);
+        $json = json_decode($result);
 
-            if (! $json || ! isset($json->responseHeader) || $json->responseHeader->status !== 0) {
-                $this->mailQueryError($url, $result);
+        if (!$json || !isset($json->responseHeader) || $json->responseHeader->status !== 0) {
+            $this->mailQueryError($url, $result);
 
-                return false;
-            }
-
-            return true;
+            return false;
         }
-
         return true;
     }
 
@@ -100,7 +94,7 @@ class SolrIndex extends BaseModel
     {
         $handler = curl_init();
         curl_setopt($handler, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($handler, CURLOPT_USERPWD, $this->solrUser.':'.$this->solrPass);
+        curl_setopt($handler, CURLOPT_USERPWD, $this->solrUser . ':' . $this->solrPass);
 
         curl_setopt($handler, CURLOPT_POST, true);
 
@@ -159,7 +153,7 @@ class SolrIndex extends BaseModel
         $result = curl_exec($curl);
 
         if (curl_errno($curl) === 6) {
-            exit('[ERROR] Could not resolve solr host: '.$this->getSolrBaseUrl());
+            exit('[ERROR] Could not resolve solr host: ' . $this->getSolrBaseUrl());
         }
         $json = json_decode($result);
         if ($json && isset($json->responseHeader) && $json->responseHeader->status == 0) {
@@ -171,7 +165,7 @@ class SolrIndex extends BaseModel
 
     public function removeItem($url)
     {
-        if (! is_null($url)) {
+        if (!is_null($url)) {
             $curl = $this->solrHandler();
 
             $payload = ['delete' => $url];
@@ -303,27 +297,27 @@ class SolrIndex extends BaseModel
             $lang
         );
         if ($filter) {
-            $url .= '&fq='.$filter;
+            $url .= '&fq=' . $filter;
         }
         if ($start && is_int($start)) {
-            $url .= '&start='.$start;
+            $url .= '&start=' . $start;
         }
 
         if ($rows && is_int($rows)) {
-            $url .= '&rows='.$rows;
+            $url .= '&rows=' . $rows;
         }
         if (count($extraColumns) > 0) {
         }
 
         if ($sortField) {
-            $url .= '&sort='.urlencode($sortField.' '.$sortDirection);
+            $url .= '&sort=' . urlencode($sortField . ' ' . $sortDirection);
         }
 
         curl_setopt($curl, CURLOPT_URL, $url);
         $result = curl_exec($curl);
         $json = json_decode($result);
         $searchResults = new SolrItem($json, $query, false, $highlightLength);
-        if (! $searchResults->isValid()) {
+        if (!$searchResults->isValid()) {
             $this->mailQueryError($url, $result);
         }
 
@@ -343,7 +337,7 @@ class SolrIndex extends BaseModel
         $result = curl_exec($curl);
         $json = json_decode($result);
         $suggestions = new SolrItem($json, $query);
-        if (! $suggestions->isValid()) {
+        if (!$suggestions->isValid()) {
             $this->buildSuggester();
             $result = curl_exec($curl);
             $json = json_decode($result);

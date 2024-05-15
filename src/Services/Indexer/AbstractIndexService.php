@@ -2,6 +2,7 @@
 
 namespace NotFound\Framework\Services\Indexer;
 
+use DateTime;
 use NotFound\Framework\Models\CmsSearch;
 
 abstract class AbstractIndexService
@@ -12,7 +13,7 @@ abstract class AbstractIndexService
 
     public ?string $domain;
 
-    abstract public function __construct($debug = false);
+    abstract public function __construct(private bool $debug = false, private bool $fresh = false);
 
     abstract public function startUpdate(): bool;
 
@@ -31,10 +32,10 @@ abstract class AbstractIndexService
         return true;
     }
 
-    public function urlNeedsUpdate(string $url, $updated): bool
+    public function urlNeedsUpdate(string $url, DateTime $updated): bool
     {
         $searchItem = CmsSearch::whereUrl($this->siteUrl($url))->first();
-        if ($searchItem && ($searchItem->updated_at !== null && $searchItem->updated_at->timestamp > $updated)) {
+        if ($searchItem && ($searchItem->updated_at !== null && $searchItem->updated_at >= $updated)) {
             CmsSearch::whereUrl($url)->update(['search_status' => 'SKIPPED']);
 
             return false;
