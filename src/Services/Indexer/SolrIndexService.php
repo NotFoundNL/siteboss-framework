@@ -14,8 +14,10 @@ class SolrIndexService extends AbstractIndexService
 
     public $solrIndex;
 
-    public function __construct(private bool $debug = false, private bool $fresh = false)
+    public function __construct( bool $debug = false,  bool $fresh = false)
     {
+        $this->debug = $debug;
+        $this->fresh = $fresh;
         $this->solrIndex = new SolrIndex();
     }
 
@@ -82,6 +84,7 @@ class SolrIndexService extends AbstractIndexService
         if ($this->debug) {
             printf("\n ** Starting SOLR update");
         }
+        $emptyResult = true;
         if ($this->fresh) {
             $emptyResult = $this->solrIndex->emptyCore();
         }
