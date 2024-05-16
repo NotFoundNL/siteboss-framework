@@ -35,7 +35,7 @@ abstract class AbstractIndexService
         return true;
     }
 
-    public function urlNeedsUpdate(string $url, DateTime $updated): bool
+    public function urlNeedsUpdate(string $url, ?DateTime $updated): bool
     {
         $searchItem = CmsSearch::whereUrl($this->siteUrl($url))->first();
         if ($searchItem && ($searchItem->updated_at !== null && $searchItem->updated_at >= $updated)) {

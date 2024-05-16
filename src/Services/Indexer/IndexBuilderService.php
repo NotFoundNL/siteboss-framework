@@ -131,7 +131,7 @@ class IndexBuilderService
             $url = $menu->getLocalizedPath();
         }
 
-        if ($this->searchServer->urlNeedsUpdate($url, strtotime($menu->updated_at))) {
+        if ($this->searchServer->urlNeedsUpdate($url, $menu->updated_at)) {
             $this->writeDebug(': update needed: ');
 
             $searchText = '';
@@ -236,7 +236,7 @@ class IndexBuilderService
                     $url = $searchItem->url();
                     $this->writeDebug($url, true, '┃ ┣━ 📄 ');
 
-                    if ($this->searchServer->urlNeedsUpdate($url, strtotime($searchItem->lastUpdated()))) {
+                    if ($this->searchServer->urlNeedsUpdate($url, $searchItem->lastUpdated())) {
 
                         $searchItem->setLanguage($lang->url);
                         $success = $this->searchServer->upsertItem($searchItem);

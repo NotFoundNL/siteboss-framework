@@ -4,6 +4,7 @@ namespace NotFound\Framework\Services\Indexer;
 
 use DateTime;
 use NotFound\Framework\Models\Lang;
+use NotFound\Framework\View\Components\Forms\Fields\Date;
 
 final class SearchItem
 {
@@ -155,9 +156,9 @@ final class SearchItem
      * This is when the content was last updated
      * This is used to determine if the content needs to be re-indexed
      */
-    public function lastUpdated(): ?string
+    public function lastUpdated(): ?DateTime
     {
-        return $this->toDateString($this->lastUpdated ?? $this->publicationDate);
+        return $this->lastUpdated ?? $this->publicationDate;
     }
 
     public function customValues(): ?array
