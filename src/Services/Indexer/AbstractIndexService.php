@@ -14,9 +14,10 @@ abstract class AbstractIndexService
     public ?string $domain;
 
     protected bool $debug;
+
     protected bool $fresh;
 
-    abstract public function __construct( bool $debug = false,  bool $fresh = false);
+    abstract public function __construct(bool $debug = false, bool $fresh = false);
 
     abstract public function startUpdate(): bool;
 

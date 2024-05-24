@@ -14,7 +14,7 @@ class SolrIndexService extends AbstractIndexService
 
     public $solrIndex;
 
-    public function __construct( bool $debug = false,  bool $fresh = false)
+    public function __construct(bool $debug = false, bool $fresh = false)
     {
         $this->debug = $debug;
         $this->fresh = $fresh;
@@ -23,7 +23,7 @@ class SolrIndexService extends AbstractIndexService
 
     public function retainItem(string $url): void
     {
-        $cmsSearchItem = CmsSearch::whereUrl($this->domain . $url)->first();
+        $cmsSearchItem = CmsSearch::whereUrl($this->domain.$url)->first();
         if ($cmsSearchItem) {
             $cmsSearchItem->search_status = 'UPDATED';
             $cmsSearchItem->save();

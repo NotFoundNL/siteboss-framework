@@ -39,7 +39,7 @@ class IndexBuilderService
 
     public function run(): void
     {
-        if (!$this->searchServer->checkConnection()) {
+        if (! $this->searchServer->checkConnection()) {
             $this->writeDebug("\n\n Error connecting to search server! \n\n");
 
             return;
@@ -51,7 +51,7 @@ class IndexBuilderService
 
         if (count($sites) > 0) {
             $startResult = $this->searchServer->startUpdate();
-            if (!$startResult) {
+            if (! $startResult) {
                 $this->writeDebug("\n\n Error when emptying core! \n\n");
             }
 
@@ -81,6 +81,7 @@ class IndexBuilderService
             }
         } else {
             $this->writeDebug("No sites to index\n");
+
             return;
         }
         $finish = $this->searchServer->finishUpdate();
@@ -95,7 +96,7 @@ class IndexBuilderService
             $this->writeDebug("┃\n");
             $this->writeDebug(sprintf('%s (id: %d)', $page->url, $page->id), true, '┣━┓  📂 Page ');
 
-            if (!isset($page->template->id)) {
+            if (! isset($page->template->id)) {
                 $this->writeDebug(": ❌ Fail, skipping, no template found\n");
 
                 continue;
@@ -103,7 +104,7 @@ class IndexBuilderService
 
             $menu = Menu::whereId($page->id)->firstOrFail();
 
-            if (!isset($page->template->properties->searchable) || $page->template->properties->searchable == 0) {
+            if (! isset($page->template->properties->searchable) || $page->template->properties->searchable == 0) {
                 $this->writeDebug(": ⏭️ Skipping, template excluded from search\n");
             } elseif (isset($page->properties->excludeFromSearch) && $page->properties->excludeFromSearch == true) {
                 $this->writeDebug(": ⏭️  Skipping, page excluded from search\n");
@@ -143,7 +144,7 @@ class IndexBuilderService
             // continue with customValues
             $customValues = [];
 
-            $className = 'App\Http\Controllers\Page\\' . $this->controllerName($menu) . 'Controller';
+            $className = 'App\Http\Controllers\Page\\'.$this->controllerName($menu).'Controller';
 
             $c = null;
             $priority = 1;
@@ -158,7 +159,7 @@ class IndexBuilderService
                 }
             }
             $searchText = rtrim($searchText, ', ');
-            if (!empty($title) && !empty($searchText)) {
+            if (! empty($title) && ! empty($searchText)) {
 
                 $searchItem = new SearchItem($url, $title);
                 $searchItem->setContent($searchText)
@@ -196,7 +197,7 @@ class IndexBuilderService
 
     private function updateSubPages($menu, $lang)
     {
-        $className = 'App\Http\Controllers\Page\\' . $this->controllerName($menu) . 'Controller';
+        $className = 'App\Http\Controllers\Page\\'.$this->controllerName($menu).'Controller';
         $c = null;
         // update subPage if necessary
 
@@ -225,7 +226,7 @@ class IndexBuilderService
 
         // We need to check if the subPages is an array of arrays
         // If not we wrap it in an extra array
-        if (count($subPages) > 0 && !is_array($subPages[0])) {
+        if (count($subPages) > 0 && ! is_array($subPages[0])) {
             $subPages = [$subPages];
         }
         foreach ($subPages as $subPage) {
@@ -268,8 +269,8 @@ class IndexBuilderService
     private function createFolderIfNotExists($fullFilePath)
     {
         $path_parts = pathinfo($fullFilePath);
-        if (!file_exists($path_parts['dirname'])) {
-            if (!mkdir($path_parts['dirname'])) {
+        if (! file_exists($path_parts['dirname'])) {
+            if (! mkdir($path_parts['dirname'])) {
                 printf("\n\n### Error creating sitemap folder");
             }
         }
@@ -283,7 +284,7 @@ class IndexBuilderService
                 $text = substr($text, 0, $this->padding - strlen($prefix));
                 $text = str_pad($text, $this->padding - strlen($prefix), ' ');
             }
-            printf("\e[1m" . $prefix . "\e[0m" . $text);
+            printf("\e[1m".$prefix."\e[0m".$text);
         }
     }
 
