@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Mail;
 use NotFound\Framework\Mail\Indexer\FileIndexError;
 use NotFound\Framework\Mail\Indexer\QueryError;
 use NotFound\Framework\Models\BaseModel;
-use NotFound\Framework\Models\CmsSearch;
 use NotFound\Framework\Services\Indexer\SearchItem;
 
 /**
@@ -71,25 +70,20 @@ class SolrIndex extends BaseModel
 
     public function emptyCore()
     {
-        $searchItems = CmsSearch::all();
-        if (count($searchItems) == 0) {
-            $curl = $this->solrHandler();
-            $url = sprintf('%s/update/?wt=%s&commit=true*', $this->getSolrBaseUrl(), $this->wt);
-            curl_setopt($curl, CURLOPT_URL, $url);
-            $payload = ['delete' => ['query' => '*:*']];
+        $curl = $this->solrHandler();
+        $url = sprintf('%s/update/?wt=%s&commit=true*', $this->getSolrBaseUrl(), $this->wt);
+        curl_setopt($curl, CURLOPT_URL, $url);
+        $payload = ['delete' => ['query' => '*:*']];
 
-            curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($payload));
-            $result = curl_exec($curl);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($payload));
+        $result = curl_exec($curl);
 
-            $json = json_decode($result);
+        $json = json_decode($result);
 
-            if (! $json || ! isset($json->responseHeader) || $json->responseHeader->status !== 0) {
-                $this->mailQueryError($url, $result);
+        if (! $json || ! isset($json->responseHeader) || $json->responseHeader->status !== 0) {
+            $this->mailQueryError($url, $result);
 
-                return false;
-            }
-
-            return true;
+            return false;
         }
 
         return true;
