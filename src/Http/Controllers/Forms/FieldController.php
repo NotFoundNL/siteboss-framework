@@ -95,7 +95,14 @@ class FieldController extends Controller
                     if ($project) {
                         $challenges = ProjectChallenge::where('project_id', $project->strapi_id)->select(['id', 'challenge_name AS nl'])->get();
                         $subfield['properties']->options = new stdClass();
-                        $subfield['properties']->options->list = $challenges->toArray();
+
+                        $challenges = $challenges->toArray();
+                        for ($i = 0; $i < count($challenges); $i++) {
+                            $challenges[$i]['index'] = $challenges[$i]['id'];
+                            $challenges[$i]['option'] = (object) ['nl' => $challenges[$i]['nl']];
+                        }
+
+                        $subfield['properties']->options->list = $challenges;
                     }
                 }
             }
@@ -180,7 +187,8 @@ class FieldController extends Controller
                     'type' => $field['type'],
                     'properties' => $field['properties'],
                     'order' => $order,
-                    'trigger_field_id' => $trigger_field_id, 'trigger_value' => $trigger_value,
+                    'trigger_field_id' => $trigger_field_id,
+                    'trigger_value' => $trigger_value,
                 ]
             );
 
