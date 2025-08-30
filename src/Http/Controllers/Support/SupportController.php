@@ -80,7 +80,7 @@ class SupportController extends Controller
             'body' => '<h3>Aanvraag '.env('APP_NAME', 'SiteBoss support form').'</h3><p>'.nl2br(htmlentities($request->input('description'))).'</p><hr/>'.$message,
             'email' => $request->input('email'),
             'subject' => $request->input('subject'),
-            'api_key' => config('support.api_key')
+            'api_key' => config('support.api_key'),
         ]);
         $url = config('support.endpoint');
         $ch = curl_init($url);

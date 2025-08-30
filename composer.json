@@ -25,7 +25,7 @@
         "xenolope/quahog": "^3.0",
         "firebase/php-jwt": "^6.3",
         "intervention/image": "^3.0",
-        "doctrine/dbal": "^3.6"
+        "doctrine/dbal": "^4.0"
     },
     "require-dev": {
         "laravel/pint": "^1.0",
