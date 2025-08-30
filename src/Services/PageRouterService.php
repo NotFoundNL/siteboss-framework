@@ -31,8 +31,8 @@ class PageRouterService
                     'prefix' => LaravelLocalization::setLocale(),
                     'middleware' => [LaravelLocalizationViewPath::class],
                 ], function () use ($routes) {
-                    $this->setRouteList($routes);
                     PageRedirectService::getRoutes();
+                    $this->setRouteList($routes);
                 }
             );
         } catch (Exception $e) {
