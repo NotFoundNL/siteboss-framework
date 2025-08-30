@@ -30,7 +30,8 @@ class PageRouterService
                 [
                     'prefix' => LaravelLocalization::setLocale(),
                     'middleware' => [LaravelLocalizationViewPath::class],
-                ], function () use ($routes) {
+                ],
+                function () use ($routes) {
                     PageRedirectService::getRoutes();
                     $this->setRouteList($routes);
                 }
@@ -97,7 +98,7 @@ class PageRouterService
             return false;
         }
 
-        $pageClassName = sprintf('App\\Http\\Controllers\\Page\\%sController', ucfirst($page->template->controller ?? $page->template->filename));
+        $pageClassName = sprintf('App\\Http\\Controllers\\Page\\%sController', ucfirst($page->template->controller ?? $this->transformFilename($page->template->filename)));
 
         if (class_exists($pageClassName)) {
             return $pageClassName;
@@ -110,6 +111,21 @@ class PageRouterService
         }
 
         return false;
+    }
+
+    private function transformFilename(string $filename): string
+    {
+        if (substr($filename, -4, 4) === 'page') {
+            $filename = substr($filename, 0, -4);
+            $filename .= 'Page';
+        }
+        $filenameParts = preg_split('/[\/-]/', $filename);
+        $cappedParts = [];
+        foreach ($filenameParts as $key => $part) {
+            $cappedParts[] = ucfirst($part);
+        }
+
+        return implode('\\', $cappedParts);
     }
 
     private function cliError($message): void
