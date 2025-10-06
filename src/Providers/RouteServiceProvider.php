@@ -36,7 +36,7 @@ class RouteServiceProvider extends ServiceProvider
         $this->routes(function () {
             Route::middleware('web')
                 ->group(function () {
-                    $pageRouter = new PageRouterService();
+                    $pageRouter = new PageRouterService;
                     $pageRouter->create();
                 });
 

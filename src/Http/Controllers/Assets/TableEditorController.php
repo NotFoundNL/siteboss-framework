@@ -74,7 +74,7 @@ class TableEditorController extends AssetEditorController
 
         $widget = new LayoutWidget($upsertingText);
         if (auth('openid')->user()->hasRole('admin') && request()->query('editor') !== '1') {
-            $bar = new LayoutBar();
+            $bar = new LayoutBar;
             $bar->removePadding();
             $editButton = new LayoutBarButton(__('siteboss::ui.edit'));
             $editButton->setLink('/table/'.$table->url.'/'.$recordId.'/?editor=1');
@@ -130,7 +130,7 @@ class TableEditorController extends AssetEditorController
 
         Cache::clear('table'.$table->id.'_'.$recordId);
 
-        $response = new LayoutResponse();
+        $response = new LayoutResponse;
         $response->addAction(new Toast(__('siteboss::response.table.ok')));
 
         if (
@@ -146,7 +146,7 @@ class TableEditorController extends AssetEditorController
                 }
                 $response->addAction(new Redirect($url));
             } else {
-                $response->addAction(new Reload());
+                $response->addAction(new Reload);
             }
         } else {
             // Redirect

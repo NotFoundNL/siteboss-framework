@@ -18,9 +18,7 @@ class File extends Properties
         $this->addText('downloadUrl', 'Download URL (Use [id])', false);
     }
 
-    public function serverProperties(): void
-    {
-    }
+    public function serverProperties(): void {}
 
     public function checkColumnType(?string $type): string
     {

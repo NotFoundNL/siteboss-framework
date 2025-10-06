@@ -154,7 +154,7 @@ abstract class Properties
     final protected function updatePropertyNames(?stdClass $properties): stdClass
     {
         if (! $properties) {
-            return new stdClass();
+            return new stdClass;
         }
         foreach ($this->rename() as $old => $new) {
             if (isset($properties->$old) && ! isset($properties->$new)) {

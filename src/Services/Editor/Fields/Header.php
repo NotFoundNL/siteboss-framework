@@ -16,9 +16,7 @@ class Header extends Properties
         $this->localize();
     }
 
-    public function serverProperties(): void
-    {
-    }
+    public function serverProperties(): void {}
 
     public function checkColumnType(?string $type): string
     {

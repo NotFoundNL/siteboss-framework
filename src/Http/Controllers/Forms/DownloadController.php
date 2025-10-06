@@ -16,7 +16,7 @@ class DownloadController extends Controller
 
         $field = Field::where('id', $fieldId)->firstOrFail();
         $filetypeType = $field->properties->filetypes;
-        $mimeTypeConverter = new \NotFound\Framework\Services\Forms\MimetypeConverter();
+        $mimeTypeConverter = new \NotFound\Framework\Services\Forms\MimetypeConverter;
         $acceptedFiletypes = $mimeTypeConverter->getMimetype($filetypeType);
 
         if (! in_array($mimeType, $acceptedFiletypes)) {

@@ -18,9 +18,7 @@ class DateTimePicker extends Properties
         $this->required();
     }
 
-    public function serverProperties(): void
-    {
-    }
+    public function serverProperties(): void {}
 
     public function checkColumnType(?string $type): string
     {

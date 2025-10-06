@@ -6,6 +6,7 @@
 namespace NotFound\Framework\Services\Assets\Components;
 
 use DateTime;
+use enshrined\svgSanitize\Sanitizer;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -16,7 +17,6 @@ use NotFound\Layout\Elements\Table\LayoutTableColumn;
 use NotFound\Layout\Inputs\LayoutInputVectorImage;
 use NotFound\Layout\LayoutResponse;
 use NotFound\Layout\Responses\Toast;
-use enshrined\svgSanitize\Sanitizer;
 use stdClass;
 
 class ComponentVectorImage extends AbstractComponent
@@ -70,7 +70,7 @@ class ComponentVectorImage extends AbstractComponent
         if (request()->hasFile($fileId)) {
             $file = request()->file($fileId);
             if (! $file->isValid()) {
-                $errorResponse = new LayoutResponse();
+                $errorResponse = new LayoutResponse;
 
                 $errorResponse->addAction(new Toast($file->getErrorMessage(), 'error'));
 
@@ -78,19 +78,19 @@ class ComponentVectorImage extends AbstractComponent
             }
         }
 
-        $sanitizer = new Sanitizer();
+        $sanitizer = new Sanitizer;
         $cleanSVG = $sanitizer->sanitize($file);
 
         if (! $cleanSVG) {
-            $errorResponse = new LayoutResponse();
+            $errorResponse = new LayoutResponse;
 
             $errorResponse->addAction(new Toast('SVG could not be sanitized', 'error'));
 
             return $errorResponse->build();
         }
 
-        $filename = $this->recordId . '.svg';
-        Storage::put('public' . $this->relativePathToPublicDisk() . $filename, $cleanSVG);
+        $filename = $this->recordId.'.svg';
+        Storage::put('public'.$this->relativePathToPublicDisk().$filename, $cleanSVG);
     }
 
     public function getDisplayValue()
@@ -106,9 +106,9 @@ class ComponentVectorImage extends AbstractComponent
      */
     public function getCurrentValue(): object
     {
-        $value = json_decode($this->currentValue ?? '{}') ?? new stdClass();
+        $value = json_decode($this->currentValue ?? '{}') ?? new stdClass;
 
-        $values = new stdClass();
+        $values = new stdClass;
 
         if (isset($value->uploaded) && $value->uploaded === true) {
 
@@ -124,7 +124,7 @@ class ComponentVectorImage extends AbstractComponent
             $prefix .= '/assets/public';
 
             // Set the default url
-            $values->url = $prefix . $this->relativePathToPublicDisk() . $this->recordId . '.svg';
+            $values->url = $prefix.$this->relativePathToPublicDisk().$this->recordId.'.svg';
         }
 
         return $values;
@@ -151,7 +151,7 @@ class ComponentVectorImage extends AbstractComponent
 
     private function deleteFiles(): void
     {
-        $fileName = Storage::path('public' . $this->relativePathToPublicDisk() . $this->recordId . '.svg');
+        $fileName = Storage::path('public'.$this->relativePathToPublicDisk().$this->recordId.'.svg');
         if (file_exists($fileName)) {
             unlink($fileName);
         }
@@ -174,7 +174,7 @@ class ComponentVectorImage extends AbstractComponent
      */
     public function getValueForStorage(): ?string
     {
-        $result = json_decode($this->currentValue ?? '{}') ?? new stdClass();
+        $result = json_decode($this->currentValue ?? '{}') ?? new stdClass;
 
         // Check for a current value
         if (isset($result->uploaded) && $result->uploaded === true) {
@@ -183,7 +183,7 @@ class ComponentVectorImage extends AbstractComponent
             if (isset($this->newValue['delete']) && $this->newValue['delete'] === true) {
                 $this->deleteFiles();
 
-                $result = new stdClass();
+                $result = new stdClass;
             }
         }
 
@@ -201,9 +201,9 @@ class ComponentVectorImage extends AbstractComponent
      */
     private function relativePathToPublicDisk(): string
     {
-        $imagePath = Str::lower($this->assetModel->getIdentifier() . '/' . $this->assetItem->internal . '/');
+        $imagePath = Str::lower($this->assetModel->getIdentifier().'/'.$this->assetItem->internal.'/');
 
-        return $this->subFolderPublic . $imagePath;
+        return $this->subFolderPublic.$imagePath;
     }
 
     /**
@@ -217,16 +217,16 @@ class ComponentVectorImage extends AbstractComponent
     {
         $createDirs = make_directories(
             Storage::path('public'),
-            $this->subFolderPublic . $this->assetModel->getIdentifier() . '/' . $this->assetItem->internal . '/'
+            $this->subFolderPublic.$this->assetModel->getIdentifier().'/'.$this->assetItem->internal.'/'
         );
 
         // if app is running in debug mode, throw an error if the directories could not be created
         if (! $createDirs) {
             if (env('APP_DEBUG') === true) {
 
-                exit('Could not create directory ' . Storage::path('public') . $this->subFolderPublic . $this->assetModel->getIdentifier() . '/' . $this->assetItem->internal . '/');
+                exit('Could not create directory '.Storage::path('public').$this->subFolderPublic.$this->assetModel->getIdentifier().'/'.$this->assetItem->internal.'/');
             } else {
-                Log::error('Could not create directory ' . Storage::path('public') . $this->subFolderPublic . $this->assetModel->getIdentifier() . '/' . $this->assetItem->internal . '/');
+                Log::error('Could not create directory '.Storage::path('public').$this->subFolderPublic.$this->assetModel->getIdentifier().'/'.$this->assetItem->internal.'/');
             }
         }
 

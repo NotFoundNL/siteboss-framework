@@ -19,7 +19,7 @@ class DataController extends Controller
     {
         $lang = Lang::where('url', $langurl)->first();
         // TODO: BUG: Fail for all multi page forms
-        $fieldC = new Field();
+        $fieldC = new Field;
         $originalForm = $fieldC->getWithChildren($formId);
 
         abort_if(
@@ -134,7 +134,7 @@ class DataController extends Controller
 
         } else {
 
-            //TODO: use Laravel events?
+            // TODO: use Laravel events?
             if (trim($formInfo->success_action) != '') {
                 $action = trim($formInfo->success_action);
 

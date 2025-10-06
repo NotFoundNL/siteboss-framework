@@ -16,14 +16,12 @@ final class ValidatorInfo
 
     private array $fileList = [];
 
-    private function __construct()
-    {
-    }
+    private function __construct() {}
 
     public static function getInstance(): ValidatorInfo
     {
         if (! isset(self::$instance)) {
-            self::$instance = new self();
+            self::$instance = new self;
         }
 
         return self::$instance;
@@ -37,7 +35,7 @@ final class ValidatorInfo
     public function addValidator(Fields\AbstractType $validator): void
     {
         $this->validatorList[] = $validator;
-        //@TODO Move this to the actual validator
+        // @TODO Move this to the actual validator
         if ($validator->getType() == 'email' && $validator->propertyIsTrue('primary')) {
             $this->primaryEmail = $validator->getValue();
         }

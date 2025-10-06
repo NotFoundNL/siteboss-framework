@@ -63,7 +63,7 @@ class Property extends BaseModel
 
     public function getWithCustomCombinations()
     {
-        $typeFactory = new FactoryType();
+        $typeFactory = new FactoryType;
         $properties = [];
         foreach ($this->get() as $property) {
             $type = $typeFactory->getByType($property->type, $property->options, 4);

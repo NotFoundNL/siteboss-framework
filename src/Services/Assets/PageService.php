@@ -63,7 +63,7 @@ class PageService extends AbstractAssetService
 
     public function getStaticInputs(): Collection
     {
-        $collect = new collection();
+        $collect = new collection;
 
         $title = new LayoutInputText('__template_title', __('siteboss::page.pageTitle'));
         $titleModel = Strings::whereTable('menu')
@@ -99,12 +99,12 @@ class PageService extends AbstractAssetService
             ->whereStringId($this->menu->id)
             ->get();
 
-        $metaStrings = new stdClass();
+        $metaStrings = new stdClass;
         foreach ($strings as $string) {
             $metaStrings->{$string->name} = $string->value;
         }
 
-        $collect = new collection();
+        $collect = new collection;
         $metaTitleInput = new LayoutInputText('__meta_title', __('siteboss::page.meta_title'));
         $metaTitleInput->setPlaceholder(__('siteboss::page.meta_title_placeholder'));
         $metaTitleInput->setValue($metaStrings->title ?? '');
@@ -360,7 +360,7 @@ class PageService extends AbstractAssetService
             foreach ($metaStrings as $string) {
                 $array['meta'.$string->name] = (object) [
                     'type' => 'Text',
-                    'properties' => new stdClass(),
+                    'properties' => new stdClass,
                     'val' => $string->value,
                 ];
             }

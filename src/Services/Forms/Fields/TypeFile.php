@@ -147,7 +147,7 @@ class TypeFile extends AbstractType
 
     public function rollback()
     {
-        //TODO: Implement
+        // TODO: Implement
     }
 
     private function filenameIsOk($filename): bool
@@ -177,9 +177,7 @@ class TypeFile extends AbstractType
     }
 
     // Checks the size of the file
-    private function FileIsSmallEnough()
-    {
-    }
+    private function FileIsSmallEnough() {}
 
     private function makeFolderInSaveLocation($folderName): void
     {

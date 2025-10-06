@@ -22,9 +22,7 @@ class DatePicker extends Properties
         $this->addText('placeholderText', 'Placeholder text');
     }
 
-    public function serverProperties(): void
-    {
-    }
+    public function serverProperties(): void {}
 
     protected function rename(): array
     {

@@ -72,7 +72,7 @@ class ComponentImage extends AbstractComponent
         if (request()->hasFile($fileId)) {
             $file = request()->file($fileId);
             if (! $file->isValid()) {
-                $errorResponse = new LayoutResponse();
+                $errorResponse = new LayoutResponse;
 
                 $errorResponse->addAction(new Toast($file->getErrorMessage(), 'error'));
 
@@ -88,7 +88,7 @@ class ComponentImage extends AbstractComponent
 
             // create new image instance
             $image = (new ImageManager(
-                new Driver()
+                new Driver
             ))->read(new File(request()->file($fileId)->path()));
 
             if ($dimensions->height === '0') {
@@ -126,9 +126,9 @@ class ComponentImage extends AbstractComponent
      */
     public function getCurrentValue(): object
     {
-        $value = json_decode($this->currentValue ?? '{}') ?? new stdClass();
+        $value = json_decode($this->currentValue ?? '{}') ?? new stdClass;
 
-        $values = new stdClass();
+        $values = new stdClass;
 
         if (isset($value->uploaded) && $value->uploaded === true && isset($this->properties()->sizes[0])) {
 
@@ -214,7 +214,7 @@ class ComponentImage extends AbstractComponent
      */
     public function getValueForStorage(): ?string
     {
-        $result = json_decode($this->currentValue ?? '{}') ?? new stdClass();
+        $result = json_decode($this->currentValue ?? '{}') ?? new stdClass;
 
         // Check for a current value
         if (isset($result->uploaded) && $result->uploaded === true) {
@@ -223,7 +223,7 @@ class ComponentImage extends AbstractComponent
             if (isset($this->newValue['delete']) && $this->newValue['delete'] === true) {
                 $this->deleteFiles();
 
-                $result = new stdClass();
+                $result = new stdClass;
             }
         }
 
@@ -243,7 +243,7 @@ class ComponentImage extends AbstractComponent
             $prefix = '/'.$this->assetItem->updated_at->timestamp;
         }
 
-        $values = new stdClass();
+        $values = new stdClass;
 
         foreach ($this->properties()->sizes as $size) {
             $name = $size->filename;

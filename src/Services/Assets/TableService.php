@@ -87,7 +87,7 @@ class TableService extends AbstractAssetService
 
     public function delete(): void
     {
-        $this->assetModel->deleteRecord($this->recordId); //, $langUrl);
+        $this->assetModel->deleteRecord($this->recordId); // , $langUrl);
     }
 
     protected function updateModel(bool $new = false): int

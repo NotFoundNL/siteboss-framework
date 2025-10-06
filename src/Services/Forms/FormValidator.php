@@ -50,13 +50,13 @@ class FormValidator
      */
     private function populateValidatorList($form)
     {
-        $factoryType = new Fields\FactoryType();
+        $factoryType = new Fields\FactoryType;
 
         foreach ($form as $field) {
             $field = (object) $field;
             // Combo is a new form,
             if ($field->type == 'Combination') {
-                //Check if the trigger is valid, otherwise we dont need to check the combo.
+                // Check if the trigger is valid, otherwise we dont need to check the combo.
                 if (isset($field->trigger_field_id) && $field->trigger_field_id !== '') {
                     if (request($field->trigger_field_id) === $field->trigger_value) {
                         $this->populateValidatorList($field->fields);
@@ -201,7 +201,7 @@ class FormValidator
         $summaryHtml = '';
 
         foreach ($this->validatorInfo->validators() as $validator) {
-            $summaryHtml .= $validator->getEmailHtml(); //"<p><strong>{$label}:</strong> {$value}</p>";
+            $summaryHtml .= $validator->getEmailHtml(); // "<p><strong>{$label}:</strong> {$value}</p>";
         }
 
         return $summaryHtml;

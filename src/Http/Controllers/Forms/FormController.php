@@ -53,7 +53,7 @@ class FormController extends Controller
     {
         $this->authorize('viewText', Form::class);
 
-        $fieldsController = new FieldController(new Field());
+        $fieldsController = new FieldController(new Field);
 
         $result = (object) [];
         $result->fields = $fieldsController->listFields($form->id);
@@ -72,7 +72,7 @@ class FormController extends Controller
             'type' => 'required',
         ]);
 
-        $form = new Form();
+        $form = new Form;
         $form->name = $request->name;
         $form->type = $request->type;
 
@@ -133,7 +133,7 @@ class FormController extends Controller
         $newForm->name = $request->name;
         $newForm->save();
 
-        $fieldC = new Field();
+        $fieldC = new Field;
         $fieldC->cloneToNewForm($newForm, $form);
 
         return $newForm;

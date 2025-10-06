@@ -150,7 +150,7 @@ class IndexBuilderService
             $priority = 1;
 
             if (class_exists($className)) {
-                $c = new $className();
+                $c = new $className;
                 if (method_exists($className, 'customSearchValues')) {
                     $customValues = $c->customSearchValues($menu->id);
                 }
@@ -202,7 +202,7 @@ class IndexBuilderService
         // update subPage if necessary
 
         if (class_exists($className)) {
-            $c = new $className();
+            $c = new $className;
             $this->updateSubitems($c, $lang);
         }
     }

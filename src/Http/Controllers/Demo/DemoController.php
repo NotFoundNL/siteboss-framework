@@ -15,9 +15,9 @@ class DemoController extends \NotFound\Framework\Http\Controllers\Controller
 {
     public function index()
     {
-        $response = new LayoutResponse();
+        $response = new LayoutResponse;
         $page = new LayoutPage(__('siteboss::ui.page'));
-        $breadcrumb = new LayoutBreadcrumb();
+        $breadcrumb = new LayoutBreadcrumb;
         $breadcrumb->addHome();
         $breadcrumb->addItem('Demo', '/app/demo/');
         $breadcrumb->addItem('Grid');
@@ -29,7 +29,7 @@ class DemoController extends \NotFound\Framework\Http\Controllers\Controller
 
         $form->addInput($demoContent);
 
-        $row = new \NotFound\Layout\Elements\LayoutRow();
+        $row = new \NotFound\Layout\Elements\LayoutRow;
         $widget = new LayoutWidget('Embedded', 6);
         $widget->addForm($form);
         $widget->addForm($form);
@@ -38,14 +38,14 @@ class DemoController extends \NotFound\Framework\Http\Controllers\Controller
 
         $widget = new LayoutWidget('First full width widget', 12);
 
-        $tabs = new LayoutTabs();
+        $tabs = new LayoutTabs;
         $tabs->addTab(new LayoutTab('Grid', '/app/demo/grid/'))->addTab(new LayoutTab('Misc', '/app/demo/misc/'));
 
         $widget->addTabs($tabs);
 
         $widget->addForm($form);
 
-        $colsRow = new \NotFound\Layout\Elements\LayoutRow();
+        $colsRow = new \NotFound\Layout\Elements\LayoutRow;
         $colsRow->addForm($form);
         $colsRow->addForm($form);
 

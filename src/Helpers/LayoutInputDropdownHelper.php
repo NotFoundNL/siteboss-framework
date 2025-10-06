@@ -13,11 +13,11 @@ class LayoutInputDropdownHelper
     /**
      * Easily create a dropdown based on a model
      *
-     * @param    $model  Model to be queried
-     * @param    $label  Label for the dropdown
-     * @param    $internal  defaults to $model table name + '_id'
-     * @param    $tableColumnName  The column name of site table to get the readable name from
-     * @param    $value  default value for the dropdown
+     * @param  $model  Model to be queried
+     * @param  $label  Label for the dropdown
+     * @param  $internal  defaults to $model table name + '_id'
+     * @param  $tableColumnName  The column name of site table to get the readable name from
+     * @param  $value  default value for the dropdown
      */
     public function __construct(
         protected BaseModel|LegacyModel $model,

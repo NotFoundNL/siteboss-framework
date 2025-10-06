@@ -38,7 +38,7 @@ class InfoController extends Controller
 
     public function settings()
     {
-        $settings = new stdClass();
+        $settings = new stdClass;
         $settings->title = env('APP_NAME');
         $settings->productName = env('APP_WHITELABEL_NAME', 'SiteBoss');
         $settings->productLogo = env('APP_WHITELABEL_LOGO', '/siteboss/images/logo.svg');
@@ -145,7 +145,7 @@ class InfoController extends Controller
      */
     private function menuFromDatabase()
     {
-        $menu = new CmsMenu();
+        $menu = new CmsMenu;
         $menu = StatusColumn::wherePublished($menu, 'cms_menu');
         $menus = $menu->whereEnabled(true)->whereNot('to', '')->orderBy('order')->get();
         $orderedMenu = [];

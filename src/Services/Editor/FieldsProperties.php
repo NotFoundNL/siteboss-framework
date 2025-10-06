@@ -33,7 +33,7 @@ class FieldsProperties
 
     private function getClass($fieldType)
     {
-        $className = '\\NotFound\\Framework\\Services\\Editor\\Fields\\' . $fieldType;
+        $className = '\\NotFound\\Framework\\Services\\Editor\\Fields\\'.$fieldType;
 
         return new $className($this->values);
     }
@@ -158,7 +158,7 @@ class FieldsProperties
                     break;
                 default:
                     $textField = new LayoutText(
-                        'Not implemented type (' . $field->type . ') for ' . $field->name ?? 'Geen naam voor dit veld'
+                        'Not implemented type ('.$field->type.') for '.$field->name ?? 'Geen naam voor dit veld'
                     );
                     $form->addText($textField);
             }
@@ -181,7 +181,7 @@ class FieldsProperties
 
     private function processUpdateProperties(array $fields, FormDataRequest $request): stdClass
     {
-        $properties = new stdClass();
+        $properties = new stdClass;
         foreach ($fields as $field) {
             $data_type = 'string';
             if (in_array($field->type, ['MultiSelect'])) {

@@ -12,7 +12,7 @@ class ComponentEditorLink extends AbstractComponent
 
     public function getAutoLayoutClass(): ?AbstractLayout
     {
-        $bar = new LayoutBar();
+        $bar = new LayoutBar;
         $button = new LayoutBarButton('Edit '.$this->assetItem->name);
         $button->setLink('/app/editor/table/'.$this->assetModel->id.'/'.$this->assetItem->id);
         $bar->addBarButton($button);

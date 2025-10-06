@@ -46,14 +46,14 @@ class ComponentChildTable extends AbstractComponent
     {
         $table = Table::whereTable($this->properties()->childTable)->first();
 
-        $contentBlocksWithValues = new Collection();
+        $contentBlocksWithValues = new Collection;
 
         $children = $this->getChildren();
 
         foreach ($children as $child) {
             $ts = new TableService($table, $this->assetService->getLang(), $child->id);
 
-            $tableValues = new \stdClass();
+            $tableValues = new \stdClass;
             $fieldComponents = $ts->getComponents();
             foreach ($fieldComponents as $fieldComponent) {
                 $tableValues->{$fieldComponent->assetItem->internal} = $fieldComponent->getDisplayValue();
@@ -80,7 +80,7 @@ class ComponentChildTable extends AbstractComponent
             $ts = new TableService($table, $this->assetService->getLang(), $contentBlock->id);
             $fieldComponents = $ts->getComponents();
 
-            $tableValues = new \stdClass();
+            $tableValues = new \stdClass;
             foreach ($fieldComponents as $fieldComponent) {
                 $tableValues->{$fieldComponent->assetItem->internal} = $fieldComponent->getDisplayValue();
 
@@ -103,13 +103,13 @@ class ComponentChildTable extends AbstractComponent
         $parentId = $this->recordId;
         $foreignKey = $this->getForeignKey();
 
-        $assetItem = new AssetItem();
+        $assetItem = new AssetItem;
         $assetItem->type = 'text';
         $assetItem->internal = $foreignKey;
         $parentIdComponent = new ComponentStaticValue($this->assetService, $assetItem);
         $parentIdComponent->setStaticValue($parentId ?? 0);
 
-        $assetItem = new AssetItem();
+        $assetItem = new AssetItem;
         $assetItem->type = 'text';
         $assetItem->internal = 'order';
         $orderComponent = new ComponentStaticValue($this->assetService, $assetItem);

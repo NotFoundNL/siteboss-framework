@@ -19,9 +19,7 @@ class Button extends Properties
         $this->addCheckbox('external', 'External link', false);
     }
 
-    public function serverProperties(): void
-    {
-    }
+    public function serverProperties(): void {}
 
     public function checkColumnType(?string $type): string
     {

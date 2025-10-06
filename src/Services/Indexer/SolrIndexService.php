@@ -18,7 +18,7 @@ class SolrIndexService extends AbstractIndexService
     {
         $this->debug = $debug;
         $this->fresh = $fresh;
-        $this->solrIndex = new SolrIndex();
+        $this->solrIndex = new SolrIndex;
     }
 
     public function retainItem(string $url): void
@@ -135,7 +135,7 @@ class SolrIndexService extends AbstractIndexService
 
     private function returnValue()
     {
-        $return = new stdClass();
+        $return = new stdClass;
 
         $return->errorCode = 0;
         $return->message = '';

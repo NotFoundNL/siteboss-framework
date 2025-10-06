@@ -17,9 +17,7 @@ class Checkbox extends Properties
         $this->sortable();
     }
 
-    public function serverProperties(): void
-    {
-    }
+    public function serverProperties(): void {}
 
     public function checkColumnType(?string $type): string
     {

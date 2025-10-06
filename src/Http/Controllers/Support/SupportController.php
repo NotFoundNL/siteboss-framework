@@ -20,10 +20,10 @@ class SupportController extends Controller
 {
     public function index(FormDataRequest $request)
     {
-        $response = new LayoutResponse();
+        $response = new LayoutResponse;
         $page = new LayoutPage(__('siteboss::support.title'));
 
-        $breadcrumb = new LayoutBreadcrumb();
+        $breadcrumb = new LayoutBreadcrumb;
         $breadcrumb->addHome();
         $breadcrumb->addItem(__('siteboss::support.breadcrumb'));
         $page->addBreadCrumb($breadcrumb);
@@ -96,7 +96,7 @@ class SupportController extends Controller
 
         $info = curl_getinfo($ch);
 
-        $response = new LayoutResponse();
+        $response = new LayoutResponse;
         if ($info['http_code'] == 200) {
             $toast = new Toast(__('siteboss::support.done'));
             $response->addAction($toast);
@@ -107,7 +107,7 @@ class SupportController extends Controller
 
         $page = new LayoutPage(__('siteboss::support.title'));
 
-        $breadcrumb = new LayoutBreadcrumb();
+        $breadcrumb = new LayoutBreadcrumb;
         $breadcrumb->addHome();
         $breadcrumb->addItem(__('siteboss::support.breadcrumb'));
         $page->addBreadCrumb($breadcrumb);

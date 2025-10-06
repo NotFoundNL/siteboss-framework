@@ -36,7 +36,7 @@ class RedirectController extends Controller
         $table->addHeader(new LayoutTableHeader(__('siteboss::redirects.from'), 'url'));
         $table->addHeader(new LayoutTableHeader(__('siteboss::redirects.to'), 'redirect'));
         $table->addHeader(new LayoutTableHeader(__('siteboss::ui.enabled'), 'enabled'));
-        $bar = new LayoutBar();
+        $bar = new LayoutBar;
 
         $button = new LayoutBarButton('Nieuw');
 
@@ -65,7 +65,7 @@ class RedirectController extends Controller
     {
         $page = new LayoutPage('Redirect');
 
-        $breadcrumb = new LayoutBreadcrumb();
+        $breadcrumb = new LayoutBreadcrumb;
         $breadcrumb->addHome();
         $breadcrumb->addItem('Redirects', '/app/redirects');
         $breadcrumb->addItem($redirect->url ?? __('siteboss::redirects.title'));
@@ -123,7 +123,7 @@ class RedirectController extends Controller
 
     public function delete(CmsRedirect $redirect)
     {
-        $response = new LayoutResponse();
+        $response = new LayoutResponse;
 
         if ($redirect->delete()) {
             $response->addAction(new Toast(__('siteboss::redirects.deleted')));
@@ -136,7 +136,7 @@ class RedirectController extends Controller
 
     public function createRedirect(FormDataRequest $request)
     {
-        $redirect = new CmsRedirect();
+        $redirect = new CmsRedirect;
 
         return $this->saveRedirect($request, $redirect);
     }
@@ -156,7 +156,7 @@ class RedirectController extends Controller
         $redirect->enabled = $request->enabled;
         $redirect->recursive = $request->recursive;
         $redirect->rewrite = $request->rewrite;
-        $response = new LayoutResponse();
+        $response = new LayoutResponse;
 
         if ($redirect->save()) {
             $response->addAction(new Toast(__('siteboss::redirects.updated')));

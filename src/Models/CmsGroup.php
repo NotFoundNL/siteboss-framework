@@ -72,7 +72,7 @@ class CmsGroup extends BaseModel
             return $groupCollection->pluck('internal');
         }
 
-        $rolesWithChildren = new Collection();
+        $rolesWithChildren = new Collection;
         foreach ($groupCollection as $item) {
             $this->recursiveSetRights($rolesWithChildren, $item);
         }

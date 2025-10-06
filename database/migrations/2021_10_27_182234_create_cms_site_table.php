@@ -18,7 +18,7 @@ class CreateCmsSiteTable extends Migration
             $table->integer('root');
             $table->json('properties')->nullable();
             $table->tinyInteger('enabled')->default(0);
-            $table->integer('position')->nullable(); //TODO
+            $table->integer('position')->nullable(); // TODO
         });
     }
 

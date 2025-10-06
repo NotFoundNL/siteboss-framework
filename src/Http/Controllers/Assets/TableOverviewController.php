@@ -90,7 +90,7 @@ class TableOverviewController extends AssetEditorController
         $widget->addBar($bottomBar);
 
         if ($siteTableRowsPaginator->total() == 0) {
-            $messageBar = new LayoutBar();
+            $messageBar = new LayoutBar;
 
             if (request('search') !== null && request('search') !== '') {
                 $messageBar->addText(new LayoutText('Geen resultaten gevonden, probeer een andere zoekterm.'));
@@ -141,7 +141,7 @@ class TableOverviewController extends AssetEditorController
             'replacedRecordId' => 'required|int',
         ]);
 
-        $response = new LayoutResponse();
+        $response = new LayoutResponse;
         try {
             db_table_items_change_order($table->getSiteTableName(), $request->recordId, $request->replacedRecordId);
         } catch (\Exception $e) {

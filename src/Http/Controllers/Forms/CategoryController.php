@@ -14,7 +14,7 @@ class CategoryController extends Controller
 
     public function readAllBasedOnRights()
     {
-        $category = new Category();
+        $category = new Category;
 
         return $category->getCategoriesByRights();
     }
