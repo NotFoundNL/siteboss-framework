@@ -39,7 +39,7 @@ class OpenIDGuard implements Guard
         }
 
         try {
-            $tokenDecoder = new TokenDecoder();
+            $tokenDecoder = new TokenDecoder;
             $this->decodedToken = $tokenDecoder->decode($token, $this->config['authentication_method']);
         } catch (\Exception $e) {
             Log::warning('[OpenID Guard] Token decode error: '.$e->getMessage());
@@ -92,7 +92,7 @@ class OpenIDGuard implements Guard
     public function hasRole($role, $resource = 'siteboss')
     {
         // TODO: MOVE THIS
-        $groupC = new CmsGroup();
+        $groupC = new CmsGroup;
         $roles = $groupC->getRolesByUser($this->user());
 
         $onlyLocalRoles = $roles->where('remote', 0);

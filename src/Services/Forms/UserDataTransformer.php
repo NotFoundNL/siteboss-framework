@@ -166,7 +166,7 @@ class UserDataTransformer
             $fieldsFromDatabase = $this->getFieldsFromDatabase($id);
         }
 
-        $typeFactory = new \NotFound\Framework\Services\Forms\Fields\FactoryType();
+        $typeFactory = new \NotFound\Framework\Services\Forms\Fields\FactoryType;
         foreach ($fieldsFromDatabase as $field) {
             // recursive when it's a combination
             if ($field->type == 'Combination') {

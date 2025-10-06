@@ -3,7 +3,6 @@
 namespace NotFound\Framework\Http\Controllers\CmsEditor;
 
 use Illuminate\Http\Request as HttpRequest;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use NotFound\Framework\Http\Requests\FormDataRequest;
 use NotFound\Framework\Models\Table;
@@ -31,11 +30,11 @@ class CmsEditorTableController extends \NotFound\Framework\Http\Controllers\Cont
 {
     public function index()
     {
-        $response = new LayoutResponse();
+        $response = new LayoutResponse;
 
         $page = new LayoutPage('CMS Editor', 'Table');
 
-        $breadcrumbs = new LayoutBreadcrumb();
+        $breadcrumbs = new LayoutBreadcrumb;
         $breadcrumbs->addHome();
         $breadcrumbs->addItem('CMS Editor', '/app/editor/');
         $breadcrumbs->addItem('Tables');
@@ -89,7 +88,7 @@ class CmsEditorTableController extends \NotFound\Framework\Http\Controllers\Cont
     public function create(FormDataRequest $request)
     {
         $request->validate(['name' => 'string|required', 'table' => 'string|required']);
-        $table = new Table();
+        $table = new Table;
         $tableId = $table->insertGetId([
             'name' => $request->name,
             'table' => $request->table,
@@ -99,7 +98,7 @@ class CmsEditorTableController extends \NotFound\Framework\Http\Controllers\Cont
             'allow_delete' => true,
             'allow_sort' => false,
         ]);
-        $response = new LayoutResponse();
+        $response = new LayoutResponse;
 
         $response->addAction(new Toast('Table added'));
         $action = new Redirect('/app/editor/table/'.$tableId);
@@ -113,18 +112,18 @@ class CmsEditorTableController extends \NotFound\Framework\Http\Controllers\Cont
 
     public function readOne(Table $table)
     {
-        $response = new LayoutResponse();
+        $response = new LayoutResponse;
 
         $page = new LayoutPage('CMS Editor', 'Table');
 
-        $breadcrumbs = new LayoutBreadcrumb();
+        $breadcrumbs = new LayoutBreadcrumb;
         $breadcrumbs->addHome();
         $breadcrumbs->addItem('CMS Editor', '/app/editor/');
         $breadcrumbs->addItem('Tables', '/app/editor/table/');
         $breadcrumbs->addItem($table->name ?? 'New table');
         $page->addBreadCrumb($breadcrumbs);
 
-        $tableExchangeService = new TableExchangeService();
+        $tableExchangeService = new TableExchangeService;
         $hasChanges = $tableExchangeService->hasChanges($table);
 
         $widget1 = new LayoutWidget($table->name ?? 'New table', $hasChanges ? 12 : 6);
@@ -159,7 +158,7 @@ class CmsEditorTableController extends \NotFound\Framework\Http\Controllers\Cont
             $newFieldDropDown = new LayoutInputDropdown('new_field', 'New field');
             $newFieldDropDown->setRequired();
 
-            $fields = (new FieldsProperties())->availableFields();
+            $fields = (new FieldsProperties)->availableFields();
             foreach ($fields as $field) {
                 $newFieldDropDown->addItem($field);
             }
@@ -256,7 +255,7 @@ class CmsEditorTableController extends \NotFound\Framework\Http\Controllers\Cont
             'allow_sort' => $request->allow_sort,
             'properties' => $properties,
         ]);
-        $response = new LayoutResponse();
+        $response = new LayoutResponse;
         $response->addAction(new Toast('Table properties updated'));
 
         $table->exportToFile();
@@ -271,10 +270,10 @@ class CmsEditorTableController extends \NotFound\Framework\Http\Controllers\Cont
             'internal' => 'string|required',
         ]);
 
-        $response = new LayoutResponse();
+        $response = new LayoutResponse;
         $response->addAction(new Toast('Table properties updated'));
 
-        $fields = (new FieldsProperties())->availableFields();
+        $fields = (new FieldsProperties)->availableFields();
 
         $max = $table->items()->max('order') + 1;
         if (! in_array($request->new_field, $fields)) {
@@ -302,7 +301,7 @@ class CmsEditorTableController extends \NotFound\Framework\Http\Controllers\Cont
             'replacedRecordId' => 'required|int',
         ]);
 
-        $response = new LayoutResponse();
+        $response = new LayoutResponse;
         try {
             db_table_items_change_order('cms_tableitem', $request->recordId, $request->replacedRecordId, "AND `table_id` = {$table->id}");
         } catch (\Exception $e) {
@@ -320,10 +319,12 @@ class CmsEditorTableController extends \NotFound\Framework\Http\Controllers\Cont
     {
         $className = '\\NotFound\\Framework\\Services\\Editor\\Fields\\'.$field->type;
 
-        $fieldClass = new $className(new stdClass());
+        $fieldClass = new $className(new stdClass);
 
         if (Schema::hasColumn($table, $field->internal)) {
-            return $fieldClass->checkColumnType(DB::getDoctrineColumn($this->setDatabasePrefix($table), $field->internal)->getType());
+            return $fieldClass->checkColumnType(
+                Schema::getColumnType($table, $field->internal)
+            );
         } else {
             return $fieldClass->checkColumnType(null);
         }

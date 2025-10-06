@@ -16,11 +16,9 @@ class Description extends Properties
         $this->addText('desc', 'Description (HTML allowed, no other fields here will be shown)');
     }
 
-    public function serverProperties(): void
-    {
-    }
+    public function serverProperties(): void {}
 
-    public function checkColumnType(?\Doctrine\DBAL\Types\Type $type): string
+    public function checkColumnType(?string $type): string
     {
 
         return '';

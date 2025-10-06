@@ -22,7 +22,7 @@ class CreateCmsTableTable extends Migration
             $table->boolean('allow_delete')->default(true);
             $table->boolean('allow_sort')->default(true);
             $table->json('properties')->nullable();
-            $table->integer('order')->nullable(); //TODO
+            $table->integer('order')->nullable(); // TODO
             $table->tinyInteger('enabled')->default(1);
             $table->set('status', ['DRAFT', 'PUBLISHED', 'DELETED'])->default('PUBLISHED');
             $table->timestamps();

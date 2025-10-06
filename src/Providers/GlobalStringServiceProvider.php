@@ -13,7 +13,7 @@ class GlobalStringServiceProvider extends ServiceProvider
     {
         View()->composer('*', function ($view) {
             $view->with('g', Cache::remember('g', 3600, function () {
-                $gp = new GlobalPageService();
+                $gp = new GlobalPageService;
                 $globalPageValues = new AssetValues($gp->getCachedValues());
 
                 return $globalPageValues;

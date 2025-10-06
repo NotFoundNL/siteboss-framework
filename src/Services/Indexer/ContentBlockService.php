@@ -6,9 +6,7 @@ use Illuminate\Support\Str;
 
 class ContentBlockService
 {
-    public function __construct(private $blocks)
-    {
-    }
+    public function __construct(private $blocks) {}
 
     private function getModelByTablename($tableName)
     {

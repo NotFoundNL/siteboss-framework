@@ -23,9 +23,7 @@ class ChildTable extends Properties
         $this->addText('prefix', 'Remove prefix from foreign key');
     }
 
-    public function serverProperties(): void
-    {
-    }
+    public function serverProperties(): void {}
 
     protected function rename(): array
     {
@@ -34,7 +32,7 @@ class ChildTable extends Properties
         ];
     }
 
-    public function checkColumnType(?\Doctrine\DBAL\Types\Type $type): string
+    public function checkColumnType(?string $type): string
     {
         if ($type !== null) {
             return 'COLUMN NOT NEEDED';

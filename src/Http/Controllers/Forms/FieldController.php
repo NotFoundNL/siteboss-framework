@@ -26,7 +26,7 @@ class FieldController extends Controller
                 continue;
             }
 
-            //TODO: lang
+            // TODO: lang
             $newItem = [
                 'id' => $field->id,
                 'label' => $field->properties->label->{'nl'},
@@ -60,7 +60,7 @@ class FieldController extends Controller
         $response->category_properties = $form->category?->properties;
         $response->locales = $form->locales;
 
-        $propC = new Property();
+        $propC = new Property;
         $response->available_fields = $propC->getWithCustomCombinations();
 
         return $response;
@@ -94,7 +94,7 @@ class FieldController extends Controller
 
                     if ($project) {
                         $challenges = ProjectChallenge::where('project_id', $project->strapi_id)->select(['id', 'challenge_name AS nl'])->get();
-                        $subfield['properties']->options = new stdClass();
+                        $subfield['properties']->options = new stdClass;
                         $subfield['properties']->options->list = $challenges->toArray();
                     }
                 }
@@ -164,7 +164,7 @@ class FieldController extends Controller
 
             if (isset($field['deleted']) && $field['deleted'] == true) {
                 if (isset($field['id'])) {
-                    StatusColumn::deleteQuery(Field::where('id', $field['id']), (new Field())->getTable());
+                    StatusColumn::deleteQuery(Field::where('id', $field['id']), (new Field)->getTable());
 
                     $this->deleteFieldsRecursive($field['id']);
                 }

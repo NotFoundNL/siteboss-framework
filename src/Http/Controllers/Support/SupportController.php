@@ -20,10 +20,10 @@ class SupportController extends Controller
 {
     public function index(FormDataRequest $request)
     {
-        $response = new LayoutResponse();
+        $response = new LayoutResponse;
         $page = new LayoutPage(__('siteboss::support.title'));
 
-        $breadcrumb = new LayoutBreadcrumb();
+        $breadcrumb = new LayoutBreadcrumb;
         $breadcrumb->addHome();
         $breadcrumb->addItem(__('siteboss::support.breadcrumb'));
         $page->addBreadCrumb($breadcrumb);
@@ -77,16 +77,15 @@ class SupportController extends Controller
         $message = '<p><strong>IP:</strong> '.$request->ip().'<br/><strong>Browser:</strong> '.$request->header('User-Agent').'</p>';
 
         $ticket_data = json_encode((object) [
-            'message' => '<h3>Aanvraag '.env('APP_NAME', 'SiteBoss support form').'</h3><p>'.nl2br(htmlentities($request->input('description'))).'</p><hr/>'.$message,
+            'body' => '<h3>Aanvraag '.env('APP_NAME', 'SiteBoss support form').'</h3><p>'.nl2br(htmlentities($request->input('description'))).'</p><hr/>'.$message,
             'email' => $request->input('email'),
-            'priority' => 2,
             'subject' => $request->input('subject'),
+            'api_key' => config('support.api_key'),
         ]);
         $url = config('support.endpoint');
         $ch = curl_init($url);
 
         $header[] = 'Content-type: application/json';
-        $header[] = 'Bearer: '.config('support.api_key');
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
         curl_setopt($ch, CURLOPT_HEADER, false);
@@ -97,8 +96,8 @@ class SupportController extends Controller
 
         $info = curl_getinfo($ch);
 
-        $response = new LayoutResponse();
-        if ($info['http_code'] == 200 && $server_output->result == 'ok') {
+        $response = new LayoutResponse;
+        if ($info['http_code'] == 200) {
             $toast = new Toast(__('siteboss::support.done'));
             $response->addAction($toast);
         } else {
@@ -108,7 +107,7 @@ class SupportController extends Controller
 
         $page = new LayoutPage(__('siteboss::support.title'));
 
-        $breadcrumb = new LayoutBreadcrumb();
+        $breadcrumb = new LayoutBreadcrumb;
         $breadcrumb->addHome();
         $breadcrumb->addItem(__('siteboss::support.breadcrumb'));
         $page->addBreadCrumb($breadcrumb);

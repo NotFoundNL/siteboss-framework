@@ -28,7 +28,7 @@ abstract class AssetEditorController extends Controller
             return;
         }
 
-        $bar = new LayoutBar();
+        $bar = new LayoutBar;
         $bar->removePadding();
         foreach ($langs as $lang) {
             if ($lang == $currentLang) {

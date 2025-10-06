@@ -7,8 +7,7 @@ class ExchangeConsoleService
     public function __construct(
         private bool $debug = false,
         private bool $dryRun = false
-    ) {
-    }
+    ) {}
 
     public function import(): void
     {
@@ -17,9 +16,9 @@ class ExchangeConsoleService
             $this->debug('Dry Run: true', force: true);
         }
 
-        $tableExchangeService = new TableExchangeService();
+        $tableExchangeService = new TableExchangeService;
         $tableExchangeService->import($this->debug, $this->dryRun);
-        $templateExchangeService = new TemplateExchangeService();
+        $templateExchangeService = new TemplateExchangeService;
         $templateExchangeService->import($this->debug, $this->dryRun);
 
         $this->debug('DONE');

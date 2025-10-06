@@ -7,7 +7,7 @@ use NotFound\Framework\Exceptions\OpenID\OpenIDException;
 
 class RemoteTokenDecoder extends AbstractTokenDecoder
 {
-    private ?object  $decodedToken = null;
+    private ?object $decodedToken = null;
 
     protected function decodeToken(): void
     {
@@ -22,12 +22,12 @@ class RemoteTokenDecoder extends AbstractTokenDecoder
 
         // Check if tokens exist
         if (! $decodedIdToken || ! $this->decodedToken) {
-            throw OpenIDException::invalidVerification($this->decodedToken->email, config('openid.client_id')); //TODO change exception
+            throw OpenIDException::invalidVerification($this->decodedToken->email, config('openid.client_id')); // TODO change exception
         }
 
         // Validate idToken has same sub and email as token
         if ($this->decodedToken->sub != $decodedIdToken->sub && $this->decodedToken->email != $decodedIdToken->email) {
-            throw OpenIDException::invalidVerification($this->decodedToken->email, config('openid.client_id')); //TODO change exception
+            throw OpenIDException::invalidVerification($this->decodedToken->email, config('openid.client_id')); // TODO change exception
         }
 
         // Validate the AppId claims:

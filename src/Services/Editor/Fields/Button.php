@@ -19,11 +19,9 @@ class Button extends Properties
         $this->addCheckbox('external', 'External link', false);
     }
 
-    public function serverProperties(): void
-    {
-    }
+    public function serverProperties(): void {}
 
-    public function checkColumnType(?\Doctrine\DBAL\Types\Type $type): string
+    public function checkColumnType(?string $type): string
     {
         return '';
     }

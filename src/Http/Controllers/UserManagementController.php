@@ -36,7 +36,7 @@ class UserManagementController extends Controller
 
         $page = new LayoutPage(__('siteboss::ui.users.list'));
 
-        $breadcrumb = new LayoutBreadcrumb();
+        $breadcrumb = new LayoutBreadcrumb;
         $breadcrumb->addHome();
         $breadcrumb->addItem(__('siteboss::ui.users.list'), '/app/users');
         $breadcrumb->addItem(__('siteboss::ui.users.new'));
@@ -74,11 +74,11 @@ class UserManagementController extends Controller
             'email' => 'required|email|unique:cms_user,email',
         ]);
 
-        $user = new CmsUser();
+        $user = new CmsUser;
         $user->email = $request->email;
         $user->enabled = true;
-        $user->properties = new \stdClass();
-        $response = new LayoutResponse();
+        $user->properties = new \stdClass;
+        $response = new LayoutResponse;
         if ($user->save()) {
             $response->addAction(new Toast(__('siteboss::response.user.updated')));
             $response->addAction(new Redirect('/app/users/'.$user->id));
@@ -97,7 +97,7 @@ class UserManagementController extends Controller
 
         $page = new LayoutPage(__('siteboss::ui.users.list'));
 
-        $breadcrumb = new LayoutBreadcrumb();
+        $breadcrumb = new LayoutBreadcrumb;
         $breadcrumb->addHome();
         $breadcrumb->addItem(__('siteboss::ui.users.list'));
         $page->addBreadCrumb($breadcrumb);
@@ -106,7 +106,7 @@ class UserManagementController extends Controller
         $widget->noPadding();
 
         if (env('OIDC_USE_EXISTING_EMAIL', false)) {
-            $bar = new LayoutBar();
+            $bar = new LayoutBar;
 
             $button = new LayoutBarButton(__('siteboss::ui.users.new'));
 
@@ -133,7 +133,7 @@ class UserManagementController extends Controller
 
         $page = new LayoutPage(__('siteboss::ui.users.list'));
 
-        $breadcrumb = new LayoutBreadcrumb();
+        $breadcrumb = new LayoutBreadcrumb;
         $breadcrumb->addHome();
         $breadcrumb->addItem(__('siteboss::ui.users.list'), '/app/users');
         $breadcrumb->addItem($user->name ?? 'User');
@@ -160,7 +160,7 @@ class UserManagementController extends Controller
         ]);
 
         if (in_array($adminRoleId, $request->roles)) {
-            $errorResponse = new LayoutResponse();
+            $errorResponse = new LayoutResponse;
 
             $errorResponse->addAction(new Toast('Do not assign admin role', 'error'));
 
@@ -181,7 +181,7 @@ class UserManagementController extends Controller
         $user->enabled = $request->enabled;
         $user->save();
 
-        $response = new LayoutResponse();
+        $response = new LayoutResponse;
         if ($user->save()) {
             $response->addAction(new Toast(__('siteboss::response.user.updated')));
             $response->addAction(new Redirect('/app/users/'));

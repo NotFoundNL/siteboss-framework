@@ -180,7 +180,7 @@ class Table extends AssetModel
         if ($this->isLocalized()) {
             $translatedTableName = $tableName.'_tr';
 
-            //TODO: delete language not all
+            // TODO: delete language not all
             $succeeded = StatusColumn::deleteQuery(DB::table($translatedTableName)->where('entity_id', $recordId), $translatedTableName);
             if (! $succeeded) {
                 return false;

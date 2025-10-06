@@ -64,7 +64,7 @@ class SolrItem extends BaseModel
         $this->error = isset($solr->error) ? $solr->error : null;
     }
 
-    public function isValid()
+    public function isValid(): bool
     {
         return $this->header && $this->header->status == 0;
     }
@@ -183,13 +183,14 @@ class SolrItem extends BaseModel
         return $queries;
     }
 
-    public function spellcheckList()
+    public function spellcheckList(): array
     {
         $items = [];
         $query = $this->q;
 
         if (isset($this->spellcheck)) {
             foreach ($this->spellcheck->suggestions as $suggestion) {
+
                 if (isset($suggestion->startOffset)) {
                     $suggest = substr($query, 0, $suggestion->startOffset).'<em>'.$suggestion->suggestion[0].'</em>'.substr($query, $suggestion->endOffset);
                     $suggestTerm = preg_replace('/^([a-zA-Z])+(_[a-zA-Z]{2})?:/', '', $suggest); // remove search field if necessary
@@ -197,7 +198,7 @@ class SolrItem extends BaseModel
                     $suggest_url = substr($query, 0, $suggestion->startOffset).$suggestion->suggestion[0].substr($query, $suggestion->endOffset);
                     $suggest_url = preg_replace('/^([a-zA-Z])+(_[a-zA-Z]{2})?:/', '', $suggest_url); // remove search field if necessary
 
-                    $items[] = (object) ['link' => '?q='.rawurlencode(urldecode($suggest_url)), 'text' => urldecode($suggestTerm)];
+                    $items[] = (object) ['link' => '?q='.rawurlencode(urldecode($suggest_url)), 'text' => $suggestTerm];
                 }
             }
         }

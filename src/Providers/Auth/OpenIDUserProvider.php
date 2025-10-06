@@ -103,7 +103,7 @@ class OpenIDUserProvider implements UserProvider
 
         if (config('openid.create_user')) {
             // Create user
-            $user = new $this->model();
+            $user = new $this->model;
 
             $user->email = $this->getEmailFromToken($token);
 
@@ -127,7 +127,7 @@ class OpenIDUserProvider implements UserProvider
      */
     public function updateRememberToken(Authenticatable $user, $token)
     {
-        throw new NotImplementedException();
+        throw new NotImplementedException;
     }
 
     /**
@@ -137,7 +137,7 @@ class OpenIDUserProvider implements UserProvider
      */
     public function retrieveByCredentials(array $credentials)
     {
-        throw new NotImplementedException();
+        throw new NotImplementedException;
     }
 
     /**
@@ -147,7 +147,7 @@ class OpenIDUserProvider implements UserProvider
      */
     public function validateCredentials(Authenticatable $user, array $credentials)
     {
-        throw new NotImplementedException();
+        throw new NotImplementedException;
     }
 
     /**
@@ -157,6 +157,6 @@ class OpenIDUserProvider implements UserProvider
      */
     public function rehashPasswordIfRequired(Authenticatable $user, array $credentials, bool $force = false)
     {
-        throw new NotImplementedException();
+        throw new NotImplementedException;
     }
 }

@@ -8,7 +8,7 @@ class TypeDefault extends AbstractType
     {
         $value = $this->getValue();
 
-        //LOG ERROR
+        // LOG ERROR
         if (gettype($value) == 'array') {
             return implode(', ', $value);
         }

@@ -39,7 +39,7 @@ abstract class Properties
 
     abstract public function description(): string;
 
-    abstract public function checkColumnType(?\Doctrine\DBAL\Types\Type $type): string;
+    abstract public function checkColumnType(?string $type): string;
 
     protected function addText($property_name, $display_name, $required = false, $default = null)
     {
@@ -154,7 +154,7 @@ abstract class Properties
     final protected function updatePropertyNames(?stdClass $properties): stdClass
     {
         if (! $properties) {
-            return new stdClass();
+            return new stdClass;
         }
         foreach ($this->rename() as $old => $new) {
             if (isset($properties->$old) && ! isset($properties->$new)) {

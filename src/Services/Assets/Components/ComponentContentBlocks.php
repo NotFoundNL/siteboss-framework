@@ -57,7 +57,7 @@ class ComponentContentBlocks extends AbstractComponent
     {
         $contentBlocks = $this->getConnectedContentBlocks();
 
-        $contentBlocksWithValues = new Collection();
+        $contentBlocksWithValues = new Collection;
         foreach ($contentBlocks as $contentBlock) {
             /** @var CmsContentBlocks $contentBlock */
             $table = Table::whereId($contentBlock->target_table_id)->first();
@@ -95,7 +95,7 @@ class ComponentContentBlocks extends AbstractComponent
             $ts = new TableService($table, $this->assetService->getLang(), $contentBlock->target_record_id);
             $fieldComponents = $ts->getComponents();
 
-            $tableValues = new \stdClass();
+            $tableValues = new \stdClass;
             foreach ($fieldComponents as $fieldComponent) {
                 $tableValues->{$fieldComponent->assetItem->internal} = $fieldComponent->getDisplayValue();
             }

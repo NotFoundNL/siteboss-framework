@@ -8,16 +8,26 @@ use stdClass;
 
 class SolrIndexService extends AbstractIndexService
 {
-    private bool $debug = false;
-
     public int $siteId;
+
+    public ?string $domain;
 
     public $solrIndex;
 
-    public function __construct($debug = false)
+    public function __construct(bool $debug = false, bool $fresh = false)
     {
         $this->debug = $debug;
-        $this->solrIndex = new SolrIndex();
+        $this->fresh = $fresh;
+        $this->solrIndex = new SolrIndex;
+    }
+
+    public function retainItem(string $url): void
+    {
+        $cmsSearchItem = CmsSearch::whereUrl($this->domain.$url)->first();
+        if ($cmsSearchItem) {
+            $cmsSearchItem->search_status = 'UPDATED';
+            $cmsSearchItem->save();
+        }
     }
 
     public function upsertItem(SearchItem $searchItem): object
@@ -26,7 +36,7 @@ class SolrIndexService extends AbstractIndexService
         $cmsSearchItemStatus = '';
 
         if ($searchItem->type() === 'file') {
-            $result = $this->solrIndex->upsertFile($searchItem, $this->siteId);
+            $result = $this->solrIndex->upsertFile($searchItem, $this->siteId, $this->domain);
 
             $return = $this->returnvalue();
             if ($result == 'success') {
@@ -37,7 +47,7 @@ class SolrIndexService extends AbstractIndexService
                 $return->message = "failed: file not found \n";
             } else {
                 $cmsSearchItemStatus = 'NOT_INDEXABLE';
-                $result = $this->solrIndex->upsertItem($searchItem, $this->siteId);
+                $result = $this->solrIndex->upsertItem($searchItem, $this->siteId, $this->domain);
                 if ($result) {
                     $cmsSearchItemStatus = 'UPDATED';
                 } else {
@@ -46,7 +56,7 @@ class SolrIndexService extends AbstractIndexService
                 }
             }
         } else {
-            $result = $this->solrIndex->upsertItem($searchItem, $this->siteId);
+            $result = $this->solrIndex->upsertItem($searchItem, $this->siteId, $this->domain);
 
             if ($result) {
                 $cmsSearchItemStatus = 'UPDATED';
@@ -57,14 +67,14 @@ class SolrIndexService extends AbstractIndexService
             }
         }
 
-        $cmsSearchItem = CmsSearch::firstOrNew(['url' => $this->solrIndex->siteUrl($searchItem->url(), $this->siteId)]);
+        $cmsSearchItem = CmsSearch::firstOrNew(['url' => $this->solrIndex->siteUrl($searchItem->url(), $this->domain)]);
         $cmsSearchItem->setValues($searchItem, $cmsSearchItemStatus);
-        $cmsSearchItem->url = $this->solrIndex->siteUrl($searchItem->url(), $this->siteId);
-        $cmsSearchItem->save();
-        if ($cmsSearchItemStatus == 'FAILED') {
+        $cmsSearchItem->url = $this->solrIndex->siteUrl($searchItem->url(), $this->domain);
+
+        if (in_array($cmsSearchItemStatus, ['NOT_FOUND', 'FAILED'])) {
             $cmsSearchItem->updated_at = null;
-            $cmsSearchItem->save();
         }
+        $cmsSearchItem->save();
 
         return $return;
     }
@@ -74,7 +84,10 @@ class SolrIndexService extends AbstractIndexService
         if ($this->debug) {
             printf("\n ** Starting SOLR update");
         }
-        $emptyResult = $this->solrIndex->emptyCore();
+        $emptyResult = true;
+        if ($this->fresh) {
+            $emptyResult = $this->solrIndex->emptyCore();
+        }
         CmsSearch::setAllPending();
 
         return $emptyResult;
@@ -82,8 +95,13 @@ class SolrIndexService extends AbstractIndexService
 
     public function finishUpdate(): object
     {
+        if ($this->debug) {
+            printf("\n ** Removing all pending items\n");
+        }
         $return = $this->removeAllPending();
-
+        if ($this->debug) {
+            printf("\n ** Rebuilding suggester\n");
+        }
         $build = $this->solrIndex->buildSuggester();
 
         if ($build->error) {
@@ -117,7 +135,7 @@ class SolrIndexService extends AbstractIndexService
 
     private function returnValue()
     {
-        $return = new stdClass();
+        $return = new stdClass;
 
         $return->errorCode = 0;
         $return->message = '';

@@ -27,11 +27,11 @@ class CmsEditorLangController extends Controller
 {
     public function index()
     {
-        $response = new LayoutResponse();
+        $response = new LayoutResponse;
 
         $page = new LayoutPage('Language');
 
-        $breadcrumbs = new LayoutBreadcrumb();
+        $breadcrumbs = new LayoutBreadcrumb;
         $breadcrumbs->addHome();
         $breadcrumbs->addItem('CMS Editor', '/app/editor/');
         $breadcrumbs->addItem('Language');
@@ -87,7 +87,7 @@ class CmsEditorLangController extends Controller
             'flag' => 'string|required',
         ]);
 
-        $response = new LayoutResponse();
+        $response = new LayoutResponse;
         $response->addAction(new Toast('Language added'));
 
         $max = Lang::max('order') + 1;
@@ -145,7 +145,7 @@ class CmsEditorLangController extends Controller
             'flag' => 'string|required',
             'enabled' => 'boolean',
         ]), ['timestamps' => false]);
-        $response = new LayoutResponse();
+        $response = new LayoutResponse;
         $response->addAction(new Toast('Field properties updated'));
 
         return $response->build();
@@ -158,7 +158,7 @@ class CmsEditorLangController extends Controller
             'replacedRecordId' => 'required|int',
         ]);
 
-        $response = new LayoutResponse();
+        $response = new LayoutResponse;
         try {
             db_table_items_change_order('lang', $request->recordId, $request->replacedRecordId);
         } catch (\Exception $e) {

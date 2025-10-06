@@ -38,7 +38,7 @@ class LegacyModel extends Model
      */
     protected static function booted()
     {
-        static::addGlobalScope(new PublishedScope());
+        static::addGlobalScope(new PublishedScope);
     }
 
     public function v()

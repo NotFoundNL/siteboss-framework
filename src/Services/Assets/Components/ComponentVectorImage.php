@@ -6,22 +6,20 @@
 namespace NotFound\Framework\Services\Assets\Components;
 
 use DateTime;
-use Illuminate\Http\File;
+use enshrined\svgSanitize\Sanitizer;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Intervention\Image\Drivers\Imagick\Driver;
-use Intervention\Image\ImageManager;
 use NotFound\Framework\Models\Menu;
 use NotFound\Framework\Services\Assets\Enums\AssetType;
 use NotFound\Layout\Elements\AbstractLayout;
 use NotFound\Layout\Elements\Table\LayoutTableColumn;
-use NotFound\Layout\Inputs\LayoutInputImage;
+use NotFound\Layout\Inputs\LayoutInputVectorImage;
 use NotFound\Layout\LayoutResponse;
 use NotFound\Layout\Responses\Toast;
 use stdClass;
 
-class ComponentImage extends AbstractComponent
+class ComponentVectorImage extends AbstractComponent
 {
     protected bool $useDefaultStorageMechanism = true;
 
@@ -29,7 +27,7 @@ class ComponentImage extends AbstractComponent
 
     public function getAutoLayoutClass(): ?AbstractLayout
     {
-        return new LayoutInputImage($this->assetItem->internal, $this->assetItem->name);
+        return new LayoutInputVectorImage($this->assetItem->internal, $this->assetItem->name);
     }
 
     public function validate($newValue): bool
@@ -80,37 +78,19 @@ class ComponentImage extends AbstractComponent
             }
         }
 
-        foreach ($this->properties()->sizes as $dimensions) {
-            $width = $dimensions->width;
-            $height = $dimensions->height;
+        $sanitizer = new Sanitizer;
+        $cleanSVG = $sanitizer->sanitize($file);
 
-            $filename = $this->recordId.'_'.$dimensions->filename.'.jpg';
+        if (! $cleanSVG) {
+            $errorResponse = new LayoutResponse;
 
-            // create new image instance
-            $image = (new ImageManager(
-                new Driver
-            ))->read(new File(request()->file($fileId)->path()));
+            $errorResponse->addAction(new Toast('SVG could not be sanitized', 'error'));
 
-            if ($dimensions->height === '0') {
-                $height = intval($image->height() / $image->width() * $width);
-            }
-            if ($dimensions->width === '0') {
-                $width = intval($image->width() / $image->height() * $height);
-            }
-
-            if (isset($dimensions->cropType) && $dimensions->cropType === 'fitWithin') {
-                $image->scaleDown($width, $height);
-            } else {
-                $image->coverDown($width, $height);
-            }
-
-            $image->toJpeg()->save(
-                Storage::path('public').$this->relativePathToPublicDisk().$filename
-            );
-            $image->toWebp()->save(
-                Storage::path('public').$this->relativePathToPublicDisk().$filename.'.webp'
-            );
+            return $errorResponse->build();
         }
+
+        $filename = $this->recordId.'.svg';
+        Storage::put('public'.$this->relativePathToPublicDisk().$filename, $cleanSVG);
     }
 
     public function getDisplayValue()
@@ -130,7 +110,7 @@ class ComponentImage extends AbstractComponent
 
         $values = new stdClass;
 
-        if (isset($value->uploaded) && $value->uploaded === true && isset($this->properties()->sizes[0])) {
+        if (isset($value->uploaded) && $value->uploaded === true) {
 
             $prefix = '';
             $updatedAt = $this->updatedAt();
@@ -141,20 +121,10 @@ class ComponentImage extends AbstractComponent
                     $prefix .= $updatedAt;
                 }
             }
+            $prefix .= '/assets/public';
 
-            // Set the url for each size
-            foreach ($this->properties()->sizes as $size) {
-                $name = $size->filename;
-                $filename = $this->recordId.'_'.$name.'.jpg';
-                $values->sizes[$name] = (object) [
-                    'url' => $prefix.'/assets/public'.$this->relativePathToPublicDisk().$filename,
-                    'width' => $size->width,
-                    'height' => $size->height,
-                    'cropType' => (isset($size->cropType)) ? $size->cropType : 'constrain',
-                ];
-            }
             // Set the default url
-            $values->url = array_values($values->sizes)[0]->url;
+            $values->url = $prefix.$this->relativePathToPublicDisk().$this->recordId.'.svg';
         }
 
         return $values;
@@ -179,21 +149,11 @@ class ComponentImage extends AbstractComponent
         return (string) $updatedAt;
     }
 
-    private function deleteFiles()
+    private function deleteFiles(): void
     {
-        foreach ($this->properties()->sizes as $dimensions) {
-            $filename = $this->recordId.'_'.$dimensions->filename.'.jpg';
-            if (file_exists(Storage::path('public').$this->relativePathToPublicDisk().$filename)) {
-                unlink(
-                    Storage::path('public').$this->relativePathToPublicDisk().$filename
-                );
-            }
-
-            if (file_exists(Storage::path('public').$this->relativePathToPublicDisk().$filename.'.webp')) {
-                unlink(
-                    Storage::path('public').$this->relativePathToPublicDisk().$filename.'.webp'
-                );
-            }
+        $fileName = Storage::path('public'.$this->relativePathToPublicDisk().$this->recordId.'.svg');
+        if (file_exists($fileName)) {
+            unlink($fileName);
         }
     }
 
@@ -236,28 +196,6 @@ class ComponentImage extends AbstractComponent
         return json_encode($result);
     }
 
-    private function getStorageJSON()
-    {
-        $prefix = '';
-        if (config('siteboss.cache_prefix') === true && isset($this->assetItem->updated_at)) {
-            $prefix = '/'.$this->assetItem->updated_at->timestamp;
-        }
-
-        $values = new stdClass;
-
-        foreach ($this->properties()->sizes as $size) {
-            $name = $size->filename;
-            $filename = $this->recordId.'_'.$name.'.jpg';
-            $values->$name = (object) [
-                'url' => $prefix.'/assets/public'.$this->relativePathToPublicDisk().$filename,
-                'width' => $size->width,
-                'height' => $size->height,
-            ];
-        }
-
-        return $values;
-    }
-
     /**
      * Returns the full path of the new image file without the filename.
      */
@@ -293,6 +231,5 @@ class ComponentImage extends AbstractComponent
         }
 
         return $createDirs;
-
     }
 }

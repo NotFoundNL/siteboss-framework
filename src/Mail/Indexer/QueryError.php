@@ -16,8 +16,7 @@ class QueryError extends Mailable
         private string $query,
         private string $result,
         private string $server
-    ) {
-    }
+    ) {}
 
     /**
      * Build the message.

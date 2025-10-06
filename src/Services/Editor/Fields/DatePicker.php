@@ -22,9 +22,7 @@ class DatePicker extends Properties
         $this->addText('placeholderText', 'Placeholder text');
     }
 
-    public function serverProperties(): void
-    {
-    }
+    public function serverProperties(): void {}
 
     protected function rename(): array
     {
@@ -33,17 +31,17 @@ class DatePicker extends Properties
         ];
     }
 
-    public function checkColumnType(?\Doctrine\DBAL\Types\Type $type): string
+    public function checkColumnType(?string $type): string
     {
         if ($type === null) {
             return 'COLUMN MISSING';
         }
-        if ($type->getName() === 'int') {
-            return 'TYPE WARNING: '.$type->getName().' should be converted to datetime';
+        if ($type === 'int') {
+            return 'TYPE WARNING: '.$type.' should be converted to datetime';
         }
 
-        if ($type->getName() !== 'datetime') {
-            return 'TYPE ERROR: '.$type->getName().' is not a valid type for a date field';
+        if ($type !== 'datetime') {
+            return 'TYPE ERROR: '.$type.' is not a valid type for a date field';
         }
 
         return '';

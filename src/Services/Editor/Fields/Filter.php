@@ -11,15 +11,11 @@ class Filter extends Properties
         return '';
     }
 
-    public function properties(): void
-    {
-    }
+    public function properties(): void {}
 
-    public function serverProperties(): void
-    {
-    }
+    public function serverProperties(): void {}
 
-    public function checkColumnType(?\Doctrine\DBAL\Types\Type $type): string
+    public function checkColumnType(?string $type): string
     {
         return '';
     }

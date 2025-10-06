@@ -20,7 +20,7 @@ class CreateCmsFormFieldsTable extends Migration
             $table->integer('trigger_field_id')->nullable();
             $table->text('trigger_value')->nullable();
             $table->json('properties')->nullable();
-            $table->integer('order'); //TODO: FIX
+            $table->integer('order'); // TODO: FIX
             $table->set('status', ['DRAFT', 'PUBLISHED', 'DELETED'])->default('PUBLISHED');
             $table->timestamps();
         });

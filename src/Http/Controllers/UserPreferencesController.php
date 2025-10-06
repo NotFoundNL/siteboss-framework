@@ -47,7 +47,7 @@ class UserPreferencesController extends Controller
     {
         $user = $this->getUser();
 
-        $preferences = new stdClass();
+        $preferences = new stdClass;
 
         foreach ($this->settings() as $setting) {
             switch ($setting->type) {
@@ -61,7 +61,7 @@ class UserPreferencesController extends Controller
         $user->preferences = $preferences;
         $user->save();
 
-        $response = new LayoutResponse();
+        $response = new LayoutResponse;
         $action = new Toast(__('siteboss::preferences.saved'), 'ok');
         $response->addAction($action);
 

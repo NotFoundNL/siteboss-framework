@@ -17,8 +17,7 @@ class ConfirmationEndUser extends Mailable
         protected Form $form,
         protected ValidatorInfo $validatorInfo,
         protected Lang $lang
-    ) {
-    }
+    ) {}
 
     public function build()
     {

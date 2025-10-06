@@ -18,18 +18,16 @@ class File extends Properties
         $this->addText('downloadUrl', 'Download URL (Use [id])', false);
     }
 
-    public function serverProperties(): void
-    {
-    }
+    public function serverProperties(): void {}
 
-    public function checkColumnType(?\Doctrine\DBAL\Types\Type $type): string
+    public function checkColumnType(?string $type): string
     {
         if ($type === null) {
             return 'COLUMN MISSING';
         }
 
-        if (! in_array($type->getName(), ['string'])) {
-            return 'TYPE ERROR: '.$type->getName().' is not a valid type for a text field';
+        if (! in_array($type, ['varchar'])) {
+            return 'TYPE ERROR: '.$type.' is not a valid type for a text field';
         }
 
         return '';

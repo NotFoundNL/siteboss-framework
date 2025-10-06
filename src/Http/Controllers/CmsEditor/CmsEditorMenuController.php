@@ -24,11 +24,11 @@ class CmsEditorMenuController extends \NotFound\Framework\Http\Controllers\Contr
 {
     public function index()
     {
-        $response = new LayoutResponse();
+        $response = new LayoutResponse;
 
         $page = new LayoutPage('CMS Editor');
 
-        $breadcrumbs = new LayoutBreadcrumb();
+        $breadcrumbs = new LayoutBreadcrumb;
         $breadcrumbs->addHome();
         $breadcrumbs->addItem('CMS Editor', '/app/editor/');
         $breadcrumbs->addItem('CMS Menu');
@@ -100,7 +100,7 @@ class CmsEditorMenuController extends \NotFound\Framework\Http\Controllers\Contr
             'level' => 'int|required',
             'enabled' => 'boolean',
         ]));
-        $response = new LayoutResponse();
+        $response = new LayoutResponse;
         $response->addAction(new Toast('Field properties updated'));
         $response->addAction(new Redirect('/app/editor/menu/'));
 
@@ -114,7 +114,7 @@ class CmsEditorMenuController extends \NotFound\Framework\Http\Controllers\Contr
             'replacedRecordId' => 'required|int',
         ]);
 
-        $response = new LayoutResponse();
+        $response = new LayoutResponse;
         try {
             db_table_items_change_order('cms_menu', $request->recordId, $request->replacedRecordId);
         } catch (\Exception $e) {
@@ -145,7 +145,7 @@ class CmsEditorMenuController extends \NotFound\Framework\Http\Controllers\Contr
             'to' => 'string|required',
         ]);
 
-        $response = new LayoutResponse();
+        $response = new LayoutResponse;
         $response->addAction(new Toast('Table properties updated'));
 
         $max = CmsMenu::max('order') + 1;

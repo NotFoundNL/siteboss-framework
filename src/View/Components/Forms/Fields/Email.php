@@ -2,6 +2,4 @@
 
 namespace NotFound\Framework\View\Components\Forms\Fields;
 
-class Email extends AbstractFieldComponent
-{
-}
+class Email extends AbstractFieldComponent {}

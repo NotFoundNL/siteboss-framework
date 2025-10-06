@@ -15,8 +15,7 @@ class PageInfo
     public function __construct(
         private ?string $title = '',
         private ?string $description = ''
-    ) {
-    }
+    ) {}
 
     public function title()
     {

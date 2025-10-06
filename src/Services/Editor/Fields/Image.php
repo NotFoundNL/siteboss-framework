@@ -2,7 +2,6 @@
 
 namespace NotFound\Framework\Services\Editor\Fields;
 
-use Doctrine\DBAL\Types\Type;
 use NotFound\Framework\Services\Editor\Properties;
 use NotFound\Framework\Services\Editor\Repeatable;
 use stdClass;
@@ -18,7 +17,7 @@ class Image extends Properties
     {
         $this->overview();
         $this->required();
-        $subItems = new Repeatable(new stdClass());
+        $subItems = new Repeatable(new stdClass);
         $subItems->addText('filename', 'Filename', required: true);
         $subItems->addText('width', 'Width', required: true);
         $subItems->addText('height', 'Height', required: true);
@@ -36,7 +35,7 @@ class Image extends Properties
         $this->addCheckbox('createPNG', 'Create PNG');
     }
 
-    public function checkColumnType(?Type $type): string
+    public function checkColumnType(?string $type): string
     {
         if ($type === null) {
             return 'COLUMN MISSING';

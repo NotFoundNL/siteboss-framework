@@ -8,8 +8,7 @@ class AssetValues
 {
     public function __construct(
         private array $cachedValues
-    ) {
-    }
+    ) {}
 
     public function __get(string $key): mixed
     {

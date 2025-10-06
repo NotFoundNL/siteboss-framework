@@ -21,10 +21,10 @@ class AboutController extends Controller
         Cache::flush();
         Artisan::call('optimize:clear');
         $productName = env('APP_WHITELABEL_NAME', 'SiteBoss');
-        $response = new LayoutResponse();
+        $response = new LayoutResponse;
         $page = new LayoutPage($productName.' CMS');
 
-        $breadcrumb = new LayoutBreadcrumb();
+        $breadcrumb = new LayoutBreadcrumb;
         $breadcrumb->addHome();
         $breadcrumb->addItem(__('siteboss::about.title'));
         $page->addBreadCrumb($breadcrumb);
@@ -47,7 +47,7 @@ class AboutController extends Controller
 
         $widget->addSiteBoss(new LayoutSiteBoss('version'));
 
-        $groupC = new CmsGroup();
+        $groupC = new CmsGroup;
         $roles = $groupC->getCachedRolesByActiveUser();
 
         $widget->addText(new LayoutText(__('siteboss::about.rights').': '.implode(', ', $roles->toArray())));

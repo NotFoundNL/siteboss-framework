@@ -44,7 +44,7 @@ class ComponentText extends AbstractComponent
             }
         }
 
-        //$inputText->setEndpoint($endPoint);
+        // $inputText->setEndpoint($endPoint);
         return null;
     }
 
@@ -73,13 +73,6 @@ class ComponentText extends AbstractComponent
                 $customProperties['editorSettings'] = json_decode($setting->settings);
             }
         }
-        if (
-            $this->assetItem->properties->type == 'richtext' &&
-         isset($this->assetItem->server_properties->editModal) &&
-         $this->assetItem->server_properties->editModal === true
-         ) {
-            $customProperties['editModal'] = true;
-        }
 
         return (object) $customProperties;
     }
@@ -107,7 +100,7 @@ class ComponentText extends AbstractComponent
 
         // create new image instance
         $image = (new ImageManager(
-            new Driver()
+            new Driver
         ))->read(new File(request()->file('file')));
         $image->scaleDown($width, null);
 
