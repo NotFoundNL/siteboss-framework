@@ -17,7 +17,7 @@ class DropDown extends Properties
     {
         $this->overview();
         $this->required();
-        $subItems = new Repeatable(new stdClass());
+        $subItems = new Repeatable(new stdClass);
         $subItems->addText('value', 'Value', required: true);
         $subItems->addText('label', 'Label', required: true);
         $this->addRepeatable('items', 'Dimensions', $subItems);
@@ -25,9 +25,7 @@ class DropDown extends Properties
         $this->addText('defaultValue', 'Default value');
     }
 
-    public function serverProperties(): void
-    {
-    }
+    public function serverProperties(): void {}
 
     public function checkColumnType(?string $type): string
     {

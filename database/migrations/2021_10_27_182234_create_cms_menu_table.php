@@ -20,7 +20,7 @@ class CreateCmsMenuTable extends Migration
             $table->string('target', 128)->nullable();
             $table->string('group', 32)->default('');
             $table->json('properties')->nullable();
-            $table->integer('order')->nullable(); //TODO: FIX
+            $table->integer('order')->nullable(); // TODO: FIX
             $table->tinyInteger('enabled')->default(1);
             $table->set('status', ['DRAFT', 'PUBLISHED', 'DELETED'])->default('DRAFT');
             $table->string('to')->default('');

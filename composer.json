@@ -1,86 +1,87 @@
 {
-    "name": "notfoundnl/siteboss-framework",
-    "description": "SiteBoss® framework is a headless CMS for Laravel. It will produce a JSON for a UI to consume.",
-    "keywords": [
-        "NotFound",
-        "laravel",
-        "siteboss-framework"
-    ],
-    "homepage": "https://github.com/notfoundnl/siteboss-framework",
-    "license": "AGPL-3.0-or-later",
-    "authors": [
-        {
-            "name": "NotFound Digital Creativity",
-            "email": "support@siteboss.nl",
-            "role": "Developer"
-        }
-    ],
-    "require": {
-        "spatie/laravel-package-tools": "^1.14.0",
-        "spatie/laravel-honeypot": "^4.3.2",
-        "illuminate/contracts": "^10.0|^11.0|^12.0",
-        "notfoundnl/siteboss-layout": "^1.6.1",
-        "notfoundnl/siteboss-static": "^1.15.0",
-        "mcamara/laravel-localization": "^2.0",
-        "xenolope/quahog": "^3.0",
-        "firebase/php-jwt": "^6.3",
-        "intervention/image": "^3.0",
-        "doctrine/dbal": "^4.0"
+  "name": "notfoundnl/siteboss-framework",
+  "description": "SiteBoss® framework is a headless CMS for Laravel. It will produce a JSON for a UI to consume.",
+  "keywords": [
+    "NotFound",
+    "laravel",
+    "siteboss-framework"
+  ],
+  "homepage": "https://github.com/notfoundnl/siteboss-framework",
+  "license": "AGPL-3.0-or-later",
+  "authors": [
+    {
+      "name": "NotFound Digital Creativity",
+      "email": "support@siteboss.nl",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "spatie/laravel-package-tools": "^1.14.0",
+    "spatie/laravel-honeypot": "^4.3.2",
+    "illuminate/contracts": "^10.0|^11.0|^12.0",
+    "notfoundnl/siteboss-layout": "^1.6.1|dev-main",
+    "notfoundnl/siteboss-static": "^1.15.0",
+    "mcamara/laravel-localization": "^2.0",
+    "enshrined/svg-sanitize": "^0.22.0",
+    "xenolope/quahog": "^3.0",
+    "firebase/php-jwt": "^6.3",
+    "intervention/image": "^3.0",
+    "doctrine/dbal": "^4.0"
+  },
+  "require-dev": {
+    "laravel/pint": "^1.25.1",
+    "nunomaduro/collision": "^6.0",
+    "nunomaduro/larastan": "^2.0.1",
+    "orchestra/testbench": "^8.9",
+    "pestphp/pest": "^1.21",
+    "pestphp/pest-plugin-laravel": "^1.1",
+    "phpstan/extension-installer": "^1.1",
+    "phpstan/phpstan-deprecation-rules": "^1.0",
+    "phpstan/phpstan-phpunit": "^1.0",
+    "phpunit/phpunit": "^9.5",
+    "nunomaduro/phpinsights": "^2.9.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "NotFound\\Framework\\": "src",
+      "NotFound\\Framework\\Database\\Seeders\\": "database/seeders"
     },
-    "require-dev": {
-        "laravel/pint": "^1.0",
-        "nunomaduro/collision": "^6.0",
-        "nunomaduro/larastan": "^2.0.1",
-        "orchestra/testbench": "^8.9",
-        "pestphp/pest": "^1.21",
-        "pestphp/pest-plugin-laravel": "^1.1",
-        "phpstan/extension-installer": "^1.1",
-        "phpstan/phpstan-deprecation-rules": "^1.0",
-        "phpstan/phpstan-phpunit": "^1.0",
-        "phpunit/phpunit": "^9.5",
-        "nunomaduro/phpinsights": "^2.9.0"
-    },
-    "autoload": {
-        "psr-4": {
-            "NotFound\\Framework\\": "src",
-            "NotFound\\Framework\\Database\\Seeders\\": "database/seeders"
-        },
-        "files": [
-            "src/Http/Helpers.php"
-        ]
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "NotFound\\Framework\\Tests\\": "tests"
-        }
-    },
-    "scripts": {
-        "post-autoload-dump": "@php ./vendor/bin/testbench package:discover --ansi",
-        "analyse": "vendor/bin/phpstan analyse",
-        "test": "vendor/bin/pest",
-        "test-coverage": "vendor/bin/pest --coverage",
-        "format": "vendor/bin/pint"
-    },
-    "config": {
-        "sort-packages": true,
-        "allow-plugins": {
-            "pestphp/pest-plugin": true,
-            "phpstan/extension-installer": true,
-            "php-http/discovery": true,
-            "bamarni/composer-bin-plugin": true,
-            "dealerdirect/phpcodesniffer-composer-installer": true
-        }
-    },
-    "extra": {
-        "laravel": {
-            "providers": [
-                "NotFound\\Framework\\FrameworkServiceProvider"
-            ],
-            "aliases": {
-                "Sb": "NotFound\\Framework\\Helpers\\SitebossHelper"
-            }
-        }
-    },
-    "minimum-stability": "dev",
-    "prefer-stable": true
+    "files": [
+      "src/Http/Helpers.php"
+    ]
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "NotFound\\Framework\\Tests\\": "tests"
+    }
+  },
+  "scripts": {
+    "post-autoload-dump": "@php ./vendor/bin/testbench package:discover --ansi",
+    "analyse": "vendor/bin/phpstan analyse",
+    "test": "vendor/bin/pest",
+    "test-coverage": "vendor/bin/pest --coverage",
+    "format": "vendor/bin/pint"
+  },
+  "config": {
+    "sort-packages": true,
+    "allow-plugins": {
+      "pestphp/pest-plugin": true,
+      "phpstan/extension-installer": true,
+      "php-http/discovery": true,
+      "bamarni/composer-bin-plugin": true,
+      "dealerdirect/phpcodesniffer-composer-installer": true
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "NotFound\\Framework\\FrameworkServiceProvider"
+      ],
+      "aliases": {
+        "Sb": "NotFound\\Framework\\Helpers\\SitebossHelper"
+      }
+    }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
 }

@@ -56,7 +56,7 @@ class TableExchangeService extends AbstractExchangeService
                 $this->debug('CREATE TABLE '.$tableName);
             } else {
 
-                $table = new Table();
+                $table = new Table;
                 if (isset($fileSource->id)) {
                     $table->id = $fileSource->id;
                 }
@@ -84,7 +84,7 @@ class TableExchangeService extends AbstractExchangeService
 
                     continue;
                 }
-                $tableItem = new TableItem();
+                $tableItem = new TableItem;
                 if (isset($item->id)) {
                     $tableItem->id = $item->id;
                 }
@@ -148,7 +148,7 @@ class TableExchangeService extends AbstractExchangeService
             $table->text('description')->nullable();
             $table->json('properties')->nullable();
             $table->json('server_properties')->nullable();
-            $table->integer('order')->nullable(); //TODO: FIX
+            $table->integer('order')->nullable(); // TODO: FIX
             $table->tinyInteger('enabled')->nullable()->default(1);
             $table->softDeletes();
             $table->timestamps();

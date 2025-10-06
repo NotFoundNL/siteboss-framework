@@ -9,8 +9,7 @@ abstract class AbstractFieldComponent extends Component
 {
     public function __construct(
         public Field $field,
-    ) {
-    }
+    ) {}
 
     public function render()
     {

@@ -57,7 +57,7 @@ class TemplateExchangeService extends AbstractExchangeService
             if ($this->dryRun) {
                 $this->debug('CREATE TABLE '.$tableName);
             } else {
-                $table = new Template();
+                $table = new Template;
                 $table->id = $fileSource->id;
                 $table->name = $fileSource->name;
                 $table->filename = $fileSource->filename;
@@ -78,7 +78,7 @@ class TemplateExchangeService extends AbstractExchangeService
 
                     continue;
                 }
-                $tableItem = new TemplateItem();
+                $tableItem = new TemplateItem;
                 if (isset($item->id)) {
                     $tableItem->id = $item->id;
                 }

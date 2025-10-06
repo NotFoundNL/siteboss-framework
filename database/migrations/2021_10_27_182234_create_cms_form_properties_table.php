@@ -17,7 +17,7 @@ class CreateCmsFormPropertiesTable extends Migration
             $table->string('name', 30);
             $table->string('type', 30)->unique();
             $table->json('options')->nullable();
-            $table->foreignId('combinationId')->nullable(); //TODO: use combination_id
+            $table->foreignId('combinationId')->nullable(); // TODO: use combination_id
             $table->set('status', ['DRAFT', 'PUBLISHED', 'DELETED'])->default('PUBLISHED');
             $table->tinyInteger('has_value')->default(1);
         });

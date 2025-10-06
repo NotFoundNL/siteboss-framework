@@ -15,7 +15,7 @@ class PageInfoServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind('pageinfo', function () {
-            return new PageInfo();
+            return new PageInfo;
         });
     }
 
@@ -24,8 +24,5 @@ class PageInfoServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
-    {
-
-    }
+    public function boot() {}
 }

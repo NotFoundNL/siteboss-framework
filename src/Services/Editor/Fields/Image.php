@@ -17,7 +17,7 @@ class Image extends Properties
     {
         $this->overview();
         $this->required();
-        $subItems = new Repeatable(new stdClass());
+        $subItems = new Repeatable(new stdClass);
         $subItems->addText('filename', 'Filename', required: true);
         $subItems->addText('width', 'Width', required: true);
         $subItems->addText('height', 'Height', required: true);

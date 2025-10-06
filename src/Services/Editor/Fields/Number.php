@@ -19,9 +19,7 @@ class Number extends Properties
         $this->addCheckbox('disabled', 'Disable editing');
     }
 
-    public function serverProperties(): void
-    {
-    }
+    public function serverProperties(): void {}
 
     public function checkColumnType(?string $type): string
     {

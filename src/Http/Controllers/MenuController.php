@@ -46,7 +46,7 @@ class MenuController extends Controller
             $page->addWidget($formWidget);
         }
 
-        $response = new LayoutResponse();
+        $response = new LayoutResponse;
         $response->addUIElement($page);
 
         return $response->build();
@@ -102,7 +102,7 @@ class MenuController extends Controller
             'replacedRecordId' => 'required|int',
         ]);
 
-        $response = new LayoutResponse();
+        $response = new LayoutResponse;
         try {
             db_table_items_change_order($menu->getTable(), $request->recordId, $request->replacedRecordId, "AND `parent_id`={$menu->id}");
         } catch (\Exception $e) {
@@ -161,7 +161,7 @@ class MenuController extends Controller
         $table->addHeader(new LayoutTableHeader(__('siteboss::page.template'), 'template'));
 
         foreach ($menuItems as $menuItem) {
-            //TODO: localization
+            // TODO: localization
             $row = new LayoutTableRow($menuItem->id, '/app/page/'.$menuItem->id.'/editor/nl/');
             $enabled = new LayoutTableColumn($menuItem->enabled ?? 0, 'checkbox');
             $enabled->setToggleEndPoint('/app/menu/'.$menuItem->id.'/toggle/enabled');
@@ -221,10 +221,10 @@ class MenuController extends Controller
 
     private function getBreadcrumb(Menu $menu): LayoutBreadcrumb
     {
-        $breadcrumb = new LayoutBreadcrumb();
+        $breadcrumb = new LayoutBreadcrumb;
         $breadcrumb->addHome();
 
-        $collection = new Collection();
+        $collection = new Collection;
         while ($menu !== null) {
             $collection->add($menu);
             if ($menu->parent_id == null || $menu->parent_id == 0) {

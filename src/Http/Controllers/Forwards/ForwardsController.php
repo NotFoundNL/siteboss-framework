@@ -68,7 +68,7 @@ class ForwardsController extends \NotFound\Framework\Http\Controllers\Controller
     {
         $page = new LayoutPage('Regel bewerken');
 
-        $breadcrumbs = new LayoutBreadcrumb();
+        $breadcrumbs = new LayoutBreadcrumb;
         $breadcrumbs->addItem(title: 'Home', link: '/');
         $breadcrumbs->addItem(title: 'Forwards', link: '/app/forwards/');
         $breadcrumbs->addItem(title: 'Regels');

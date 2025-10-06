@@ -25,7 +25,7 @@ abstract class AbstractType
     /**
      * An protected function so that the value can't be set from anywhere.
      *
-     * @param    $value  The value that needs to be set
+     * @param  $value  The value that needs to be set
      */
     protected function setValue($value): void
     {
@@ -70,9 +70,7 @@ abstract class AbstractType
     /**
      * All the fields are valid. Prepare the data before the field is saved.
      */
-    public function beforeSave(): void
-    {
-    }
+    public function beforeSave(): void {}
 
     /**
      * We need the data that is saved to the database.
@@ -91,16 +89,12 @@ abstract class AbstractType
     /**
      * Everything is called correctly and the data is saved to the database. We are able to finish it up here.
      */
-    public function afterSave()
-    {
-    }
+    public function afterSave() {}
 
     /**
      * The query failed. If a field has made changes to the field system etc we can clean it up here.
      */
-    public function rollback()
-    {
-    }
+    public function rollback() {}
 
     /**
      * The dataviewer requires to know what the headers are for the columns. If the data saved by this field is different than
@@ -113,8 +107,8 @@ abstract class AbstractType
      */
     public function createHeadersForDataViewer(&$headerArray, $outputFilter)
     {
-        //TODO: lang
-        //$headerArray[] = $this->properties->label->{\nfapi\formbuilder\utils\LanguageManager::getDefaultLanguage()};
+        // TODO: lang
+        // $headerArray[] = $this->properties->label->{\nfapi\formbuilder\utils\LanguageManager::getDefaultLanguage()};
         $headerArray[] = $this->properties->label->{'nl'};
     }
 
@@ -190,7 +184,7 @@ abstract class AbstractType
 
     public function getLabel(string $language = 'nl'): string
     {
-        //TODO: lang
+        // TODO: lang
         if (! isset($this->properties->label)) {
             return '';
         }
@@ -205,7 +199,7 @@ abstract class AbstractType
     public function getEmailHtml(): string
     {
         $label = $this->getLabel();
-        //TODO: lang
+        // TODO: lang
         $value = $this->getReadableValue('nl');
 
         return "<p><strong>{$label}:</strong> {$value}</p>";

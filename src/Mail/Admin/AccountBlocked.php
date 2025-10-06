@@ -14,8 +14,7 @@ class AccountBlocked extends Mailable
      */
     public function __construct(
         private CmsUser $user,
-    ) {
-    }
+    ) {}
 
     /**
      * Build the message.

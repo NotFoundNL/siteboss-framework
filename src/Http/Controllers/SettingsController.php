@@ -87,7 +87,7 @@ class SettingsController extends Controller
 
     public function update(FormDataRequest $request, CmsConfig $setting)
     {
-        $response = new LayoutResponse();
+        $response = new LayoutResponse;
         // Only allow editing if the user has the right to do so
         if ($request->user()->cannot('update', $setting)) {
             $action = new Toast('Onvoldoende rechten', 'error');

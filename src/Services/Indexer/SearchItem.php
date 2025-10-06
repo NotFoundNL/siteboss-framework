@@ -30,9 +30,7 @@ final class SearchItem
 
     // Minimum required fields
 
-    public function __construct(private string $url, private string $title)
-    {
-    }
+    public function __construct(private string $url, private string $title) {}
 
     // Setters
 

@@ -77,7 +77,7 @@ abstract class AbstractComponent
      */
     protected function customProperties(): object
     {
-        return new stdClass();
+        return new stdClass;
     }
 
     public function buildAutoLayoutClass()
@@ -112,9 +112,7 @@ abstract class AbstractComponent
      *
      * @return void
      */
-    public function beforeSave()
-    {
-    }
+    public function beforeSave() {}
 
     /**
      * This function is for doing additional actions while saving, or - when not using the
@@ -122,21 +120,17 @@ abstract class AbstractComponent
      *
      * @return void
      */
-    public function save()
-    {
-    }
+    public function save() {}
 
     /**
      * This function is called after the save function. This is the place to do some
      * processing on the value after it is saved.
      */
-    public function afterSave(): void
-    {
-    }
+    public function afterSave(): void {}
 
     public function properties(): stdClass
     {
-        $properties = new \stdClass();
+        $properties = new \stdClass;
 
         if ($this->assetItem->properties) {
             $properties = $this->assetItem->properties;
@@ -321,7 +315,7 @@ abstract class AbstractComponent
      * Converts [][] to the DB prefix set in the config
      * Also accepts tablename without [][]
      *
-     * @param    $tableName  for example: '[][]user' or 'user'
+     * @param  $tableName  for example: '[][]user' or 'user'
      * @return string 'cc_user'
      */
     protected function removeDatabasePrefix(string $tableName)

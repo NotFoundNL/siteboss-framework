@@ -27,11 +27,11 @@ class CmsEditorTemplateController extends \NotFound\Framework\Http\Controllers\C
 {
     public function index()
     {
-        $response = new LayoutResponse();
+        $response = new LayoutResponse;
 
         $page = new LayoutPage('CMS Editor', 'Page Templates');
 
-        $breadcrumbs = new LayoutBreadcrumb();
+        $breadcrumbs = new LayoutBreadcrumb;
         $breadcrumbs->addHome();
         $breadcrumbs->addItem('CMS Editor', '/app/editor/');
         $breadcrumbs->addItem('Page Templates');
@@ -80,7 +80,7 @@ class CmsEditorTemplateController extends \NotFound\Framework\Http\Controllers\C
     public function create(FormDataRequest $request)
     {
         $request->validate(['name' => 'string|required', 'internal' => 'string|required']);
-        $table = new Template();
+        $table = new Template;
         $tableId = $table->insertGetId([
             'name' => $request->name,
             'filename' => $request->table,
@@ -88,7 +88,7 @@ class CmsEditorTemplateController extends \NotFound\Framework\Http\Controllers\C
             'params' => 0,
             'properties' => '{}',
         ]);
-        $response = new LayoutResponse();
+        $response = new LayoutResponse;
 
         $response->addAction(new Toast('Template added'));
         $action = new Redirect('/app/editor/page/'.$tableId);
@@ -99,11 +99,11 @@ class CmsEditorTemplateController extends \NotFound\Framework\Http\Controllers\C
 
     public function readOne(Template $table)
     {
-        $response = new LayoutResponse();
+        $response = new LayoutResponse;
 
         $page = new LayoutPage('CMS Editor', 'Page');
 
-        $breadcrumbs = new LayoutBreadcrumb();
+        $breadcrumbs = new LayoutBreadcrumb;
         $breadcrumbs->addHome();
         $breadcrumbs->addItem('CMS Editor', '/app/editor/');
         $breadcrumbs->addItem('Page Templates', '/app/editor/page/');
@@ -133,7 +133,7 @@ class CmsEditorTemplateController extends \NotFound\Framework\Http\Controllers\C
         $newFieldDropDown = new LayoutInputDropdown('new_field', 'New field');
         $newFieldDropDown->setRequired();
 
-        $fields = (new FieldsProperties())->availableFields();
+        $fields = (new FieldsProperties)->availableFields();
         foreach ($fields as $field) {
             $newFieldDropDown->addItem($field);
         }
@@ -212,7 +212,7 @@ class CmsEditorTemplateController extends \NotFound\Framework\Http\Controllers\C
             'enabled' => $request->enabled,
             'properties' => $properties,
         ]);
-        $response = new LayoutResponse();
+        $response = new LayoutResponse;
         $response->addAction(new Toast('Template properties updated'));
 
         return $response->build();
@@ -225,10 +225,10 @@ class CmsEditorTemplateController extends \NotFound\Framework\Http\Controllers\C
             'internal' => 'string|required',
         ]);
 
-        $response = new LayoutResponse();
+        $response = new LayoutResponse;
         $response->addAction(new Toast('Table properties updated'));
 
-        $fields = (new FieldsProperties())->availableFields();
+        $fields = (new FieldsProperties)->availableFields();
 
         $max = $table->items()->max('order') + 1;
         if (! in_array($request->new_field, $fields)) {
@@ -253,7 +253,7 @@ class CmsEditorTemplateController extends \NotFound\Framework\Http\Controllers\C
             'replacedRecordId' => 'required|int',
         ]);
 
-        $response = new LayoutResponse();
+        $response = new LayoutResponse;
         try {
             db_table_items_change_order('cms_templateitem', $request->recordId, $request->replacedRecordId, "AND `template` = {$table->id}");
         } catch (\Exception $e) {

@@ -25,7 +25,7 @@ class FieldsProperties
 
     public function availableFields()
     {
-        $fields = ['Text', 'Checkbox', 'ChildTable', 'DropDown', 'Tags', 'Description', 'TableSelect', 'Header', 'DatePicker', 'TimePicker', 'DateTimePicker', 'Image', 'File', 'Filter', 'ContentBlocks', 'Button', 'Slug', 'Number', 'ModelSelect'];
+        $fields = ['Text', 'Checkbox', 'ChildTable', 'DropDown', 'Tags', 'Description', 'TableSelect', 'Header', 'DatePicker', 'TimePicker', 'DateTimePicker', 'Image', 'VectorImage', 'File', 'Filter', 'ContentBlocks', 'Button', 'Slug', 'Number', 'ModelSelect'];
         sort($fields);
 
         return $fields;
@@ -150,7 +150,7 @@ class FieldsProperties
                         //     $checkboxField->setValue(true);
                         // } else {
                         $checkboxField->setValue(false);
-                    // }
+                        // }
                     } else {
                         $checkboxField->setValue($value ?? false);
                     }
@@ -181,7 +181,7 @@ class FieldsProperties
 
     private function processUpdateProperties(array $fields, FormDataRequest $request): stdClass
     {
-        $properties = new stdClass();
+        $properties = new stdClass;
         foreach ($fields as $field) {
             $data_type = 'string';
             if (in_array($field->type, ['MultiSelect'])) {

@@ -16,8 +16,7 @@ class MailHandler
         private Lang $lang,
         private Form $form,
         private ValidatorInfo $validatorInfo
-    ) {
-    }
+    ) {}
 
     public function sendMail(): void
     {

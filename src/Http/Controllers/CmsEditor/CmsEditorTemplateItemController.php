@@ -57,7 +57,7 @@ class CmsEditorTemplateItemController extends \NotFound\Framework\Http\Controlle
 
         $properties = (object) array_merge((array) $tableItem->properties, (array) $tableItem->server_properties);
 
-        $fieldProperties = new \NotFound\Framework\Services\Editor\FieldsProperties($properties ?? new stdClass());
+        $fieldProperties = new \NotFound\Framework\Services\Editor\FieldsProperties($properties ?? new stdClass);
         $fieldProperties->getLayoutFields($type, $form);
 
         $form->addButton(new LayoutButton('Save field properties'));
@@ -100,7 +100,7 @@ class CmsEditorTemplateItemController extends \NotFound\Framework\Http\Controlle
         // Write changes to file
         $table->exportToFile();
 
-        $response = new LayoutResponse();
+        $response = new LayoutResponse;
         $response->addAction(new Toast('Field properties updated'));
         $response->addAction(new Redirect('/app/editor/page/'.$table->id.'/'));
 

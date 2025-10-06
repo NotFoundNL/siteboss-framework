@@ -97,7 +97,7 @@ class CmsUser extends User implements MustVerifyEmail
 
     public function groups()
     {
-        //TODO: proper name is: cc_cms_group_user || cc_cms_user_group
+        // TODO: proper name is: cc_cms_group_user || cc_cms_user_group
         return $this->belongsToMany(CmsGroup::class, 'cms_usergroup', 'user_id', 'group_id');
     }
 
@@ -125,7 +125,7 @@ class CmsUser extends User implements MustVerifyEmail
             return $default;
         }
 
-        //Check for use of illegal characters. Just allow () || && ! and alpha
+        // Check for use of illegal characters. Just allow () || && ! and alpha
         if (preg_match('/[^a-z &!|)(-]/', $expression)) {
             abort(500, 'Syntax error encountered in checkRights! Use of illegal characters.');
         }
@@ -151,12 +151,12 @@ class CmsUser extends User implements MustVerifyEmail
             abort(500, __("Syntax error encountered in checkRights! Use of illegal String ('true' || 'false')."));
         }
 
-        $groupC = new CmsGroup();
+        $groupC = new CmsGroup;
         if (! $groupC->getCachedGroups()->pluck('internal')->contains($group)) {
             abort(500, sprintf("Syntax error encountered in checkRights! Use of non-existing group '%s'.", $group));
         }
 
-        //Check for an exact match.
+        // Check for an exact match.
         if ($this->hasRole($group)) {
             return 'true';
         }
@@ -174,7 +174,7 @@ class CmsUser extends User implements MustVerifyEmail
      */
     public function explicityHasRole($role)
     {
-        $groupC = new CmsGroup();
+        $groupC = new CmsGroup;
         $roles = $groupC->getRolesByUser($this, useRecursion: false);
 
         return $roles->contains($role);
@@ -208,7 +208,7 @@ class CmsUser extends User implements MustVerifyEmail
      */
     public function hasLocalRole(string $role): bool
     {
-        $groupC = new CmsGroup();
+        $groupC = new CmsGroup;
         $roles = $groupC->getRolesByUser($this);
 
         return $roles->contains($role);

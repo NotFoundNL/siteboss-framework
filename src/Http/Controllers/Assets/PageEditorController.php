@@ -65,7 +65,7 @@ class PageEditorController extends AssetEditorController
 
         $pageService->update($lang);
 
-        $response = new LayoutResponse();
+        $response = new LayoutResponse;
         $response->addAction(new Toast(__('siteboss::response.table.ok')));
         $response->addAction(new Redirect('/app/menu/'.$menu->parent_id));
 
@@ -74,7 +74,7 @@ class PageEditorController extends AssetEditorController
 
     private function setBreadcrumbs(LayoutWidgetHelper $helper, Menu $menu): void
     {
-        $collection = new Collection();
+        $collection = new Collection;
         while ($menu) {
             $collection->add($menu);
 

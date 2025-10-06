@@ -11,9 +11,7 @@ use NotFound\Layout\Elements\LayoutSearchBox;
 
 class DefaultEditor extends AbstractEditor
 {
-    public function __construct(protected TableService $ts)
-    {
-    }
+    public function __construct(protected TableService $ts) {}
 
     public function getTopBar(LayoutPager $pager): LayoutBar
     {
@@ -57,7 +55,7 @@ class DefaultEditor extends AbstractEditor
     public function getBreadCrumbs(): LayoutBreadCrumb
     {
         $table = $this->ts->getAssetModel();
-        $breadcrumb = new LayoutBreadcrumb();
+        $breadcrumb = new LayoutBreadcrumb;
         $breadcrumb->addHome();
         $breadcrumb->addItem($table->name);
 
@@ -83,7 +81,7 @@ class DefaultEditor extends AbstractEditor
         $url = sprintf('/table/%s/?%s&%s', $table->url, $params, $this->filterParameters());
 
         return $url;
-}
+    }
 
     public function filterParameters(): string
     {

@@ -5,7 +5,7 @@ namespace NotFound\Framework\Models\Forms;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use NotFound\Framework\Models\BaseModel;
 
-//TODO: Think of a better name
+// TODO: Think of a better name
 /**
  * NotFound\Framework\Models\Forms\Data
  *

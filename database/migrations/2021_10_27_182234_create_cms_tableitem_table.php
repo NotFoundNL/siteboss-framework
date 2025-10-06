@@ -21,7 +21,7 @@ class CreateCmsTableitemTable extends Migration
             $table->string('name', 128)->nullable();
             $table->text('description')->nullable();
             $table->json('properties')->nullable();
-            $table->integer('order')->nullable(); //TODO: FIX
+            $table->integer('order')->nullable(); // TODO: FIX
             $table->tinyInteger('enabled')->nullable()->default(1);
             $table->timestamps();
         });

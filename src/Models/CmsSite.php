@@ -38,6 +38,6 @@ class CmsSite extends Model
 
     protected static function booted()
     {
-        static::addGlobalScope(new EnabledScope());
+        static::addGlobalScope(new EnabledScope);
     }
 }

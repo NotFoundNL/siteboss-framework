@@ -18,7 +18,5 @@ class TimePicker extends Properties
         $this->required();
     }
 
-    public function serverProperties(): void
-    {
-    }
+    public function serverProperties(): void {}
 }

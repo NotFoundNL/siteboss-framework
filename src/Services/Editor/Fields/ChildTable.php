@@ -23,9 +23,7 @@ class ChildTable extends Properties
         $this->addText('prefix', 'Remove prefix from foreign key');
     }
 
-    public function serverProperties(): void
-    {
-    }
+    public function serverProperties(): void {}
 
     protected function rename(): array
     {

@@ -97,7 +97,7 @@ class ComponentFile extends AbstractComponent
      */
     public function getCurrentValue(): object
     {
-        $value = json_decode($this->currentValue) ?? new \stdClass();
+        $value = json_decode($this->currentValue) ?? new \stdClass;
 
         if (isset($value->name)) {
             return (object) ['name' => $value->name, 'size' => $this->formatSize($value->size ?? 0)];
@@ -121,7 +121,7 @@ class ComponentFile extends AbstractComponent
     public function getValueForStorage(): ?string
     {
         // TODO:  Move this over from AutoLayout for reference
-        $result = json_decode($this->currentValue ?? '{}') ?? new \stdClass();
+        $result = json_decode($this->currentValue ?? '{}') ?? new \stdClass;
 
         // Check if the file needs to be deleted
         if (isset($this->newValue['delete']) && $this->newValue['delete'] === true) {

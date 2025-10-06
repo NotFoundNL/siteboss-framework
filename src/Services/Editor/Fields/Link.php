@@ -11,14 +11,9 @@ class Link extends Properties
         return 'Link';
     }
 
-    public function properties(): void
-    {
+    public function properties(): void {}
 
-    }
-
-    public function serverProperties(): void
-    {
-    }
+    public function serverProperties(): void {}
 
     public function checkColumnType(?string $type): string
     {

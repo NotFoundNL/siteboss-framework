@@ -13,8 +13,7 @@ class FactoryComponent
 
     public function __construct(
         protected AbstractAssetService $assetService
-    ) {
-    }
+    ) {}
 
     public function getByType(AssetItem $assetItem): AbstractComponent
     {

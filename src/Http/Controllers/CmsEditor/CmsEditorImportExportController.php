@@ -12,7 +12,7 @@ class CmsEditorImportExportController extends Controller
 {
     public function exportAllTables()
     {
-        $response = new LayoutResponse();
+        $response = new LayoutResponse;
         $tables = Table::all();
 
         foreach ($tables as $table) {
@@ -35,7 +35,7 @@ class CmsEditorImportExportController extends Controller
 
     public function exportAllTemplates()
     {
-        $response = new LayoutResponse();
+        $response = new LayoutResponse;
         $templates = Template::all();
 
         foreach ($templates as $template) {

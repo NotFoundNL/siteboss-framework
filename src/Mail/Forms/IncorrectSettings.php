@@ -15,8 +15,7 @@ class IncorrectSettings extends Mailable
     public function __construct(
         public Form $form,
         public ValidatorInfo $validatorInfo
-    ) {
-    }
+    ) {}
 
     /**
      * Build the message.

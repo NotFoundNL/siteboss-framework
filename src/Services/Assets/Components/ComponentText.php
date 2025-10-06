@@ -44,7 +44,7 @@ class ComponentText extends AbstractComponent
             }
         }
 
-        //$inputText->setEndpoint($endPoint);
+        // $inputText->setEndpoint($endPoint);
         return null;
     }
 
@@ -100,7 +100,7 @@ class ComponentText extends AbstractComponent
 
         // create new image instance
         $image = (new ImageManager(
-            new Driver()
+            new Driver
         ))->read(new File(request()->file('file')));
         $image->scaleDown($width, null);
 

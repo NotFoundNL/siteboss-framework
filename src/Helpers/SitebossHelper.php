@@ -47,7 +47,7 @@ class SitebossHelper
         $sendgrid_sender_email = self::config('sendgrid_sender_email', true);
         $sendgrid_sender_name = self::config('sendgrid_sender_name', true);
 
-        $email = new \SendGrid\Mail\Mail();
+        $email = new \SendGrid\Mail\Mail;
         $email->setFrom($sendgrid_sender_email, $sendgrid_sender_name);
         $email->setSubject($subject);
 
