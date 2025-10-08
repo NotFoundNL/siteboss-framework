@@ -70,23 +70,15 @@ class ComponentVectorImage extends AbstractComponent
         if (request()->hasFile($fileId)) {
             $file = request()->file($fileId);
             if (! $file->isValid()) {
-                $errorResponse = new LayoutResponse;
+                abort(500, 'SVG file is not valid');
 
-                $errorResponse->addAction(new Toast($file->getErrorMessage(), 'error'));
-
-                return $errorResponse->build();
             }
         }
 
         $sanitizer = new Sanitizer;
-        $cleanSVG = $sanitizer->sanitize($file);
-
-        if (! $cleanSVG) {
-            $errorResponse = new LayoutResponse;
-
-            $errorResponse->addAction(new Toast('SVG could not be sanitized', 'error'));
-
-            return $errorResponse->build();
+        $cleanSVG = $sanitizer->sanitize(file_get_contents($file->path()));
+        if ($cleanSVG === false) {
+            abort(500, 'SVG could not be sanitized');
         }
 
         $filename = $this->recordId.'.svg';
