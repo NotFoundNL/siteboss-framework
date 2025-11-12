@@ -92,6 +92,7 @@ class CmsEditorTableController extends \NotFound\Framework\Http\Controllers\Cont
         $tableId = $table->insertGetId([
             'name' => $request->name,
             'table' => $request->table,
+            'model' => $request->model,
             'url' => $request->table,
             'enabled' => true,
             'allow_create' => true,
@@ -137,6 +138,7 @@ class CmsEditorTableController extends \NotFound\Framework\Http\Controllers\Cont
             $form->addInput((new LayoutInputText('table', 'Table'))->setValue($table->table ?? '')->setRequired());
 
             $form->addInput((new LayoutInputText('url', 'Slug'))->setValue($table->url ?? '')->setRequired());
+            $form->addInput((new LayoutInputText('model', 'Model'))->setValue($table->model ?? ''));
 
             $form->addInput((new LayoutInputText('itemsPerPage', 'Rows per page'))->setValue($table->properties->itemsPerPage ?? '25')->setRequired());
 
@@ -226,6 +228,7 @@ class CmsEditorTableController extends \NotFound\Framework\Http\Controllers\Cont
             'table' => 'string|required',
             'url' => 'string|required',
             'enabled' => 'boolean',
+            'model' => 'string',
             'allow_create' => 'boolean',
             'allow_delete' => 'boolean',
             'allow_sort' => 'boolean',
@@ -248,6 +251,7 @@ class CmsEditorTableController extends \NotFound\Framework\Http\Controllers\Cont
         $table->update([
             'name' => $request->name,
             'table' => $request->table,
+            'model' => $request->model,
             'url' => $request->url,
             'enabled' => $request->enabled,
             'allow_create' => $request->allow_create,

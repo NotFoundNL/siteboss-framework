@@ -63,7 +63,7 @@ class Table extends AssetModel
 
     protected $visible = ['id', 'items', 'name', 'url'];
 
-    protected $fillable = ['name', 'url', 'table', 'properties', 'enabled', 'allow_sort', 'allow_create', 'allow_delete'];
+    protected $fillable = ['name', 'url', 'table', 'properties', 'enabled', 'allow_sort', 'allow_create', 'allow_delete', 'model'];
 
     protected $casts = [
         'properties' => 'object',
