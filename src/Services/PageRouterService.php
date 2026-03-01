@@ -87,7 +87,7 @@ class PageRouterService
 
         if ($className) {
             Route::get($route, [$className, '__invoke'])
-                ->name('page.'.$page->id)
+                ->name($isRoot ? 'root.'.$page->id : 'page.'.$page->id)
                 ->defaults('page_id', $page->id);
         }
     }

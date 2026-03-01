@@ -15,8 +15,6 @@ use NotFound\Framework\Services\Assets\Enums\AssetType;
 use NotFound\Layout\Elements\AbstractLayout;
 use NotFound\Layout\Elements\Table\LayoutTableColumn;
 use NotFound\Layout\Inputs\LayoutInputVectorImage;
-use NotFound\Layout\LayoutResponse;
-use NotFound\Layout\Responses\Toast;
 use stdClass;
 
 class ComponentVectorImage extends AbstractComponent
