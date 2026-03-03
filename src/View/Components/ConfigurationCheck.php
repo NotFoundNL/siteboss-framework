@@ -96,6 +96,9 @@ class ConfigurationCheck extends Component
 
     private function envTest(): bool|string
     {
+        // This check will fail if the configuration is cached,
+        // but it is still useful for development and staging environments.
+        // In production, the configuration should be cached and this check can be ignored.
         $result = [];
 
         $envCheck = ['OIDC_CONFIGURATION_URL', 'OIDC_CLIENT_ID', 'OIDC_ISSUER', 'SB_ADMIN_EMAIL', 'MAIL_PASSWORD'];
