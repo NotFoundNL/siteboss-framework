@@ -2,12 +2,16 @@
 
 namespace NotFound\Framework;
 
+use Illuminate\Console\Command;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use NotFound\Framework\Auth\Notifications\VerifyEmail;
 use NotFound\Framework\Models\Lang;
+use NotFound\Framework\Services\CmsExchange\ExchangeConsoleService;
+use NotFound\Framework\Services\Indexer\IndexBuilderService;
 use NotFound\Framework\View\Components\ConfigurationCheck;
 use NotFound\Framework\View\Components\Forms\Form;
 
@@ -17,7 +21,21 @@ class FrameworkServiceProvider extends ServiceProvider
     {
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
         $this->loadRoutesFrom(__DIR__.'/../routes/api.php');
-        $this->loadRoutesFrom(__DIR__.'/../routes/console.php');
+        $this->commands([
+            Artisan::command('siteboss:index-site {--debug : Display debug messages} {--fresh : Empty local search table}', function ($debug, $fresh) {
+                $indexer = new IndexBuilderService($debug, $fresh);
+                $indexer->run();
+
+                return Command::SUCCESS;
+            })->purpose('Index site for local search'),
+
+            Artisan::command('siteboss:cms-import {--debug : Display debug messages} {--dry : Dry Run}', function ($debug, $dry) {
+                $exchanger = new ExchangeConsoleService($debug, $dry);
+                $exchanger->import();
+
+                return Command::SUCCESS;
+            })->purpose('Import CMS changes to the database'),
+        ]);
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'siteboss');
         $this->loadTranslationsFrom(__DIR__.'/../lang', 'siteboss');
 
