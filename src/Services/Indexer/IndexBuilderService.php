@@ -10,43 +10,41 @@ use NotFound\Framework\Services\Assets\PageService;
 
 class IndexBuilderService
 {
-    private bool $debug;
-
-    private bool $clean;
-
     private $locales;
 
     private $domain;
 
     private $sitemapFile;
 
+    private $padding = 140;
+
     private AbstractIndexService $searchServer;
 
-    public function __construct($debug = false, $clean = false)
+    public function __construct(private bool $debug = false, private bool $fresh = false)
     {
         $serverType = config('indexer.engine');
         $this->debug = $debug;
-        $this->clean = $clean;
+        $this->fresh = $fresh;
         $this->locales = Lang::all();
 
         $this->domain = rtrim(env('APP_URL', ''), '/');
         switch ($serverType) {
             case 'solr':
-                $this->searchServer = new SolrIndexService($this->debug);
+                $this->searchServer = new SolrIndexService($this->debug, $this->fresh);
                 break;
             default:
                 exit('Unknown search index type');
         }
     }
 
-    public function run()
+    public function run(): void
     {
         if (! $this->searchServer->checkConnection()) {
             $this->writeDebug("\n\n Error connecting to search server! \n\n");
 
             return;
         }
-        if ($this->clean) {
+        if ($this->fresh) {
             $this->searchServer->clean();
         }
         $sites = CmsSite::whereIndex(1)->get();
@@ -64,58 +62,58 @@ class IndexBuilderService
                     $this->sitemapFile = fopen($sitemapFileName, 'w') or exit('Could not open sitemap file for writing');
                 } else {
                     $this->sitemapFile = false;
-                    $this->writeDebug("   skipping sitemap\n");
+                    $this->writeDebug(" ⏭️ Skipping sitemap\n");
                 }
 
                 $siteId = $site->id;
                 $this->searchServer->siteId = $siteId;
+                $this->searchServer->domain = $site->domain ?? null;
+
                 $this->searchServer->languageId = 1;
 
                 // insert all pages, starting from the root
-                $this->writeDebug("   INDEXING PAGES\n   ==============\n");
+                $this->writeDebug("┃ INDEXING PAGES\n   ==============\n");
                 $this->indexChildPages($site->root);
 
                 if ($this->sitemapFile) {
                     fclose($this->sitemapFile);
                 }
-                $finish = $this->searchServer->finishUpdate();
-
-                $this->writeDebug($finish->message);
             }
         } else {
             $this->writeDebug("No sites to index\n");
+
+            return;
         }
+        $finish = $this->searchServer->finishUpdate();
+
+        $this->writeDebug($finish->message);
     }
 
     private function indexChildPages($parentId)
     {
         $childPages = Menu::whereParent_id($parentId)->whereEnabled(1)->get();
         foreach ($childPages as $page) {
-            $this->writeDebug(sprintf("    * Page \e[1m%s\e[0m (id: %d)", $page->url, $page->id));
+            $this->writeDebug("┃\n");
+            $this->writeDebug(sprintf('%s (id: %d)', $page->url, $page->id), true, '┣━┓  📂 Page ');
 
             if (! isset($page->template->id)) {
-                $this->writeDebug("   skipping, no template found\n");
-
-                continue;
-            }
-
-            if (! isset($page->template->properties->searchable) || $page->template->properties->searchable == 0) {
-                $this->writeDebug("   skipping, template not searchable\n");
-
-                continue;
-            }
-            if (isset($page->properties->exludeFromSearch) && $page->properties->exludeFromSearch == true) {
-                $this->writeDebug("  skipping, page not searchable\n");
+                $this->writeDebug(": ❌ Fail, skipping, no template found\n");
 
                 continue;
             }
 
             $menu = Menu::whereId($page->id)->firstOrFail();
 
-            foreach ($this->locales as $lang) {
-                $this->updatePage($menu, $lang);
-            }
+            if (! isset($page->template->properties->searchable) || $page->template->properties->searchable == 0) {
+                $this->writeDebug(": ⏭️ Skipping, template excluded from search\n");
+            } elseif (isset($page->properties->excludeFromSearch) && $page->properties->excludeFromSearch == true) {
+                $this->writeDebug(": ⏭️  Skipping, page excluded from search\n");
+            } else {
 
+                foreach ($this->locales as $lang) {
+                    $this->updatePage($menu, $lang);
+                }
+            }
             // index subitems for page
             foreach ($this->locales as $lang) {
                 $this->updateSubPages($menu, $lang);
@@ -134,7 +132,7 @@ class IndexBuilderService
             $url = $menu->getLocalizedPath();
         }
 
-        if ($this->searchServer->urlNeedsUpdate($url, strtotime($menu->updated_at))) {
+        if ($this->searchServer->urlNeedsUpdate($url, $menu->updated_at)) {
             $this->writeDebug(': update needed: ');
 
             $searchText = '';
@@ -146,11 +144,11 @@ class IndexBuilderService
             // continue with customValues
             $customValues = [];
 
-            $class = $menu->template->filename ?? '';
-            $className = 'App\Http\Controllers\Page\\'.$class.'Controller';
+            $className = 'App\Http\Controllers\Page\\'.$this->controllerName($menu).'Controller';
+
             $c = null;
             $priority = 1;
-            $solrDate = '';
+
             if (class_exists($className)) {
                 $c = new $className();
                 if (method_exists($className, 'customSearchValues')) {
@@ -159,30 +157,31 @@ class IndexBuilderService
                 if (method_exists($className, 'searchPriority')) {
                     $priority = $c->searchPriority();
                 }
-                if (method_exists($className, 'solrDate')) {
-                    $solrDate = $c->solrDate($menu->id);
-                }
             }
             $searchText = rtrim($searchText, ', ');
             if (! empty($title) && ! empty($searchText)) {
 
                 $searchItem = new SearchItem($url, $title);
-                $searchItem->setContent($searchText)->setLanguage($lang->url)->setPriority($priority)->setPublicationDate(new DateTime($menu->updated_at));
+                $searchItem->setContent($searchText)
+                    ->setLanguage($lang->url)
+                    ->setPriority($priority)
+                    ->setPublicationDate(new DateTime($menu->updated_at));
                 foreach ($customValues as $key => $value) {
                     $searchItem->setCustomValue($key, $value);
                 }
                 $result = $this->searchServer->upsertItem($searchItem);
 
                 if ($result->errorCode == 0) {
-                    $this->writeDebug(" success\n");
+                    $this->writeDebug(": ✅ Success\n");
                 } else {
-                    $this->writeDebug(" FAILED\n");
+                    $this->writeDebug(": ❌ FAILED\n");
                 }
             } else {
-                $this->writeDebug(" empty page or title\n");
+                $this->writeDebug(": ❌ Empty page or title\n");
             }
         } else {
-            $this->writeDebug(": Does not need updating\n");
+            $this->writeDebug(": ✅ Page does not need updating\n");
+            $this->searchServer->retainItem($url);
         }
 
         if ($this->sitemapFile) {
@@ -198,8 +197,7 @@ class IndexBuilderService
 
     private function updateSubPages($menu, $lang)
     {
-        $class = $menu->template->filename ?? '';
-        $className = 'App\Http\Controllers\Page\\'.$class.'Controller';
+        $className = 'App\Http\Controllers\Page\\'.$this->controllerName($menu).'Controller';
         $c = null;
         // update subPage if necessary
 
@@ -207,6 +205,18 @@ class IndexBuilderService
             $c = new $className();
             $this->updateSubitems($c, $lang);
         }
+    }
+
+    private function controllerName($menu): string
+    {
+        $class = str_replace('/', '\\', $menu->template->getIdentifier() ?? '');
+        $classes = explode('\\', $class);
+        foreach ($classes as &$c) {
+
+            $c = ucfirst($c);
+        }
+
+        return implode('\\', $classes);
     }
 
     private function updateSubitems($class, $lang)
@@ -225,9 +235,9 @@ class IndexBuilderService
                 $success = false;
                 if ((new \ReflectionClass($searchItem))->getShortName() == 'SearchItem') {
                     $url = $searchItem->url();
-                    $this->writeDebug($url);
+                    $this->writeDebug($url, true, '┃ ┣━ 📄 ');
 
-                    if ($this->searchServer->urlNeedsUpdate($url, strtotime($searchItem->lastUpdated()))) {
+                    if ($this->searchServer->urlNeedsUpdate($url, $searchItem->lastUpdated())) {
 
                         $searchItem->setLanguage($lang->url);
                         $success = $this->searchServer->upsertItem($searchItem);
@@ -241,12 +251,13 @@ class IndexBuilderService
                         }
 
                         if ($success->errorCode == 0) {
-                            $this->writeDebug(" success\n");
+                            $this->writeDebug(": ✅ Success\n");
                         } else {
                             $this->writeDebug($success->message);
                         }
                     } else {
-                        $this->writeDebug(": Does not need updating\n");
+                        $this->writeDebug(": ✅ Item does not need updating\n");
+                        $success = $this->searchServer->retainItem($url);
                     }
                 } else {
                     dd('Please use the SearchItem class');
@@ -265,10 +276,15 @@ class IndexBuilderService
         }
     }
 
-    private function writeDebug($text)
+    private function writeDebug($text, $padding = false, $prefix = '')
     {
         if ($this->debug) {
-            printf($text);
+
+            if ($padding) {
+                $text = substr($text, 0, $this->padding - strlen($prefix));
+                $text = str_pad($text, $this->padding - strlen($prefix), ' ');
+            }
+            printf("\e[1m".$prefix."\e[0m".$text);
         }
     }
 

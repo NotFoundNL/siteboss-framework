@@ -63,6 +63,13 @@ class CmsEditorTemplateController extends \NotFound\Framework\Http\Controllers\C
         $form->addButton(new LayoutButton('Add new template'));
         $widget2->addForm($form);
 
+        $form = new LayoutForm('/app/editor/template-export/');
+
+        $form->addInput((new LayoutInputCheckbox('name', 'I know this will overwrite the template files from my database'))->setRequired());
+
+        $form->addButton(new LayoutButton('Export all templates to files'));
+        $widget2->addForm($form);
+
         $page->addWidget($widget2);
 
         $response->addUIElement($page);
@@ -169,9 +176,6 @@ class CmsEditorTemplateController extends \NotFound\Framework\Http\Controllers\C
         $widget2->addTable($UItable);
 
         $page->addWidget($widget2);
-
-        $page->addWidget(CmsEditorImportExportController::getExport($tables));
-        $page->addWidget(CmsEditorImportExportController::getImport($table->id, 'page'));
 
         $response->addUIElement($page);
 

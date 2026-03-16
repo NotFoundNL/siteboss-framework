@@ -171,15 +171,4 @@ class PageController extends Controller
     {
         return [];
     }
-
-    public function solrDate($pageId)
-    {
-        $this->pageId = $pageId;
-        $date = $this->menuItem()->updated_at;
-        if ($date) {
-            return $date->toIso8601String();
-        } else {
-            return '2023-01-01T10:00:00Z';
-        }
-    }
 }

@@ -94,7 +94,7 @@ class ClamAV
             $unixSocket = config('clamav.unix_socket');
 
             return 'unix://'.$unixSocket;
-        } else {
+        } elseif ($preferredSocket === 'tcp') {
             $tcpSocket = config('clamav.tcp_socket');
 
             return $tcpSocket;

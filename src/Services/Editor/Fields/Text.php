@@ -24,6 +24,7 @@ class Text extends Properties
             (object) ['value' => 'richtext', 'label' => 'Rich Text'],
         ]);
         $this->addNumber('maxlength', 'Maximum length');
+        $this->addCheckbox('editModal', 'Edit texts in popup (required for ContentBlock/Childtable)');
     }
 
     public function serverProperties(): void
@@ -34,7 +35,8 @@ class Text extends Properties
             $options[] = (object) ['value' => $table->name, 'label' => $table->name];
         }
         $this->addDropDown('editorSettings', 'Editor settings (for rich text editor)', $options);
-
+        // BUG: TODO: editModal should just be a property,
+        //            not a server property
         $this->addTitle('Validation');
 
         $this->addDropDown('regExTemplate', 'Built in validations', [
@@ -52,13 +54,13 @@ class Text extends Properties
         return ['texttype' => 'type'];
     }
 
-    public function checkColumnType(?\Doctrine\DBAL\Types\Type $type): string
+    public function checkColumnType(?string $type): string
     {
         if ($type === null) {
             return 'COLUMN MISSING';
         }
-        if (! in_array($type->getName(), ['string', 'text'])) {
-            return 'TYPE ERROR: '.$type->getName().' is not a valid type for a text field';
+        if (! in_array($type, ['varchar', 'text'])) {
+            return 'TYPE ERROR: '.$type.' is not a valid type for a text field';
         }
 
         return '';

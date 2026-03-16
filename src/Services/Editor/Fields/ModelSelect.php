@@ -23,13 +23,13 @@ class ModelSelect extends Properties
         $this->addText('methodName', 'Method', true);
     }
 
-    public function checkColumnType(?\Doctrine\DBAL\Types\Type $type): string
+    public function checkColumnType(?string $type): string
     {
         if ($type === null) {
             return 'COLUMN MISSING';
         }
-        if (! in_array($type->getName(), ['string', 'integer'])) {
-            return 'TYPE ERROR: '.$type->getName().' is not a valid type for a table select field';
+        if (! in_array($type, ['varchar', 'int'])) {
+            return 'TYPE ERROR: '.$type.' is not a valid type for a table select field';
         }
 
         return '';

@@ -42,7 +42,7 @@ class TableEditorController extends AssetEditorController
 
         $params = sprintf('?page=%d&sort=%s&asc=%s', $request->page ?? 1, $request->sort ?? '', $request->asc ?? '');
 
-        $formUrl = sprintf('/table/%s/%s/%s/%s', $table->url, $recordId ?? 0, urlencode($langUrl), $params.$editor->filterToParams());
+        $formUrl = sprintf('/table/%s/%s/%s/%s', $table->url, $recordId ?? 0, urlencode($langUrl), $params.'&'.$editor->filterParameters());
 
         $form = new LayoutForm($formUrl);
 
@@ -108,7 +108,6 @@ class TableEditorController extends AssetEditorController
         }
 
         $tableService = new TableService($table, $lang, $recordId);
-
         $tableService->setRequestParameters($request->query());
 
         $editor = $this->customEditor($table, $tableService);
@@ -142,8 +141,8 @@ class TableEditorController extends AssetEditorController
             // Stay on page
             if ($newTableRecord) {
                 $url = '/table/'.$table->url.'/'.$id;
-                if ($params = $editor->filterToParams()) {
-                    $url .= '?'.ltrim($params, '&');
+                if ($params = $editor->filterParameters()) {
+                    $url .= '?'.$params;
                 }
                 $response->addAction(new Redirect($url));
             } else {
@@ -152,9 +151,11 @@ class TableEditorController extends AssetEditorController
         } else {
             // Redirect
 
-            $params = sprintf('?page=%d&sort=%s&asc=%s', $request->page ?? 1, $request->sort ?? '', $request->asc ?? '');
-            $params .= $editor->filterToParams();
-            $response->addAction(new Redirect('/table/'.$table->url.'/?'.$params));
+            // Get the overview URL from the editor
+            $editor = $this->customEditor($table, $tableService);
+            $overviewUrl = $editor->getOverviewUrl();
+
+            $response->addAction(new Redirect($overviewUrl));
         }
 
         return $response->build();

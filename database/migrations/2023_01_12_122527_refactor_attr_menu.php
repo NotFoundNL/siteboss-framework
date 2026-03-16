@@ -81,7 +81,7 @@ return new class extends Migration
             'allowChangeParent' => (bool) (intval($menuitem->attr) & $ATTR_CHANGEPARENT),
             'allowDeleteChildren' => ! (intval($menuitem->attr) & $ATTR_NODELETECHILD),
             'allowEnabled' => ! (intval($menuitem->attr) & $ATTR_NOENABLE),
-            'exludeFromSearch' => (bool) $excludeFromSearch,
+            'excludeFromSearch' => (bool) $excludeFromSearch,
         ];
         $menuitem->properties = ($newProperties);
         $menuitem->menu = (bool) (intval($menuitem->attr) & $ATTR_NODELETECHILD);

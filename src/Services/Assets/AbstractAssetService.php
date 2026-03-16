@@ -57,7 +57,7 @@ abstract class AbstractAssetService
     /**
      * Loops through all the table items and return them with the appropriate Input Class
      */
-    public function getFieldComponents(?int $recordId = null): Collection
+    public function getFieldComponents(int $recordId = null): Collection
     {
         $items = $this->assetModel->items()->where('enabled', 1)->orderBy('order')->get();
 

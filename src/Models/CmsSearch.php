@@ -40,7 +40,12 @@ class CmsSearch extends BaseModel
 {
     protected $table = 'cms_search';
 
-    private array $status = ['PENDING', 'ADDED', 'SKIPPED', 'UPDATED', 'NOT_INDEXABLE', 'NOT_FOUND'];
+    protected $casts = [
+        'updated_at' => 'datetime',
+        'created_at' => 'datetime',
+        'deleted_at' => 'datetime',
+    ];
+    //    private array $status = ['PENDING', 'ADDED', 'SKIPPED', 'UPDATED', 'NOT_INDEXABLE', 'NOT_FOUND'];
 
     private static array $skipStatus = ['NOT_INDEXABLE', 'NOT_FOUND'];
 
