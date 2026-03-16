@@ -21,13 +21,17 @@ class PageRedirectService
         $redirects = CmsRedirect::where('enabled', true)->orderByRaw('CHAR_LENGTH(`url`) DESC')->get();
         foreach ($redirects as $redirect) {
             if ($redirect->recursive) {
-                Route::any($redirect->url.'{any}', function (?string $pages = '') use ($redirect) {
+                // Extract values to avoid serialization issues with route caching
+                $redirectTo = $redirect->redirect;
+                $rewrite = $redirect->rewrite;
+
+                Route::any($redirect->url.'{any}', function (?string $pages = '') use ($redirectTo, $rewrite) {
                     $pages = trim($pages, '/');
-                    if ($redirect->rewrite) {
+                    if ($rewrite) {
                         $pages = '';
                     }
 
-                    return Redirect::to($redirect->redirect.$pages);
+                    return Redirect::to($redirectTo.'/'.$pages);
                 })->where('any', '.*');
             } else {
                 Route::permanentRedirect($redirect->url, $redirect->redirect);
