@@ -70,7 +70,10 @@ class Lang extends Model
             $locale = app()->getLocale();
             self::$current = self::query()->whereUrl($locale)->first();
             if (! isset(self::$current->id)) {
-                exit('Locale not supported: '.$locale."\nCheck config/app.php and your database\n");
+                self::$current = self::default();
+                if (! isset(self::$current->id)) {
+                    exit('Locale not supported, default could not be set: '.$locale."\nCheck config/app.php and your database\n");
+                }
             }
         }
 
