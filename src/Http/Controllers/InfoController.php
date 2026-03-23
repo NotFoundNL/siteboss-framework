@@ -16,15 +16,17 @@ class InfoController extends Controller
 {
     public function index()
     {
+        $languages = $this->getLanguages();
+
         return [
             'menu' => $this->menu(),
             'locales' => [
                 // The available language for the website
-                'siteLocales' => Lang::all(),
+                'siteLocales' => $languages->list,
                 // The UI language for the CMS
                 // TODO: retrieve the selected language from the user settings
-                'defaultLocale' => env('SB_LOCALES_DEFAULT', 'en'),
-                'availableLocales' => explode(',', env('SB_LOCALES_SUPPORTED', 'nl,en')),
+                'defaultLocale' => $languages->default,
+                'availableLocales' => $languages->available,
             ],
             'settings' => [
                 'documentationUrl' => env('APP_CLIENT_DOCS_URL', 'https://docs.siteboss.nl'),
@@ -38,6 +40,8 @@ class InfoController extends Controller
 
     public function settings()
     {
+        $languages = $this->getLanguages();
+
         $settings = new stdClass;
         $settings->title = env('APP_NAME');
         $settings->productName = env('APP_WHITELABEL_NAME', 'SiteBoss');
@@ -54,8 +58,8 @@ class InfoController extends Controller
 
         // The UI languages for the Login page (currently no difference from the rest of the CMS)
         $settings->messages = [];
-        $settings->defaultLocale = env('SB_LOCALES_DEFAULT', 'en');
-        $settings->availableLocales = explode(',', env('SB_LOCALES_SUPPORTED', 'nl,en'));
+        $settings->defaultLocale = $languages->default;
+        $settings->availableLocales = $languages->available;
         $settings->documentationUrl = env('APP_CLIENT_DOCS_URL', 'https://docs.siteboss.nl');
         $settings->logo = env('APP_CLIENT_LOGO');
 
@@ -223,5 +227,23 @@ class InfoController extends Controller
         $newStr = str_replace('?menu=', '/', $newStr);
         $menuitem->to = '/'.$newStr;
         $menuitem->save();
+    }
+
+    private function getLanguages()
+    {
+        $languages = Lang::all();
+        if (count($languages) === 1) {
+            $defaultLocale = $languages->first()->url;
+            $availbleLocales = [$languages->first()->url];
+        } else {
+            $defaultLocale = config('siteboss.locales.default', 'en');
+            $availbleLocales = explode(',', config('siteboss.locales.supported', 'en'));
+        }
+
+        return (object) [
+            'list' => $languages,
+            'default' => $defaultLocale,
+            'available' => $availbleLocales,
+        ];
     }
 }

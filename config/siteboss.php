@@ -60,4 +60,17 @@ return [
 
     'admin_email' => env('SB_ADMIN_EMAIL', null),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Locales
+    |--------------------------------------------------------------------------
+    |
+    | Supported locales for the application.
+    |
+    */
+
+    'locales' => [
+        'default' => env('SB_LOCALES_DEFAULT', 'en'),
+        'supported' => explode(',', env('SB_LOCALES_SUPPORTED', 'en,nl')),
+    ],
 ];

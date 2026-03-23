@@ -19,7 +19,7 @@ return [
         'updated' => 'De pagina is bijgewerkt',
     ],
     'users' => [
-        'list' => 'Gebruikers',
+        'list' => 'CMS Gebruikers',
         'new' => 'Nieuwe gebruiker',
         'new_explain' => 'Voeg een nieuwe gebruiker toe die al bestaat op de gekoppelde OpenID Connect provider.',
         'roles' => 'Rollen',

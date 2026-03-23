@@ -46,7 +46,7 @@ class UserManagementController extends Controller
 
         $form = new LayoutForm(sprintf('/app/users/create/'));
 
-        $help = new LayoutText(__('siteboss::ui.users.new_explain'));
+        $help = new LayoutText('<p>'.__('siteboss::ui.users.new_explain').'</p>');
 
         $form->addText($help);
 
