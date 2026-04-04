@@ -17,7 +17,7 @@
   ],
   "require": {
     "firebase/php-jwt": "^7.0",
-    "intervention/image": "^3.0",
+    "intervention/image": "^4.0",
     "mcamara/laravel-localization": "^2.0",
     "notfoundnl/siteboss-layout": "^1.6.1",
     "notfoundnl/siteboss-static": "^1.15.0",
