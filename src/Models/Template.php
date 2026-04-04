@@ -2,6 +2,8 @@
 
 namespace NotFound\Framework\Models;
 
+use Illuminate\Database\Eloquent\Attributes\CollectedBy;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use NotFound\Framework\Traits\Exchangeable;
@@ -49,6 +51,7 @@ use NotFound\Framework\Traits\Exchangeable;
  *
  * @mixin \Eloquent
  */
+#[CollectedBy(Collection::class)]
 class Template extends AssetModel
 {
     use Exchangeable;
