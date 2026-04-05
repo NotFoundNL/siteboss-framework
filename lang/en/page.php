@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 // TODO: update values to use proper naming convention
 return [
     'title' => 'Pages',

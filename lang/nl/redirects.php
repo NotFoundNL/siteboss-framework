@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 return [
     'title' => 'Doorverwijzingen',
     'widget_title' => 'Overzicht van alle doorverwijzingen',

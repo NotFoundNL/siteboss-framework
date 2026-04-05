@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 return [
     'title' => 'User preferences',
     'subtitle' => 'Here you can change your preferences',

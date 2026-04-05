@@ -1,22 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Support\Facades\Route;
 use NotFound\Framework\Http\Controllers\Assets\TableEditorController;
 use NotFound\Framework\Http\Controllers\Assets\TableItemEditorController;
 use NotFound\Framework\Http\Controllers\Assets\TableOverviewController;
 
-Route::prefix('{table:url}')->group(function () {
+Route::prefix('{table:url}')->group(function (): void {
     Route::get('', [TableOverviewController::class, 'index']);
     Route::put('', [TableOverviewController::class, 'updateField']);
     Route::post('', [TableOverviewController::class, 'create']);
     Route::put('move', [TableOverviewController::class, 'updatePosition']);
 
     // /table/{slug}/{recordId}
-    Route::prefix('{recordId}')->group(function () {
+    Route::prefix('{recordId}')->group(function (): void {
         Route::delete('', [TableEditorController::class, 'deleteRecord']);
 
         // /table/{slug}/{recordId}/{lang}
-        Route::prefix('{langSlug}')->group(function () {
+        Route::prefix('{langSlug}')->group(function (): void {
             Route::get('', [TableEditorController::class, 'index']);
             Route::post('', [TableEditorController::class, 'update']);
 

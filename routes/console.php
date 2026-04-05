@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
 use NotFound\Framework\Services\CmsExchange\ExchangeConsoleService;
