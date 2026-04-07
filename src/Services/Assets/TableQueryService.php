@@ -108,8 +108,10 @@ class TableQueryService
     {
         $siteTableNameTr = $this->table->getSiteTableName().'_tr';
 
-        $query->leftJoin($siteTableNameTr, $this->table->getSiteTableName().'.id', '=', $siteTableNameTr.'.entity_id')
-            ->where($siteTableNameTr.'.lang_id', Lang::current()->id)
+        $query->leftJoin($siteTableNameTr, function ($join) use ($siteTableNameTr) {
+            $join->on($this->table->getSiteTableName().'.id', '=', $siteTableNameTr.'.entity_id')
+                ->where($siteTableNameTr.'.lang_id', Lang::current()->id);
+        })
             ->select($siteTableNameTr.'.*', $this->table->getSiteTableName().'.*');
 
         return $query;
