@@ -47,7 +47,7 @@ class VerifyEmailController extends Controller
             throw new AuthorizationException;
         }
 
-        if (! hash_equals((string) $request->route('hash'), sha1($user->getEmailForVerification())) || ! $user->enabled) {
+        if (! hash_equals((string) $request->route('hash'), hash('sha256', $user->getEmailForVerification())) || ! $user->enabled) {
             throw new AuthorizationException;
         }
 
@@ -71,7 +71,7 @@ class VerifyEmailController extends Controller
             throw new AuthorizationException;
         }
 
-        if (! hash_equals((string) $request->route('hash'), sha1($user->getEmailForVerification()))) {
+        if (! hash_equals((string) $request->route('hash'), hash('sha256', $user->getEmailForVerification()))) {
             throw new AuthorizationException;
         }
 

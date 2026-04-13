@@ -107,7 +107,7 @@ class PageRouterService
         if (app()->runningInConsole()) {
             $this->cliError($pageClassName.' does not exist.');
         } else {
-            dd('Class does not exist: '.$pageClassName);
+            Log::error('PageRouterService: controller class does not exist', ['class' => $pageClassName]);
         }
 
         return false;

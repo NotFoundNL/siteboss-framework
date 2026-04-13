@@ -3,6 +3,7 @@
 namespace NotFound\Framework\Services\Indexer;
 
 use Illuminate\Support\Str;
+use RuntimeException;
 
 class ContentBlockService
 {
@@ -14,7 +15,7 @@ class ContentBlockService
         if (class_exists($className)) {
             return new $className;
         }
-        dd('Unknown class '.$className);
+        throw new RuntimeException('ContentBlockService: unknown class '.$className);
     }
 
     public function toText()

@@ -24,7 +24,7 @@ class AccountBlocked extends Mailable
     public function build()
     {
         return $this->markdown('siteboss::mail.admin.account-blocked')
-            ->subject('CMS: Account geblokkeerd')
+            ->subject(__('siteboss::mail.account_blocked_subject'))
             ->with([
                 'user' => $this->user,
             ]);

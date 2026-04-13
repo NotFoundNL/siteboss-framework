@@ -260,7 +260,7 @@ class IndexBuilderService
                         $success = $this->searchServer->retainItem($url);
                     }
                 } else {
-                    dd('Please use the SearchItem class');
+                    throw new \RuntimeException('IndexBuilderService: search subitem must be an instance of SearchItem');
                 }
             }
         }

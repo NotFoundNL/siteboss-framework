@@ -29,13 +29,6 @@ class BaseModel extends Model
     use SoftDeletes;
 
     /**
-     * The attributes that should be visible in arrays.
-     *
-     * @var array
-     */
-    protected $visible = [''];
-
-    /**
      * Fetch the cached values for this model
      * based on the CMS settings.
      *

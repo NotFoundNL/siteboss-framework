@@ -11,17 +11,6 @@ use NotFound\Framework\Services\PageRouterService;
 
 class RouteServiceProvider extends ServiceProvider
 {
-    const HOME = '/home';
-
-    /**
-     * The controller namespace for the application.
-     *
-     * When present, controller route declarations will automatically be prefixed with this namespace.
-     *
-     * @var null|string
-     */
-    protected $namespace = 'NotFound\\Framework\\Http\\Controllers';
-
     /**
      * Define your route model bindings, pattern filters, etc.
      */
