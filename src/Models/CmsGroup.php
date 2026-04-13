@@ -72,21 +72,22 @@ class CmsGroup extends BaseModel
             return $groupCollection->pluck('internal');
         }
 
+        $allGroups = static::all();
         $rolesWithChildren = new Collection;
         foreach ($groupCollection as $item) {
-            $this->recursiveSetRights($rolesWithChildren, $item);
+            $this->recursiveSetRights($rolesWithChildren, $item, $allGroups);
         }
 
         return $rolesWithChildren;
     }
 
-    private function recursiveSetRights(Collection &$groupCollection, $recursiveItem): void
+    private function recursiveSetRights(Collection &$groupCollection, $recursiveItem, Collection $allGroups): void
     {
         $groupCollection->add($recursiveItem->internal);
-        $groups = $this->where('parent', $recursiveItem->id)->get();
+        $children = $allGroups->where('parent', $recursiveItem->id);
 
-        foreach ($groups as $item) {
-            $this->recursiveSetRights($groupCollection, $item);
+        foreach ($children as $item) {
+            $this->recursiveSetRights($groupCollection, $item, $allGroups);
         }
     }
 }
