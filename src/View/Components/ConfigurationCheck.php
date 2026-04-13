@@ -5,7 +5,6 @@ namespace NotFound\Framework\View\Components;
 use Exception;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Testing\Assert;
 use Illuminate\View\Component;
 use NotFound\Framework\Services\ClamAV\ClamAV;
 use NotFound\Framework\Services\Indexer\IndexBuilderService;
@@ -57,7 +56,9 @@ class ConfigurationCheck extends Component
             try {
                 Cache::put('test123', 'test123');
 
-                Assert::assertEquals(Cache::get('test123'), 'test123');
+                if (Cache::get('test123') !== 'test123') {
+                    throw new Exception('Cache read/write mismatch');
+                }
 
                 Cache::forget('test123');
             } catch (Exception $e) {
