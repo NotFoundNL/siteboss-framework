@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Notifications\Notifiable;
 use NotFound\Framework\Auth\Notifications\VerifyEmail;
+use NotFound\Framework\Helpers\BooleanExpressionEvaluator;
 
 /**
  * NotFound\Framework\Models\CmsUser
@@ -130,12 +131,9 @@ class CmsUser extends User implements MustVerifyEmail
             abort(500, 'Syntax error encountered in checkRights! Use of illegal characters.');
         }
 
-        $rights = preg_replace_callback('/[a-z-]+/', [$this, 'expressionCallBack'], trim($expression));
+        $resolved = preg_replace_callback('/[a-z-]+/', [$this, 'expressionCallBack'], trim($expression));
 
-        $result = null;
-        eval('$result='.$rights.';');
-
-        return $result;
+        return BooleanExpressionEvaluator::evaluate($resolved);
     }
 
     /**
