@@ -23,6 +23,8 @@ return [
         'new' => 'Add new user',
         'new_explain' => 'Add a new user that already exists on the linked OpenID Connect provider.',
         'roles' => 'Roles',
+        'is_admin' => 'This user is a system administrator, you cannot remove this role.',
+        'cannot_add_admin' => 'You cannot add administrator rights to a user.',
     ],
     'email' => 'E-mail',
     'enabled' => 'Enabled',

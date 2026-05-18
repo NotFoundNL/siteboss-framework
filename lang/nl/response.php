@@ -24,5 +24,6 @@ return [
     'user' => [
         'updated' => 'Gebruiker bijgewerkt',
         'error' => 'Kon gebruiker niet bijwerken',
+        'no_admin_assign' => 'Je kunt de beheerdersrol niet toewijzen',
     ],
 ];

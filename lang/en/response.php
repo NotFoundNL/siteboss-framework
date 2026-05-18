@@ -23,5 +23,6 @@ return [
     'user' => [
         'updated' => 'User updated',
         'error' => 'Couldn\'t update user',
+        'no_admin_assign' => 'You cannot assign the administrator role',
     ],
 ];
