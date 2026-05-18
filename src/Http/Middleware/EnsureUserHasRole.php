@@ -4,6 +4,7 @@ namespace NotFound\Framework\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class EnsureUserHasRole
 {
@@ -13,10 +14,10 @@ class EnsureUserHasRole
      *  Route::middleware('role:tasks');
      */
 
-    public function handle(Request $request, Closure $next, string $role)
+    public function handle(Request $request, Closure $next, string $role): Response
     {
-        if (! auth('openid')->user()->checkRights($role)) {
-            return abort(403, 'No permission for this resource');
+        if (! auth('openid')->user()?->checkRights($role)) {
+            abort(403, 'No permission for this resource');
         }
 
         return $next($request);

@@ -43,52 +43,50 @@ class CmsGroup extends BaseModel
 
     protected $table = 'cms_group';
 
-    public function getCachedGroups(): Collection
+    public static function getCachedGroups(): Collection
     {
         $secondsToRemember = 1 * 24 * 60 * 60;
 
         return Cache::remember('allRoles', $secondsToRemember, function () {
-            return $this->get();
+            return static::all();
         });
     }
 
-    public function getCachedRolesByActiveUser(): Collection
+    public static function getCachedRolesByActiveUser(): Collection
     {
-        if (! session()->has('currentRoles')) {
-            session()->put('currentRoles', $this->getRolesByUser(Auth::user()));
-        }
+        $user = Auth::user();
 
-        return session('currentRoles');
+        return static::getRolesByUser($user);
     }
 
-    public function getRolesByUser(CmsUser $user, bool $useRecursion = true): Collection
+    public static function getRolesByUser(CmsUser $user, bool $useRecursion = true): Collection
     {
-        $groupCollection = $this
+        $groupCollection = static::query()
             ->join('cms_usergroup', 'cms_usergroup.group_id', '=', 'cms_group.id')
             ->where('cms_usergroup.user_id', $user->id)
             ->select('cms_group.*')
             ->get();
+
         if (! $useRecursion) {
-            // We don't want to use recursion, so we return the groups we found.
             return $groupCollection->pluck('internal');
         }
 
         $allGroups = static::all();
         $rolesWithChildren = new Collection;
         foreach ($groupCollection as $item) {
-            $this->recursiveSetRights($rolesWithChildren, $item, $allGroups);
+            static::recursiveSetRights($rolesWithChildren, $item, $allGroups);
         }
 
         return $rolesWithChildren;
     }
 
-    private function recursiveSetRights(Collection &$groupCollection, $recursiveItem, Collection $allGroups): void
+    private static function recursiveSetRights(Collection &$groupCollection, mixed $recursiveItem, Collection $allGroups): void
     {
         $groupCollection->add($recursiveItem->internal);
         $children = $allGroups->where('parent', $recursiveItem->id);
 
         foreach ($children as $item) {
-            $this->recursiveSetRights($groupCollection, $item, $allGroups);
+            static::recursiveSetRights($groupCollection, $item, $allGroups);
         }
     }
 }

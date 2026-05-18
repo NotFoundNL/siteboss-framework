@@ -7,9 +7,8 @@ use NotFound\Framework\Http\Controllers\Forms\DownloadController;
 use NotFound\Framework\Http\Controllers\Forms\FieldController;
 use NotFound\Framework\Http\Controllers\Forms\FormController;
 
-Route::namespace('Forms')->group(function () {
-    // /forms
-    Route::prefix('forms')->group(function () {
+// /forms
+Route::prefix('forms')->group(function () {
         Route::post('', [FormController::class, 'create']);
 
         Route::get('combinations', [FormController::class, 'readAllCombinations']);
@@ -59,4 +58,4 @@ Route::namespace('Forms')->group(function () {
             });
         });
     });
-});
+
