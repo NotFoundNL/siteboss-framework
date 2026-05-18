@@ -14,59 +14,55 @@ use stdClass;
 
 class InfoController extends Controller
 {
-    public function index()
+    public function index(): array
     {
         $languages = $this->getLanguages();
 
         return [
             'menu' => $this->menu(),
             'locales' => [
-                // The available language for the website
                 'siteLocales' => $languages->list,
-                // The UI language for the CMS
-                // TODO: retrieve the selected language from the user settings
                 'defaultLocale' => $languages->default,
                 'availableLocales' => $languages->available,
             ],
             'settings' => [
-                'documentationUrl' => env('APP_CLIENT_DOCS_URL', 'https://docs.siteboss.nl'),
-                'clientLogo' => env('APP_CLIENT_LOGO'),
-                'productName' => env('APP_WHITELABEL_NAME', 'SiteBoss'),
-                'productLogo' => env('APP_WHITELABEL_LOGO', '/siteboss/images/logo.svg'),
+                'documentationUrl' => config('siteboss.branding.docs_url'),
+                'clientLogo' => config('siteboss.branding.client_logo'),
+                'productName' => config('siteboss.branding.product_name'),
+                'productLogo' => config('siteboss.branding.product_logo'),
             ],
             'preferences' => $this->preferences(),
         ];
     }
 
-    public function settings()
+    public function settings(): stdClass
     {
         $languages = $this->getLanguages();
 
         $settings = new stdClass;
-        $settings->title = env('APP_NAME');
-        $settings->productName = env('APP_WHITELABEL_NAME', 'SiteBoss');
-        $settings->productLogo = env('APP_WHITELABEL_LOGO', '/siteboss/images/logo.svg');
+        $settings->title = config('app.name');
+        $settings->productName = config('siteboss.branding.product_name');
+        $settings->productLogo = config('siteboss.branding.product_logo');
 
         $settings->background = (object) [
-            'url' => env('APP_LOGIN_IMAGE_URL', '/siteboss/images/back.jpg'),
+            'url' => config('siteboss.login.image_url'),
             'credits' => (object) [
-                'name' => env('APP_LOGIN_IMAGE_SOURCE_NAME', 'zeitfaenger.at'),
-                'url' => env('APP_LOGIN_IMAGE_SOURCE_URL', 'https://flickr.com/photos/kwarz/'),
-                'license' => env('APP_LOGIN_IMAGE_SOURCE_LICENSE', 'CC BY 2.0'),
+                'name' => config('siteboss.login.image_source_name'),
+                'url' => config('siteboss.login.image_source_url'),
+                'license' => config('siteboss.login.image_source_license'),
             ],
         ];
 
-        // The UI languages for the Login page (currently no difference from the rest of the CMS)
         $settings->messages = [];
         $settings->defaultLocale = $languages->default;
         $settings->availableLocales = $languages->available;
-        $settings->documentationUrl = env('APP_CLIENT_DOCS_URL', 'https://docs.siteboss.nl');
-        $settings->logo = env('APP_CLIENT_LOGO');
+        $settings->documentationUrl = config('siteboss.branding.docs_url');
+        $settings->logo = config('siteboss.branding.client_logo');
 
         return $settings;
     }
 
-    public function oidc()
+    public function oidc(): array
     {
         $secondsToRemember = 3600;
         $configUri = config('openid.configuration_url');
@@ -81,18 +77,17 @@ class InfoController extends Controller
             return $response->json();
         });
         $configResponse['siteboss_client_id'] = config('openid.client_id');
-        $configResponse['siteboss_logout_redirect_uri'] = 'https://'.$_SERVER['HTTP_HOST'].'/siteboss/login';
+        $configResponse['siteboss_logout_redirect_uri'] = 'https://'.request()->getHost().'/siteboss/login';
 
         return $configResponse;
     }
 
-    private function menu()
+    private function menu(): array
     {
         $menuConfigFile = base_path('resources/siteboss/menu.json');
         if (file_exists($menuConfigFile)) {
             $menuItems = json_decode(file_get_contents($menuConfigFile));
         } else {
-            // Fetch data from database
             Sb::makeDirectory(base_path(), 'resources/siteboss');
             $menuItems = $this->menuFromDatabase();
             if (file_put_contents($menuConfigFile, json_encode($menuItems, JSON_PRETTY_PRINT))) {
@@ -105,30 +100,20 @@ class InfoController extends Controller
         return $this->filterRights($menuItems);
     }
 
-    /**
-     * filterRights
-     *
-     * This function will filter the menu items based on the rights of the user.
-     */
     private function filterRights(array $menuItems): array
     {
         $menu = [];
         foreach ($menuItems as $menuitem) {
-            // If rights are defined, we'll check them here.
             if (! isset($menuitem->rights) || auth('openid')->user()->checkRights($menuitem->rights)) {
                 unset($menuitem->rights);
 
-                // Check if there are subitems and if the user has rights to see them.
                 if (isset($menuitem->submenu) && count($menuitem->submenu) > 0) {
                     $submenu = $this->filterRights($menuitem->submenu);
                     if (count($submenu) > 0) {
-
                         $menuitem->submenu = $submenu;
                         $menu[] = $menuitem;
                     }
-
                 } else {
-                    // No submenu, so we'll add it directly to the menu.
                     $menu[] = $menuitem;
                 }
             }
@@ -137,17 +122,7 @@ class InfoController extends Controller
         return $menu;
     }
 
-    /**
-     * menuFromDatabase
-     *
-     * This function will convert the menu from the database to the new format
-     * and store the file in the resources/siteboss folder.
-     *
-     * The table
-     *
-     * @return void
-     */
-    private function menuFromDatabase()
+    private function menuFromDatabase(): array
     {
         $menu = new CmsMenu;
         $menu = StatusColumn::wherePublished($menu, 'cms_menu');
@@ -170,7 +145,6 @@ class InfoController extends Controller
                 'icon' => $menuitem->icon,
                 'title' => $menuitem->title,
                 'path' => $menuitem->to ?? $menuitem->target,
-
             ];
 
             if ($menuitem->to) {
@@ -199,7 +173,7 @@ class InfoController extends Controller
         return $orderedMenu;
     }
 
-    private function preferences()
+    private function preferences(): object
     {
         $user = auth('openid')->user();
         $user = CmsUser::find($user->id);
@@ -209,9 +183,10 @@ class InfoController extends Controller
 
         return $user->preferences;
     }
+
     /* TODO: Remove or move these conversion methods */
 
-    private function convertToToTable($menuitem)
+    private function convertToToTable($menuitem): void
     {
         $newStr = str_replace('#', '', $menuitem->target);
         $newStr = str_replace('-', '/', $newStr);
@@ -220,7 +195,7 @@ class InfoController extends Controller
         $menuitem->save();
     }
 
-    private function convertToToMenu($menuitem)
+    private function convertToToMenu($menuitem): void
     {
         $newStr = str_replace('#', '', $menuitem->target);
         $newStr = str_replace('menu.php', 'menu', $newStr);
@@ -229,7 +204,7 @@ class InfoController extends Controller
         $menuitem->save();
     }
 
-    private function getLanguages()
+    private function getLanguages(): object
     {
         $languages = Lang::all();
         if (count($languages) === 1) {
