@@ -198,7 +198,7 @@ class UserManagementController extends Controller
 
         $table->addHeader(new LayoutTableHeader(__('siteboss::ui.email'), 'email'));
         $table->addHeader(new LayoutTableHeader(__('siteboss::ui.enabled'), 'enabled'));
-        $users = CmsUser::get();
+        $users = CmsUser::orderBy('email')->get();
 
         foreach ($users as $user) {
             $row = new LayoutTableRow($user->id, '/app/users/'.$user->id);
