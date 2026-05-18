@@ -19,13 +19,24 @@ use NotFound\Framework\Services\CmsExchange\ExchangeConsoleService;
 use NotFound\Framework\Services\Indexer\IndexBuilderService;
 use NotFound\Framework\View\Components\ConfigurationCheck;
 use NotFound\Framework\View\Components\Forms\Form;
+use Spatie\LaravelPackageTools\Package;
+use Spatie\LaravelPackageTools\PackageServiceProvider;
 
-class FrameworkServiceProvider extends ServiceProvider
+class FrameworkServiceProvider extends PackageServiceProvider
 {
-    public function boot(): void
+    public function configurePackage(Package $package): void
+    {
+        $package
+            ->name('siteboss')
+            ->hasViews()
+            ->hasTranslations()
+            ->hasRoute('api');
+    }
+
+    public function packageBooted(): void
     {
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
-        $this->loadRoutesFrom(__DIR__.'/../routes/api.php');
+
         $this->commands([
             Artisan::command('siteboss:index-site {--debug : Display debug messages} {--fresh : Empty local search table}', function ($debug, $fresh) {
                 $indexer = new IndexBuilderService($debug, $fresh);
@@ -57,26 +68,37 @@ class FrameworkServiceProvider extends ServiceProvider
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'siteboss');
         $this->loadTranslationsFrom(__DIR__.'/../lang', 'siteboss');
 
+        app('router')->aliasMiddleware('set-forget-locale', \NotFound\Framework\Http\Middleware\SetAndForgetLocale::class);
+        app('router')->aliasMiddleware('role', \NotFound\Framework\Http\Middleware\EnsureUserHasRole::class);
+
         Blade::component('formbuilder-form', Form::class);
         Blade::component('configuration-check', ConfigurationCheck::class);
         Blade::componentNamespace('NotFound\\Framework\\View\\Components\\Forms\\Fields', 'fields');
 
+        // Package-specific configs are merged so they are available without publishing.
+        // Consumers should publish and customise these files via `php artisan vendor:publish --tag=siteboss-framework`.
+        $this->mergeConfigFrom(__DIR__.'/../config/siteboss.php', 'siteboss');
+        $this->mergeConfigFrom(__DIR__.'/../config/openid.php', 'openid');
+        $this->mergeConfigFrom(__DIR__.'/../config/clamav.php', 'clamav');
+        $this->mergeConfigFrom(__DIR__.'/../config/indexer.php', 'indexer');
+        $this->mergeConfigFrom(__DIR__.'/../config/laravellocalization.php', 'laravellocalization');
+        $this->mergeConfigFrom(__DIR__.'/../config/support.php', 'support');
+
         $this->publishes([
-            __DIR__.'/../config/app.php' => config_path('app.php'),
-            __DIR__.'/../config/auth.php' => config_path('auth.php'),
-            __DIR__.'/../config/honeypot.php' => config_path('honeypot.php'),
+            // Package-specific configs (safe to publish and customise)
             __DIR__.'/../config/siteboss.php' => config_path('siteboss.php'),
             __DIR__.'/../config/openid.php' => config_path('openid.php'),
             __DIR__.'/../config/clamav.php' => config_path('clamav.php'),
-            __DIR__.'/../config/database.php' => config_path('database.php'),
             __DIR__.'/../config/indexer.php' => config_path('indexer.php'),
             __DIR__.'/../config/laravellocalization.php' => config_path('laravellocalization.php'),
+            __DIR__.'/../config/support.php' => config_path('support.php'),
+            // These configs must be manually merged into the host app's existing files —
+            // auth.php and honeypot.php contain guards/providers that extend the defaults.
+            // CSS asset
             __DIR__.'/../resources/css/siteboss.css' => public_path('assets/static/siteboss.css'),
-            __DIR__.'/Providers/AuthServiceProvider.php' => app_path('Providers/AuthServiceProvider.php'),
         ], 'siteboss-framework');
 
         VerifyEmail::toMailUsing(function (object $notifiable, string $url) {
-
             // todo: get value from users current lang;
             App::setLocale(Lang::current()->url);
 
