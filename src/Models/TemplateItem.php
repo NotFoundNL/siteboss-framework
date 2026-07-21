@@ -4,6 +4,7 @@ namespace NotFound\Framework\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
 
 /**
  * NotFound\Framework\Models\TemplateItem
@@ -11,7 +12,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int $id
  * @property string|null $rights
  * @property string|null $internal
- * @property \NotFound\Framework\Models\Template|null $template
+ * @property Template|null $template
  * @property string|null $type
  * @property string|null $name
  * @property string|null $description
@@ -19,10 +20,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int|null $order
  * @property int|null $enabled
  * @property int|null $global
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property object|null $server_properties
- * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property Carbon|null $deleted_at
  *
  * @method static \Illuminate\Database\Eloquent\Builder|TemplateItem newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|TemplateItem newQuery()

@@ -3,13 +3,14 @@
 namespace NotFound\Framework\Mail\Indexer;
 
 use Illuminate\Mail\Mailable;
+use NotFound\Framework\Models\Form;
 
 class QueryError extends Mailable
 {
     /**
      * Create a new message instance.
      *
-     * @param  \NotFound\Framework\Models\Form  $form
+     * @param  Form  $form
      * @return void
      */
     public function __construct(

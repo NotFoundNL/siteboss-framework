@@ -99,7 +99,7 @@ trait Exchangeable
 
             return true;
         } catch (Exception) {
-            throw new \Exception('Could not write '.$this->table.' JSON file');
+            throw new Exception('Could not write '.$this->table.' JSON file');
         }
 
         return false;

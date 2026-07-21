@@ -3,10 +3,14 @@
 namespace NotFound\Framework\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User;
+use Illuminate\Notifications\DatabaseNotification;
+use Illuminate\Notifications\DatabaseNotificationCollection;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Carbon;
 use NotFound\Framework\Auth\Notifications\VerifyEmail;
 use NotFound\Framework\Helpers\BooleanExpressionEvaluator;
 
@@ -29,10 +33,10 @@ use NotFound\Framework\Helpers\BooleanExpressionEvaluator;
  * @property int|null $order
  * @property string $sub
  * @property object|null $preferences
- * @property \Illuminate\Support\Carbon|null $deleted_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \NotFound\Framework\Models\CmsGroup> $groups
+ * @property Carbon|null $deleted_at
+ * @property-read Collection<int, CmsGroup> $groups
  * @property-read int|null $groups_count
- * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
+ * @property-read DatabaseNotificationCollection<int, DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
  *
  * @method static \Illuminate\Database\Eloquent\Builder|CmsUser newModelQuery()

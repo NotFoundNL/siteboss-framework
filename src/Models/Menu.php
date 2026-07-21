@@ -2,6 +2,7 @@
 
 namespace NotFound\Framework\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
@@ -27,10 +28,10 @@ use NotFound\Framework\Services\Legacy\StatusColumn;
  * @property int|null $site_rights
  * @property string $updated
  * @property int $menu
- * @property-read \Illuminate\Database\Eloquent\Collection<int, Menu> $children
+ * @property-read Collection<int, Menu> $children
  * @property-read int|null $children_count
  * @property-read Menu $parent
- * @property-read \NotFound\Framework\Models\Template|null $template
+ * @property-read Template|null $template
  *
  * @method static \Illuminate\Database\Eloquent\Builder|Menu newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Menu newQuery()

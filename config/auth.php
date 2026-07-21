@@ -1,5 +1,8 @@
 <?php
 
+use App\Models\User;
+use NotFound\Framework\Models\CmsUser;
+
 // This file is published by the siteboss-framework package
 
 return [
@@ -68,12 +71,12 @@ return [
     'providers' => [
         'openid-users' => [
             'driver' => 'openid-user-provider',
-            'model' => NotFound\Framework\Models\CmsUser::class,
+            'model' => CmsUser::class,
         ],
 
         'users' => [
             'driver' => 'eloquent',
-            'model' => App\Models\User::class,
+            'model' => User::class,
         ],
     ],
 

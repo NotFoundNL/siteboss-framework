@@ -3,6 +3,7 @@
 namespace NotFound\Framework\Models;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
 
 /**
  * NotFound\Framework\Models\CmsMenu
@@ -17,9 +18,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $rights
  * @property bool $enabled
  * @property int|null $order
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property Carbon|null $deleted_at
  *
  * @method static \Illuminate\Database\Eloquent\Builder|CmsMenu newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CmsMenu newQuery()

@@ -3,6 +3,7 @@
 namespace NotFound\Framework\Http\Controllers\Forwards;
 
 use Illuminate\Support\Facades\Http;
+use NotFound\Framework\Http\Controllers\Controller;
 use NotFound\Layout\Elements\LayoutBreadcrumb;
 use NotFound\Layout\Elements\LayoutButton;
 use NotFound\Layout\Elements\LayoutForm;
@@ -15,7 +16,7 @@ use NotFound\Layout\Elements\LayoutTableRow;
 use NotFound\Layout\Elements\LayoutWidget;
 use Sb;
 
-class ForwardsController extends \NotFound\Framework\Http\Controllers\Controller
+class ForwardsController extends Controller
 {
     public function readAll()
     {

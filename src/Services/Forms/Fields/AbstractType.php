@@ -2,6 +2,8 @@
 
 namespace NotFound\Framework\Services\Forms\Fields;
 
+use NotFound\Framework\Services\Forms\ValidatorInfo;
+
 abstract class AbstractType
 {
     protected $id = null;
@@ -10,7 +12,7 @@ abstract class AbstractType
 
     protected $type = null;
 
-    protected \NotFound\Framework\Services\Forms\ValidatorInfo $validatorInfo;
+    protected ValidatorInfo $validatorInfo;
 
     private $value = null;
 
@@ -19,7 +21,7 @@ abstract class AbstractType
         $this->id = (int) $fieldId;
         $this->properties = $fieldProperties;
         $this->type = $type;
-        $this->validatorInfo = \NotFound\Framework\Services\Forms\ValidatorInfo::getInstance();
+        $this->validatorInfo = ValidatorInfo::getInstance();
     }
 
     /**

@@ -40,7 +40,8 @@ class TableOverviewController extends AssetEditorController
         $layoutTable = new LayoutTable(
             create: $table->allow_create,
             delete: $table->allow_delete,
-            sort: ($request->sort ? false : $table->allow_sort)
+            sort: ($request->sort ? false : $table->allow_sort),
+            duplicate: $table->allow_duplicate,
         );
         $layoutTable->setTotalItems($siteTableRowsPaginator->total());
 

@@ -3,6 +3,7 @@
 namespace NotFound\Framework\Models;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
 
 /**
  * NotFound\Framework\Models\TableItem
@@ -18,10 +19,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property object|null $server_properties
  * @property int $enabled
  * @property int|null $order
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at
- * @property-read \NotFound\Framework\Models\Table|null $table
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property Carbon|null $deleted_at
+ * @property-read Table|null $table
  *
  * @method static \Illuminate\Database\Eloquent\Builder|TableItem newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|TableItem newQuery()

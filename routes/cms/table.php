@@ -15,6 +15,7 @@ Route::prefix('{table:url}')->group(function () {
     Route::prefix('{recordId}')->group(function () {
         Route::delete('', [TableEditorController::class, 'deleteRecord']);
 
+        Route::post('duplicate', [TableEditorController::class, 'duplicateRecord']);
         // /table/{slug}/{recordId}/{lang}
         Route::prefix('{langSlug}')->group(function () {
             Route::get('', [TableEditorController::class, 'index']);

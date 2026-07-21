@@ -2,9 +2,11 @@
 
 namespace NotFound\Framework\Http\Controllers\CmsEditor;
 
+use NotFound\Framework\Http\Controllers\Controller;
 use NotFound\Framework\Http\Requests\FormDataRequest;
 use NotFound\Framework\Models\Template;
 use NotFound\Framework\Models\TemplateItem;
+use NotFound\Framework\Services\Editor\FieldsProperties;
 use NotFound\Layout\Elements\LayoutButton;
 use NotFound\Layout\Elements\LayoutForm;
 use NotFound\Layout\Helpers\LayoutWidgetHelper;
@@ -15,7 +17,7 @@ use NotFound\Layout\Responses\Redirect;
 use NotFound\Layout\Responses\Toast;
 use stdClass;
 
-class CmsEditorTemplateItemController extends \NotFound\Framework\Http\Controllers\Controller
+class CmsEditorTemplateItemController extends Controller
 {
     public function readOne(Template $table, TemplateItem $tableItem)
     {
@@ -57,7 +59,7 @@ class CmsEditorTemplateItemController extends \NotFound\Framework\Http\Controlle
 
         $properties = (object) array_merge((array) $tableItem->properties, (array) $tableItem->server_properties);
 
-        $fieldProperties = new \NotFound\Framework\Services\Editor\FieldsProperties($properties ?? new stdClass);
+        $fieldProperties = new FieldsProperties($properties ?? new stdClass);
         $fieldProperties->getLayoutFields($type, $form);
 
         $form->addButton(new LayoutButton('Save field properties'));
@@ -91,7 +93,7 @@ class CmsEditorTemplateItemController extends \NotFound\Framework\Http\Controlle
         $tableItem->global = $request->global;
         $properties = (object) array_merge((array) $tableItem->properties, (array) $tableItem->server_properties);
 
-        $fieldProperties = new \NotFound\Framework\Services\Editor\FieldsProperties($properties);
+        $fieldProperties = new FieldsProperties($properties);
         $tableItem->properties = $fieldProperties->updateProperties($tableItem->type, $request);
         $tableItem->server_properties = $fieldProperties->updateServerProperties($tableItem->type, $request);
 

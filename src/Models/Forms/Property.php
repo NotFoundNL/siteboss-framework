@@ -3,8 +3,10 @@
 namespace NotFound\Framework\Models\Forms;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
 use NotFound\Framework\Models\BaseModel;
 use NotFound\Framework\Services\Forms\Fields\FactoryType;
+use NotFound\Layout\Elements\LayoutForm;
 use NotFound\Layout\Inputs\LayoutInputCheckbox;
 use NotFound\Layout\Inputs\LayoutInputDropdown;
 use NotFound\Layout\Inputs\LayoutInputRepeatable;
@@ -22,7 +24,7 @@ use NotFound\Layout\Inputs\LayoutInputTextArea;
  * @property object|null $options
  * @property int|null $combinationId
  * @property string|null $has_value
- * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property Carbon|null $deleted_at
  *
  * @method static \Illuminate\Database\Eloquent\Builder|Property newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Property newQuery()
@@ -116,7 +118,7 @@ class Property extends BaseModel
                     $optionList->setRequired();
                     $optionList->showDeleted();
 
-                    $form = new \NotFound\Layout\Elements\LayoutForm('form');
+                    $form = new LayoutForm('form');
                     //                    $form->addInput((new LayoutInputHidden('id')));
                     $form->addInput((new LayoutInputText('option', 'Optie'))->setLocalize()->setRequired());
 

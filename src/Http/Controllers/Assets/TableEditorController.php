@@ -164,12 +164,26 @@ class TableEditorController extends AssetEditorController
     public function deleteRecord(Table $table, int $recordId)
     {
         $this->authorize('delete', $table);
-        Log::withContext(['table-name' => $table->name])->notice('Table deleted');
+        Log::withContext(['table-name' => $table->name, 'record-id' => $recordId])->notice('Table item deleted');
 
         if ($table->deleteRecord($recordId)) {
             return response()->json(['status' => 'ok']);
         }
 
         abort(404, __('siteboss::response.table.delete'));
+    }
+
+    public function duplicateRecord(Table $table, int $recordId)
+    {
+        $this->authorize('create', $table);
+        Log::withContext(['table-name' => $table->name, 'record-id' => $recordId])->notice('Table item duplicated');
+
+        $newRecordId = $table->duplicateRecord($recordId);
+
+        if ($newRecordId) {
+            return response()->json(['status' => 'ok', 'newRecordId' => $newRecordId]);
+        }
+
+        abort(404, __('siteboss::response.table.duplicate'));
     }
 }

@@ -19,7 +19,7 @@ class OpenIDUserProvider implements UserProvider
     /**
      * Create a new mongo user provider.
      *
-     * @return \Illuminate\Contracts\Auth\Authenticatable|null
+     * @return Authenticatable|null
      * @return void
      */
     public function __construct(CmsUser $userModel)
@@ -62,7 +62,7 @@ class OpenIDUserProvider implements UserProvider
      *
      * @param  mixed  $identifier
      * @param  stdClass  $token
-     * @return \Illuminate\Contracts\Auth\Authenticatable|null
+     * @return Authenticatable|null
      */
     public function retrieveByToken($identifier, $token)
     {
@@ -133,7 +133,7 @@ class OpenIDUserProvider implements UserProvider
     /**
      * Retrieve a user by the given credentials.
      *
-     * @return \Illuminate\Contracts\Auth\Authenticatable|null
+     * @return Authenticatable|null
      */
     public function retrieveByCredentials(array $credentials)
     {

@@ -3,6 +3,7 @@
 namespace NotFound\Framework\Models;
 
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use NotFound\Framework\Services\Indexer\SearchItem;
@@ -16,9 +17,9 @@ use NotFound\Framework\Services\Indexer\SearchItem;
  * @property string $language
  * @property string|null $type
  * @property int|null $updated
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $deleted_at
  *
  * @method static \Illuminate\Database\Eloquent\Builder|CmsSearch newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CmsSearch newQuery()

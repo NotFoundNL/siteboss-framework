@@ -5,6 +5,7 @@ namespace NotFound\Framework\Helpers;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use NotFound\Framework\Models\CmsConfig;
+use SendGrid\Mail\Mail;
 
 class SitebossHelper
 {
@@ -47,7 +48,7 @@ class SitebossHelper
         $sendgrid_sender_email = self::config('sendgrid_sender_email', true);
         $sendgrid_sender_name = self::config('sendgrid_sender_name', true);
 
-        $email = new \SendGrid\Mail\Mail;
+        $email = new Mail;
         $email->setFrom($sendgrid_sender_email, $sendgrid_sender_name);
         $email->setSubject($subject);
 

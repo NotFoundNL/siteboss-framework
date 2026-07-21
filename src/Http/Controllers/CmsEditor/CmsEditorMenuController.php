@@ -4,6 +4,7 @@ namespace NotFound\Framework\Http\Controllers\CmsEditor;
 
 use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Facades\Log;
+use NotFound\Framework\Http\Controllers\Controller;
 use NotFound\Framework\Http\Requests\FormDataRequest;
 use NotFound\Framework\Models\CmsMenu;
 use NotFound\Layout\Elements\LayoutBreadcrumb;
@@ -20,7 +21,7 @@ use NotFound\Layout\LayoutResponse;
 use NotFound\Layout\Responses\Redirect;
 use NotFound\Layout\Responses\Toast;
 
-class CmsEditorMenuController extends \NotFound\Framework\Http\Controllers\Controller
+class CmsEditorMenuController extends Controller
 {
     public function index()
     {

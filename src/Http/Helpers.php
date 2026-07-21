@@ -10,7 +10,7 @@ if (! function_exists('db_table_items_change_order')) {
         $replacedRecord = DB::table($tableName)->where('id', $replacedRecordId)->first();
 
         if (! isset($movedRecord->order) || ! isset($replacedRecord->order)) {
-            throw new \Exception(__('response.table.order.column_null'));
+            throw new Exception(__('response.table.order.column_null'));
         }
 
         $newRecordOrder = $replacedRecord->order;
@@ -38,7 +38,7 @@ if (! function_exists('db_table_items_change_order')) {
         $updated = DB::update($queryString.$whereSql);
 
         if (! $updated) {
-            throw new \Exception(__('response.table.order.error'));
+            throw new Exception(__('response.table.order.error'));
         }
 
         DB::table($tableName)->where('id', $recordId)->update(['order' => $newRecordOrder]);
@@ -55,7 +55,7 @@ if (! function_exists('make_directories')) {
     {
         trigger_error('Method '.__METHOD__.' is deprecated', E_USER_DEPRECATED);
 
-        return \Sb::makeDirectory($root, $dir);
+        return Sb::makeDirectory($root, $dir);
 
     }
 }

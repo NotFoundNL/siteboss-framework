@@ -3,6 +3,7 @@
 namespace NotFound\Framework\Http\Controllers\CmsEditor;
 
 use Illuminate\Http\Request as HttpRequest;
+use NotFound\Framework\Http\Controllers\Controller;
 use NotFound\Framework\Http\Requests\FormDataRequest;
 use NotFound\Framework\Models\Template;
 use NotFound\Framework\Services\Editor\FieldsProperties;
@@ -23,7 +24,7 @@ use NotFound\Layout\LayoutResponse;
 use NotFound\Layout\Responses\Redirect;
 use NotFound\Layout\Responses\Toast;
 
-class CmsEditorTemplateController extends \NotFound\Framework\Http\Controllers\Controller
+class CmsEditorTemplateController extends Controller
 {
     public function index()
     {

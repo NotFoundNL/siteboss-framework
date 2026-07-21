@@ -2,6 +2,8 @@
 
 namespace NotFound\Framework\Models;
 
+use Illuminate\Database\Eloquent\Collection;
+
 /**
  * NotFound\Framework\Models\Table
  *
@@ -15,7 +17,7 @@ namespace NotFound\Framework\Models;
  * @property string|null $name
  * @property object $properties
  * @property int $enabled
- * @property-read \Illuminate\Database\Eloquent\Collection|\NotFound\Framework\Models\TableItem[] $tableItems
+ * @property-read Collection|TableItem[] $tableItems
  * @property-read int|null $table_items_count
  *
  * @method static \Illuminate\Database\Eloquent\Builder|Table newModelQuery()

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Attributes\CollectedBy;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
 use NotFound\Framework\Traits\Exchangeable;
 
 /**
@@ -21,11 +22,11 @@ use NotFound\Framework\Traits\Exchangeable;
  * @property string|null $allowedchildren
  * @property int|null $attr
  * @property string $params
- * @property \Illuminate\Support\Carbon|null $created_at
+ * @property Carbon|null $created_at
  * @property int $enabled
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \NotFound\Framework\Models\TemplateItem> $items
+ * @property Carbon|null $updated_at
+ * @property Carbon|null $deleted_at
+ * @property-read Collection<int, TemplateItem> $items
  * @property-read int|null $items_count
  *
  * @method static \Illuminate\Database\Eloquent\Builder|Template newModelQuery()

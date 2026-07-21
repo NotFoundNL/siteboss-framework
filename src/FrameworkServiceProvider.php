@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use NotFound\Framework\Auth\Notifications\VerifyEmail;
+use NotFound\Framework\Http\Middleware\EnsureUserHasRole;
+use NotFound\Framework\Http\Middleware\SetAndForgetLocale;
 use NotFound\Framework\Models\Lang;
 use NotFound\Framework\Services\CmsExchange\ExchangeConsoleService;
 use NotFound\Framework\Services\Indexer\IndexBuilderService;
@@ -72,7 +74,7 @@ class FrameworkServiceProvider extends ServiceProvider
 
     public function register(): void
     {
-        app('router')->aliasMiddleware('set-forget-locale', \NotFound\Framework\Http\Middleware\SetAndForgetLocale::class);
-        app('router')->aliasMiddleware('role', \NotFound\Framework\Http\Middleware\EnsureUserHasRole::class);
+        app('router')->aliasMiddleware('set-forget-locale', SetAndForgetLocale::class);
+        app('router')->aliasMiddleware('role', EnsureUserHasRole::class);
     }
 }
