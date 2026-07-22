@@ -67,7 +67,7 @@ class Table extends AssetModel
 
     protected $visible = ['id', 'items', 'name', 'url'];
 
-    protected $fillable = ['name', 'url', 'table', 'properties', 'enabled', 'allow_sort', 'allow_create', 'allow_delete', 'allow_duplicate'];
+    protected $fillable = ['name', 'url', 'table', 'properties', 'enabled', 'allow_sort', 'allow_create', 'allow_delete', 'allow_duplicate','allow_archive'];
 
     protected $casts = [
         'properties' => 'object',
@@ -76,6 +76,7 @@ class Table extends AssetModel
         'allow_create' => 'boolean',
         'allow_delete' => 'boolean',
         'allow_duplicate' => 'boolean',
+        'allow_archive' => 'boolean',
     ];
 
     public function getIdentifier()
@@ -204,4 +205,21 @@ class Table extends AssetModel
     {
         return $this->attributes['allow_sort'];
     }
+
+    public function isArchivable(): bool
+    {
+        return $this->attributes['allow_archive'];
+    }
+
+    public function archiveRecord(int $recordId): bool
+    {
+        $tableName = $this->getSiteTableName();
+        return DB::table($tableName)->where('id', $recordId)->update(['archived_at' => now()]);
+      }
+
+    public function unarchiveRecord(int $recordId): bool
+    {
+        $tableName = $this->getSiteTableName();
+        return DB::table($tableName)->where('id', $recordId)->update(['archived_at' => null]);
+      }
 }

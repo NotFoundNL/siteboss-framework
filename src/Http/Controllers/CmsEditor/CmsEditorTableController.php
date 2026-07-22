@@ -146,6 +146,7 @@ class CmsEditorTableController extends Controller
             $form->addInput((new LayoutInputCheckbox('allow_delete', 'Allow delete'))->setValue($table->allow_delete == 1 ?? false));
             $form->addInput((new LayoutInputCheckbox('allow_sort', 'Allow sorting'))->setValue($table->allow_sort == 1 ?? false));
             $form->addInput((new LayoutInputCheckbox('allow_duplicate', 'Allow duplicate'))->setValue($table->allow_duplicate == 1 ?? false));
+            $form->addInput((new LayoutInputCheckbox('allow_archive', 'Allow archive'))->setValue($table->allow_archive == 1 ?? false));
             $form->addInput((new LayoutInputCheckbox('disable_sticky_submit', 'Disable sticky submit button'))->setValue($table->properties->disable_sticky_submit ?? false));
             $form->addInput((new LayoutInputCheckbox('stay_on_page', 'Allow stay on page'))->setValue($table->properties->stay_on_page ?? false));
             $form->addInput((new LayoutInputCheckbox('localize', 'Localize this table'))->setValue($table->properties->localize ?? false));
@@ -229,6 +230,7 @@ class CmsEditorTableController extends Controller
             'url' => 'string|required',
             'enabled' => 'boolean',
             'allow_create' => 'boolean',
+            'allow_archive' => 'boolean',
             'allow_delete' => 'boolean',
             'allow_sort' => 'boolean',
             'allow_duplicate' => 'boolean',
@@ -257,6 +259,7 @@ class CmsEditorTableController extends Controller
             'allow_delete' => $request->allow_delete,
             'allow_sort' => $request->allow_sort,
             'allow_duplicate' => $request->allow_duplicate,
+            'allow_archive' => $request->allow_archive,
             'properties' => $properties,
         ]);
         $response = new LayoutResponse;

@@ -31,4 +31,9 @@ class TablePolicy extends BasePolicy
     {
         return $user->checkRights($table->rights) && $table->allow_delete;
     }
+
+    public function archive(CmsUser $user, Table $table)
+    {
+        return $user->checkRights($table->rights) && $table->allow_archive;
+    }
 }

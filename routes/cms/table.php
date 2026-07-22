@@ -7,6 +7,7 @@ use NotFound\Framework\Http\Controllers\Assets\TableOverviewController;
 
 Route::prefix('{table:url}')->group(function () {
     Route::get('', [TableOverviewController::class, 'index']);
+    Route::get('archive', [TableOverviewController::class, 'archive']);
     Route::put('', [TableOverviewController::class, 'updateField']);
     Route::post('', [TableOverviewController::class, 'create']);
     Route::put('move', [TableOverviewController::class, 'updatePosition']);
@@ -16,6 +17,9 @@ Route::prefix('{table:url}')->group(function () {
         Route::delete('', [TableEditorController::class, 'deleteRecord']);
 
         Route::post('duplicate', [TableEditorController::class, 'duplicateRecord']);
+        Route::post('archive', [TableEditorController::class, 'archiveRecord']);
+        Route::post('unarchive', [TableEditorController::class, 'unarchiveRecord']);
+
         // /table/{slug}/{recordId}/{lang}
         Route::prefix('{langSlug}')->group(function () {
             Route::get('', [TableEditorController::class, 'index']);

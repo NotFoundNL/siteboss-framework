@@ -14,6 +14,8 @@ use NotFound\Layout\Elements\LayoutPage;
 use NotFound\Layout\Elements\LayoutPager;
 use NotFound\Layout\Elements\LayoutText;
 use NotFound\Layout\Elements\LayoutTitle;
+use NotFound\Layout\Elements\LayoutTabs;
+use NotFound\Layout\Elements\LayoutTab;
 use NotFound\Layout\Elements\LayoutWidget;
 use NotFound\Layout\Elements\Table\LayoutTable;
 use NotFound\Layout\Elements\Table\LayoutTableRow;
@@ -29,20 +31,29 @@ class TableOverviewController extends AssetEditorController
      * @param  string  $customer  This is an value of tg_cms_table->url column.
      * @return array ['headers' => [{'name' => 'name3','properties' => 'sourcename']], 'rows' => [
      */
-    public function index(Request $request, Table $table)
+    public function index(Request $request, Table $table, bool $archived = false    )
     {
         $tableService = new TableService($table, Lang::default());
         $components = $tableService->getFieldComponentsOverview();
 
-        $tableQueryService = new TableQueryService($table, $components);
+        $tableQueryService = new TableQueryService($table, $components, $archived);
         $siteTableRowsPaginator = $tableQueryService->getSiteTableRows();
 
         $layoutTable = new LayoutTable(
             create: $table->allow_create,
             delete: $table->allow_delete,
+            archive: $table->allow_archive,
             sort: ($request->sort ? false : $table->allow_sort),
             duplicate: $table->allow_duplicate,
+            archiveView: $archived
         );
+        if( $table->allow_archive)
+        {
+            $tabs = new LayoutTabs();
+            $tabs->addTab(new LayoutTab('Actief', '/table/'.$table->url.'', !$archived));
+            $tabs->addTab(new LayoutTab('Gearchiveerd', '/table/'.$table->url.'/archive', $archived ));
+        }
+
         $layoutTable->setTotalItems($siteTableRowsPaginator->total());
 
         $tableService->setRequestParameters($request->query());
@@ -86,7 +97,11 @@ class TableOverviewController extends AssetEditorController
 
         $widget = new LayoutWidget(__('siteboss::ui.overview'));
         $widget->noPadding();
-        $widget->addBar($bar);
+  
+
+        $widget->addBar($bar);      if (isset($tabs)) {
+            $widget->addTabs($tabs);
+        }
         $widget->addTable($layoutTable);
         $widget->addBar($bottomBar);
 
@@ -106,6 +121,11 @@ class TableOverviewController extends AssetEditorController
         $response = new LayoutResponse($page);
 
         return $page->build();
+    }
+
+    public function archive(Request $request, Table $table)
+    {
+      return $this->index($request, $table, true);
     }
 
     public function updateField(Request $request, Table $table)

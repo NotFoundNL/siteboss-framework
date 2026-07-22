@@ -183,9 +183,34 @@ class TableEditorController extends AssetEditorController
         $newRecordId = $tableService->duplicateRecord();
 
         if ($newRecordId) {
-            return response()->json(['status' => 'ok', 'newRecordId' => $newRecordId]);
+            return response()->json(['status' => 'ok', 'newRecordId' => $newRecordId, 'message' => __('siteboss::response.table.duplicate')]);
         }
 
         abort(404, __('siteboss::response.table.duplicate'));
+    }
+
+    public function archiveRecord(Table $table, int $recordId)
+    {
+        $this->authorize('archive', $table);
+        Log::withContext(['table-name' => $table->name, 'record-id' => $recordId])->notice('Table item archived');
+
+        if ($table->archiveRecord($recordId)) {
+            return response()->json(['status' => 'ok','message' => __('siteboss::response.table.archive')   ]);
+        }
+
+        abort(404, __('siteboss::response.table.archive-error'));
+    }
+
+
+    public function unarchiveRecord(Table $table, int $recordId)
+    {
+        $this->authorize('archive', $table);
+        Log::withContext(['table-name' => $table->name, 'record-id' => $recordId])->notice('Table item unarchived');
+
+        if ($table->unarchiveRecord($recordId)) {
+            return response()->json(['status' => 'ok','message' => __('siteboss::response.table.unarchive') ]);
+        }
+
+        abort(404, __('siteboss::response.table.unarchive-error'));
     }
 }
