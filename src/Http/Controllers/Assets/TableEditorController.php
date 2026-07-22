@@ -195,12 +195,11 @@ class TableEditorController extends AssetEditorController
         Log::withContext(['table-name' => $table->name, 'record-id' => $recordId])->notice('Table item archived');
 
         if ($table->archiveRecord($recordId)) {
-            return response()->json(['status' => 'ok','message' => __('siteboss::response.table.archive')   ]);
+            return response()->json(['status' => 'ok', 'message' => __('siteboss::response.table.archive')]);
         }
 
         abort(404, __('siteboss::response.table.archive-error'));
     }
-
 
     public function unarchiveRecord(Table $table, int $recordId)
     {
@@ -208,7 +207,7 @@ class TableEditorController extends AssetEditorController
         Log::withContext(['table-name' => $table->name, 'record-id' => $recordId])->notice('Table item unarchived');
 
         if ($table->unarchiveRecord($recordId)) {
-            return response()->json(['status' => 'ok','message' => __('siteboss::response.table.unarchive') ]);
+            return response()->json(['status' => 'ok', 'message' => __('siteboss::response.table.unarchive')]);
         }
 
         abort(404, __('siteboss::response.table.unarchive-error'));

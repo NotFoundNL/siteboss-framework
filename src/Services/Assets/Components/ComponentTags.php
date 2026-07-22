@@ -210,7 +210,6 @@ class ComponentTags extends AbstractComponent
         ];
     }
 
-
     /**
      * Tags are not stored in the record itself, but in a link table.
      * So we copy the link rows of the original record to the new record.

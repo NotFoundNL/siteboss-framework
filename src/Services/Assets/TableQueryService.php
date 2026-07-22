@@ -16,7 +16,7 @@ class TableQueryService
 
     public function __construct(
         private Table $table,
-        private Collection $components, 
+        private Collection $components,
         private bool $archive = false
     ) {
         $this->setRecordPerPage();
@@ -32,7 +32,7 @@ class TableQueryService
 
         $siteTableRowsQuery = $this->setSearch($siteTableRowsQuery);
 
-        if ($this->table->allow_archive ) {
+        if ($this->table->allow_archive) {
             $siteTableRowsQuery = $this->setArchived($siteTableRowsQuery);
         }
 
@@ -121,6 +121,7 @@ class TableQueryService
 
         return $query;
     }
+
     private function setArchived(Builder $query): Builder
     {
         if ($this->archive) {
