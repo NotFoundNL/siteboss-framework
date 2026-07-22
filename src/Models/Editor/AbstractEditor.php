@@ -15,7 +15,7 @@ abstract class AbstractEditor
 
     abstract public function getBottomBar(LayoutPager $pager): LayoutBar;
 
-    abstract public function getBreadCrumbs(): LayoutBreadcrumb;
+    abstract public function getBreadCrumbs(bool $archiveView = false): LayoutBreadcrumb;
 
     abstract public function getBreadCrumbsEdit(): LayoutBreadcrumb;
 

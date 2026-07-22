@@ -26,4 +26,5 @@ return [
     ],
     'email' => 'E-mail',
     'enabled' => 'Geactiveerd',
+    'archive_message' => 'Dit is een gearchiveerd item. Mogelijk moet je dit eerst herstellen voordat het zichtbaar is op de website.',
 ];

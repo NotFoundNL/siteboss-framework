@@ -16,6 +16,7 @@ use NotFound\Layout\Elements\LayoutBar;
 use NotFound\Layout\Elements\LayoutBarButton;
 use NotFound\Layout\Elements\LayoutButton;
 use NotFound\Layout\Elements\LayoutForm;
+use NotFound\Layout\Elements\LayoutMessage;
 use NotFound\Layout\Elements\LayoutPage;
 use NotFound\Layout\Elements\LayoutTitle;
 use NotFound\Layout\Elements\LayoutWidget;
@@ -73,6 +74,12 @@ class TableEditorController extends AssetEditorController
         $form->addButton($saveButton);
 
         $widget = new LayoutWidget($upsertingText);
+
+        if ($table->allow_archive && $tableService->isArchived()) {
+            $message = new LayoutMessage(__('siteboss::ui.archive_message'), 'warning')->setIntroText('ARCHIEF');
+            $widget->addMessage($message);
+        }
+
         if (auth('openid')->user()->hasRole('admin') && request()->query('editor') !== '1') {
             $bar = new LayoutBar;
             $bar->removePadding();
