@@ -2,6 +2,7 @@
 
 namespace NotFound\Framework\Services\Assets\Components;
 
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use NotFound\Layout\Elements\AbstractLayout;
 use NotFound\Layout\Inputs\LayoutInputSlug;
@@ -11,6 +12,16 @@ class ComponentSlug extends AbstractComponent
     public function getAutoLayoutClass(): ?AbstractLayout
     {
         return new LayoutInputSlug($this->assetItem->internal, $this->assetItem->name);
+    }
+
+    public function getCloneValue(Collection $components): mixed
+    {
+        $value = parent::getCloneValue($components);
+        if ($value !== null) {
+            return $this->preventDuplicateSlug($value);
+        }
+
+        return null;
     }
 
     /**
@@ -53,6 +64,11 @@ class ComponentSlug extends AbstractComponent
         }
 
         // Prevent duplicate slugs
+        $this->newValue = $this->preventDuplicateSlug($newValue);
+    }
+
+    private function preventDuplicateSlug(string $newValue): string
+    {
         $columnName = $this->assetItem->internal;
         $highestSlug = DB::table($this->assetModel->table)->where($columnName, '=', $newValue)->orWhere($columnName, 'regexp', $newValue.'\-[0-9]+')->orderBy($columnName, 'DESC')->limit(1)->get();
 
@@ -67,6 +83,7 @@ class ComponentSlug extends AbstractComponent
                 $newValue .= '-1';
             }
         }
-        $this->newValue = $newValue;
+
+        return $newValue;
     }
 }

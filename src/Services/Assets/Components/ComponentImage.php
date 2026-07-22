@@ -7,6 +7,7 @@ namespace NotFound\Framework\Services\Assets\Components;
 
 use DateTime;
 use Illuminate\Http\File;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -295,4 +296,42 @@ class ComponentImage extends AbstractComponent
         return $createDirs;
 
     }
+
+    public function getCloneValue(Collection $components): mixed
+    {
+        $value = json_decode($this->currentValue ?? '{}') ?? new stdClass;
+
+        if (isset($value->uploaded) && $value->uploaded === true && isset($this->properties()->sizes[0])) {
+            return '{"uploaded":true}';
+        }
+        return null;
+    }
+
+    public function clone(int $_newRecordId): bool
+    {
+        $value = json_decode($this->currentValue ?? '{}') ?? new stdClass;
+
+        if (isset($value->uploaded) && $value->uploaded === true && isset($this->properties()->sizes[0])) {
+            foreach ($this->properties()->sizes as $dimensions) {
+                $filename = $this->recordId.'_'.$dimensions->filename.'.jpg';
+                $newFilename = $_newRecordId.'_'.$dimensions->filename.'.jpg';
+
+                if (file_exists(Storage::path('public').$this->relativePathToPublicDisk().$filename)) {
+                    copy(
+                        Storage::path('public').$this->relativePathToPublicDisk().$filename,
+                        Storage::path('public').$this->relativePathToPublicDisk().$newFilename
+                    );
+                }
+
+                if (file_exists(Storage::path('public').$this->relativePathToPublicDisk().$filename.'.webp')) {
+                    copy(
+                        Storage::path('public').$this->relativePathToPublicDisk().$filename.'.webp',
+                        Storage::path('public').$this->relativePathToPublicDisk().$newFilename.'.webp'
+                    );
+                }
+            }
+        }
+
+        return true;
+    }   
 }

@@ -178,7 +178,9 @@ class TableEditorController extends AssetEditorController
         $this->authorize('create', $table);
         Log::withContext(['table-name' => $table->name, 'record-id' => $recordId])->notice('Table item duplicated');
 
-        $newRecordId = $table->duplicateRecord($recordId);
+        $tableService = new TableService($table, Lang::default(), $recordId);
+
+        $newRecordId = $tableService->duplicateRecord();
 
         if ($newRecordId) {
             return response()->json(['status' => 'ok', 'newRecordId' => $newRecordId]);
