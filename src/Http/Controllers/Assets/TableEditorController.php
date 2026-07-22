@@ -164,12 +164,52 @@ class TableEditorController extends AssetEditorController
     public function deleteRecord(Table $table, int $recordId)
     {
         $this->authorize('delete', $table);
-        Log::withContext(['table-name' => $table->name])->notice('Table deleted');
+        Log::withContext(['table-name' => $table->name, 'record-id' => $recordId])->notice('Table item deleted');
 
         if ($table->deleteRecord($recordId)) {
             return response()->json(['status' => 'ok']);
         }
 
         abort(404, __('siteboss::response.table.delete'));
+    }
+
+    public function duplicateRecord(Table $table, int $recordId)
+    {
+        $this->authorize('create', $table);
+        Log::withContext(['table-name' => $table->name, 'record-id' => $recordId])->notice('Table item duplicated');
+
+        $tableService = new TableService($table, Lang::default(), $recordId);
+
+        $newRecordId = $tableService->duplicateRecord();
+
+        if ($newRecordId) {
+            return response()->json(['status' => 'ok', 'newRecordId' => $newRecordId, 'message' => __('siteboss::response.table.duplicate')]);
+        }
+
+        abort(404, __('siteboss::response.table.duplicate'));
+    }
+
+    public function archiveRecord(Table $table, int $recordId)
+    {
+        $this->authorize('archive', $table);
+        Log::withContext(['table-name' => $table->name, 'record-id' => $recordId])->notice('Table item archived');
+
+        if ($table->archiveRecord($recordId)) {
+            return response()->json(['status' => 'ok', 'message' => __('siteboss::response.table.archive')]);
+        }
+
+        abort(404, __('siteboss::response.table.archive-error'));
+    }
+
+    public function unarchiveRecord(Table $table, int $recordId)
+    {
+        $this->authorize('archive', $table);
+        Log::withContext(['table-name' => $table->name, 'record-id' => $recordId])->notice('Table item unarchived');
+
+        if ($table->unarchiveRecord($recordId)) {
+            return response()->json(['status' => 'ok', 'message' => __('siteboss::response.table.unarchive')]);
+        }
+
+        abort(404, __('siteboss::response.table.unarchive-error'));
     }
 }

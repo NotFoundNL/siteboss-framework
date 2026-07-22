@@ -4,6 +4,8 @@ namespace NotFound\Framework\Services\Assets;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 use NotFound\Framework\Models\Lang;
 use NotFound\Framework\Models\Table;
 use NotFound\Framework\Services\Assets\Components\AbstractComponent;
@@ -189,5 +191,59 @@ class TableService extends AbstractAssetService
     protected function getCacheKey(): string
     {
         return 'table_'.$this->table->slug.'_'.$this->recordId.'_'.$this->lang->url;
+    }
+
+    public function duplicateRecord(): ?int
+    {
+        if ($this->recordId === null) {
+            return null;
+        }
+
+        // Get values for cloned record
+        $newRecordRawValues = [];
+        foreach ($this->fieldComponents as $component) {
+            $clonedValue = $component->getCloneValue($this->fieldComponents);
+
+            if ($clonedValue
+            !== null) {
+                $newRecordRawValues[$component->assetItem->internal] = $clonedValue;
+            }
+        }
+        $tableName = $this->table->getSiteTableName();
+
+        if (Schema::hasColumn($tableName, 'status')) {
+            // Remove when support for status column is dropped
+            $newRecordRawValues['status'] = 'PUBLISHED';
+        }
+
+        if (Schema::hasColumn($tableName, 'created_at')) {
+            $newRecordRawValues['created_at'] = now();
+        }
+
+        DB::table($tableName)->insert($newRecordRawValues);
+
+        $newRecordId = DB::class::getPdo()->lastInsertId();
+
+        foreach ($this->fieldComponents as $component) {
+            $component->clone($newRecordId);
+
+        }
+
+        return $newRecordId;
+
+        //     if ($this->isLocalized()) {
+        //         $translatedTableName = $tableName.'_tr';
+
+        //         $translatedRecords = DB::table($translatedTableName)->where('entity_id', $recordId)->get();
+
+        //         foreach ($translatedRecords as $translatedRecord) {
+        //             $translatedRecordArray = (array) $translatedRecord;
+        //             unset($translatedRecordArray['id']);
+        //             $translatedRecordArray['entity_id'] = $newRecordId;
+
+        //             DB::table($translatedTableName)->insert($translatedRecordArray);
+        //         }
+        //     }
+
     }
 }

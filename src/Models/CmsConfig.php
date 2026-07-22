@@ -2,6 +2,8 @@
 
 namespace NotFound\Framework\Models;
 
+use Illuminate\Support\Carbon;
+
 /**
  * NotFound\Framework\Models\CmsConfig
  *
@@ -15,9 +17,9 @@ namespace NotFound\Framework\Models;
  * @property string|null $value
  * @property string|null $description
  * @property int $order
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property Carbon|null $deleted_at
  *
  * @method static \Illuminate\Database\Eloquent\Builder|CmsConfig newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CmsConfig newQuery()

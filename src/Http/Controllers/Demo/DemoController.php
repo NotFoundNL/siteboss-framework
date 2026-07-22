@@ -2,16 +2,18 @@
 
 namespace NotFound\Framework\Http\Controllers\Demo;
 
+use NotFound\Framework\Http\Controllers\Controller;
 use NotFound\Layout\Elements\LayoutBreadcrumb;
 use NotFound\Layout\Elements\LayoutForm;
 use NotFound\Layout\Elements\LayoutPage;
+use NotFound\Layout\Elements\LayoutRow;
 use NotFound\Layout\Elements\LayoutTab;
 use NotFound\Layout\Elements\LayoutTabs;
 use NotFound\Layout\Elements\LayoutWidget;
 use NotFound\Layout\Inputs\LayoutInputText;
 use NotFound\Layout\LayoutResponse;
 
-class DemoController extends \NotFound\Framework\Http\Controllers\Controller
+class DemoController extends Controller
 {
     public function index()
     {
@@ -29,7 +31,7 @@ class DemoController extends \NotFound\Framework\Http\Controllers\Controller
 
         $form->addInput($demoContent);
 
-        $row = new \NotFound\Layout\Elements\LayoutRow;
+        $row = new LayoutRow;
         $widget = new LayoutWidget('Embedded', 6);
         $widget->addForm($form);
         $widget->addForm($form);
@@ -45,7 +47,7 @@ class DemoController extends \NotFound\Framework\Http\Controllers\Controller
 
         $widget->addForm($form);
 
-        $colsRow = new \NotFound\Layout\Elements\LayoutRow;
+        $colsRow = new LayoutRow;
         $colsRow->addForm($form);
         $colsRow->addForm($form);
 

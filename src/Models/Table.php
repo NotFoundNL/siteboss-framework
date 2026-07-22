@@ -5,6 +5,7 @@ namespace NotFound\Framework\Models;
 use Illuminate\Database\Eloquent\Attributes\CollectedBy;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
@@ -26,10 +27,10 @@ use NotFound\Framework\Traits\Exchangeable;
  * @property object|null $properties
  * @property bool|null $enabled
  * @property int|null $order
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \NotFound\Framework\Models\TableItem> $items
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property Carbon|null $deleted_at
+ * @property-read Collection<int, TableItem> $items
  * @property-read int|null $items_count
  *
  * @method static \Illuminate\Database\Eloquent\Builder|Table newModelQuery()
@@ -66,7 +67,7 @@ class Table extends AssetModel
 
     protected $visible = ['id', 'items', 'name', 'url'];
 
-    protected $fillable = ['name', 'url', 'table', 'properties', 'enabled', 'allow_sort', 'allow_create', 'allow_delete'];
+    protected $fillable = ['name', 'url', 'table', 'properties', 'enabled', 'allow_sort', 'allow_create', 'allow_delete', 'allow_duplicate', 'allow_archive'];
 
     protected $casts = [
         'properties' => 'object',
@@ -74,6 +75,8 @@ class Table extends AssetModel
         'allow_sort' => 'boolean',
         'allow_create' => 'boolean',
         'allow_delete' => 'boolean',
+        'allow_duplicate' => 'boolean',
+        'allow_archive' => 'boolean',
     ];
 
     public function getIdentifier()
@@ -201,5 +204,24 @@ class Table extends AssetModel
     public function isOrdered(): bool
     {
         return $this->attributes['allow_sort'];
+    }
+
+    public function isArchivable(): bool
+    {
+        return $this->attributes['allow_archive'];
+    }
+
+    public function archiveRecord(int $recordId): bool
+    {
+        $tableName = $this->getSiteTableName();
+
+        return DB::table($tableName)->where('id', $recordId)->update(['archived_at' => now()]);
+    }
+
+    public function unarchiveRecord(int $recordId): bool
+    {
+        $tableName = $this->getSiteTableName();
+
+        return DB::table($tableName)->where('id', $recordId)->update(['archived_at' => null]);
     }
 }

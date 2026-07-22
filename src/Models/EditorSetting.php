@@ -2,6 +2,8 @@
 
 namespace NotFound\Framework\Models;
 
+use Illuminate\Support\Carbon;
+
 /**
  * NotFound\Framework\Models\EditorSetting
  *
@@ -9,7 +11,7 @@ namespace NotFound\Framework\Models;
  * @property string|null $name
  * @property string|null $settings
  * @property int|null $enabled
- * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property Carbon|null $deleted_at
  *
  * @method static \Illuminate\Database\Eloquent\Builder|EditorSetting newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|EditorSetting newQuery()

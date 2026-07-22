@@ -2,6 +2,7 @@
 
 namespace NotFound\Framework\Services\Assets\Components;
 
+use Illuminate\Support\Collection;
 use NotFound\Layout\Elements\AbstractLayout;
 use NotFound\Layout\Elements\LayoutTitle;
 
@@ -17,5 +18,10 @@ class ComponentHeader extends AbstractComponent
     public function validate($newValue): bool
     {
         return true;
+    }
+
+    public function getCloneValue(Collection $components): mixed
+    {
+        return null;
     }
 }

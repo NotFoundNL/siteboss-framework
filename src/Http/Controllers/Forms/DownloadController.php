@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Storage;
 use NotFound\Framework\Http\Controllers\Controller;
 use NotFound\Framework\Models\Forms\Data;
 use NotFound\Framework\Models\Forms\Field;
+use NotFound\Framework\Services\Forms\MimetypeConverter;
+use NotFound\Framework\Services\Forms\UserDataTransformer;
 
 class DownloadController extends Controller
 {
@@ -16,7 +18,7 @@ class DownloadController extends Controller
 
         $field = Field::where('id', $fieldId)->firstOrFail();
         $filetypeType = $field->properties->filetypes;
-        $mimeTypeConverter = new \NotFound\Framework\Services\Forms\MimetypeConverter;
+        $mimeTypeConverter = new MimetypeConverter;
         $acceptedFiletypes = $mimeTypeConverter->getMimetype($filetypeType);
 
         if (! in_array($mimeType, $acceptedFiletypes)) {
@@ -85,7 +87,7 @@ class DownloadController extends Controller
             'Pragma' => 'public',
         ];
 
-        $dataHandler = new \NotFound\Framework\Services\Forms\UserDataTransformer($id, $type);
+        $dataHandler = new UserDataTransformer($id, $type);
         $list = $dataHandler->getDataCsv();
 
         $callback = function () use ($list) {

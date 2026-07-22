@@ -2,6 +2,7 @@
 
 namespace NotFound\Framework\Services\Assets\Components;
 
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 use Nette\NotImplementedException;
 use NotFound\Framework\Models\AssetItem;
@@ -123,6 +124,32 @@ abstract class AbstractComponent
     public function save() {}
 
     /**
+     * This function is for changing the database value while cloning the record.
+     * This method is called after the clone value is set, but before the record is saved.
+     *
+     * Return null to not clone the value, or return a new value to set it to that.
+     */
+    public function getCloneValue(Collection $components): mixed
+    {
+        foreach ($components as $component) {
+            if ($component->assetItem->internal === $this->assetItem->internal) {
+                return $component->getCurrentValue();
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * This function is for doing additional actions while cloning the record.
+     * This method is called after the main database row has been cloned.
+     */
+    public function clone(int $_newRecordId): bool
+    {
+        return true;
+    }
+
+    /**
      * This function is called after the save function. This is the place to do some
      * processing on the value after it is saved.
      */
@@ -130,7 +157,7 @@ abstract class AbstractComponent
 
     public function properties(): stdClass
     {
-        $properties = new \stdClass;
+        $properties = new stdClass;
 
         if ($this->assetItem->properties) {
             $properties = $this->assetItem->properties;

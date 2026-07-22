@@ -2,6 +2,7 @@
 
 namespace NotFound\Framework\Services\Assets\Components;
 
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use NotFound\Framework\Services\Legacy\StatusColumn;
 use NotFound\Layout\Elements\AbstractLayout;
@@ -176,6 +177,12 @@ class ComponentTags extends AbstractComponent
         );
     }
 
+    public function getCloneValue(Collection $components): mixed
+    {
+        // Tags does not use internal storage, so we return null to not clone the value.
+        return null;
+    }
+
     public function asyncGetRequest()
     {
         $requestValues = request()->validate([
@@ -201,5 +208,39 @@ class ComponentTags extends AbstractComponent
         return (object) [
             'results' => $builder->get(),
         ];
+    }
+
+    /**
+     * Tags are not stored in the record itself, but in a link table.
+     * So we copy the link rows of the original record to the new record.
+     */
+    public function clone(int $newRecordId): bool
+    {
+        $p = $this->properties();
+        $linkTable = $this->removeDatabasePrefix($p->linkTable);
+        $sortable = isset($p->tagsSortable) && $p->tagsSortable === true;
+
+        $columns = $sortable ? [$p->linkTagId, 'order'] : [$p->linkTagId];
+
+        $currentLinks = DB::table($linkTable)
+            ->where($p->linkItemId, $this->recordId)
+            ->when($sortable, fn ($query) => $query->orderBy('order'))
+            ->get($columns);
+
+        if ($currentLinks->isEmpty()) {
+            return true;
+        }
+
+        $newLinks = $currentLinks->map(function ($link) use ($p, $newRecordId, $sortable) {
+            $row = [$p->linkItemId => $newRecordId, $p->linkTagId => $link->{$p->linkTagId}];
+
+            if ($sortable) {
+                $row['order'] = $link->order;
+            }
+
+            return $row;
+        })->toArray();
+
+        return DB::table($linkTable)->insert($newLinks);
     }
 }

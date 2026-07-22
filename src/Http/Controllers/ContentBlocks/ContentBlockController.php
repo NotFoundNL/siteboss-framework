@@ -28,7 +28,7 @@ class ContentBlockController
         }
 
         $newTables = $tables->map(function ($table) {
-            $inputs = (new TableService($table, lang::default()))->getFieldComponents();
+            $inputs = (new TableService($table, Lang::default()))->getFieldComponents();
 
             $newInputs = [];
             foreach ($inputs as $component) {

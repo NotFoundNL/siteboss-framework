@@ -3,6 +3,7 @@
 namespace NotFound\Framework\Models\Forms;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
 use NotFound\Framework\Models\BaseModel;
 
 /**
@@ -11,7 +12,7 @@ use NotFound\Framework\Models\BaseModel;
  * @property int $id
  * @property string $name
  * @property string|null $display_name
- * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property Carbon|null $deleted_at
  *
  * @method static \Illuminate\Database\Eloquent\Builder|Filetype newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Filetype newQuery()

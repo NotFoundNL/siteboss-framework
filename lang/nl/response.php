@@ -6,11 +6,14 @@ return [
     'table' => [
         'ok' => 'Opslaan geslaagd',
         'delete' => 'Kon item niet verwijderen',
-
         'order' => [
             'column_null' => 'order column bestaat niet',
             'error' => 'Probleem bij herschikken',
         ],
+        'archive' => 'Item gearchiveerd',
+        'unarchive' => 'Item uit archief gehaald',
+        'archive-error' => 'Kon item niet archiveren',
+        'unarchive-error' => 'Kon item niet uit archief halen',
     ],
 
     'error' => [

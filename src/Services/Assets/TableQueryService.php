@@ -16,7 +16,8 @@ class TableQueryService
 
     public function __construct(
         private Table $table,
-        private Collection $components
+        private Collection $components,
+        private bool $archive = false
     ) {
         $this->setRecordPerPage();
     }
@@ -30,6 +31,10 @@ class TableQueryService
         $siteTableRowsQuery = $this->setOrdering($siteTableRowsQuery);
 
         $siteTableRowsQuery = $this->setSearch($siteTableRowsQuery);
+
+        if ($this->table->allow_archive) {
+            $siteTableRowsQuery = $this->setArchived($siteTableRowsQuery);
+        }
 
         if ($this->table->isLocalized()) {
             $siteTableRowsQuery = $this->joinLocalize($siteTableRowsQuery);
@@ -115,5 +120,14 @@ class TableQueryService
             ->select($siteTableNameTr.'.*', $this->table->getSiteTableName().'.*');
 
         return $query;
+    }
+
+    private function setArchived(Builder $query): Builder
+    {
+        if ($this->archive) {
+            return $query->whereNotNull('archived_at');
+        }
+
+        return $query->whereNull('archived_at');
     }
 }

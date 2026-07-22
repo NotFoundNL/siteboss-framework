@@ -5,6 +5,8 @@ namespace NotFound\Framework\Services\ClamAV;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use NotFound\Framework\Exceptions\ClamAV\ClamAVException;
+use Socket\Raw\Factory;
+use Xenolope\Quahog\Client;
 
 // TODO: Convert to Laravel facade
 class ClamAV
@@ -78,12 +80,12 @@ class ClamAV
         }
     }
 
-    private static function GetClient(): \Xenolope\Quahog\Client
+    private static function GetClient(): Client
     {
         $socketString = self::getClamAVSocket();
-        $socket = (new \Socket\Raw\Factory)->createClient($socketString);
+        $socket = (new Factory)->createClient($socketString);
 
-        return new \Xenolope\Quahog\Client($socket);
+        return new Client($socket);
     }
 
     private static function getClamAVSocket(): string

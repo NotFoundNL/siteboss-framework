@@ -2,6 +2,7 @@
 
 namespace NotFound\Framework\Http\Controllers\Forms;
 
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use NotFound\Framework\Http\Controllers\Controller;
 use NotFound\Framework\Models\Forms\Category;
@@ -86,7 +87,7 @@ class FormController extends Controller
 
         try {
             return $form->save();
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             $errorCode = $e->errorInfo[1];
             if ($errorCode == 1062) {
                 return response()->json([

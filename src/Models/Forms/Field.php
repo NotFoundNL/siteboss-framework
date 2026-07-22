@@ -4,6 +4,7 @@ namespace NotFound\Framework\Models\Forms;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
 use NotFound\Framework\Models\BaseModel;
 
 /**
@@ -18,10 +19,10 @@ use NotFound\Framework\Models\BaseModel;
  * @property int $order
  * @property int|null $trigger_field_id
  * @property string|null $trigger_value
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at
- * @property-read \NotFound\Framework\Models\Forms\Property|null $property
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property Carbon|null $deleted_at
+ * @property-read Property|null $property
  *
  * @method static \Illuminate\Database\Eloquent\Builder|Field newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Field newQuery()

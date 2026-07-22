@@ -3,6 +3,7 @@
 namespace NotFound\Framework\Mail\Indexer;
 
 use Illuminate\Mail\Mailable;
+use NotFound\Framework\Models\Form;
 
 class FileIndexError extends Mailable
 {
@@ -17,7 +18,7 @@ class FileIndexError extends Mailable
     /**
      * Create a new message instance.
      *
-     * @param  \NotFound\Framework\Models\Form  $form
+     * @param  Form  $form
      * @return void
      */
     public function __construct(string $error, $server, $document, $title)

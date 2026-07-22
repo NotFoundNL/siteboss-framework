@@ -2,6 +2,7 @@
 
 namespace NotFound\Framework\Services\Assets\Components;
 
+use Illuminate\Support\Collection;
 use NotFound\Framework\Services\Assets\Enums\AssetType;
 use NotFound\Layout\Elements\AbstractLayout;
 use NotFound\Layout\Elements\Table\LayoutTableColumn;
@@ -51,5 +52,10 @@ class ComponentButton extends AbstractComponent
         // TODO: This is not an input and should
         //       probably not be bases on AbstractComponent.
         return true;
+    }
+
+    public function getCloneValue(Collection $components): mixed
+    {
+        return null;
     }
 }

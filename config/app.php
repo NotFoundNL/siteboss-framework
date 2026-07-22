@@ -2,8 +2,17 @@
 
 // This file is published by the siteboss-framework package
 
+use App\Providers\AuthServiceProvider;
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\ServiceProvider;
+use NotFound\Framework\Facades\Info;
+use NotFound\Framework\Helpers\SitebossHelper;
+use NotFound\Framework\Providers\EventServiceProvider;
+use NotFound\Framework\Providers\GlobalStringServiceProvider;
+use NotFound\Framework\Providers\LogServiceProvider;
+use NotFound\Framework\Providers\MigrationServiceProvider;
+use NotFound\Framework\Providers\PageInfoServiceProvider;
+use NotFound\Framework\Providers\RouteServiceProvider;
 
 return [
 
@@ -144,13 +153,13 @@ return [
         /*
          * Application Service Providers...
          */
-        App\Providers\AuthServiceProvider::class,
-        NotFound\Framework\Providers\EventServiceProvider::class,
-        NotFound\Framework\Providers\RouteServiceProvider::class,
-        NotFound\Framework\Providers\LogServiceProvider::class,
-        NotFound\Framework\Providers\MigrationServiceProvider::class,
-        NotFound\Framework\Providers\GlobalStringServiceProvider::class,
-        NotFound\Framework\Providers\PageInfoServiceProvider::class,
+        AuthServiceProvider::class,
+        EventServiceProvider::class,
+        RouteServiceProvider::class,
+        LogServiceProvider::class,
+        MigrationServiceProvider::class,
+        GlobalStringServiceProvider::class,
+        PageInfoServiceProvider::class,
 
     ])->toArray(),
 
@@ -166,8 +175,8 @@ return [
     */
 
     'aliases' => Facade::defaultAliases()->merge([
-        'Sb' => \NotFound\Framework\Helpers\SitebossHelper::class,
-        'Info' => \NotFound\Framework\Facades\Info::class,
+        'Sb' => SitebossHelper::class,
+        'Info' => Info::class,
     ])->toArray(),
 
 ];

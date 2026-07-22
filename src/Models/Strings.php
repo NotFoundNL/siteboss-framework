@@ -3,6 +3,7 @@
 namespace NotFound\Framework\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 /**
  * NotFound\Framework\Models\Strings
@@ -13,8 +14,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $lang_id
  * @property int $string_id
  * @property string|null $value
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \Illuminate\Support\Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property Carbon|null $created_at
  *
  * @method static \Illuminate\Database\Eloquent\Builder|Strings newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Strings newQuery()

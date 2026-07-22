@@ -6,6 +6,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use NotFound\Framework\Models\Forms\Filetype;
 use NotFound\Framework\Services\ClamAV\ClamAV;
+use NotFound\Framework\Services\Forms\MimetypeConverter;
 
 class TypeFile extends AbstractType
 {
@@ -165,7 +166,7 @@ class TypeFile extends AbstractType
         if (isset($this->properties) && isset($this->properties->filetypes)) {
             $filetype = $this->properties->{'filetypes'};
 
-            $extArray = \NotFound\Framework\Services\Forms\MimetypeConverter::getExtension($filetype);
+            $extArray = MimetypeConverter::getExtension($filetype);
             if (! is_array($extArray)) {
                 return true;
             }

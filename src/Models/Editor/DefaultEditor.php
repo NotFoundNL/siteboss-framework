@@ -52,7 +52,7 @@ class DefaultEditor extends AbstractEditor
         return $bar->addBarButton($addNew);
     }
 
-    public function getBreadCrumbs(): LayoutBreadCrumb
+    public function getBreadCrumbs(): LayoutBreadcrumb
     {
         $table = $this->ts->getAssetModel();
         $breadcrumb = new LayoutBreadcrumb;
@@ -62,7 +62,7 @@ class DefaultEditor extends AbstractEditor
         return $breadcrumb;
     }
 
-    public function getBreadCrumbsEdit(): LayoutBreadCrumb
+    public function getBreadCrumbsEdit(): LayoutBreadcrumb
     {
         $table = $this->ts->getAssetModel();
         $breadcrumb = $this->getBreadCrumbs();

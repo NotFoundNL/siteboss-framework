@@ -2,6 +2,8 @@
 
 namespace NotFound\Framework\Models;
 
+use Illuminate\Support\Carbon;
+
 /**
  * NotFound\Framework\Models\CmsContentBlocks
  *
@@ -13,10 +15,10 @@ namespace NotFound\Framework\Models;
  * @property int $target_record_id
  * @property int $lang_id
  * @property int $order
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at
- * @property-read \NotFound\Framework\Models\Lang|null $lang
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property Carbon|null $deleted_at
+ * @property-read Lang|null $lang
  *
  * @method static \Illuminate\Database\Eloquent\Builder|CmsContentBlocks newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CmsContentBlocks newQuery()

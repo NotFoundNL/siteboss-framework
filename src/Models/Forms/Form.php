@@ -4,6 +4,7 @@ namespace NotFound\Framework\Models\Forms;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
 use NotFound\Framework\Models\BaseModel;
 
 /**
@@ -18,12 +19,12 @@ use NotFound\Framework\Models\BaseModel;
  * @property string|null $notification_address
  * @property string|null $success_action
  * @property object|null $confirmation_mail
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property Carbon|null $deleted_at
  * @property int|null $archived
  * @property int $draft
- * @property-read \NotFound\Framework\Models\Forms\Category|null $category
+ * @property-read Category|null $category
  *
  * @method static Builder|Form newModelQuery()
  * @method static Builder|Form newQuery()

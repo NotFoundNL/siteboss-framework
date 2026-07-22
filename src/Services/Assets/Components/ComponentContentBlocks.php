@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use NotFound\Framework\Models\CmsContentBlocks;
+use NotFound\Framework\Models\Lang;
 use NotFound\Framework\Models\Table;
 use NotFound\Framework\Services\Assets\TableService;
 use NotFound\Layout\Elements\AbstractLayout;
@@ -188,5 +189,64 @@ class ComponentContentBlocks extends AbstractComponent
             ->get();
 
         return $contentBlocks;
+    }
+
+    /**
+     * Content blocks are not stored in the record itself, so there is no value to clone.
+     */
+    public function getCloneValue(Collection $components): mixed
+    {
+        return null;
+    }
+
+    /**
+     * Content blocks live in cms_content_blocks and point to records in other tables.
+     * So we duplicate every connected record and link the copy to the new record.
+     *
+     * Because the duplication runs through the TableService, content blocks inside the
+     * duplicated blocks are cloned as well.
+     */
+    public function clone(int $newRecordId): bool
+    {
+        $contentBlocks = CmsContentBlocks::whereAssetType($this->assetType)
+            ->whereSourceAssetItemId($this->assetItem->id)
+            ->whereSourceRecordId($this->getRecordId())
+            ->orderBy('order', 'ASC')
+            ->get();
+
+        foreach ($contentBlocks as $contentBlock) {
+            /** @var CmsContentBlocks $contentBlock */
+            $table = Table::whereId($contentBlock->target_table_id)->first();
+            $lang = Lang::find($contentBlock->lang_id);
+
+            if ($table === null || $lang === null) {
+                Log::withContext(['contentBlockId' => $contentBlock->id])
+                    ->warning('[ContentBlock] Could not clone block, table or language not found');
+
+                continue;
+            }
+
+            $ts = new TableService($table, $lang, $contentBlock->target_record_id);
+            $newTargetRecordId = $ts->duplicateRecord();
+
+            if ($newTargetRecordId === null) {
+                Log::withContext(['contentBlockId' => $contentBlock->id])
+                    ->warning('[ContentBlock] Could not clone block, duplicating the record failed');
+
+                continue;
+            }
+
+            CmsContentBlocks::create([
+                'asset_type' => $contentBlock->asset_type,
+                'source_asset_item_id' => $contentBlock->source_asset_item_id,
+                'source_record_id' => $newRecordId,
+                'target_table_id' => $contentBlock->target_table_id,
+                'target_record_id' => $newTargetRecordId,
+                'lang_id' => $contentBlock->lang_id,
+                'order' => $contentBlock->order,
+            ]);
+        }
+
+        return true;
     }
 }

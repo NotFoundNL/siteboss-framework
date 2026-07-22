@@ -4,6 +4,7 @@ namespace NotFound\Framework\Models\Forms;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use NotFound\Framework\Models\BaseModel;
 
@@ -15,7 +16,7 @@ use NotFound\Framework\Models\BaseModel;
  * @property string $name
  * @property string $slug
  * @property object|null $properties
- * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property Carbon|null $deleted_at
  *
  * @method static \Illuminate\Database\Eloquent\Builder|Category newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Category newQuery()

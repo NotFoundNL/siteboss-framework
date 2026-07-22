@@ -4,6 +4,7 @@ namespace NotFound\Framework\Http\Controllers\CmsEditor;
 
 use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Facades\Schema;
+use NotFound\Framework\Http\Controllers\Controller;
 use NotFound\Framework\Http\Requests\FormDataRequest;
 use NotFound\Framework\Models\Table;
 use NotFound\Framework\Services\CmsExchange\TableExchangeService;
@@ -26,7 +27,7 @@ use NotFound\Layout\Responses\Redirect;
 use NotFound\Layout\Responses\Toast;
 use stdClass;
 
-class CmsEditorTableController extends \NotFound\Framework\Http\Controllers\Controller
+class CmsEditorTableController extends Controller
 {
     public function index()
     {
@@ -144,6 +145,8 @@ class CmsEditorTableController extends \NotFound\Framework\Http\Controllers\Cont
             $form->addInput((new LayoutInputCheckbox('allow_create', 'Allow create'))->setValue($table->allow_create == 1 ?? false));
             $form->addInput((new LayoutInputCheckbox('allow_delete', 'Allow delete'))->setValue($table->allow_delete == 1 ?? false));
             $form->addInput((new LayoutInputCheckbox('allow_sort', 'Allow sorting'))->setValue($table->allow_sort == 1 ?? false));
+            $form->addInput((new LayoutInputCheckbox('allow_duplicate', 'Allow duplicate'))->setValue($table->allow_duplicate == 1 ?? false));
+            $form->addInput((new LayoutInputCheckbox('allow_archive', 'Allow archive'))->setValue($table->allow_archive == 1 ?? false));
             $form->addInput((new LayoutInputCheckbox('disable_sticky_submit', 'Disable sticky submit button'))->setValue($table->properties->disable_sticky_submit ?? false));
             $form->addInput((new LayoutInputCheckbox('stay_on_page', 'Allow stay on page'))->setValue($table->properties->stay_on_page ?? false));
             $form->addInput((new LayoutInputCheckbox('localize', 'Localize this table'))->setValue($table->properties->localize ?? false));
@@ -227,8 +230,10 @@ class CmsEditorTableController extends \NotFound\Framework\Http\Controllers\Cont
             'url' => 'string|required',
             'enabled' => 'boolean',
             'allow_create' => 'boolean',
+            'allow_archive' => 'boolean',
             'allow_delete' => 'boolean',
             'allow_sort' => 'boolean',
+            'allow_duplicate' => 'boolean',
             'disable_sticky_submit' => 'boolean',
             'stay_on_page' => 'boolean',
             'localize' => 'boolean',
@@ -253,6 +258,8 @@ class CmsEditorTableController extends \NotFound\Framework\Http\Controllers\Cont
             'allow_create' => $request->allow_create,
             'allow_delete' => $request->allow_delete,
             'allow_sort' => $request->allow_sort,
+            'allow_duplicate' => $request->allow_duplicate,
+            'allow_archive' => $request->allow_archive,
             'properties' => $properties,
         ]);
         $response = new LayoutResponse;

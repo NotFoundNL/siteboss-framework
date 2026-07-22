@@ -1,6 +1,8 @@
 <?php
 
 declare(strict_types=1);
+use PHP_CodeSniffer\Standards\Generic\Sniffs\Files\LineLengthSniff;
+use SlevomatCodingStandard\Sniffs\TypeHints\NullableTypeForNullDefaultValueSniff;
 
 return [
     'preset' => 'laravel',
@@ -23,10 +25,10 @@ return [
         ReturnTypeHintSniff::class,
         UselessFunctionDocCommentSniff::class,
         // Pint will remove this, so don't enforce it
-        SlevomatCodingStandard\Sniffs\TypeHints\NullableTypeForNullDefaultValueSniff::class,
+        NullableTypeForNullDefaultValueSniff::class,
     ],
     'config' => [
-        \PHP_CodeSniffer\Standards\Generic\Sniffs\Files\LineLengthSniff::class => [
+        LineLengthSniff::class => [
             'lineLimit' => 120,
             'absoluteLineLimit' => 160,
         ],

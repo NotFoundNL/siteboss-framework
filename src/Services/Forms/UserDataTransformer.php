@@ -4,6 +4,7 @@ namespace NotFound\Framework\Services\Forms;
 
 use NotFound\Framework\Models\Forms\Data;
 use NotFound\Framework\Models\Forms\Field;
+use NotFound\Framework\Services\Forms\Fields\FactoryType;
 
 // TODO: Loose coupling on class
 // Should rethink how the filters work, csv/table are bad names
@@ -166,7 +167,7 @@ class UserDataTransformer
             $fieldsFromDatabase = $this->getFieldsFromDatabase($id);
         }
 
-        $typeFactory = new \NotFound\Framework\Services\Forms\Fields\FactoryType;
+        $typeFactory = new FactoryType;
         foreach ($fieldsFromDatabase as $field) {
             // recursive when it's a combination
             if ($field->type == 'Combination') {

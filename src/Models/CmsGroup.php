@@ -3,6 +3,7 @@
 namespace NotFound\Framework\Models;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
@@ -16,7 +17,7 @@ use Illuminate\Support\Facades\Cache;
  * @property string|null $internal
  * @property string|null $name
  * @property string|null $description
- * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property Carbon|null $deleted_at
  *
  * @method static \Illuminate\Database\Eloquent\Builder|CmsGroup newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CmsGroup newQuery()
