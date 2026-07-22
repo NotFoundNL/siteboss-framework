@@ -18,8 +18,8 @@
   "require": {
     "spatie/laravel-package-tools": "^1.14.0",
     "spatie/laravel-honeypot": "^4.3.2",
-    "notfoundnl/siteboss-layout": "^1.7.0",
-    "notfoundnl/siteboss-static": "^1.15.0",
+    "notfoundnl/siteboss-layout": "^1.8.0",
+    "notfoundnl/siteboss-static": "^1.15.0|dev-main",
     "mcamara/laravel-localization": "^2.0",
     "enshrined/svg-sanitize": "^0.22.0",
     "xenolope/quahog": "^3.0",

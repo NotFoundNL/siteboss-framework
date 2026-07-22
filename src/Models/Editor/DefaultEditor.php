@@ -52,12 +52,19 @@ class DefaultEditor extends AbstractEditor
         return $bar->addBarButton($addNew);
     }
 
-    public function getBreadCrumbs(): LayoutBreadcrumb
+    public function getBreadCrumbs(bool $archiveView = false): LayoutBreadcrumb
     {
         $table = $this->ts->getAssetModel();
         $breadcrumb = new LayoutBreadcrumb;
         $breadcrumb->addHome();
-        $breadcrumb->addItem($table->name);
+
+        if ($archiveView) {
+            $breadcrumb->addItem($table->name, '/table/'.$table->url.'/');
+            $breadcrumb->addItem('Archief');
+
+        } else {
+            $breadcrumb->addItem($table->name);
+        }
 
         return $breadcrumb;
     }

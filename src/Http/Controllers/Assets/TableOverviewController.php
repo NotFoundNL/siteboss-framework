@@ -31,12 +31,12 @@ class TableOverviewController extends AssetEditorController
      * @param  string  $customer  This is an value of tg_cms_table->url column.
      * @return array ['headers' => [{'name' => 'name3','properties' => 'sourcename']], 'rows' => [
      */
-    public function index(Request $request, Table $table, bool $archived = false)
+    public function index(Request $request, Table $table, bool $archiveView = false)
     {
         $tableService = new TableService($table, Lang::default());
         $components = $tableService->getFieldComponentsOverview();
 
-        $tableQueryService = new TableQueryService($table, $components, $archived);
+        $tableQueryService = new TableQueryService($table, $components, $archiveView);
         $siteTableRowsPaginator = $tableQueryService->getSiteTableRows();
 
         $layoutTable = new LayoutTable(
@@ -45,12 +45,12 @@ class TableOverviewController extends AssetEditorController
             archive: $table->allow_archive,
             sort: ($request->sort ? false : $table->allow_sort),
             duplicate: $table->allow_duplicate,
-            archiveView: $archived
+            archiveView: $archiveView
         );
         if ($table->allow_archive) {
             $tabs = new LayoutTabs;
-            $tabs->addTab(new LayoutTab('Actief', '/table/'.$table->url.'', ! $archived));
-            $tabs->addTab(new LayoutTab('Gearchiveerd', '/table/'.$table->url.'/archive', $archived));
+            $tabs->addTab(new LayoutTab('Actief', '/table/'.$table->url.'', ! $archiveView));
+            $tabs->addTab(new LayoutTab('Gearchiveerd', '/table/'.$table->url.'/archive', $archiveView));
         }
 
         $layoutTable->setTotalItems($siteTableRowsPaginator->total());
@@ -87,7 +87,7 @@ class TableOverviewController extends AssetEditorController
         $page = new LayoutPage($table->name);
         $page->addTitle(new LayoutTitle($table->name));
 
-        $page->addBreadCrumb($editor->getBreadCrumbs());
+        $page->addBreadCrumb($editor->getBreadCrumbs($archiveView));
 
         $pager = new LayoutPager(totalItems: $siteTableRowsPaginator->total(), itemsPerPage: request()->query('pitems') ?? $table->properties->itemsPerPage ?? 25);
 

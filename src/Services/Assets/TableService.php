@@ -15,6 +15,8 @@ class TableService extends AbstractAssetService
 {
     private Collection $fieldComponents;
 
+    private ?object $siteTableRow = null;
+
     public function __construct(
         private Table $table,
         protected Lang $lang,
@@ -45,6 +47,14 @@ class TableService extends AbstractAssetService
     public function addCustomComponent(string $internal, AbstractComponent $component): void
     {
         $this->fieldComponents->put($internal, $component);
+    }
+
+    /**
+     * Whether the current record is archived. Always false for new records.
+     */
+    public function isArchived(): bool
+    {
+        return ($this->siteTableRow->archived_at ?? null) !== null;
     }
 
     public function getType(): AssetType
@@ -170,6 +180,7 @@ class TableService extends AbstractAssetService
     private function setCurrentValues(): void
     {
         $siteTableRow = $this->assetModel->getSiteTableRowByRecordId($this->recordId);
+        $this->siteTableRow = $siteTableRow;
 
         $localizedSiteRow = null;
         if ($this->table->isLocalized()) {

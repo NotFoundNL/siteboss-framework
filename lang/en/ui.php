@@ -26,4 +26,5 @@ return [
     ],
     'email' => 'E-mail',
     'enabled' => 'Enabled',
+    'archive_message' => 'This is an archived item. You may need to restore it first before it is visible on the website.',
 ];
