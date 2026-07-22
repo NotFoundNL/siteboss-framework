@@ -304,7 +304,7 @@ class ComponentImage extends AbstractComponent
         if (isset($value->uploaded) && $value->uploaded === true && isset($this->properties()->sizes[0])) {
             return '{"uploaded":true}';
         }
-        return null;
+        return '{}';
     }
 
     public function clone(int $_newRecordId): bool
