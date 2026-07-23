@@ -3,8 +3,6 @@
 namespace NotFound\Framework\Http\Controllers;
 
 use Illuminate\Http\Request;
-use NotFound\Framework\Http\Requests\FormDataRequest;
-use NotFound\Framework\Models\CmsConfig;
 use NotFound\Framework\Helpers\Layout\Elements\LayoutButton;
 use NotFound\Framework\Helpers\Layout\Elements\LayoutForm;
 use NotFound\Framework\Helpers\Layout\Elements\LayoutText;
@@ -17,6 +15,8 @@ use NotFound\Framework\Helpers\Layout\Inputs\LayoutInputText;
 use NotFound\Framework\Helpers\Layout\LayoutResponse;
 use NotFound\Framework\Helpers\Layout\Responses\Redirect;
 use NotFound\Framework\Helpers\Layout\Responses\Toast;
+use NotFound\Framework\Http\Requests\FormDataRequest;
+use NotFound\Framework\Models\CmsConfig;
 
 class SettingsController extends Controller
 {

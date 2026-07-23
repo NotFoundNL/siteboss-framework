@@ -5,12 +5,6 @@ namespace NotFound\Framework\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
-use NotFound\Framework\Http\Requests\FormDataRequest;
-use NotFound\Framework\Models\Lang;
-use NotFound\Framework\Models\Menu;
-use NotFound\Framework\Models\Strings;
-use NotFound\Framework\Models\Template;
-use NotFound\Framework\Services\Legacy\StatusColumn;
 use NotFound\Framework\Helpers\Layout\Elements\LayoutBreadcrumb;
 use NotFound\Framework\Helpers\Layout\Elements\LayoutButton;
 use NotFound\Framework\Helpers\Layout\Elements\LayoutForm;
@@ -25,6 +19,12 @@ use NotFound\Framework\Helpers\Layout\Inputs\LayoutInputText;
 use NotFound\Framework\Helpers\Layout\LayoutResponse;
 use NotFound\Framework\Helpers\Layout\Responses\Redirect;
 use NotFound\Framework\Helpers\Layout\Responses\Toast;
+use NotFound\Framework\Http\Requests\FormDataRequest;
+use NotFound\Framework\Models\Lang;
+use NotFound\Framework\Models\Menu;
+use NotFound\Framework\Models\Strings;
+use NotFound\Framework\Models\Template;
+use NotFound\Framework\Services\Legacy\StatusColumn;
 
 /**
  * Creates the data required to display the CMS menu on the frontend.

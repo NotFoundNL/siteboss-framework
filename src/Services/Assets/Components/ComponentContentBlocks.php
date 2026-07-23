@@ -5,12 +5,12 @@ namespace NotFound\Framework\Services\Assets\Components;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
+use NotFound\Framework\Helpers\Layout\Elements\AbstractLayout;
+use NotFound\Framework\Helpers\Layout\Inputs\LayoutInputContentBlocks;
 use NotFound\Framework\Models\CmsContentBlocks;
 use NotFound\Framework\Models\Lang;
 use NotFound\Framework\Models\Table;
 use NotFound\Framework\Services\Assets\TableService;
-use NotFound\Framework\Helpers\Layout\Elements\AbstractLayout;
-use NotFound\Framework\Helpers\Layout\Inputs\LayoutInputContentBlocks;
 
 /**
  * Component to manage content blocks.

@@ -2,7 +2,6 @@
 
 namespace NotFound\Framework\Services\Editor;
 
-use NotFound\Framework\Http\Requests\FormDataRequest;
 use NotFound\Framework\Helpers\Layout\Elements\LayoutForm;
 use NotFound\Framework\Helpers\Layout\Elements\LayoutText;
 use NotFound\Framework\Helpers\Layout\Elements\LayoutTitle;
@@ -12,6 +11,7 @@ use NotFound\Framework\Helpers\Layout\Inputs\LayoutInputNumber;
 use NotFound\Framework\Helpers\Layout\Inputs\LayoutInputRepeatable;
 use NotFound\Framework\Helpers\Layout\Inputs\LayoutInputTags;
 use NotFound\Framework\Helpers\Layout\Inputs\LayoutInputText;
+use NotFound\Framework\Http\Requests\FormDataRequest;
 use stdClass;
 
 class FieldsProperties

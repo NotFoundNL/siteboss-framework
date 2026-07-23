@@ -6,6 +6,9 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use NotFound\Framework\Helpers\Layout\Inputs\LayoutInputCheckbox;
+use NotFound\Framework\Helpers\Layout\Inputs\LayoutInputSlug;
+use NotFound\Framework\Helpers\Layout\Inputs\LayoutInputText;
 use NotFound\Framework\Http\Requests\FormDataRequest;
 use NotFound\Framework\Models\Lang;
 use NotFound\Framework\Models\Menu;
@@ -14,9 +17,6 @@ use NotFound\Framework\Services\Assets\Components\AbstractComponent;
 use NotFound\Framework\Services\Assets\Enums\AssetType;
 use NotFound\Framework\Services\Assets\Enums\TemplateType;
 use NotFound\Framework\Services\Indexer\ContentBlockService;
-use NotFound\Framework\Helpers\Layout\Inputs\LayoutInputCheckbox;
-use NotFound\Framework\Helpers\Layout\Inputs\LayoutInputSlug;
-use NotFound\Framework\Helpers\Layout\Inputs\LayoutInputText;
 use stdClass;
 
 class PageService extends AbstractAssetService

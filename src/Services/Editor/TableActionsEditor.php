@@ -2,10 +2,6 @@
 
 namespace NotFound\Framework\Services\Editor;
 
-use NotFound\Framework\Models\Table;
-use NotFound\Framework\Models\TableAction;
-use NotFound\Framework\Services\Assets\Enums\TableActionCondition;
-use NotFound\Framework\Services\Assets\Enums\TableActionType;
 use NotFound\Framework\Helpers\Layout\Elements\LayoutButton;
 use NotFound\Framework\Helpers\Layout\Elements\LayoutForm;
 use NotFound\Framework\Helpers\Layout\Elements\LayoutText;
@@ -17,6 +13,10 @@ use NotFound\Framework\Helpers\Layout\Elements\Table\LayoutTableHeader;
 use NotFound\Framework\Helpers\Layout\Elements\Table\LayoutTableRow;
 use NotFound\Framework\Helpers\Layout\Inputs\LayoutInputDropdown;
 use NotFound\Framework\Helpers\Layout\Inputs\LayoutInputNumber;
+use NotFound\Framework\Models\Table;
+use NotFound\Framework\Models\TableAction;
+use NotFound\Framework\Services\Assets\Enums\TableActionCondition;
+use NotFound\Framework\Services\Assets\Enums\TableActionType;
 
 /**
  * Builds the CMS editor UI for the retention actions of a table.

@@ -2,15 +2,15 @@
 
 namespace NotFound\Framework\Http\Controllers\Assets;
 
+use NotFound\Framework\Helpers\Layout\Elements\LayoutBar;
+use NotFound\Framework\Helpers\Layout\Elements\LayoutBarButton;
+use NotFound\Framework\Helpers\Layout\Elements\LayoutWidget;
 use NotFound\Framework\Http\Controllers\Controller;
 use NotFound\Framework\Models\Editor\AbstractEditor;
 use NotFound\Framework\Models\Editor\DefaultEditor;
 use NotFound\Framework\Models\Lang;
 use NotFound\Framework\Models\Table;
 use NotFound\Framework\Services\Assets\TableService;
-use NotFound\Framework\Helpers\Layout\Elements\LayoutBar;
-use NotFound\Framework\Helpers\Layout\Elements\LayoutBarButton;
-use NotFound\Framework\Helpers\Layout\Elements\LayoutWidget;
 
 abstract class AssetEditorController extends Controller
 {

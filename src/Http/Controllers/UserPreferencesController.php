@@ -2,8 +2,6 @@
 
 namespace NotFound\Framework\Http\Controllers;
 
-use NotFound\Framework\Http\Requests\FormDataRequest;
-use NotFound\Framework\Models\CmsUser;
 use NotFound\Framework\Helpers\Layout\Elements\LayoutButton;
 use NotFound\Framework\Helpers\Layout\Elements\LayoutForm;
 use NotFound\Framework\Helpers\Layout\Elements\LayoutTitle;
@@ -11,6 +9,8 @@ use NotFound\Framework\Helpers\Layout\Helpers\LayoutWidgetHelper;
 use NotFound\Framework\Helpers\Layout\Inputs\LayoutInputCheckbox;
 use NotFound\Framework\Helpers\Layout\LayoutResponse;
 use NotFound\Framework\Helpers\Layout\Responses\Toast;
+use NotFound\Framework\Http\Requests\FormDataRequest;
+use NotFound\Framework\Models\CmsUser;
 use stdClass;
 
 class UserPreferencesController extends Controller

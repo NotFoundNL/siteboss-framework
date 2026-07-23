@@ -3,10 +3,6 @@
 namespace NotFound\Framework\Http\Controllers\CmsEditor;
 
 use Illuminate\Http\Request as HttpRequest;
-use NotFound\Framework\Http\Controllers\Controller;
-use NotFound\Framework\Http\Requests\FormDataRequest;
-use NotFound\Framework\Models\Template;
-use NotFound\Framework\Services\Editor\FieldsProperties;
 use NotFound\Framework\Helpers\Layout\Elements\LayoutBreadcrumb;
 use NotFound\Framework\Helpers\Layout\Elements\LayoutButton;
 use NotFound\Framework\Helpers\Layout\Elements\LayoutForm;
@@ -23,6 +19,10 @@ use NotFound\Framework\Helpers\Layout\Inputs\LayoutInputText;
 use NotFound\Framework\Helpers\Layout\LayoutResponse;
 use NotFound\Framework\Helpers\Layout\Responses\Redirect;
 use NotFound\Framework\Helpers\Layout\Responses\Toast;
+use NotFound\Framework\Http\Controllers\Controller;
+use NotFound\Framework\Http\Requests\FormDataRequest;
+use NotFound\Framework\Models\Template;
+use NotFound\Framework\Services\Editor\FieldsProperties;
 
 class CmsEditorTemplateController extends Controller
 {

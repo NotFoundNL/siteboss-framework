@@ -4,6 +4,12 @@ namespace NotFound\Framework\Http\Controllers\CmsEditor;
 
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
+use NotFound\Framework\Helpers\Layout\Elements\LayoutButton;
+use NotFound\Framework\Helpers\Layout\Elements\LayoutForm;
+use NotFound\Framework\Helpers\Layout\Helpers\LayoutWidgetHelper;
+use NotFound\Framework\Helpers\Layout\LayoutResponse;
+use NotFound\Framework\Helpers\Layout\Responses\Redirect;
+use NotFound\Framework\Helpers\Layout\Responses\Toast;
 use NotFound\Framework\Http\Controllers\Controller;
 use NotFound\Framework\Http\Requests\FormDataRequest;
 use NotFound\Framework\Models\Table;
@@ -11,12 +17,6 @@ use NotFound\Framework\Models\TableAction;
 use NotFound\Framework\Services\Assets\Enums\TableActionCondition;
 use NotFound\Framework\Services\Assets\Enums\TableActionType;
 use NotFound\Framework\Services\Editor\TableActionsEditor;
-use NotFound\Framework\Helpers\Layout\Elements\LayoutButton;
-use NotFound\Framework\Helpers\Layout\Elements\LayoutForm;
-use NotFound\Framework\Helpers\Layout\Helpers\LayoutWidgetHelper;
-use NotFound\Framework\Helpers\Layout\LayoutResponse;
-use NotFound\Framework\Helpers\Layout\Responses\Redirect;
-use NotFound\Framework\Helpers\Layout\Responses\Toast;
 
 class CmsEditorTableActionController extends Controller
 {
@@ -63,7 +63,7 @@ class CmsEditorTableActionController extends Controller
 
         $response = new LayoutResponse;
         $response->addAction(new Toast('Action updated'));
-        $response->addAction(new Refresh());
+        $response->addAction(new Refresh);
         $response->addAction(new Redirect('/app/editor/table/'.$table->id));
 
         return $response->build();

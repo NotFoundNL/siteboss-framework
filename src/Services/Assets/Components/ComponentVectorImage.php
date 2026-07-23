@@ -10,11 +10,11 @@ use enshrined\svgSanitize\Sanitizer;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use NotFound\Framework\Models\Menu;
-use NotFound\Framework\Services\Assets\Enums\AssetType;
 use NotFound\Framework\Helpers\Layout\Elements\AbstractLayout;
 use NotFound\Framework\Helpers\Layout\Elements\Table\LayoutTableColumn;
 use NotFound\Framework\Helpers\Layout\Inputs\LayoutInputVectorImage;
+use NotFound\Framework\Models\Menu;
+use NotFound\Framework\Services\Assets\Enums\AssetType;
 use stdClass;
 
 class ComponentVectorImage extends AbstractComponent

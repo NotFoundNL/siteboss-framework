@@ -2,10 +2,10 @@
 
 namespace NotFound\Framework\Models\Editor;
 
-use NotFound\Framework\Services\Assets\TableService;
 use NotFound\Framework\Helpers\Layout\Elements\LayoutBar;
 use NotFound\Framework\Helpers\Layout\Elements\LayoutBreadcrumb;
 use NotFound\Framework\Helpers\Layout\Elements\LayoutPager;
+use NotFound\Framework\Services\Assets\TableService;
 
 abstract class AbstractEditor
 {

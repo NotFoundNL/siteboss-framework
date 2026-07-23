@@ -2,12 +2,12 @@
 
 namespace NotFound\Framework\Models\Editor;
 
-use NotFound\Framework\Services\Assets\TableService;
 use NotFound\Framework\Helpers\Layout\Elements\LayoutBar;
 use NotFound\Framework\Helpers\Layout\Elements\LayoutBarButton;
 use NotFound\Framework\Helpers\Layout\Elements\LayoutBreadcrumb;
 use NotFound\Framework\Helpers\Layout\Elements\LayoutPager;
 use NotFound\Framework\Helpers\Layout\Elements\LayoutSearchBox;
+use NotFound\Framework\Services\Assets\TableService;
 
 class DefaultEditor extends AbstractEditor
 {

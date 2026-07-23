@@ -3,7 +3,6 @@
 namespace NotFound\Framework\Http\Controllers\Forwards;
 
 use Illuminate\Support\Facades\Http;
-use NotFound\Framework\Http\Controllers\Controller;
 use NotFound\Framework\Helpers\Layout\Elements\LayoutBreadcrumb;
 use NotFound\Framework\Helpers\Layout\Elements\LayoutButton;
 use NotFound\Framework\Helpers\Layout\Elements\LayoutForm;
@@ -14,6 +13,7 @@ use NotFound\Framework\Helpers\Layout\Elements\LayoutTableColumn;
 use NotFound\Framework\Helpers\Layout\Elements\LayoutTableHeader;
 use NotFound\Framework\Helpers\Layout\Elements\LayoutTableRow;
 use NotFound\Framework\Helpers\Layout\Elements\LayoutWidget;
+use NotFound\Framework\Http\Controllers\Controller;
 use Sb;
 
 class ForwardsController extends Controller

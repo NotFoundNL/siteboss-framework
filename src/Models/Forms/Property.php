@@ -4,8 +4,6 @@ namespace NotFound\Framework\Models\Forms;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
-use NotFound\Framework\Models\BaseModel;
-use NotFound\Framework\Services\Forms\Fields\FactoryType;
 use NotFound\Framework\Helpers\Layout\Elements\LayoutForm;
 use NotFound\Framework\Helpers\Layout\Inputs\LayoutInputCheckbox;
 use NotFound\Framework\Helpers\Layout\Inputs\LayoutInputDropdown;
@@ -13,6 +11,8 @@ use NotFound\Framework\Helpers\Layout\Inputs\LayoutInputRepeatable;
 use NotFound\Framework\Helpers\Layout\Inputs\LayoutInputSlider;
 use NotFound\Framework\Helpers\Layout\Inputs\LayoutInputText;
 use NotFound\Framework\Helpers\Layout\Inputs\LayoutInputTextArea;
+use NotFound\Framework\Models\BaseModel;
+use NotFound\Framework\Services\Forms\Fields\FactoryType;
 
 /**
  * NotFound\Framework\Models\Forms\Property

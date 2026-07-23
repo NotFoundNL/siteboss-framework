@@ -4,10 +4,10 @@ namespace NotFound\Framework\Services\Assets\Components;
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
-use NotFound\Framework\Services\Legacy\StatusColumn;
 use NotFound\Framework\Helpers\Layout\Elements\AbstractLayout;
 use NotFound\Framework\Helpers\Layout\Elements\Table\LayoutTableColumn;
 use NotFound\Framework\Helpers\Layout\Inputs\LayoutInputTags;
+use NotFound\Framework\Services\Legacy\StatusColumn;
 
 class ComponentTags extends AbstractComponent
 {

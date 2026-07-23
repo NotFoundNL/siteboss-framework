@@ -7,11 +7,11 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Drivers\Imagick\Driver;
 use Intervention\Image\ImageManager;
+use NotFound\Framework\Helpers\Layout\Elements\AbstractLayout;
+use NotFound\Framework\Helpers\Layout\Inputs\LayoutInputText;
 use NotFound\Framework\Models\EditorSetting;
 use NotFound\Framework\Models\FileUpload;
 use NotFound\Framework\Services\Assets\Enums\AssetType;
-use NotFound\Framework\Helpers\Layout\Elements\AbstractLayout;
-use NotFound\Framework\Helpers\Layout\Inputs\LayoutInputText;
 
 class ComponentText extends AbstractComponent
 {

@@ -4,11 +4,6 @@ namespace NotFound\Framework\Http\Controllers\Assets;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use NotFound\Framework\Models\Lang;
-use NotFound\Framework\Models\Table;
-use NotFound\Framework\Services\Assets\Components\AbstractComponent;
-use NotFound\Framework\Services\Assets\TableQueryService;
-use NotFound\Framework\Services\Assets\TableService;
 use NotFound\Framework\Helpers\Layout\Elements\LayoutBar;
 use NotFound\Framework\Helpers\Layout\Elements\LayoutPage;
 use NotFound\Framework\Helpers\Layout\Elements\LayoutPager;
@@ -21,6 +16,11 @@ use NotFound\Framework\Helpers\Layout\Elements\Table\LayoutTable;
 use NotFound\Framework\Helpers\Layout\Elements\Table\LayoutTableRow;
 use NotFound\Framework\Helpers\Layout\LayoutResponse;
 use NotFound\Framework\Helpers\Layout\Responses\Toast;
+use NotFound\Framework\Models\Lang;
+use NotFound\Framework\Models\Table;
+use NotFound\Framework\Services\Assets\Components\AbstractComponent;
+use NotFound\Framework\Services\Assets\TableQueryService;
+use NotFound\Framework\Services\Assets\TableService;
 
 class TableOverviewController extends AssetEditorController
 {

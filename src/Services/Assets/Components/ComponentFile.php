@@ -4,10 +4,10 @@ namespace NotFound\Framework\Services\Assets\Components;
 
 use Illuminate\Http\File;
 use Illuminate\Support\Facades\Storage;
-use NotFound\Framework\Services\ClamAV\ClamAV;
 use NotFound\Framework\Helpers\Layout\Elements\AbstractLayout;
 use NotFound\Framework\Helpers\Layout\Elements\Table\LayoutTableColumn;
 use NotFound\Framework\Helpers\Layout\Inputs\LayoutInputFile;
+use NotFound\Framework\Services\ClamAV\ClamAV;
 
 class ComponentFile extends AbstractComponent
 {

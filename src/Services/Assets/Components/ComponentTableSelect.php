@@ -3,11 +3,11 @@
 namespace NotFound\Framework\Services\Assets\Components;
 
 use Illuminate\Support\Facades\DB;
-use NotFound\Framework\Models\Lang;
-use NotFound\Framework\Services\Legacy\StatusColumn;
 use NotFound\Framework\Helpers\Layout\Elements\AbstractLayout;
 use NotFound\Framework\Helpers\Layout\Elements\Table\LayoutTableColumn;
 use NotFound\Framework\Helpers\Layout\Inputs\LayoutInputDropdown;
+use NotFound\Framework\Models\Lang;
+use NotFound\Framework\Services\Legacy\StatusColumn;
 
 class ComponentTableSelect extends AbstractComponent
 {

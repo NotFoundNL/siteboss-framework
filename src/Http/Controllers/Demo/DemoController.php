@@ -2,7 +2,6 @@
 
 namespace NotFound\Framework\Http\Controllers\Demo;
 
-use NotFound\Framework\Http\Controllers\Controller;
 use NotFound\Framework\Helpers\Layout\Elements\LayoutBreadcrumb;
 use NotFound\Framework\Helpers\Layout\Elements\LayoutForm;
 use NotFound\Framework\Helpers\Layout\Elements\LayoutPage;
@@ -12,6 +11,7 @@ use NotFound\Framework\Helpers\Layout\Elements\LayoutTabs;
 use NotFound\Framework\Helpers\Layout\Elements\LayoutWidget;
 use NotFound\Framework\Helpers\Layout\Inputs\LayoutInputText;
 use NotFound\Framework\Helpers\Layout\LayoutResponse;
+use NotFound\Framework\Http\Controllers\Controller;
 
 class DemoController extends Controller
 {

@@ -3,9 +3,6 @@
 namespace NotFound\Framework\Http\Controllers;
 
 use Illuminate\Support\Arr;
-use NotFound\Framework\Http\Requests\FormDataRequest;
-use NotFound\Framework\Models\CmsGroup;
-use NotFound\Framework\Models\CmsUser;
 use NotFound\Framework\Helpers\Layout\Elements\LayoutBar;
 use NotFound\Framework\Helpers\Layout\Elements\LayoutBarButton;
 use NotFound\Framework\Helpers\Layout\Elements\LayoutBreadcrumb;
@@ -25,6 +22,9 @@ use NotFound\Framework\Helpers\Layout\Inputs\LayoutInputText;
 use NotFound\Framework\Helpers\Layout\LayoutResponse;
 use NotFound\Framework\Helpers\Layout\Responses\Redirect;
 use NotFound\Framework\Helpers\Layout\Responses\Toast;
+use NotFound\Framework\Http\Requests\FormDataRequest;
+use NotFound\Framework\Models\CmsGroup;
+use NotFound\Framework\Models\CmsUser;
 
 class UserManagementController extends Controller
 {

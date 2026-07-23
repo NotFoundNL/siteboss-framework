@@ -6,11 +6,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use NotFound\Framework\Helpers\Layout\Elements\AbstractLayout;
+use NotFound\Framework\Helpers\Layout\Inputs\LayoutInputContentBlocks;
 use NotFound\Framework\Models\AssetItem;
 use NotFound\Framework\Models\Table;
 use NotFound\Framework\Services\Assets\TableService;
-use NotFound\Framework\Helpers\Layout\Elements\AbstractLayout;
-use NotFound\Framework\Helpers\Layout\Inputs\LayoutInputContentBlocks;
 
 class ComponentChildTable extends AbstractComponent
 {
