@@ -64,12 +64,17 @@ class ComponentFile extends AbstractComponent
      * Removes the uploaded file. The name and size are stored in the record
      * and are removed together with the record.
      */
-    public function purge(): bool
-    {
-        return $this->deleteFile();
-    }
+public function purge(): bool
+{
+    return $this->deleteFile();
+}
 
-    private function deleteFile(): bool
+private function delete(): void
+{
+    $this->deleteFile();
+}
+
+private function deleteFile(): bool
     {
         $path = Storage::path('private').'/'.$this->subFolderPrivate
             .$this->assetModel->getIdentifier().'/'.$this->assetItem->internal.'/'.$this->recordId;
