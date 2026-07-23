@@ -44,12 +44,10 @@ Route::prefix(config('siteboss.api_prefix'))->group(function () {
     Route::prefix('api')->group(function () {
 
         // Unauthenticated routes
-        Route::namespace('Forms')->group(function () {
-            Route::post('forms/{form:id}/{langurl}', [DataController::class, 'create'])->middleware(ProtectAgainstSpam::class)->name('formbuilder.post');
-            Route::get('fields/{id}', [FieldController::class, 'readOneJson']);
-            // RIGHTS!!!!!
-            Route::get('download/{submitid}/{fieldId}/{UUID}', [DownloadController::class, 'unauthenticatedDownload']);
-        });
+        Route::post('forms/{form:id}/{langurl}', [DataController::class, 'create'])->middleware(ProtectAgainstSpam::class)->name('formbuilder.post');
+        Route::get('fields/{id}', [FieldController::class, 'readOneJson']);
+        // RIGHTS!!!!!
+        Route::get('download/{submitid}/{fieldId}/{UUID}', [DownloadController::class, 'unauthenticatedDownload']);
     });
 
     Route::post('{locale}/email/verification-notification', [EmailVerificationNotificationController::class, '__invoke'])

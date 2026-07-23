@@ -93,8 +93,7 @@ class OpenIDGuard implements Guard
     public function hasRole($role, $resource = 'siteboss')
     {
         // TODO: MOVE THIS
-        $groupC = new CmsGroup;
-        $roles = $groupC->getRolesByUser($this->user());
+        $roles = CmsGroup::getRolesByUser($this->user());
 
         $onlyLocalRoles = $roles->where('remote', 0);
 

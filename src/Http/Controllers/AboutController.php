@@ -13,14 +13,13 @@ use NotFound\Framework\Helpers\Layout\Elements\LayoutWidget;
 use NotFound\Framework\Helpers\Layout\LayoutResponse;
 use NotFound\Framework\Models\CmsGroup;
 
-// TODO: Translation
 class AboutController extends Controller
 {
-    public function index()
+    public function index(): mixed
     {
         Cache::flush();
         Artisan::call('optimize:clear');
-        $productName = env('APP_WHITELABEL_NAME', 'SiteBoss');
+        $productName = config('siteboss.branding.product_name');
         $response = new LayoutResponse;
         $page = new LayoutPage($productName.' CMS');
 
@@ -47,8 +46,7 @@ class AboutController extends Controller
 
         $widget->addSiteBoss(new LayoutSiteBoss('version'));
 
-        $groupC = new CmsGroup;
-        $roles = $groupC->getCachedRolesByActiveUser();
+        $roles = CmsGroup::getCachedRolesByActiveUser();
 
         $widget->addText(new LayoutText(__('siteboss::about.rights').': '.implode(', ', $roles->toArray())));
 
@@ -74,7 +72,7 @@ class AboutController extends Controller
         return response()->json($response->build());
     }
 
-    private function getMaximumFileUploadSize()
+    private function getMaximumFileUploadSize(): string
     {
         if ($this->convertPHPSizeToBytes(ini_get('post_max_size')) < self::convertPHPSizeToBytes(ini_get('upload_max_filesize'))) {
             return ini_get('post_max_size');
@@ -83,9 +81,8 @@ class AboutController extends Controller
         }
     }
 
-    private function convertPHPSizeToBytes($sSize)
+    private function convertPHPSizeToBytes(string $sSize): int
     {
-        //
         $sSuffix = strtoupper(substr($sSize, -1));
         if (! in_array($sSuffix, ['P', 'T', 'G', 'M', 'K'])) {
             return (int) $sSize;
@@ -94,19 +91,15 @@ class AboutController extends Controller
         switch ($sSuffix) {
             case 'P':
                 $iValue *= 1024;
-                // Fallthrough intended
                 // no break
             case 'T':
                 $iValue *= 1024;
-                // Fallthrough intended
                 // no break
             case 'G':
                 $iValue *= 1024;
-                // Fallthrough intended
                 // no break
             case 'M':
                 $iValue *= 1024;
-                // Fallthrough intended
                 // no break
             case 'K':
                 $iValue *= 1024;

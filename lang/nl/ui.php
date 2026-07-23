@@ -23,6 +23,8 @@ return [
         'new' => 'Nieuwe gebruiker',
         'new_explain' => 'Voeg een nieuwe gebruiker toe die al bestaat op de gekoppelde OpenID Connect provider.',
         'roles' => 'Rollen',
+        'is_admin' => 'Deze gebruiker is een systeembeheerder, je kunt deze rol niet verwijderen.',
+        'cannot_add_admin' => 'Je kunt geen beheerdersrechten aan een gebruiker toewijzen.',
     ],
     'email' => 'E-mail',
     'enabled' => 'Geactiveerd',

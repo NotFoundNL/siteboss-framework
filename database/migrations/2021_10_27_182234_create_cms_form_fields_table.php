@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use NotFound\Framework\Models\Forms\Form;
 
-class CreateCmsFormFieldsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -33,4 +33,4 @@ class CreateCmsFormFieldsTable extends Migration
     {
         Schema::dropIfExists('cms_form_fields');
     }
-}
+};

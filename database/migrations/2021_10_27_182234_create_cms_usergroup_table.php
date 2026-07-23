@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Schema;
 use NotFound\Framework\Models\CmsGroup;
 use NotFound\Framework\Models\CmsUser;
 
-class CreateCmsUsergroupTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -31,4 +31,4 @@ class CreateCmsUsergroupTable extends Migration
     {
         Schema::dropIfExists('cms_usergroup');
     }
-}
+};

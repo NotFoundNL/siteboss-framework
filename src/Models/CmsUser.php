@@ -3,8 +3,10 @@
 namespace NotFound\Framework\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Notifications\DatabaseNotification;
@@ -78,59 +80,48 @@ class CmsUser extends User implements MustVerifyEmail
 
     protected $table = 'cms_user';
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var string[]
-     */
     protected $fillable = [
         'name',
         'login',
         'sub',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'properties' => 'object',
-        'preferences' => 'object',
-        'email_verified_at' => 'datetime',
-    ];
-
-    public function groups()
+    protected function casts(): array
     {
-        // TODO: proper name is: cc_cms_group_user || cc_cms_user_group
+        return [
+            'properties' => 'object',
+            'preferences' => 'object',
+            'email_verified_at' => 'datetime',
+        ];
+    }
+
+    public function groups(): BelongsToMany
+    {
         return $this->belongsToMany(CmsGroup::class, 'cms_usergroup', 'user_id', 'group_id');
     }
 
+    protected function emailVerified(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => (bool) $this->email_verified_at,
+        );
+    }
+
     /**
-     * Use an expression to check if the user has the appropriate
-     * rights.
+     * Use an expression to check if the user has the appropriate rights.
      *
      * Example: "!admin || user" or "form-data && admin" or "admin"
-     * check the database which groups exist
-     *
-     * @param  string  $expression  The expression to check
-     * @param  bool  $default  if the rights are not set, returns this
-     * @return bool user is authorized for the expression
      */
-    public function checkRights($expression, $default = true): bool
+    public function checkRights(string $expression, bool $default = true): bool
     {
-        // Allow a simple expression to disable a field
         if ($expression == 'false') {
             return true;
         }
 
         if ($expression === null || empty(trim($expression))) {
-            // Rights have not been set => return true;
-            // This is to make things backwards compatible
             return $default;
         }
 
-        // Check for use of illegal characters. Just allow () || && ! and alpha
         if (preg_match('/[^a-z &!|)(-]/', $expression)) {
             abort(500, 'Syntax error encountered in checkRights! Use of illegal characters.');
         }
@@ -140,49 +131,31 @@ class CmsUser extends User implements MustVerifyEmail
         return BooleanExpressionEvaluator::evaluate($resolved);
     }
 
-    /**
-     * Called from CheckRights()
-     *
-     * @param  mixed  $matches
-     * @return string that's either 'false' or 'true'
-     */
-    private function expressionCallBack($matches): string
+    private function expressionCallBack(array $matches): string
     {
         $group = $matches[0];
         if ($group === 'true' || $group === 'false') {
             abort(500, __("Syntax error encountered in checkRights! Use of illegal String ('true' || 'false')."));
         }
 
-        $groupC = new CmsGroup;
-        if (! $groupC->getCachedGroups()->pluck('internal')->contains($group)) {
+        if (! CmsGroup::getCachedGroups()->pluck('internal')->contains($group)) {
             abort(500, sprintf("Syntax error encountered in checkRights! Use of non-existing group '%s'.", $group));
         }
 
-        // Check for an exact match.
-        if ($this->hasRole($group)) {
-            return 'true';
-        }
-
-        return 'false';
+        return $this->hasRole($group) ? 'true' : 'false';
     }
 
     /**
-     * explicityHasRole
-     *
      * Checks if the user has explicitly (not inherited) been given the role.
-     *
-     * @param  string  $role  The role to check
-     * @return array of roles
      */
-    public function explicityHasRole($role)
+    public function explicitlyHasRole(string $role): bool
     {
-        $groupC = new CmsGroup;
-        $roles = $groupC->getRolesByUser($this, useRecursion: false);
+        $roles = CmsGroup::getRolesByUser($this, useRecursion: false);
 
         return $roles->contains($role);
     }
 
-    public function hasRole($rolesToCheck)
+    public function hasRole(string $rolesToCheck): bool
     {
         if (trim($rolesToCheck) == '') {
             return false;
@@ -190,11 +163,6 @@ class CmsUser extends User implements MustVerifyEmail
 
         $roles = explode(',', $rolesToCheck);
         foreach ($roles as $role) {
-            // OpenID roles from SSO
-            // if (auth('openid')->hasRole(trim($role))) {
-            //     return true;
-            // // Local SiteBoss roles
-            // } else
             if ($this->hasLocalRole($role)) {
                 return true;
             }
@@ -203,25 +171,14 @@ class CmsUser extends User implements MustVerifyEmail
         return false;
     }
 
-    /**
-     * Checks the database against the roles assigned to the user
-     *
-     * @param  string  $role  role to check
-     */
     public function hasLocalRole(string $role): bool
     {
-        $groupC = new CmsGroup;
-        $roles = $groupC->getRolesByUser($this);
+        $roles = CmsGroup::getRolesByUser($this);
 
         return $roles->contains($role);
     }
 
-    public function getEmailVerifiedAttribute(): bool
-    {
-        return $this->email_verified_at ? true : false;
-    }
-
-    public function sendEmailVerificationNotification()
+    public function sendEmailVerificationNotification(): void
     {
         $this->notify(new VerifyEmail);
     }

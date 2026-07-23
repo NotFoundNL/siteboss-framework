@@ -28,9 +28,9 @@ use NotFound\Framework\Models\CmsUser;
 
 class UserManagementController extends Controller
 {
-    public function create()
+    public function create(): mixed
     {
-        if (! env('OIDC_USE_EXISTING_EMAIL', false) || request()->user()->cannot('viewAny', CmsUser::class)) {
+        if (! config('openid.use_existing_email', false) || request()->user()->cannot('viewAny', CmsUser::class)) {
             return LayoutPage::unauthorized();
         }
 
@@ -65,9 +65,9 @@ class UserManagementController extends Controller
         return $response->build();
     }
 
-    public function createUser(FormDataRequest $request)
+    public function createUser(FormDataRequest $request): mixed
     {
-        if (! env('OIDC_USE_EXISTING_EMAIL', false) || request()->user()->cannot('viewAny', CmsUser::class)) {
+        if (! config('openid.use_existing_email', false) || request()->user()->cannot('viewAny', CmsUser::class)) {
             return LayoutPage::unauthorized();
         }
         $request->validate([
@@ -89,7 +89,7 @@ class UserManagementController extends Controller
         return $response->build();
     }
 
-    public function readAll(CmsUser $user)
+    public function readAll(CmsUser $user): mixed
     {
         if (request()->user()->cannot('update', $user)) {
             return LayoutPage::unauthorized();
@@ -105,7 +105,7 @@ class UserManagementController extends Controller
         $widget = new LayoutWidget(__('siteboss::ui.users.list'));
         $widget->noPadding();
 
-        if (env('OIDC_USE_EXISTING_EMAIL', false)) {
+        if (config('openid.use_existing_email', false)) {
             $bar = new LayoutBar;
 
             $button = new LayoutBarButton(__('siteboss::ui.users.new'));
@@ -125,7 +125,7 @@ class UserManagementController extends Controller
         return $response->build();
     }
 
-    public function readOne(CmsUser $user)
+    public function readOne(CmsUser $user): mixed
     {
         if (request()->user()->cannot('update', $user)) {
             return LayoutPage::unauthorized();
@@ -149,9 +149,9 @@ class UserManagementController extends Controller
         return $response->build();
     }
 
-    public function update(FormDataRequest $request, CmsUser $user)
+    public function update(FormDataRequest $request, CmsUser $user): mixed
     {
-        $adminRoleId = (new CmsGroup)->whereInternal('admin')->firstOrFail()->id;
+        $adminRoleId = CmsGroup::whereInternal('admin')->firstOrFail()->id;
 
         $this->authorize('update', $user);
         $request->validate([
@@ -161,25 +161,22 @@ class UserManagementController extends Controller
 
         if (in_array($adminRoleId, $request->roles)) {
             $errorResponse = new LayoutResponse;
-
-            $errorResponse->addAction(new Toast('Do not assign admin role', 'error'));
+            $errorResponse->addAction(new Toast(__('siteboss::response.user.no_admin_assign'), 'error'));
 
             return $errorResponse->build();
         }
 
-        // Make sure any roles selected are in fact local roles
-        $rolesAllowed = (new CmsGroup)->getCachedGroups()->pluck('id')->toArray();
+        $rolesAllowed = CmsGroup::getCachedGroups()->pluck('id')->toArray();
         $checkedRoles = Arr::where($request->roles, function ($value) use ($rolesAllowed) {
             return in_array($value, $rolesAllowed);
         });
 
-        if ($user->explicityHasRole('admin')) {
+        if ($user->explicitlyHasRole('admin')) {
             $checkedRoles[] = $adminRoleId;
         }
 
         $user->groups()->sync($checkedRoles);
         $user->enabled = $request->enabled;
-        $user->save();
 
         $response = new LayoutResponse;
         if ($user->save()) {
@@ -198,7 +195,7 @@ class UserManagementController extends Controller
 
         $table->addHeader(new LayoutTableHeader(__('siteboss::ui.email'), 'email'));
         $table->addHeader(new LayoutTableHeader(__('siteboss::ui.enabled'), 'enabled'));
-        $users = CmsUser::get();
+        $users = CmsUser::orderBy('email')->get();
 
         foreach ($users as $user) {
             $row = new LayoutTableRow($user->id, '/app/users/'.$user->id);
@@ -242,14 +239,13 @@ class UserManagementController extends Controller
         $userIsAdmin = false;
 
         $userRoles = [];
-        foreach ((new CmsGroup)->getCachedGroups() as $group) {
-            // Do not show the admin group unless a user is an admin
+        foreach (CmsGroup::getCachedGroups() as $group) {
             if ($group->internal !== 'admin') {
                 $rolesTags->addItem($group->id, $group->name);
-                if ($user->explicityHasRole($group->internal)) {
+                if ($user->explicitlyHasRole($group->internal)) {
                     $userRoles[] = (object) ['id' => $group->id, 'label' => $group->name];
                 }
-            } elseif ($user->explicityHasRole($group->internal)) {
+            } elseif ($user->explicitlyHasRole($group->internal)) {
                 $userIsAdmin = true;
             }
         }
@@ -257,9 +253,9 @@ class UserManagementController extends Controller
         $form->addInput($rolesTags);
 
         if ($userIsAdmin) {
-            $form->addText(new LayoutText('This user is a system administrator, you cannot remove this role.'));
+            $form->addText(new LayoutText(__('siteboss::ui.users.is_admin')));
         } else {
-            $form->addText(new LayoutText('You cannot add administrator rights to a user.'));
+            $form->addText(new LayoutText(__('siteboss::ui.users.cannot_add_admin')));
         }
 
         $checkbox = new LayoutInputCheckbox('enabled', __('siteboss::ui.enabled'));

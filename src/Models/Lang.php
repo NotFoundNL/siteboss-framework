@@ -64,7 +64,7 @@ class Lang extends Model
         });
     }
 
-    public static function current()
+    public static function current(): static
     {
         if (is_null(self::$current)) {
             $locale = app()->getLocale();
@@ -72,7 +72,9 @@ class Lang extends Model
             if (! isset(self::$current->id)) {
                 self::$current = self::default();
                 if (! isset(self::$current->id)) {
-                    exit('Locale not supported, default could not be set: '.$locale."\nCheck config/app.php and your database\n");
+                    throw new \RuntimeException(
+                        'Locale not supported, default could not be set: '.$locale.'. Check config/app.php and your database.'
+                    );
                 }
             }
         }

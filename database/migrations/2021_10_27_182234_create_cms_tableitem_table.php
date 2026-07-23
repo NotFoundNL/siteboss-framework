@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use NotFound\Framework\Models\Table;
 
-class CreateCmsTableitemTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -34,4 +34,4 @@ class CreateCmsTableitemTable extends Migration
     {
         Schema::dropIfExists('cms_tableitem');
     }
-}
+};
