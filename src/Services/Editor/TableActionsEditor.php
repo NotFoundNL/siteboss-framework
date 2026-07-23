@@ -96,7 +96,7 @@ class TableActionsEditor
         foreach (TableActionCondition::cases() as $case) {
             $condition->addOption($case->value, $case->label());
         }
-        $condition->setValue($action->condition->value ?? TableActionCondition::EDIT->value);
+        $condition->setValue($action?->condition?->value ?? TableActionCondition::EDIT->value);
         $condition->setRequired();
         $form->addInput($condition);
 
