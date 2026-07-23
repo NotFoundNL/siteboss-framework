@@ -249,4 +249,43 @@ class ComponentContentBlocks extends AbstractComponent
 
         return true;
     }
+
+    /**
+     * The blocks of every language are purged, including the records they point
+     * to. Those records are purged through the TableService, so the blocks
+     * inside them are removed as well.
+     */
+    public function purge(): bool
+    {
+        $contentBlocks = CmsContentBlocks::withTrashed()
+            ->whereAssetType($this->assetType)
+            ->whereSourceAssetItemId($this->assetItem->id)
+            ->whereSourceRecordId($this->getRecordId())
+            ->get();
+
+        $succeeded = true;
+        foreach ($contentBlocks as $contentBlock) {
+            /** @var CmsContentBlocks $contentBlock */
+            $table = Table::whereId($contentBlock->target_table_id)->first();
+            $lang = Lang::find($contentBlock->lang_id);
+
+            if ($table === null || $lang === null) {
+                Log::withContext(['contentBlockId' => $contentBlock->id])
+                    ->warning('[ContentBlock] Could not purge block, table or language not found');
+
+                $succeeded = false;
+
+                continue;
+            }
+
+            $ts = new TableService($table, $lang, $contentBlock->target_record_id);
+            if (! $ts->purge()) {
+                $succeeded = false;
+            }
+
+            $contentBlock->forceDelete();
+        }
+
+        return $succeeded;
+    }
 }

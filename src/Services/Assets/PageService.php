@@ -4,6 +4,7 @@ namespace NotFound\Framework\Services\Assets;
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use NotFound\Framework\Http\Requests\FormDataRequest;
 use NotFound\Framework\Models\Lang;
@@ -391,8 +392,42 @@ class PageService extends AbstractAssetService
         return trim($searchText);
     }
 
+    /**
+     * Permanently removes the content of the page: everything its components
+     * own and the strings the page is stored in.
+     *
+     * The menu item itself is left alone, just like delete() does. Removing
+     * that is up to the caller.
+     */
     public function purge(): bool
     {
-        return abort('500', 'Not implemented yet');
+        $succeeded = true;
+        foreach ($this->getComponents() as $component) {
+            /** @var AbstractComponent $component */
+            if (! $component->purge()) {
+                $succeeded = false;
+
+                Log::warning(sprintf(
+                    '[PageService] Could not purge %s of page %d',
+                    $component->assetItem->internal,
+                    $this->menu->id
+                ));
+            }
+        }
+
+        // Values of global components are stored with string id 0 and are
+        // shared with the other pages, those are left alone.
+        Strings::whereStringId($this->menu->id)
+            ->whereIn('table', [
+                TemplateType::TEMPLATE->value,
+                TemplateType::META->value,
+                TemplateType::MENU->value,
+            ])
+            ->delete();
+
+        Cache::forget($this->getCacheKey());
+        Menu::removeRouteCache();
+
+        return $succeeded;
     }
 }

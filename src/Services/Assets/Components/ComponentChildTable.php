@@ -162,6 +162,34 @@ class ComponentChildTable extends AbstractComponent
     }
 
     /**
+     * The children of this record are purged, including the ones that were
+     * deleted earlier. They are purged through the TableService, so their
+     * files and their own children are removed as well.
+     */
+    public function purge(): bool
+    {
+        $table = Table::whereTable($this->properties()->childTable)->first();
+
+        if ($table === null) {
+            Log::withContext(['childTable' => $this->properties()->childTable])
+                ->warning('[ChildTable] Could not purge children, table not found');
+
+            return false;
+        }
+
+        $succeeded = true;
+        foreach ($this->allChildren() as $child) {
+            $ts = new TableService($table, $this->assetService->getLang(), $child->id);
+
+            if (! $ts->purge()) {
+                $succeeded = false;
+            }
+        }
+
+        return $succeeded;
+    }
+
+    /**
      * getChildren
      *
      * Get child rows from the linked table for the current record
@@ -169,6 +197,16 @@ class ComponentChildTable extends AbstractComponent
     private function getChildren(): Collection
     {
         return DB::table($this->properties()->childTable)->where($this->getForeignKey(), $this->recordId)->where('deleted_at', null)->orderBy('order')->get();
+    }
+
+    /**
+     * allChildren
+     *
+     * Get every child row of the current record, including the deleted ones
+     */
+    private function allChildren(): Collection
+    {
+        return DB::table($this->properties()->childTable)->where($this->getForeignKey(), $this->recordId)->orderBy('order')->get();
     }
 
     private function getForeignKey()

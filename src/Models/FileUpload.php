@@ -8,6 +8,7 @@ namespace NotFound\Framework\Models;
  * @property int $id
  * @property int|null $container_id
  * @property string|null $container_type
+ * @property int|null $source_upload_id
  * @property string|null $filename
  * @property string|null $mimetype
  * @property object|null $properties
@@ -22,6 +23,7 @@ namespace NotFound\Framework\Models;
  * @method static \Illuminate\Database\Eloquent\Builder|FileUpload whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|FileUpload whereMimetype($value)
  * @method static \Illuminate\Database\Eloquent\Builder|FileUpload whereProperties($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|FileUpload whereSourceUploadId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|FileUpload withTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|FileUpload withoutTrashed()
  *
@@ -31,7 +33,7 @@ class FileUpload extends BaseModel
 {
     protected $table = 'cms_uploads';
 
-    protected $fillable = ['container_id', 'container_type', 'filename', 'mimetype', 'properties'];
+    protected $fillable = ['container_id', 'container_type', 'source_upload_id', 'filename', 'mimetype', 'properties'];
 
     protected $casts = [
         'properties' => 'object',
