@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Schedule;
-use Illuminate\Support\ServiceProvider;
 use NotFound\Framework\Auth\Notifications\VerifyEmail;
 use NotFound\Framework\Http\Middleware\EnsureUserHasRole;
 use NotFound\Framework\Http\Middleware\SetAndForgetLocale;
@@ -68,8 +67,8 @@ class FrameworkServiceProvider extends PackageServiceProvider
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'siteboss');
         $this->loadTranslationsFrom(__DIR__.'/../lang', 'siteboss');
 
-        app('router')->aliasMiddleware('set-forget-locale', \NotFound\Framework\Http\Middleware\SetAndForgetLocale::class);
-        app('router')->aliasMiddleware('role', \NotFound\Framework\Http\Middleware\EnsureUserHasRole::class);
+        app('router')->aliasMiddleware('set-forget-locale', SetAndForgetLocale::class);
+        app('router')->aliasMiddleware('role', EnsureUserHasRole::class);
 
         Blade::component('formbuilder-form', Form::class);
         Blade::component('configuration-check', ConfigurationCheck::class);
