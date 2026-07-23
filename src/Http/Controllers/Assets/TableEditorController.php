@@ -12,18 +12,18 @@ use NotFound\Framework\Models\Lang;
 use NotFound\Framework\Models\Table;
 use NotFound\Framework\Services\Assets\Components\ComponentEditorLink;
 use NotFound\Framework\Services\Assets\TableService;
-use NotFound\Layout\Elements\LayoutBar;
-use NotFound\Layout\Elements\LayoutBarButton;
-use NotFound\Layout\Elements\LayoutButton;
-use NotFound\Layout\Elements\LayoutForm;
-use NotFound\Layout\Elements\LayoutMessage;
-use NotFound\Layout\Elements\LayoutPage;
-use NotFound\Layout\Elements\LayoutTitle;
-use NotFound\Layout\Elements\LayoutWidget;
-use NotFound\Layout\LayoutResponse;
-use NotFound\Layout\Responses\Redirect;
-use NotFound\Layout\Responses\Reload;
-use NotFound\Layout\Responses\Toast;
+use NotFound\Framework\Helpers\Layout\Elements\LayoutBar;
+use NotFound\Framework\Helpers\Layout\Elements\LayoutBarButton;
+use NotFound\Framework\Helpers\Layout\Elements\LayoutButton;
+use NotFound\Framework\Helpers\Layout\Elements\LayoutForm;
+use NotFound\Framework\Helpers\Layout\Elements\LayoutMessage;
+use NotFound\Framework\Helpers\Layout\Elements\LayoutPage;
+use NotFound\Framework\Helpers\Layout\Elements\LayoutTitle;
+use NotFound\Framework\Helpers\Layout\Elements\LayoutWidget;
+use NotFound\Framework\Helpers\Layout\LayoutResponse;
+use NotFound\Framework\Helpers\Layout\Responses\Redirect;
+use NotFound\Framework\Helpers\Layout\Responses\Reload;
+use NotFound\Framework\Helpers\Layout\Responses\Toast;
 
 /**
  * Controller for viewing / updating a table

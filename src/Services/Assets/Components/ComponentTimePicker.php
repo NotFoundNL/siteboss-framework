@@ -5,8 +5,8 @@ namespace NotFound\Framework\Services\Assets\Components;
 use Carbon\Carbon;
 use Carbon\Exceptions\InvalidDateException;
 use Illuminate\Support\Facades\Log;
-use NotFound\Layout\Elements\AbstractLayout;
-use NotFound\Layout\Inputs\LayoutInputTimePicker;
+use NotFound\Framework\Helpers\Layout\Elements\AbstractLayout;
+use NotFound\Framework\Helpers\Layout\Inputs\LayoutInputTimePicker;
 
 class ComponentTimePicker extends AbstractComponent
 {

@@ -14,9 +14,9 @@ use NotFound\Framework\Services\Assets\Components\AbstractComponent;
 use NotFound\Framework\Services\Assets\Enums\AssetType;
 use NotFound\Framework\Services\Assets\Enums\TemplateType;
 use NotFound\Framework\Services\Indexer\ContentBlockService;
-use NotFound\Layout\Inputs\LayoutInputCheckbox;
-use NotFound\Layout\Inputs\LayoutInputSlug;
-use NotFound\Layout\Inputs\LayoutInputText;
+use NotFound\Framework\Helpers\Layout\Inputs\LayoutInputCheckbox;
+use NotFound\Framework\Helpers\Layout\Inputs\LayoutInputSlug;
+use NotFound\Framework\Helpers\Layout\Inputs\LayoutInputText;
 use stdClass;
 
 class PageService extends AbstractAssetService

@@ -7,14 +7,14 @@ use NotFound\Framework\Http\Requests\FormDataRequest;
 use NotFound\Framework\Models\Table;
 use NotFound\Framework\Models\TableItem;
 use NotFound\Framework\Services\Editor\FieldsProperties;
-use NotFound\Layout\Elements\LayoutButton;
-use NotFound\Layout\Elements\LayoutForm;
-use NotFound\Layout\Helpers\LayoutWidgetHelper;
-use NotFound\Layout\Inputs\LayoutInputCheckbox;
-use NotFound\Layout\Inputs\LayoutInputText;
-use NotFound\Layout\LayoutResponse;
-use NotFound\Layout\Responses\Redirect;
-use NotFound\Layout\Responses\Toast;
+use NotFound\Framework\Helpers\Layout\Elements\LayoutButton;
+use NotFound\Framework\Helpers\Layout\Elements\LayoutForm;
+use NotFound\Framework\Helpers\Layout\Helpers\LayoutWidgetHelper;
+use NotFound\Framework\Helpers\Layout\Inputs\LayoutInputCheckbox;
+use NotFound\Framework\Helpers\Layout\Inputs\LayoutInputText;
+use NotFound\Framework\Helpers\Layout\LayoutResponse;
+use NotFound\Framework\Helpers\Layout\Responses\Redirect;
+use NotFound\Framework\Helpers\Layout\Responses\Toast;
 use stdClass;
 
 class CmsEditorTableItemController extends Controller

@@ -3,8 +3,8 @@
 namespace NotFound\Framework\Services\Assets\Components;
 
 use Illuminate\Support\Collection;
-use NotFound\Layout\Elements\AbstractLayout;
-use NotFound\Layout\Elements\LayoutTitle;
+use NotFound\Framework\Helpers\Layout\Elements\AbstractLayout;
+use NotFound\Framework\Helpers\Layout\Elements\LayoutTitle;
 
 class ComponentHeader extends AbstractComponent
 {

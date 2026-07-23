@@ -4,8 +4,8 @@ namespace NotFound\Framework\Services\Assets\Components;
 
 use Illuminate\Support\Collection;
 use NotFound\Framework\Services\Assets\Enums\AssetType;
-use NotFound\Layout\Elements\AbstractLayout;
-use NotFound\Layout\Elements\Table\LayoutTableColumn;
+use NotFound\Framework\Helpers\Layout\Elements\AbstractLayout;
+use NotFound\Framework\Helpers\Layout\Elements\Table\LayoutTableColumn;
 
 class ComponentButton extends AbstractComponent
 {

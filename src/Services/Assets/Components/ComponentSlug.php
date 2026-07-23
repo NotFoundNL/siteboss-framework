@@ -4,8 +4,8 @@ namespace NotFound\Framework\Services\Assets\Components;
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
-use NotFound\Layout\Elements\AbstractLayout;
-use NotFound\Layout\Inputs\LayoutInputSlug;
+use NotFound\Framework\Helpers\Layout\Elements\AbstractLayout;
+use NotFound\Framework\Helpers\Layout\Inputs\LayoutInputSlug;
 
 class ComponentSlug extends AbstractComponent
 {

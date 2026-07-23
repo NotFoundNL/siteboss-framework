@@ -8,9 +8,9 @@ use NotFound\Framework\Models\Editor\DefaultEditor;
 use NotFound\Framework\Models\Lang;
 use NotFound\Framework\Models\Table;
 use NotFound\Framework\Services\Assets\TableService;
-use NotFound\Layout\Elements\LayoutBar;
-use NotFound\Layout\Elements\LayoutBarButton;
-use NotFound\Layout\Elements\LayoutWidget;
+use NotFound\Framework\Helpers\Layout\Elements\LayoutBar;
+use NotFound\Framework\Helpers\Layout\Elements\LayoutBarButton;
+use NotFound\Framework\Helpers\Layout\Elements\LayoutWidget;
 
 abstract class AssetEditorController extends Controller
 {

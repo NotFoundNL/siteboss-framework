@@ -9,8 +9,8 @@ use Illuminate\Support\Facades\Log;
 use NotFound\Framework\Models\AssetItem;
 use NotFound\Framework\Models\Table;
 use NotFound\Framework\Services\Assets\TableService;
-use NotFound\Layout\Elements\AbstractLayout;
-use NotFound\Layout\Inputs\LayoutInputContentBlocks;
+use NotFound\Framework\Helpers\Layout\Elements\AbstractLayout;
+use NotFound\Framework\Helpers\Layout\Inputs\LayoutInputContentBlocks;
 
 class ComponentChildTable extends AbstractComponent
 {

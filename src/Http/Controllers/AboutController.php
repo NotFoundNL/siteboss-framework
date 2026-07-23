@@ -5,13 +5,13 @@ namespace NotFound\Framework\Http\Controllers;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 use NotFound\Framework\Models\CmsGroup;
-use NotFound\Layout\Elements\LayoutBreadcrumb;
-use NotFound\Layout\Elements\LayoutPage;
-use NotFound\Layout\Elements\LayoutSiteBoss;
-use NotFound\Layout\Elements\LayoutText;
-use NotFound\Layout\Elements\LayoutTitle;
-use NotFound\Layout\Elements\LayoutWidget;
-use NotFound\Layout\LayoutResponse;
+use NotFound\Framework\Helpers\Layout\Elements\LayoutBreadcrumb;
+use NotFound\Framework\Helpers\Layout\Elements\LayoutPage;
+use NotFound\Framework\Helpers\Layout\Elements\LayoutSiteBoss;
+use NotFound\Framework\Helpers\Layout\Elements\LayoutText;
+use NotFound\Framework\Helpers\Layout\Elements\LayoutTitle;
+use NotFound\Framework\Helpers\Layout\Elements\LayoutWidget;
+use NotFound\Framework\Helpers\Layout\LayoutResponse;
 
 // TODO: Translation
 class AboutController extends Controller

@@ -2,8 +2,8 @@
 
 namespace NotFound\Framework\Services\Assets\Components;
 
-use NotFound\Layout\Elements\AbstractLayout;
-use NotFound\Layout\LayoutNotImplemented;
+use NotFound\Framework\Helpers\Layout\Elements\AbstractLayout;
+use NotFound\Framework\Helpers\Layout\LayoutNotImplemented;
 
 class ComponentDefault extends AbstractComponent
 {

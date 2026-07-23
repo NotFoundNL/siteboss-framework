@@ -2,7 +2,7 @@
 
 namespace NotFound\Framework\Services\Assets\Components;
 
-use NotFound\Layout\Elements\AbstractLayout;
+use NotFound\Framework\Helpers\Layout\Elements\AbstractLayout;
 
 /**
  * ComponentStaticValue

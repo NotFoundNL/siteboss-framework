@@ -4,16 +4,16 @@ namespace NotFound\Framework\Http\Controllers\Forwards;
 
 use Illuminate\Support\Facades\Http;
 use NotFound\Framework\Http\Controllers\Controller;
-use NotFound\Layout\Elements\LayoutBreadcrumb;
-use NotFound\Layout\Elements\LayoutButton;
-use NotFound\Layout\Elements\LayoutForm;
-use NotFound\Layout\Elements\LayoutNavigationItem;
-use NotFound\Layout\Elements\LayoutPage;
-use NotFound\Layout\Elements\LayoutTable;
-use NotFound\Layout\Elements\LayoutTableColumn;
-use NotFound\Layout\Elements\LayoutTableHeader;
-use NotFound\Layout\Elements\LayoutTableRow;
-use NotFound\Layout\Elements\LayoutWidget;
+use NotFound\Framework\Helpers\Layout\Elements\LayoutBreadcrumb;
+use NotFound\Framework\Helpers\Layout\Elements\LayoutButton;
+use NotFound\Framework\Helpers\Layout\Elements\LayoutForm;
+use NotFound\Framework\Helpers\Layout\Elements\LayoutNavigationItem;
+use NotFound\Framework\Helpers\Layout\Elements\LayoutPage;
+use NotFound\Framework\Helpers\Layout\Elements\LayoutTable;
+use NotFound\Framework\Helpers\Layout\Elements\LayoutTableColumn;
+use NotFound\Framework\Helpers\Layout\Elements\LayoutTableHeader;
+use NotFound\Framework\Helpers\Layout\Elements\LayoutTableRow;
+use NotFound\Framework\Helpers\Layout\Elements\LayoutWidget;
 use Sb;
 
 class ForwardsController extends Controller

@@ -4,7 +4,7 @@ namespace NotFound\Framework\Helpers;
 
 use NotFound\Framework\Models\BaseModel;
 use NotFound\Framework\Models\LegacyModel;
-use NotFound\Layout\Inputs\LayoutInputDropdown;
+use NotFound\Framework\Helpers\Layout\Inputs\LayoutInputDropdown;
 
 class LayoutInputDropdownHelper
 {

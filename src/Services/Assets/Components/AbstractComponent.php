@@ -9,10 +9,10 @@ use NotFound\Framework\Models\AssetItem;
 use NotFound\Framework\Models\AssetModel;
 use NotFound\Framework\Services\Assets\AbstractAssetService;
 use NotFound\Framework\Services\Assets\Enums\AssetType;
-use NotFound\Layout\Elements\AbstractLayout;
-use NotFound\Layout\Elements\Table\LayoutTableColumn;
-use NotFound\Layout\Elements\Table\LayoutTableHeader;
-use NotFound\Layout\Inputs\AbstractInput;
+use NotFound\Framework\Helpers\Layout\Elements\AbstractLayout;
+use NotFound\Framework\Helpers\Layout\Elements\Table\LayoutTableColumn;
+use NotFound\Framework\Helpers\Layout\Elements\Table\LayoutTableHeader;
+use NotFound\Framework\Helpers\Layout\Inputs\AbstractInput;
 use stdClass;
 
 abstract class AbstractComponent

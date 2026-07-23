@@ -3,15 +3,15 @@
 namespace NotFound\Framework\Http\Controllers\Demo;
 
 use NotFound\Framework\Http\Controllers\Controller;
-use NotFound\Layout\Elements\LayoutBreadcrumb;
-use NotFound\Layout\Elements\LayoutForm;
-use NotFound\Layout\Elements\LayoutPage;
-use NotFound\Layout\Elements\LayoutRow;
-use NotFound\Layout\Elements\LayoutTab;
-use NotFound\Layout\Elements\LayoutTabs;
-use NotFound\Layout\Elements\LayoutWidget;
-use NotFound\Layout\Inputs\LayoutInputText;
-use NotFound\Layout\LayoutResponse;
+use NotFound\Framework\Helpers\Layout\Elements\LayoutBreadcrumb;
+use NotFound\Framework\Helpers\Layout\Elements\LayoutForm;
+use NotFound\Framework\Helpers\Layout\Elements\LayoutPage;
+use NotFound\Framework\Helpers\Layout\Elements\LayoutRow;
+use NotFound\Framework\Helpers\Layout\Elements\LayoutTab;
+use NotFound\Framework\Helpers\Layout\Elements\LayoutTabs;
+use NotFound\Framework\Helpers\Layout\Elements\LayoutWidget;
+use NotFound\Framework\Helpers\Layout\Inputs\LayoutInputText;
+use NotFound\Framework\Helpers\Layout\LayoutResponse;
 
 class DemoController extends Controller
 {

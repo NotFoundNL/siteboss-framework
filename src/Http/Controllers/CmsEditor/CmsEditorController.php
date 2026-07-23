@@ -3,11 +3,11 @@
 namespace NotFound\Framework\Http\Controllers\CmsEditor;
 
 use NotFound\Framework\Http\Controllers\Controller;
-use NotFound\Layout\Elements\Table\LayoutTable;
-use NotFound\Layout\Elements\Table\LayoutTableColumn;
-use NotFound\Layout\Elements\Table\LayoutTableHeader;
-use NotFound\Layout\Elements\Table\LayoutTableRow;
-use NotFound\Layout\Helpers\LayoutWidgetHelper;
+use NotFound\Framework\Helpers\Layout\Elements\Table\LayoutTable;
+use NotFound\Framework\Helpers\Layout\Elements\Table\LayoutTableColumn;
+use NotFound\Framework\Helpers\Layout\Elements\Table\LayoutTableHeader;
+use NotFound\Framework\Helpers\Layout\Elements\Table\LayoutTableRow;
+use NotFound\Framework\Helpers\Layout\Helpers\LayoutWidgetHelper;
 
 class CmsEditorController extends Controller
 {

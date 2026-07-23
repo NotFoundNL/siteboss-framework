@@ -6,17 +6,17 @@ use NotFound\Framework\Models\Table;
 use NotFound\Framework\Models\TableAction;
 use NotFound\Framework\Services\Assets\Enums\TableActionCondition;
 use NotFound\Framework\Services\Assets\Enums\TableActionType;
-use NotFound\Layout\Elements\LayoutButton;
-use NotFound\Layout\Elements\LayoutForm;
-use NotFound\Layout\Elements\LayoutText;
-use NotFound\Layout\Elements\LayoutTitle;
-use NotFound\Layout\Elements\LayoutWidget;
-use NotFound\Layout\Elements\Table\LayoutTable;
-use NotFound\Layout\Elements\Table\LayoutTableColumn;
-use NotFound\Layout\Elements\Table\LayoutTableHeader;
-use NotFound\Layout\Elements\Table\LayoutTableRow;
-use NotFound\Layout\Inputs\LayoutInputDropdown;
-use NotFound\Layout\Inputs\LayoutInputNumber;
+use NotFound\Framework\Helpers\Layout\Elements\LayoutButton;
+use NotFound\Framework\Helpers\Layout\Elements\LayoutForm;
+use NotFound\Framework\Helpers\Layout\Elements\LayoutText;
+use NotFound\Framework\Helpers\Layout\Elements\LayoutTitle;
+use NotFound\Framework\Helpers\Layout\Elements\LayoutWidget;
+use NotFound\Framework\Helpers\Layout\Elements\Table\LayoutTable;
+use NotFound\Framework\Helpers\Layout\Elements\Table\LayoutTableColumn;
+use NotFound\Framework\Helpers\Layout\Elements\Table\LayoutTableHeader;
+use NotFound\Framework\Helpers\Layout\Elements\Table\LayoutTableRow;
+use NotFound\Framework\Helpers\Layout\Inputs\LayoutInputDropdown;
+use NotFound\Framework\Helpers\Layout\Inputs\LayoutInputNumber;
 
 /**
  * Builds the CMS editor UI for the retention actions of a table.
@@ -34,18 +34,27 @@ class TableActionsEditor
     }
 
     /**
-     * The widget holding the list of actions and the form to add one.
+     * The widget holding the list of actions
      */
-    public function widget(): LayoutWidget
+    public function overviewWidget(): LayoutWidget
     {
-        $widget = new LayoutWidget('Retention actions', 6);
+        $widget = new LayoutWidget('Retention actions', 6)->noPadding();
 
         $widget->addText(new LayoutText(
-            'These run once a day. Records of which the chosen moment is more than the given number of days ago are archived, deleted or purged.'
+            '<p class="p-2">These run once a day. Records of which the chosen moment is more than the given number of days ago are archived, deleted or purged.</p>'
         ));
 
         $widget->addTable($this->overviewTable());
 
+        return $widget;
+    }
+
+    /**
+     * The widget holding the form to add one.
+     */
+    public function addWidget(): LayoutWidget
+    {
+        $widget = new LayoutWidget('Retention actions', 6);
         $form = new LayoutForm($this->baseUrl());
         $this->addInputs($form);
         $form->addButton(new LayoutButton('Add action'));

@@ -2,9 +2,9 @@
 
 namespace NotFound\Framework\Services\Assets\Components;
 
-use NotFound\Layout\Elements\AbstractLayout;
-use NotFound\Layout\Elements\LayoutBar;
-use NotFound\Layout\Elements\LayoutBarButton;
+use NotFound\Framework\Helpers\Layout\Elements\AbstractLayout;
+use NotFound\Framework\Helpers\Layout\Elements\LayoutBar;
+use NotFound\Framework\Helpers\Layout\Elements\LayoutBarButton;
 
 class ComponentEditorLink extends AbstractComponent
 {

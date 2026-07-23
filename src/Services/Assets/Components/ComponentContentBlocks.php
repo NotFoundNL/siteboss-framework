@@ -9,8 +9,8 @@ use NotFound\Framework\Models\CmsContentBlocks;
 use NotFound\Framework\Models\Lang;
 use NotFound\Framework\Models\Table;
 use NotFound\Framework\Services\Assets\TableService;
-use NotFound\Layout\Elements\AbstractLayout;
-use NotFound\Layout\Inputs\LayoutInputContentBlocks;
+use NotFound\Framework\Helpers\Layout\Elements\AbstractLayout;
+use NotFound\Framework\Helpers\Layout\Inputs\LayoutInputContentBlocks;
 
 /**
  * Component to manage content blocks.

@@ -3,9 +3,9 @@
 namespace NotFound\Framework\Services\Assets\Components;
 
 use Illuminate\Support\Facades\Log;
-use NotFound\Layout\Elements\AbstractLayout;
-use NotFound\Layout\Elements\Table\LayoutTableColumn;
-use NotFound\Layout\Inputs\LayoutInputDropdown;
+use NotFound\Framework\Helpers\Layout\Elements\AbstractLayout;
+use NotFound\Framework\Helpers\Layout\Elements\Table\LayoutTableColumn;
+use NotFound\Framework\Helpers\Layout\Inputs\LayoutInputDropdown;
 
 class ComponentCustomSelect extends AbstractComponent
 {
