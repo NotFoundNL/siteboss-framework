@@ -166,13 +166,15 @@ class TableActionService
         try {
             $tableService = new TableService($table, $this->lang(), $recordId);
 
-            match ($action->action) {
-                TableActionType::ARCHIVE => $tableService->archive(),
-                TableActionType::DELETE => $tableService->delete(),
-                TableActionType::PURGE => $tableService->purge(),
-            };
-
-            return true;
+            switch ($action->action) {
+                case TableActionType::ARCHIVE:
+                    return $tableService->archive();
+                case TableActionType::DELETE:
+                    $tableService->delete();
+                    return true;
+                case TableActionType::PURGE:
+                    return $tableService->purge();
+            }
         } catch (Throwable $e) {
             Log::error(sprintf(
                 '[TableActionService] %s failed on %s record %d: %s',
