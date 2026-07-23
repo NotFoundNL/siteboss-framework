@@ -171,6 +171,7 @@ class TableActionService
                     return $tableService->archive();
                 case TableActionType::DELETE:
                     $tableService->delete();
+
                     return true;
                 case TableActionType::PURGE:
                     return $tableService->purge();

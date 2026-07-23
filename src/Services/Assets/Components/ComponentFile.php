@@ -35,7 +35,7 @@ class ComponentFile extends AbstractComponent
     public function save()
     {
         if (isset($this->newValue->delete) && $this->newValue->delete == true) {
-            $this->delete();
+            $this->purge();
 
             return;
         }
@@ -63,18 +63,10 @@ class ComponentFile extends AbstractComponent
     /**
      * Removes the uploaded file. The name and size are stored in the record
      * and are removed together with the record.
+     *
+     * This method is called by save() when the delete flag is set in the newValue.
      */
-public function purge(): bool
-{
-    return $this->deleteFile();
-}
-
-private function delete(): void
-{
-    $this->deleteFile();
-}
-
-private function deleteFile(): bool
+    public function purge(): bool
     {
         $path = Storage::path('private').'/'.$this->subFolderPrivate
             .$this->assetModel->getIdentifier().'/'.$this->assetItem->internal.'/'.$this->recordId;
