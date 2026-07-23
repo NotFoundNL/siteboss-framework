@@ -3,16 +3,16 @@
 namespace NotFound\Framework\Http\Controllers\Assets;
 
 use Illuminate\Support\Collection;
+use NotFound\Framework\Helpers\Layout\Elements\LayoutButton;
+use NotFound\Framework\Helpers\Layout\Elements\LayoutForm;
+use NotFound\Framework\Helpers\Layout\Helpers\LayoutWidgetHelper;
+use NotFound\Framework\Helpers\Layout\LayoutResponse;
+use NotFound\Framework\Helpers\Layout\Responses\Redirect;
+use NotFound\Framework\Helpers\Layout\Responses\Toast;
 use NotFound\Framework\Http\Requests\FormDataRequest;
 use NotFound\Framework\Models\Lang;
 use NotFound\Framework\Models\Menu;
 use NotFound\Framework\Services\Assets\PageService;
-use NotFound\Layout\Elements\LayoutButton;
-use NotFound\Layout\Elements\LayoutForm;
-use NotFound\Layout\Helpers\LayoutWidgetHelper;
-use NotFound\Layout\LayoutResponse;
-use NotFound\Layout\Responses\Redirect;
-use NotFound\Layout\Responses\Toast;
 
 class PageEditorController extends AssetEditorController
 {

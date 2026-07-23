@@ -3,9 +3,9 @@
 namespace NotFound\Framework\Services\Assets\Components;
 
 use Illuminate\Support\Collection;
+use NotFound\Framework\Helpers\Layout\Elements\AbstractLayout;
+use NotFound\Framework\Helpers\Layout\Elements\Table\LayoutTableColumn;
 use NotFound\Framework\Services\Assets\Enums\AssetType;
-use NotFound\Layout\Elements\AbstractLayout;
-use NotFound\Layout\Elements\Table\LayoutTableColumn;
 
 class ComponentButton extends AbstractComponent
 {
@@ -57,5 +57,11 @@ class ComponentButton extends AbstractComponent
     public function getCloneValue(Collection $components): mixed
     {
         return null;
+    }
+
+    public function purge(): bool
+    {
+        // The button has no value of its own, so there is nothing to remove.
+        return true;
     }
 }

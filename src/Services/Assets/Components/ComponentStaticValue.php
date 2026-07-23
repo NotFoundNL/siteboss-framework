@@ -2,7 +2,7 @@
 
 namespace NotFound\Framework\Services\Assets\Components;
 
-use NotFound\Layout\Elements\AbstractLayout;
+use NotFound\Framework\Helpers\Layout\Elements\AbstractLayout;
 
 /**
  * ComponentStaticValue
@@ -32,5 +32,11 @@ class ComponentStaticValue extends AbstractComponent
     public function getValueForStorage(): ?string
     {
         return $this->staticValue;
+    }
+
+    public function purge(): bool
+    {
+        // The value is stored in the record itself, there is nothing else to remove.
+        return true;
     }
 }

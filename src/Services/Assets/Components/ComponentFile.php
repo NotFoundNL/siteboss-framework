@@ -4,10 +4,10 @@ namespace NotFound\Framework\Services\Assets\Components;
 
 use Illuminate\Http\File;
 use Illuminate\Support\Facades\Storage;
+use NotFound\Framework\Helpers\Layout\Elements\AbstractLayout;
+use NotFound\Framework\Helpers\Layout\Elements\Table\LayoutTableColumn;
+use NotFound\Framework\Helpers\Layout\Inputs\LayoutInputFile;
 use NotFound\Framework\Services\ClamAV\ClamAV;
-use NotFound\Layout\Elements\AbstractLayout;
-use NotFound\Layout\Elements\Table\LayoutTableColumn;
-use NotFound\Layout\Inputs\LayoutInputFile;
 
 class ComponentFile extends AbstractComponent
 {
@@ -35,7 +35,7 @@ class ComponentFile extends AbstractComponent
     public function save()
     {
         if (isset($this->newValue->delete) && $this->newValue->delete == true) {
-            $this->delete();
+            $this->purge();
 
             return;
         }
@@ -60,9 +60,22 @@ class ComponentFile extends AbstractComponent
         $file->move(Storage::path('private').'/'.$this->subFolderPrivate.$this->assetModel->getIdentifier().'/'.$this->assetItem->internal.'/', $filename);
     }
 
-    private function delete()
+    /**
+     * Removes the uploaded file. The name and size are stored in the record
+     * and are removed together with the record.
+     *
+     * This method is called by save() when the delete flag is set in the newValue.
+     */
+    public function purge(): bool
     {
-        // TODO: Implement delete() method.
+        $path = Storage::path('private').'/'.$this->subFolderPrivate
+            .$this->assetModel->getIdentifier().'/'.$this->assetItem->internal.'/'.$this->recordId;
+
+        if (! file_exists($path)) {
+            return true;
+        }
+
+        return unlink($path);
     }
 
     public function validate($newValue): bool

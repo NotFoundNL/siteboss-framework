@@ -2,16 +2,16 @@
 
 namespace NotFound\Framework\Services\Editor;
 
+use NotFound\Framework\Helpers\Layout\Elements\LayoutForm;
+use NotFound\Framework\Helpers\Layout\Elements\LayoutText;
+use NotFound\Framework\Helpers\Layout\Elements\LayoutTitle;
+use NotFound\Framework\Helpers\Layout\Inputs\LayoutInputCheckbox;
+use NotFound\Framework\Helpers\Layout\Inputs\LayoutInputDropdown;
+use NotFound\Framework\Helpers\Layout\Inputs\LayoutInputNumber;
+use NotFound\Framework\Helpers\Layout\Inputs\LayoutInputRepeatable;
+use NotFound\Framework\Helpers\Layout\Inputs\LayoutInputTags;
+use NotFound\Framework\Helpers\Layout\Inputs\LayoutInputText;
 use NotFound\Framework\Http\Requests\FormDataRequest;
-use NotFound\Layout\Elements\LayoutForm;
-use NotFound\Layout\Elements\LayoutText;
-use NotFound\Layout\Elements\LayoutTitle;
-use NotFound\Layout\Inputs\LayoutInputCheckbox;
-use NotFound\Layout\Inputs\LayoutInputDropdown;
-use NotFound\Layout\Inputs\LayoutInputNumber;
-use NotFound\Layout\Inputs\LayoutInputRepeatable;
-use NotFound\Layout\Inputs\LayoutInputTags;
-use NotFound\Layout\Inputs\LayoutInputText;
 use stdClass;
 
 class FieldsProperties

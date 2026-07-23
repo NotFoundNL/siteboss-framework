@@ -2,9 +2,9 @@
 
 namespace NotFound\Framework\Services\Assets\Components;
 
-use NotFound\Layout\Elements\AbstractLayout;
-use NotFound\Layout\Elements\LayoutBar;
-use NotFound\Layout\Elements\LayoutBarButton;
+use NotFound\Framework\Helpers\Layout\Elements\AbstractLayout;
+use NotFound\Framework\Helpers\Layout\Elements\LayoutBar;
+use NotFound\Framework\Helpers\Layout\Elements\LayoutBarButton;
 
 class ComponentEditorLink extends AbstractComponent
 {
@@ -22,6 +22,12 @@ class ComponentEditorLink extends AbstractComponent
 
     public function validate($newValue): bool
     {
+        return true;
+    }
+
+    public function purge(): bool
+    {
+        // Only shows a link in the form, there is nothing to remove.
         return true;
     }
 }

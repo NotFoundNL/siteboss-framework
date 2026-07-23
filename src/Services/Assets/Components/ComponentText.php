@@ -3,14 +3,15 @@
 namespace NotFound\Framework\Services\Assets\Components;
 
 use Illuminate\Http\File;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Drivers\Imagick\Driver;
 use Intervention\Image\ImageManager;
+use NotFound\Framework\Helpers\Layout\Elements\AbstractLayout;
+use NotFound\Framework\Helpers\Layout\Inputs\LayoutInputText;
 use NotFound\Framework\Models\EditorSetting;
 use NotFound\Framework\Models\FileUpload;
 use NotFound\Framework\Services\Assets\Enums\AssetType;
-use NotFound\Layout\Elements\AbstractLayout;
-use NotFound\Layout\Inputs\LayoutInputText;
 
 class ComponentText extends AbstractComponent
 {
@@ -84,7 +85,7 @@ class ComponentText extends AbstractComponent
         }
 
         // Create folder
-        $folder = '/uploads/'.$this->assetModel->getIdentifier().'/'.$this->assetItem->internal.'/';
+        $folder = $this->uploadFolder();
         if (! make_directories(Storage::path('public'), $folder)) {
             return (object) ['result' => 'error'];
         }
@@ -110,7 +111,107 @@ class ComponentText extends AbstractComponent
 
         return (object) [
             'result' => 'ok',
-            'path' => '/assets/public/uploads/'.$this->assetModel->getIdentifier().'/'.$this->assetItem->internal.'/'.$filename,
+            'path' => '/assets/public'.$folder.$filename,
         ];
+    }
+
+    /**
+     * The duplicate uses the same text, so it points to the same images. The
+     * files are not copied, the duplicate gets its own row that refers to the
+     * upload of the original.
+     */
+    public function clone(int $newRecordId): bool
+    {
+        $copies = [];
+        foreach ($this->uploads() as $upload) {
+            $copies[] = [
+                'container_id' => $newRecordId,
+                'container_type' => $this->assetModel->getIdentifier(),
+                'source_upload_id' => $this->fileIdOf($upload),
+                'filename' => $upload->filename,
+                'mimetype' => $upload->mimetype,
+            ];
+        }
+
+        if ($copies === []) {
+            return true;
+        }
+
+        return FileUpload::insert($copies);
+    }
+
+    /**
+     * Removes the images that were uploaded through the rich text editor.
+     *
+     * A file is shared with the records this one was duplicated from or to, so
+     * it is only removed once the last record that refers to it is purged.
+     */
+    public function purge(): bool
+    {
+        $folder = Storage::path('public').$this->uploadFolder();
+
+        $succeeded = true;
+        foreach ($this->uploads() as $upload) {
+            $fileId = $this->fileIdOf($upload);
+            $path = $folder.$fileId.$upload->filename;
+
+            $upload->forceDelete();
+
+            if ($this->isUsed($fileId) || ! file_exists($path)) {
+                continue;
+            }
+
+            if (! unlink($path)) {
+                $succeeded = false;
+            }
+        }
+
+        return $succeeded;
+    }
+
+    /**
+     * The uploads of this record that belong to this field.
+     *
+     * The rows are stored per record instead of per field, so they are shared
+     * with the other text fields of the record. The file tells us which field
+     * an upload belongs to, as every field has its own folder.
+     */
+    private function uploads(): Collection
+    {
+        $folder = Storage::path('public').$this->uploadFolder();
+
+        // cms_uploads has no deleted_at column while the model does use soft
+        // deletes, so the scope is skipped and the rows are handled for real.
+        return FileUpload::withoutGlobalScopes()
+            ->where('container_id', $this->recordId)
+            ->where('container_type', $this->assetModel->getIdentifier())
+            ->get()
+            ->filter(fn (FileUpload $upload) => file_exists($folder.$this->fileIdOf($upload).$upload->filename));
+    }
+
+    /**
+     * Whether any record still refers to the given file.
+     */
+    private function isUsed(int $fileId): bool
+    {
+        return FileUpload::withoutGlobalScopes()
+            ->where(function ($query) use ($fileId) {
+                $query->where('id', $fileId)->orWhere('source_upload_id', $fileId);
+            })
+            ->exists();
+    }
+
+    /**
+     * The file of an upload is named after the row it was uploaded with, which
+     * is the row itself unless the record is a duplicate of another record.
+     */
+    private function fileIdOf(FileUpload $upload): int
+    {
+        return $upload->source_upload_id ?? $upload->id;
+    }
+
+    private function uploadFolder(): string
+    {
+        return '/uploads/'.$this->assetModel->getIdentifier().'/'.$this->assetItem->internal.'/';
     }
 }

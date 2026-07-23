@@ -13,13 +13,13 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Intervention\Image\Drivers\Imagick\Driver;
 use Intervention\Image\ImageManager;
+use NotFound\Framework\Helpers\Layout\Elements\AbstractLayout;
+use NotFound\Framework\Helpers\Layout\Elements\Table\LayoutTableColumn;
+use NotFound\Framework\Helpers\Layout\Inputs\LayoutInputImage;
+use NotFound\Framework\Helpers\Layout\LayoutResponse;
+use NotFound\Framework\Helpers\Layout\Responses\Toast;
 use NotFound\Framework\Models\Menu;
 use NotFound\Framework\Services\Assets\Enums\AssetType;
-use NotFound\Layout\Elements\AbstractLayout;
-use NotFound\Layout\Elements\Table\LayoutTableColumn;
-use NotFound\Layout\Inputs\LayoutInputImage;
-use NotFound\Layout\LayoutResponse;
-use NotFound\Layout\Responses\Toast;
 use stdClass;
 
 class ComponentImage extends AbstractComponent
@@ -182,7 +182,7 @@ class ComponentImage extends AbstractComponent
 
     private function deleteFiles()
     {
-        foreach ($this->properties()->sizes as $dimensions) {
+        foreach ($this->properties()->sizes ?? [] as $dimensions) {
             $filename = $this->recordId.'_'.$dimensions->filename.'.jpg';
             if (file_exists(Storage::path('public').$this->relativePathToPublicDisk().$filename)) {
                 unlink(
@@ -196,6 +196,17 @@ class ComponentImage extends AbstractComponent
                 );
             }
         }
+    }
+
+    /**
+     * Removes the generated images of every size. The value itself is stored
+     * in the record and is removed together with the record.
+     */
+    public function purge(): bool
+    {
+        $this->deleteFiles();
+
+        return true;
     }
 
     public function getTableOverviewContent(): LayoutTableColumn

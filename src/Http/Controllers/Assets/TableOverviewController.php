@@ -4,23 +4,23 @@ namespace NotFound\Framework\Http\Controllers\Assets;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use NotFound\Framework\Helpers\Layout\Elements\LayoutBar;
+use NotFound\Framework\Helpers\Layout\Elements\LayoutPage;
+use NotFound\Framework\Helpers\Layout\Elements\LayoutPager;
+use NotFound\Framework\Helpers\Layout\Elements\LayoutTab;
+use NotFound\Framework\Helpers\Layout\Elements\LayoutTabs;
+use NotFound\Framework\Helpers\Layout\Elements\LayoutText;
+use NotFound\Framework\Helpers\Layout\Elements\LayoutTitle;
+use NotFound\Framework\Helpers\Layout\Elements\LayoutWidget;
+use NotFound\Framework\Helpers\Layout\Elements\Table\LayoutTable;
+use NotFound\Framework\Helpers\Layout\Elements\Table\LayoutTableRow;
+use NotFound\Framework\Helpers\Layout\LayoutResponse;
+use NotFound\Framework\Helpers\Layout\Responses\Toast;
 use NotFound\Framework\Models\Lang;
 use NotFound\Framework\Models\Table;
 use NotFound\Framework\Services\Assets\Components\AbstractComponent;
 use NotFound\Framework\Services\Assets\TableQueryService;
 use NotFound\Framework\Services\Assets\TableService;
-use NotFound\Layout\Elements\LayoutBar;
-use NotFound\Layout\Elements\LayoutPage;
-use NotFound\Layout\Elements\LayoutPager;
-use NotFound\Layout\Elements\LayoutTab;
-use NotFound\Layout\Elements\LayoutTabs;
-use NotFound\Layout\Elements\LayoutText;
-use NotFound\Layout\Elements\LayoutTitle;
-use NotFound\Layout\Elements\LayoutWidget;
-use NotFound\Layout\Elements\Table\LayoutTable;
-use NotFound\Layout\Elements\Table\LayoutTableRow;
-use NotFound\Layout\LayoutResponse;
-use NotFound\Layout\Responses\Toast;
 
 class TableOverviewController extends AssetEditorController
 {

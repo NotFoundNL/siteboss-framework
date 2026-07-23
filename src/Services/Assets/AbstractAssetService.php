@@ -126,4 +126,6 @@ abstract class AbstractAssetService
 
         return $array;
     }
+
+    abstract public function purge(): bool;
 }

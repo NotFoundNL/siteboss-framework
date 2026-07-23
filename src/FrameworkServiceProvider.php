@@ -7,11 +7,14 @@ use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Schedule;
 use Illuminate\Support\ServiceProvider;
 use NotFound\Framework\Auth\Notifications\VerifyEmail;
 use NotFound\Framework\Http\Middleware\EnsureUserHasRole;
 use NotFound\Framework\Http\Middleware\SetAndForgetLocale;
+use NotFound\Framework\Jobs\RunTableActions;
 use NotFound\Framework\Models\Lang;
+use NotFound\Framework\Services\Assets\TableActionService;
 use NotFound\Framework\Services\CmsExchange\ExchangeConsoleService;
 use NotFound\Framework\Services\Indexer\IndexBuilderService;
 use NotFound\Framework\View\Components\ConfigurationCheck;
@@ -37,7 +40,20 @@ class FrameworkServiceProvider extends ServiceProvider
 
                 return Command::SUCCESS;
             })->purpose('Import CMS changes to the database'),
+
+            Artisan::command('siteboss:table-actions {--debug : Display debug messages} {--dry : Dry Run}', function () {
+                $actions = new TableActionService($this->option('debug'), $this->option('dry'));
+                $actions->run();
+
+                return Command::SUCCESS;
+            })->purpose('Run the retention actions configured for the CMS tables'),
         ]);
+
+        // Registered after booting, so the schedule this is added to is the
+        // same instance the console kernel builds.
+        $this->app->booted(function () {
+            Schedule::job(new RunTableActions)->daily();
+        });
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'siteboss');
         $this->loadTranslationsFrom(__DIR__.'/../lang', 'siteboss');
 

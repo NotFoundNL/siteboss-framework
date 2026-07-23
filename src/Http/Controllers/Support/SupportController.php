@@ -2,19 +2,19 @@
 
 namespace NotFound\Framework\Http\Controllers\Support;
 
+use NotFound\Framework\Helpers\Layout\Elements\LayoutBreadcrumb;
+use NotFound\Framework\Helpers\Layout\Elements\LayoutButton;
+use NotFound\Framework\Helpers\Layout\Elements\LayoutForm;
+use NotFound\Framework\Helpers\Layout\Elements\LayoutPage;
+use NotFound\Framework\Helpers\Layout\Elements\LayoutText;
+use NotFound\Framework\Helpers\Layout\Elements\LayoutWidget;
+use NotFound\Framework\Helpers\Layout\Inputs\LayoutInputEmail;
+use NotFound\Framework\Helpers\Layout\Inputs\LayoutInputText;
+use NotFound\Framework\Helpers\Layout\Inputs\LayoutInputTextArea;
+use NotFound\Framework\Helpers\Layout\LayoutResponse;
+use NotFound\Framework\Helpers\Layout\Responses\Toast;
 use NotFound\Framework\Http\Controllers\Controller;
 use NotFound\Framework\Http\Requests\FormDataRequest;
-use NotFound\Layout\Elements\LayoutBreadcrumb;
-use NotFound\Layout\Elements\LayoutButton;
-use NotFound\Layout\Elements\LayoutForm;
-use NotFound\Layout\Elements\LayoutPage;
-use NotFound\Layout\Elements\LayoutText;
-use NotFound\Layout\Elements\LayoutWidget;
-use NotFound\Layout\Inputs\LayoutInputEmail;
-use NotFound\Layout\Inputs\LayoutInputText;
-use NotFound\Layout\Inputs\LayoutInputTextArea;
-use NotFound\Layout\LayoutResponse;
-use NotFound\Layout\Responses\Toast;
 
 class SupportController extends Controller
 {

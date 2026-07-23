@@ -5,7 +5,9 @@ namespace NotFound\Framework\Services\Assets;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
+use NotFound\Framework\Models\FileUpload;
 use NotFound\Framework\Models\Lang;
 use NotFound\Framework\Models\Table;
 use NotFound\Framework\Services\Assets\Components\AbstractComponent;
@@ -100,6 +102,47 @@ class TableService extends AbstractAssetService
     public function delete(): void
     {
         $this->assetModel->deleteRecord($this->recordId); // , $langUrl);
+    }
+
+    /**
+     * Permanently removes the record, everything its components own and the
+     * uploads that were made for it. Unlike delete() nothing is kept.
+     */
+    public function purge(): bool
+    {
+        if ($this->recordId === null) {
+            return false;
+        }
+
+        $succeeded = true;
+        foreach ($this->fieldComponents as $component) {
+            /** @var AbstractComponent $component */
+            if (! $component->purge()) {
+                $succeeded = false;
+
+                Log::warning(sprintf(
+                    '[TableService] Could not purge %s of %s record %d',
+                    $component->assetItem->internal,
+                    $this->table->getSiteTableName(),
+                    $this->recordId
+                ));
+            }
+        }
+
+        // Rich text uploads are stored per record instead of per component, so
+        // whatever the components left behind is removed here. The table has no
+        // deleted_at column while the model does use soft deletes, hence the scope.
+        FileUpload::withoutGlobalScopes()
+            ->where('container_id', $this->recordId)
+            ->where('container_type', $this->table->getIdentifier())
+            ->forceDelete();
+
+        return $this->table->purgeRecord($this->recordId) && $succeeded;
+    }
+
+    public function archive(): bool
+    {
+        return $this->table->archiveRecord($this->recordId);
     }
 
     protected function updateModel(bool $new = false): int

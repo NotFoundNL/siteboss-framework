@@ -10,11 +10,11 @@ use enshrined\svgSanitize\Sanitizer;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use NotFound\Framework\Helpers\Layout\Elements\AbstractLayout;
+use NotFound\Framework\Helpers\Layout\Elements\Table\LayoutTableColumn;
+use NotFound\Framework\Helpers\Layout\Inputs\LayoutInputVectorImage;
 use NotFound\Framework\Models\Menu;
 use NotFound\Framework\Services\Assets\Enums\AssetType;
-use NotFound\Layout\Elements\AbstractLayout;
-use NotFound\Layout\Elements\Table\LayoutTableColumn;
-use NotFound\Layout\Inputs\LayoutInputVectorImage;
 use stdClass;
 
 class ComponentVectorImage extends AbstractComponent
@@ -145,6 +145,17 @@ class ComponentVectorImage extends AbstractComponent
         if (file_exists($fileName)) {
             unlink($fileName);
         }
+    }
+
+    /**
+     * Removes the uploaded SVG. The value itself is stored in the record
+     * and is removed together with the record.
+     */
+    public function purge(): bool
+    {
+        $this->deleteFiles();
+
+        return true;
     }
 
     public function getTableOverviewContent(): LayoutTableColumn

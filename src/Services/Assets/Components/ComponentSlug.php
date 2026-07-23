@@ -4,8 +4,8 @@ namespace NotFound\Framework\Services\Assets\Components;
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
-use NotFound\Layout\Elements\AbstractLayout;
-use NotFound\Layout\Inputs\LayoutInputSlug;
+use NotFound\Framework\Helpers\Layout\Elements\AbstractLayout;
+use NotFound\Framework\Helpers\Layout\Inputs\LayoutInputSlug;
 
 class ComponentSlug extends AbstractComponent
 {
@@ -85,5 +85,11 @@ class ComponentSlug extends AbstractComponent
         }
 
         return $newValue;
+    }
+
+    public function purge(): bool
+    {
+        // The value is stored in the record itself, there is nothing else to remove.
+        return true;
     }
 }

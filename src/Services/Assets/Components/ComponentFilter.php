@@ -2,8 +2,8 @@
 
 namespace NotFound\Framework\Services\Assets\Components;
 
-use NotFound\Layout\Elements\AbstractLayout;
-use NotFound\Layout\Inputs\LayoutInputHidden;
+use NotFound\Framework\Helpers\Layout\Elements\AbstractLayout;
+use NotFound\Framework\Helpers\Layout\Inputs\LayoutInputHidden;
 
 class ComponentFilter extends AbstractComponent
 {
@@ -35,5 +35,11 @@ class ComponentFilter extends AbstractComponent
         if (array_key_exists($this->assetItem->internal, $filter)) {
             $this->setNewValue($filter[$this->assetItem->internal]);
         }
+    }
+
+    public function purge(): bool
+    {
+        // The value is stored in the record itself, there is nothing else to remove.
+        return true;
     }
 }

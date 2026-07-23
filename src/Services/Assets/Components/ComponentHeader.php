@@ -3,8 +3,8 @@
 namespace NotFound\Framework\Services\Assets\Components;
 
 use Illuminate\Support\Collection;
-use NotFound\Layout\Elements\AbstractLayout;
-use NotFound\Layout\Elements\LayoutTitle;
+use NotFound\Framework\Helpers\Layout\Elements\AbstractLayout;
+use NotFound\Framework\Helpers\Layout\Elements\LayoutTitle;
 
 class ComponentHeader extends AbstractComponent
 {
@@ -23,5 +23,11 @@ class ComponentHeader extends AbstractComponent
     public function getCloneValue(Collection $components): mixed
     {
         return null;
+    }
+
+    public function purge(): bool
+    {
+        // Only shows a header in the form, there is nothing to remove.
+        return true;
     }
 }

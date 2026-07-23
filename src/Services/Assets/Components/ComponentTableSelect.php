@@ -3,11 +3,11 @@
 namespace NotFound\Framework\Services\Assets\Components;
 
 use Illuminate\Support\Facades\DB;
+use NotFound\Framework\Helpers\Layout\Elements\AbstractLayout;
+use NotFound\Framework\Helpers\Layout\Elements\Table\LayoutTableColumn;
+use NotFound\Framework\Helpers\Layout\Inputs\LayoutInputDropdown;
 use NotFound\Framework\Models\Lang;
 use NotFound\Framework\Services\Legacy\StatusColumn;
-use NotFound\Layout\Elements\AbstractLayout;
-use NotFound\Layout\Elements\Table\LayoutTableColumn;
-use NotFound\Layout\Inputs\LayoutInputDropdown;
 
 class ComponentTableSelect extends AbstractComponent
 {
@@ -103,5 +103,12 @@ class ComponentTableSelect extends AbstractComponent
     public function getValueForStorage(): ?string
     {
         return $this->newValue === '' ? null : $this->newValue;
+    }
+
+    public function purge(): bool
+    {
+        // The value is stored in the record itself. The rows it points to are
+        // shared with other records, so they are left alone.
+        return true;
     }
 }

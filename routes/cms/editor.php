@@ -5,6 +5,7 @@ use NotFound\Framework\Http\Controllers\CmsEditor\CmsEditorController;
 use NotFound\Framework\Http\Controllers\CmsEditor\CmsEditorImportExportController;
 use NotFound\Framework\Http\Controllers\CmsEditor\CmsEditorLangController;
 use NotFound\Framework\Http\Controllers\CmsEditor\CmsEditorMenuController;
+use NotFound\Framework\Http\Controllers\CmsEditor\CmsEditorTableActionController;
 use NotFound\Framework\Http\Controllers\CmsEditor\CmsEditorTableController;
 use NotFound\Framework\Http\Controllers\CmsEditor\CmsEditorTableItemController;
 use NotFound\Framework\Http\Controllers\CmsEditor\CmsEditorTemplateController;
@@ -26,6 +27,17 @@ Route::prefix('table')->group(function () {
 
         Route::put('move', [CmsEditorTableController::class, 'updatePosition']);
         Route::post('add-field', [CmsEditorTableController::class, 'addField']);
+
+        // Registered before {tableItem}, that one matches any single segment.
+        Route::prefix('action')->group(function () {
+            Route::post('', [CmsEditorTableActionController::class, 'create']);
+
+            Route::prefix('{tableAction}')->group(function () {
+                Route::get('', [CmsEditorTableActionController::class, 'readOne']);
+                Route::post('', [CmsEditorTableActionController::class, 'update']);
+                Route::delete('', [CmsEditorTableActionController::class, 'deleteRecord']);
+            });
+        });
 
         Route::prefix('{tableItem}')->group(function () {
             Route::get('', [CmsEditorTableItemController::class, 'readOne']);

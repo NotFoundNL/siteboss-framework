@@ -2,8 +2,8 @@
 
 namespace NotFound\Framework\Services\Assets\Components;
 
-use NotFound\Layout\Elements\AbstractLayout;
-use NotFound\Layout\Inputs\LayoutInputDropdown;
+use NotFound\Framework\Helpers\Layout\Elements\AbstractLayout;
+use NotFound\Framework\Helpers\Layout\Inputs\LayoutInputDropdown;
 
 class ComponentCombobox extends AbstractComponent
 {
@@ -15,6 +15,12 @@ class ComponentCombobox extends AbstractComponent
     public function validate($newValue): bool
     {
         // TODO: Implement validate() method.
+        return true;
+    }
+
+    public function purge(): bool
+    {
+        // The value is stored in the record itself, there is nothing else to remove.
         return true;
     }
 }

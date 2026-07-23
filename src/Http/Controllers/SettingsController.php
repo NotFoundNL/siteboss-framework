@@ -3,20 +3,20 @@
 namespace NotFound\Framework\Http\Controllers;
 
 use Illuminate\Http\Request;
+use NotFound\Framework\Helpers\Layout\Elements\LayoutButton;
+use NotFound\Framework\Helpers\Layout\Elements\LayoutForm;
+use NotFound\Framework\Helpers\Layout\Elements\LayoutText;
+use NotFound\Framework\Helpers\Layout\Elements\Table\LayoutTable;
+use NotFound\Framework\Helpers\Layout\Elements\Table\LayoutTableColumn;
+use NotFound\Framework\Helpers\Layout\Elements\Table\LayoutTableHeader;
+use NotFound\Framework\Helpers\Layout\Elements\Table\LayoutTableRow;
+use NotFound\Framework\Helpers\Layout\Helpers\LayoutWidgetHelper;
+use NotFound\Framework\Helpers\Layout\Inputs\LayoutInputText;
+use NotFound\Framework\Helpers\Layout\LayoutResponse;
+use NotFound\Framework\Helpers\Layout\Responses\Redirect;
+use NotFound\Framework\Helpers\Layout\Responses\Toast;
 use NotFound\Framework\Http\Requests\FormDataRequest;
 use NotFound\Framework\Models\CmsConfig;
-use NotFound\Layout\Elements\LayoutButton;
-use NotFound\Layout\Elements\LayoutForm;
-use NotFound\Layout\Elements\LayoutText;
-use NotFound\Layout\Elements\Table\LayoutTable;
-use NotFound\Layout\Elements\Table\LayoutTableColumn;
-use NotFound\Layout\Elements\Table\LayoutTableHeader;
-use NotFound\Layout\Elements\Table\LayoutTableRow;
-use NotFound\Layout\Helpers\LayoutWidgetHelper;
-use NotFound\Layout\Inputs\LayoutInputText;
-use NotFound\Layout\LayoutResponse;
-use NotFound\Layout\Responses\Redirect;
-use NotFound\Layout\Responses\Toast;
 
 class SettingsController extends Controller
 {

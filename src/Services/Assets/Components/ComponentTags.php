@@ -4,10 +4,10 @@ namespace NotFound\Framework\Services\Assets\Components;
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use NotFound\Framework\Helpers\Layout\Elements\AbstractLayout;
+use NotFound\Framework\Helpers\Layout\Elements\Table\LayoutTableColumn;
+use NotFound\Framework\Helpers\Layout\Inputs\LayoutInputTags;
 use NotFound\Framework\Services\Legacy\StatusColumn;
-use NotFound\Layout\Elements\AbstractLayout;
-use NotFound\Layout\Elements\Table\LayoutTableColumn;
-use NotFound\Layout\Inputs\LayoutInputTags;
 
 class ComponentTags extends AbstractComponent
 {
@@ -181,6 +181,20 @@ class ComponentTags extends AbstractComponent
     {
         // Tags does not use internal storage, so we return null to not clone the value.
         return null;
+    }
+
+    /**
+     * Removes the rows that link this record to its tags. The tags themselves
+     * are shared with other records, so they are left alone.
+     */
+    public function purge(): bool
+    {
+        $p = $this->properties();
+        $linkTable = $this->removeDatabasePrefix($p->linkTable);
+
+        DB::table($linkTable)->where($p->linkItemId, $this->recordId)->delete();
+
+        return true;
     }
 
     public function asyncGetRequest()

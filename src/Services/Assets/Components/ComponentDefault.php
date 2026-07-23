@@ -2,8 +2,8 @@
 
 namespace NotFound\Framework\Services\Assets\Components;
 
-use NotFound\Layout\Elements\AbstractLayout;
-use NotFound\Layout\LayoutNotImplemented;
+use NotFound\Framework\Helpers\Layout\Elements\AbstractLayout;
+use NotFound\Framework\Helpers\Layout\LayoutNotImplemented;
 
 class ComponentDefault extends AbstractComponent
 {
@@ -19,6 +19,12 @@ class ComponentDefault extends AbstractComponent
     public function validate($newValue): bool
     {
         // TODO: Implement validate() method.
+        return true;
+    }
+
+    public function purge(): bool
+    {
+        // Fallback component without storage of its own, there is nothing to remove.
         return true;
     }
 }

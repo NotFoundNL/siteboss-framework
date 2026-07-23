@@ -2,9 +2,9 @@
 
 namespace NotFound\Framework\Services\Assets\Components;
 
-use NotFound\Layout\Elements\AbstractLayout;
-use NotFound\Layout\Elements\Table\LayoutTableColumn;
-use NotFound\Layout\Inputs\LayoutInputCheckbox;
+use NotFound\Framework\Helpers\Layout\Elements\AbstractLayout;
+use NotFound\Framework\Helpers\Layout\Elements\Table\LayoutTableColumn;
+use NotFound\Framework\Helpers\Layout\Inputs\LayoutInputCheckbox;
 
 class ComponentCheckbox extends AbstractComponent
 {
@@ -37,5 +37,11 @@ class ComponentCheckbox extends AbstractComponent
     public function getValueForStorage(): ?string
     {
         return $this->newValue ? '1' : '0';
+    }
+
+    public function purge(): bool
+    {
+        // The value is stored in the record itself, there is nothing else to remove.
+        return true;
     }
 }

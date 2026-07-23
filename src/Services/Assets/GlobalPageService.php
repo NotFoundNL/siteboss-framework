@@ -59,4 +59,9 @@ class GlobalPageService extends AbstractAssetService
 
         return $inputs;
     }
+
+    public function purge(): bool
+    {
+        return abort(404, 'Global page cannot be purged.');
+    }
 }
