@@ -29,13 +29,13 @@ class FrameworkServiceProvider extends PackageServiceProvider
             ->name('siteboss')
             ->hasViews()
             ->hasTranslations()
+            ->discoversMigrations()
+            ->runsMigrations()
             ->hasRoute('api');
     }
 
     public function packageBooted(): void
     {
-        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
-
         $this->commands([
             Artisan::command('siteboss:index-site {--debug : Display debug messages} {--fresh : Empty local search table}', function ($debug, $fresh) {
                 $indexer = new IndexBuilderService($debug, $fresh);
