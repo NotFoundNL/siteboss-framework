@@ -67,9 +67,6 @@ class FrameworkServiceProvider extends PackageServiceProvider
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'siteboss');
         $this->loadTranslationsFrom(__DIR__.'/../lang', 'siteboss');
 
-        app('router')->aliasMiddleware('set-forget-locale', SetAndForgetLocale::class);
-        app('router')->aliasMiddleware('role', EnsureUserHasRole::class);
-
         Blade::component('formbuilder-form', Form::class);
         Blade::component('configuration-check', ConfigurationCheck::class);
         Blade::componentNamespace('NotFound\\Framework\\View\\Components\\Forms\\Fields', 'fields');
@@ -109,7 +106,7 @@ class FrameworkServiceProvider extends PackageServiceProvider
         });
     }
 
-    public function register(): void
+    public function packageRegistered(): void
     {
         app('router')->aliasMiddleware('set-forget-locale', SetAndForgetLocale::class);
         app('router')->aliasMiddleware('role', EnsureUserHasRole::class);
