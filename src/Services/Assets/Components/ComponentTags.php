@@ -183,6 +183,20 @@ class ComponentTags extends AbstractComponent
         return null;
     }
 
+    /**
+     * Removes the rows that link this record to its tags. The tags themselves
+     * are shared with other records, so they are left alone.
+     */
+    public function purge(): bool
+    {
+        $p = $this->properties();
+        $linkTable = $this->removeDatabasePrefix($p->linkTable);
+
+        DB::table($linkTable)->where($p->linkItemId, $this->recordId)->delete();
+
+        return true;
+    }
+
     public function asyncGetRequest()
     {
         $requestValues = request()->validate([

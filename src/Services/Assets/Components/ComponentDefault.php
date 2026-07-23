@@ -21,4 +21,10 @@ class ComponentDefault extends AbstractComponent
         // TODO: Implement validate() method.
         return true;
     }
+
+    public function purge(): bool
+    {
+        // Fallback component without storage of its own, there is nothing to remove.
+        return true;
+    }
 }

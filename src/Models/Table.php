@@ -232,18 +232,20 @@ class Table extends AssetModel
         return DB::table($tableName)->where('id', $recordId)->update(['archived_at' => null]);
     }
 
+    /**
+     * Removes the record and its translations from the database.
+     *
+     * Where deleteRecord() only marks the record as deleted, this really
+     * removes the rows. There is no way back after this.
+     */
     public function purgeRecord(int $recordId): bool
     {
         $tableName = $this->getSiteTableName();
 
         if ($this->isLocalized()) {
-            $translatedTableName = $tableName.'_tr';
-            $succeeded = StatusColumn::deleteQuery(DB::table($translatedTableName)->where('entity_id', $recordId), $translatedTableName);
-            if (! $succeeded) {
-                return false;
-            }
+            DB::table($tableName.'_tr')->where('entity_id', $recordId)->delete();
         }
 
-        return StatusColumn::deleteQuery(DB::table($tableName)->where('id', $recordId), $tableName);
+        return (bool) DB::table($tableName)->where('id', $recordId)->delete();
     }
 }

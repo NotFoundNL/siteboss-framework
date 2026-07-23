@@ -45,4 +45,11 @@ class ComponentCustomSelect extends AbstractComponent
         // TODO: Implement validate() method.
         return true;
     }
+
+    public function purge(): bool
+    {
+        // The value is stored in the record itself. The rows the service selects
+        // from are not owned by this record, so they are left alone.
+        return true;
+    }
 }

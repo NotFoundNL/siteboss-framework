@@ -101,4 +101,10 @@ class ComponentDatePicker extends AbstractComponent
 
         return strtotime($this->newValue);
     }
+
+    public function purge(): bool
+    {
+        // The value is stored in the record itself, there is nothing else to remove.
+        return true;
+    }
 }

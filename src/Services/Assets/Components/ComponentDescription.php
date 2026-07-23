@@ -18,4 +18,10 @@ class ComponentDescription extends AbstractComponent
     {
         return true;
     }
+
+    public function purge(): bool
+    {
+        // Only shows a description in the form, there is nothing to remove.
+        return true;
+    }
 }

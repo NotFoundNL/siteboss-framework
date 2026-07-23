@@ -50,7 +50,16 @@ abstract class AbstractComponent
 
     abstract protected function getAutoLayoutClass(): ?AbstractLayout;
 
-abstract public function purge(): bool;
+    /**
+     * Permanently removes everything this component owns for the current record:
+     * uploaded files and rows in other tables.
+     *
+     * The value stored through the default storage mechanism is not removed here,
+     * that value lives in the record itself and is removed by the asset service.
+     *
+     * @return bool true when everything was removed
+     */
+    abstract public function purge(): bool;
 
     abstract public function validate($newValue): bool;
 
@@ -357,6 +366,4 @@ abstract public function purge(): bool;
 
         return $tableName;
     }
-
-
 }

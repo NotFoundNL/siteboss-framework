@@ -58,4 +58,10 @@ class ComponentButton extends AbstractComponent
     {
         return null;
     }
+
+    public function purge(): bool
+    {
+        // The button has no value of its own, so there is nothing to remove.
+        return true;
+    }
 }

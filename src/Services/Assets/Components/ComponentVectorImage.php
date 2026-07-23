@@ -147,6 +147,17 @@ class ComponentVectorImage extends AbstractComponent
         }
     }
 
+    /**
+     * Removes the uploaded SVG. The value itself is stored in the record
+     * and is removed together with the record.
+     */
+    public function purge(): bool
+    {
+        $this->deleteFiles();
+
+        return true;
+    }
+
     public function getTableOverviewContent(): LayoutTableColumn
     {
         $currentValue = $this->getCurrentValue();

@@ -182,7 +182,7 @@ class ComponentImage extends AbstractComponent
 
     private function deleteFiles()
     {
-        foreach ($this->properties()->sizes as $dimensions) {
+        foreach ($this->properties()->sizes ?? [] as $dimensions) {
             $filename = $this->recordId.'_'.$dimensions->filename.'.jpg';
             if (file_exists(Storage::path('public').$this->relativePathToPublicDisk().$filename)) {
                 unlink(
@@ -196,6 +196,17 @@ class ComponentImage extends AbstractComponent
                 );
             }
         }
+    }
+
+    /**
+     * Removes the generated images of every size. The value itself is stored
+     * in the record and is removed together with the record.
+     */
+    public function purge(): bool
+    {
+        $this->deleteFiles();
+
+        return true;
     }
 
     public function getTableOverviewContent(): LayoutTableColumn

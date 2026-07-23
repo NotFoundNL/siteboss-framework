@@ -104,4 +104,11 @@ class ComponentTableSelect extends AbstractComponent
     {
         return $this->newValue === '' ? null : $this->newValue;
     }
+
+    public function purge(): bool
+    {
+        // The value is stored in the record itself. The rows it points to are
+        // shared with other records, so they are left alone.
+        return true;
+    }
 }

@@ -60,9 +60,25 @@ class ComponentFile extends AbstractComponent
         $file->move(Storage::path('private').'/'.$this->subFolderPrivate.$this->assetModel->getIdentifier().'/'.$this->assetItem->internal.'/', $filename);
     }
 
-    private function delete()
+    /**
+     * Removes the uploaded file. The name and size are stored in the record
+     * and are removed together with the record.
+     */
+    public function purge(): bool
     {
-        // TODO: Implement delete() method.
+        return $this->deleteFile();
+    }
+
+    private function deleteFile(): bool
+    {
+        $path = Storage::path('private').'/'.$this->subFolderPrivate
+            .$this->assetModel->getIdentifier().'/'.$this->assetItem->internal.'/'.$this->recordId;
+
+        if (! file_exists($path)) {
+            return true;
+        }
+
+        return unlink($path);
     }
 
     public function validate($newValue): bool

@@ -24,4 +24,10 @@ class ComponentHeader extends AbstractComponent
     {
         return null;
     }
+
+    public function purge(): bool
+    {
+        // Only shows a header in the form, there is nothing to remove.
+        return true;
+    }
 }
