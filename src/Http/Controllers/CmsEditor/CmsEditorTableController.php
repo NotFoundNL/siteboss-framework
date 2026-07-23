@@ -9,6 +9,7 @@ use NotFound\Framework\Http\Requests\FormDataRequest;
 use NotFound\Framework\Models\Table;
 use NotFound\Framework\Services\CmsExchange\TableExchangeService;
 use NotFound\Framework\Services\Editor\FieldsProperties;
+use NotFound\Framework\Services\Editor\TableActionsEditor;
 use NotFound\Layout\Elements\LayoutBreadcrumb;
 use NotFound\Layout\Elements\LayoutButton;
 use NotFound\Layout\Elements\LayoutForm;
@@ -215,6 +216,8 @@ class CmsEditorTableController extends Controller
             }
             $widget2->addTable($UItable);
             $page->addWidget($widget2);
+
+            $page->addWidget((new TableActionsEditor($table))->widget());
         }
 
         $response->addUIElement($page);

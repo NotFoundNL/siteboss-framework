@@ -32,6 +32,8 @@ use NotFound\Framework\Traits\Exchangeable;
  * @property Carbon|null $deleted_at
  * @property-read Collection<int, TableItem> $items
  * @property-read int|null $items_count
+ * @property-read Collection<int, TableAction> $actions
+ * @property-read int|null $actions_count
  *
  * @method static \Illuminate\Database\Eloquent\Builder|Table newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Table newQuery()
@@ -87,6 +89,11 @@ class Table extends AssetModel
     public function items()
     {
         return $this->hasMany(TableItem::class);
+    }
+
+    public function actions()
+    {
+        return $this->hasMany(TableAction::class, 'table_id');
     }
 
     /**
@@ -223,5 +230,20 @@ class Table extends AssetModel
         $tableName = $this->getSiteTableName();
 
         return DB::table($tableName)->where('id', $recordId)->update(['archived_at' => null]);
+    }
+
+    public function purgeRecord(int $recordId): bool
+    {
+        $tableName = $this->getSiteTableName();
+
+        if ($this->isLocalized()) {
+            $translatedTableName = $tableName.'_tr';
+            $succeeded = StatusColumn::deleteQuery(DB::table($translatedTableName)->where('entity_id', $recordId), $translatedTableName);
+            if (! $succeeded) {
+                return false;
+            }
+        }
+
+        return StatusColumn::deleteQuery(DB::table($tableName)->where('id', $recordId), $tableName);
     }
 }

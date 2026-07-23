@@ -50,6 +50,8 @@ abstract class AbstractComponent
 
     abstract protected function getAutoLayoutClass(): ?AbstractLayout;
 
+abstract public function purge(): bool;
+
     abstract public function validate($newValue): bool;
 
     /**
@@ -355,4 +357,6 @@ abstract class AbstractComponent
 
         return $tableName;
     }
+
+
 }

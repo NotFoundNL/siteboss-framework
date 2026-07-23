@@ -390,4 +390,9 @@ class PageService extends AbstractAssetService
 
         return trim($searchText);
     }
+
+    public function purge(): bool
+    {
+        return abort('500', 'Not implemented yet');
+    }
 }

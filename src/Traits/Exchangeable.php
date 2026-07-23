@@ -57,7 +57,7 @@ trait Exchangeable
             $exportItem->id = $this->id;
         }
         $exportItem->siteboss_asset = (object) [
-            'version' => '1.3.0',
+            'version' => '1.4.0',
             'type' => $typeName,
         ];
         $exportItem->model = $this->model;
@@ -70,6 +70,9 @@ trait Exchangeable
             $exportItem->allow_create = $this->allow_create;
             $exportItem->allow_delete = $this->allow_delete;
             $exportItem->allow_sort = $this->allow_sort;
+            $exportItem->allow_archive = $this->allow_archive;
+            $exportItem->allow_duplicate = $this->allow_duplicate;
+            $exportItem->actions = $this->exportActions();
         } else {
             $exportItem->allow_children = $this->allow_children;
             $exportItem->filename = $this->filename;
@@ -82,6 +85,27 @@ trait Exchangeable
         $exportItem->items = $items;
 
         return $exportItem;
+    }
+
+    /**
+     * The retention actions of a table, exported so they are version
+     * controlled along with the rest of the table definition.
+     *
+     * @return array<int, object>
+     */
+    private function exportActions(): array
+    {
+        $actions = [];
+
+        foreach ($this->actions()->orderBy('id', 'asc')->get() as $action) {
+            $actions[] = (object) [
+                'condition' => $action->condition->value,
+                'days' => $action->days,
+                'action' => $action->action->value,
+            ];
+        }
+
+        return $actions;
     }
 
     public function exportToFile(): bool

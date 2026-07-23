@@ -113,6 +113,7 @@ class TemplateExchangeService extends AbstractExchangeService
         $this->debug('Creating import tables');
         Schema::dropIfExists('cms_template_backup');
         Schema::rename('cms_template', 'cms_template_backup');
+        $this->dropForeignKeys('cms_template_backup');
         Schema::create('cms_template', function (Blueprint $table) {
             $table->id();
             $table->string('rights', 128)->nullable();
@@ -130,6 +131,7 @@ class TemplateExchangeService extends AbstractExchangeService
 
         Schema::dropIfExists('cms_templateitem_backup');
         Schema::rename('cms_templateitem', 'cms_templateitem_backup');
+        $this->dropForeignKeys('cms_templateitem_backup');
         Schema::create('cms_templateitem', function (Blueprint $table) {
             $table->id();
             $table->string('rights', 128)->default('');

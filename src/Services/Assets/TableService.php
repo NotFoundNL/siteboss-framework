@@ -102,6 +102,25 @@ class TableService extends AbstractAssetService
         $this->assetModel->deleteRecord($this->recordId); // , $langUrl);
     }
 
+
+    public function purge(): bool
+    {
+            foreach ($this->fieldComponents as $component) {
+                
+       //     var_dump($component->assetItem);
+                echo "Purged component: ".$component->assetItem->internal.PHP_EOL;
+         //       $component->purge();
+            }
+
+
+        return $this->table->purgeRecord($this->recordId);
+    }
+
+    public function archive(): bool
+    {
+        return $this->table->archiveRecord($this->recordId);
+    }
+
     protected function updateModel(bool $new = false): int
     {
         foreach ($this->fieldComponents as $component) {
