@@ -6,6 +6,7 @@ use Illuminate\Http\File;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Drivers\Imagick\Driver;
+use Intervention\Image\Encoders\JpegEncoder;
 use Intervention\Image\ImageManager;
 use NotFound\Framework\Helpers\Layout\Elements\AbstractLayout;
 use NotFound\Framework\Helpers\Layout\Inputs\LayoutInputText;
@@ -102,10 +103,10 @@ class ComponentText extends AbstractComponent
         // create new image instance
         $image = (new ImageManager(
             new Driver
-        ))->read(new File(request()->file('file')));
+        ))->decode(new File(request()->file('file')));
         $image->scaleDown($width, null);
 
-        $image->toJpeg()->save(
+        $image->encode(new JpegEncoder())->save(
             Storage::path('public').$folder.$filename
         );
 

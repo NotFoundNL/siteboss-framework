@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Intervention\Image\Drivers\Imagick\Driver;
+use Intervention\Image\Encoders\JpegEncoder;
+use Intervention\Image\Encoders\WebpEncoder;
 use Intervention\Image\ImageManager;
 use NotFound\Framework\Helpers\Layout\Elements\AbstractLayout;
 use NotFound\Framework\Helpers\Layout\Elements\Table\LayoutTableColumn;
@@ -90,7 +92,7 @@ class ComponentImage extends AbstractComponent
             // create new image instance
             $image = (new ImageManager(
                 new Driver
-            ))->read(new File(request()->file($fileId)->path()));
+            ))->decode(new File(request()->file($fileId)->path()));
 
             if ($dimensions->height === '0') {
                 $height = intval($image->height() / $image->width() * $width);
@@ -105,10 +107,10 @@ class ComponentImage extends AbstractComponent
                 $image->coverDown($width, $height);
             }
 
-            $image->toJpeg()->save(
+            $image->encode(new JpegEncoder())->save(
                 Storage::path('public').$this->relativePathToPublicDisk().$filename
             );
-            $image->toWebp()->save(
+            $image->encode(new WebpEncoder())->save(
                 Storage::path('public').$this->relativePathToPublicDisk().$filename.'.webp'
             );
         }
