@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
 use NotFound\Framework\Services\Assets\AssetValues;
 use NotFound\Framework\Services\Assets\TableService;
 
@@ -27,6 +28,7 @@ class BaseModel extends Model
 {
     use HasFactory;
     use SoftDeletes;
+    use HasTimestamps;
 
     /**
      * Fetch the cached values for this model
