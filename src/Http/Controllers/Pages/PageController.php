@@ -171,4 +171,16 @@ class PageController extends Controller
     {
         return [];
     }
+
+    /**
+     * ttl
+     *
+     * Return the TTL (time to live) for the page in seconds.
+     * This is used for caching the page in Varnish or other caching systems.
+     * Return 0 for no caching.
+     */
+    public function ttl($edge = false): int
+    {
+        return 0;
+    }
 }
