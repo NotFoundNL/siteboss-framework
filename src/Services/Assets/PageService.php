@@ -283,7 +283,7 @@ class PageService extends AbstractAssetService
 
             $langId = $this->lang->id;
             if (! $component->isLocalized()) {
-                $langId = 0;
+                $langId = Lang::default()->id ?? 0;
             }
 
             $models[] = [
