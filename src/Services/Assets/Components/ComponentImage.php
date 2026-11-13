@@ -107,10 +107,10 @@ class ComponentImage extends AbstractComponent
                 $image->coverDown($width, $height);
             }
 
-            $image->encode(new JpegEncoder())->save(
+            $image->encode(new JpegEncoder)->save(
                 Storage::path('public').$this->relativePathToPublicDisk().$filename
             );
-            $image->encode(new WebpEncoder())->save(
+            $image->encode(new WebpEncoder)->save(
                 Storage::path('public').$this->relativePathToPublicDisk().$filename.'.webp'
             );
         }
