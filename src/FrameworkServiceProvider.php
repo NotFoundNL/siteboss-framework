@@ -31,6 +31,9 @@ class FrameworkServiceProvider extends PackageServiceProvider
             ->hasTranslations()
             ->discoversMigrations()
             ->runsMigrations()
+            ->hasCommands([
+                Console\Commands\UpdateTable::class,
+            ])
             ->hasRoute('api');
     }
 

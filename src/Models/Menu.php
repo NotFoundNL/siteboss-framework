@@ -7,7 +7,8 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 use NotFound\Framework\Services\Assets\Enums\TemplateType;
-use NotFound\Framework\Services\Legacy\StatusColumn;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
 
 /**
  * NotFound\Framework\Models\Menu
@@ -56,8 +57,12 @@ use NotFound\Framework\Services\Legacy\StatusColumn;
  *
  * @mixin \Eloquent
  */
-class Menu extends LegacyModel
+class Menu extends BaseModel
 {
+    use SoftDeletes;
+    use HasTimestamps;
+
+
     protected $table = 'menu';
 
     public $timestamps = true;
@@ -167,6 +172,13 @@ class Menu extends LegacyModel
     // Get all site routes
     public function scopeSiteRoutes($query, $site = null)
     {
+        return $this->where('parent_id', 0)
+            ->whereNot('template_id', 0)
+            ->whereNotNull('template_id')
+            ->where('enabled', 1)
+            ->orderby('order');
+
+
         $builder = $query->select(['id', 'parent_id', 'url', 'template_id'])
             ->where('parent_id', 0)
             ->whereNot('template_id', 0)

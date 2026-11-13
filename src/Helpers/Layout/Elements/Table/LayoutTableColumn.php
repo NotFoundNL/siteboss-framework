@@ -45,4 +45,12 @@ class LayoutTableColumn
 
         return $this;
     }
+
+    public function makeFolder(string $to): self
+    {
+        $this->type = 'Folder';
+        $this->properties->link = $to;
+
+        return $this;
+    }
 }
