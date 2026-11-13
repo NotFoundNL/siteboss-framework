@@ -106,7 +106,7 @@ class ComponentText extends AbstractComponent
         ))->decode(new File(request()->file('file')));
         $image->scaleDown($width, null);
 
-        $image->encode(new JpegEncoder())->save(
+        $image->encode(new JpegEncoder)->save(
             Storage::path('public').$folder.$filename
         );
 
