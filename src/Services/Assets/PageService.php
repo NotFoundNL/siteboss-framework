@@ -281,10 +281,7 @@ class PageService extends AbstractAssetService
                 continue;
             }
 
-            $langId = $this->lang->id;
-            if (! $component->isLocalized()) {
-                $langId = 0;
-            }
+            $langId = $component->isGlobal() ? 0 : ($this->lang->id?? Lang::default()->id ?? 0);
 
             $models[] = [
                 'table' => 'template',

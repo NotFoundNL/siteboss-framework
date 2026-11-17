@@ -172,7 +172,7 @@ class MenuController extends Controller
 
             $menuTitle = new LayoutTableColumn($menuItem->value ?? __('siteboss::ui.menu.untitled'));
             if (isset($menuItem->template?->allow_children) && $menuItem->template?->allow_children !== '') {
-                $menuTitle->makeLinkButton('/app/menu/'.$menuItem->id);
+                $menuTitle->makeFolder('/app/menu/'.$menuItem->id);
             }
 
             $row->addColumn($menuTitle);
